@@ -155,7 +155,7 @@ export default function Footer() {
           <span className="absolute right-full mr-3 bg-white text-[#006C35] text-xs font-bold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
             آمر
           </span>
-          <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+          {/* Red dot removed */}
         </button>
         <button className="w-12 h-12 bg-[#2d7a58] rounded-full shadow-lg flex items-center justify-center text-white hover:bg-[#3d8a68]" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <ArrowUp className="w-6 h-6" />
