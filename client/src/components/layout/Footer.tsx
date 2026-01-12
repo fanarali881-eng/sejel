@@ -113,7 +113,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-end border-t border-[#2d7a58] pt-8 mt-8">
           
           {/* Right: Copyright & Links */}
-          <div className="text-right mt-6 md:mt-0 order-2 md:order-2">
+          <div className="text-right mt-6 md:mt-0 order-1 md:order-1">
             <div className="flex justify-end gap-4 text-sm font-bold mb-2 underline">
               <a href="#">سياسة الخصوصية</a>
               <a href="#">شروط الاستخدام</a>
@@ -124,8 +124,8 @@ export default function Footer() {
           </div>
 
           {/* Left: Logos */}
-          <div className="flex items-center justify-start order-1 md:order-1">
-            <img src="/images/footer-logos-v2.png" alt="GOV.SA and Vision 2030 Logos" className="h-12 object-contain" />
+          <div className="flex items-center justify-end order-2 md:order-2">
+            <img src="/images/footer-logos-v2.png" alt="GOV.SA and Vision 2030 Logos" className="h-16 object-contain" />
           </div>
         </div>
       </div>
