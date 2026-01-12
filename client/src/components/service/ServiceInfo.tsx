@@ -137,24 +137,14 @@ export default function ServiceInfo() {
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
-          {/* User Guide Button - Absolutely positioned to guarantee no gap */}
-          <div className="absolute top-[2.5rem] right-7">
-            <img src="/images/user-guide-final.png" alt="" className="h-20 object-contain cursor-pointer" />
-          </div>
+          {/* User Guide Button removed as it is part of the related-apps image below */}
         </div>
 
         {/* Related Apps */}
         <div className="flex flex-col items-start gap-2 mt-8 pt-6 border-t border-gray-100 w-full">
-          <h3 className="text-gray-900 font-bold text-base mb-2">تطبيقات ذات صلة</h3>
-          <div className="flex items-center gap-4">
-             <div className="flex flex-col items-center">
-                <span className="text-lg font-bold text-[#006C35]">توكلنا</span>
-                <span className="text-xs text-gray-500">Tawakkalna</span>
-                <span className="text-[10px] text-gray-400">التطبيق الوطني الشامل</span>
-             </div>
-             <div className="w-10 h-10 rounded-full bg-[#006C35] flex items-center justify-center text-white font-bold">
-                T
-             </div>
+          {/* Negative margin to pull the image up and cover the gap */}
+          <div className="-mt-12 w-full flex justify-start">
+             <img src="/images/related-apps.png" alt="" className="w-full max-w-[200px] object-contain" />
           </div>
         </div>
       </div>
