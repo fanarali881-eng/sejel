@@ -3,7 +3,7 @@ import Footer from "@/components/layout/Footer";
 import ServiceHero from "@/components/service/ServiceHero";
 import ServiceSteps from "@/components/service/ServiceSteps";
 import ServiceInfo from "@/components/service/ServiceInfo";
-import { MessageSquare, ThumbsUp, ThumbsDown, CheckCircle2 } from "lucide-react";
+import { MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -86,37 +86,55 @@ export default function Home() {
               
               {/* Feedback Section */}
               <div className="mt-12 pt-8 border-t border-gray-200">
-                <div className="bg-[#f8f9fa] p-6 rounded border border-gray-100">
-                  <h3 className="font-bold text-[#006C35] mb-4 flex items-center gap-2 text-sm">
-                    <MessageSquare className="w-4 h-4" />
-                    التعليقات والاقتراحات
-                  </h3>
-                  <p className="text-xs text-gray-500 mb-4">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
-                  
-                  <div className="mb-6">
-                    <Button variant="outline" className="text-xs h-8 bg-white border-gray-300 text-gray-600">اضافة تعليق</Button>
+                {/* Comments Section */}
+                <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6 mb-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-[#006C35] text-base flex items-center gap-2">
+                      التعليقات والاقتراحات
+                    </h3>
+                    <div className="w-10 h-10 bg-[#e6f4ea] rounded-full flex items-center justify-center text-[#006C35]">
+                      <MessageSquare className="w-5 h-5" />
+                    </div>
                   </div>
+                  <p className="text-sm text-gray-600 mb-6 font-medium">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
+                  
+                  <div className="flex justify-end">
+                    <Button className="bg-[#006C35] hover:bg-[#005a2b] text-white px-6 h-10 text-sm font-bold rounded">اضافة تعليق</Button>
+                  </div>
+                </div>
 
-                  <div className="border-t border-gray-200 pt-6">
-                    <h4 className="font-bold text-gray-700 mb-2 text-sm">شاركنا رأيك، وساهم بالتحسين</h4>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <span className="text-xs text-gray-600">هل أعجبك محتوى الصفحة ؟</span>
-                        <div className="flex gap-2">
-                          <button className="px-3 py-1 bg-white border border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50">نعم</button>
-                          <button className="px-3 py-1 bg-white border border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50">لا</button>
-                        </div>
+                {/* Share Opinion Section */}
+                <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6">
+                  <div className="flex justify-between items-start mb-6">
+                    <h3 className="font-bold text-[#006C35] text-lg">
+                      شاركنا رأيك، وساهم بالتحسين
+                    </h3>
+                  </div>
+                  
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="flex items-center gap-6 w-full md:w-auto">
+                      <span className="text-base font-bold text-gray-800">هل أعجبك محتوى الصفحة ؟</span>
+                      <div className="flex gap-6">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <span className="text-sm font-bold text-gray-700">نعم</span>
+                          <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <span className="text-sm font-bold text-gray-700">لا</span>
+                          <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
+                        </label>
                       </div>
-                      <div className="text-[10px] text-gray-400">
-                        <span className="font-bold text-[#006C35] text-sm mx-1">3</span>
-                        من الزوّار للموقع أعجبهم محتوى هذه الصفحة
-                      </div>
+                    </div>
+                    
+                    <div className="text-sm text-gray-600 font-medium flex items-center gap-1 w-full md:w-auto justify-end">
+                      <span className="font-bold text-[#006C35]">3</span>
+                      من الزوّار للموقع أعجبهم محتوى هذه الصفحة
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-4 text-left">
-                  <p className="text-[10px] text-gray-400">
+                <div className="mt-6 text-left" dir="ltr">
+                  <p className="text-xs text-gray-400 font-medium">
                     تاريخ آخر تحديث لمحتوى الصفحة : 03/09/2025 بتمام الساعة 12:19 مساء بتوقيت المملكة العربية السعودية
                   </p>
                 </div>
