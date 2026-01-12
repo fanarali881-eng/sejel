@@ -114,7 +114,7 @@ export default function Footer() {
           
           {/* Right: Copyright & Links */}
           <div className="text-right mt-6 md:mt-0 order-1 md:order-1">
-            <div className="flex justify-end gap-4 text-sm font-bold mb-2 underline">
+            <div className="flex justify-start gap-4 text-sm font-bold mb-2 underline">
               <a href="#">سياسة الخصوصية</a>
               <a href="#">شروط الاستخدام</a>
               <a href="#">خريطة الموقع</a>
