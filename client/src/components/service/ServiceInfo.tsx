@@ -138,7 +138,7 @@ export default function ServiceInfo() {
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
           {/* User Guide Button moved inside Location section */}
-          <div className="pr-7 -mt-4">
+          <div className="pr-7 -mt-10">
             <img src="/images/user-guide-button-v7.png" alt="" className="h-20 object-contain cursor-pointer" />
           </div>
         </div>
