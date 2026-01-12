@@ -90,16 +90,14 @@ export default function Home() {
                 <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6 mb-6">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-bold text-[#006C35] text-base flex items-center gap-2">
+                      <MessageSquare className="w-5 h-5" />
                       التعليقات والاقتراحات
                     </h3>
-                    <div className="w-10 h-10 bg-[#e6f4ea] rounded-full flex items-center justify-center text-[#006C35]">
-                      <MessageSquare className="w-5 h-5" />
-                    </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-6 font-medium">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
+                  <p className="text-xs text-gray-500 mb-4">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
                   
-                  <div className="flex justify-end">
-                    <Button className="bg-[#006C35] hover:bg-[#005a2b] text-white px-6 h-10 text-sm font-bold rounded">اضافة تعليق</Button>
+                  <div className="mb-2">
+                    <Button variant="outline" className="text-xs h-9 bg-white border-gray-200 text-gray-600 hover:bg-gray-50 px-4">اضافة تعليق</Button>
                   </div>
                 </div>
 
