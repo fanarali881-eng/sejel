@@ -46,16 +46,11 @@ export default function Header() {
           <div className="flex items-center gap-8">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3">
-              <div className="flex flex-col items-end">
-                <span className="text-2xl font-bold text-[#1a2b4c] tracking-tighter leading-none">GOV.SA</span>
-                <span className="text-[9px] text-[#006C35] font-bold tracking-widest">المنصة الوطنية</span>
-              </div>
-              <div className="w-8 h-8">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                  <path d="M2 12L7 17L12 12M12 12L17 7L22 12" stroke="#1a2b4c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 7L7 12L12 7M12 17L17 12L22 17" stroke="#006C35" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
+              <img 
+                src="https://www.my.gov.sa/wps/contenthandler/dav/fs-type1/themes/GOV_SA_Theme/images/logo.png" 
+                alt="GOV.SA Logo" 
+                className="h-12 object-contain"
+              />
             </Link>
 
             {/* Navigation Links */}
@@ -107,20 +102,11 @@ export default function Header() {
 
             {/* Vision 2030 Logo */}
             <div className="hidden lg:block">
-              <div className="flex flex-col items-center opacity-80 grayscale hover:grayscale-0 transition-all">
-                <span className="text-[8px] text-gray-500 tracking-[0.2em] mb-[-2px]">رؤية VISION</span>
-                <div className="flex items-center gap-0.5 leading-none">
-                  <span className="text-xl font-bold text-gray-600">2</span>
-                  <div className="relative flex items-center justify-center w-4 h-4">
-                    <div className="absolute w-full h-full border-2 border-[#006C35] rounded-full border-t-transparent rotate-45"></div>
-                    <div className="w-1 h-1 bg-[#006C35] rounded-full"></div>
-                  </div>
-                  <span className="text-xl font-bold text-gray-600">3</span>
-                  <span className="text-xl font-bold text-gray-600">0</span>
-                </div>
-                <span className="text-[6px] text-gray-400 mt-[-2px]">المملكة العربية السعودية</span>
-                <span className="text-[4px] text-gray-300 uppercase">Kingdom of Saudi Arabia</span>
-              </div>
+              <img 
+                src="https://www.vision2030.gov.sa/img/logo/logo.svg" 
+                alt="Saudi Vision 2030" 
+                className="h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+              />
             </div>
           </div>
         </div>
