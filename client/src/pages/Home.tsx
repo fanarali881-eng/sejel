@@ -64,8 +64,23 @@ export default function Home() {
               )}
 
               {activeTab === "documents" && (
-                <div className="py-4 text-gray-600 text-sm">
-                  لا توجد مستندات مطلوبة لهذه الخدمة حالياً.
+                <div className="py-4 space-y-4">
+                  <div className="flex items-start gap-2 text-gray-800">
+                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                    <span className="text-base font-medium leading-relaxed">إرفاق موافقة الجهة المرخصة في حال كان النشاط الممارس من الأنشطة التي تتطلب ترخيصًا قبل الإصدار.</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-gray-800">
+                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                    <span className="text-base font-medium leading-relaxed">تحديد ممارسة التجارة الإلكترونية في حال كان مقدم الطلب ممارسًا لها.</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-gray-800">
+                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                    <span className="text-base font-medium leading-relaxed">في حال كان طالب القيد جمعية تعاونية أو خيرية يتطلب تقديم المستندات التالية من وزارة الموارد البشرية والتنمية الاجتماعية أو المركز الوطني لتنمية القطاع غير الربحي: - إرفاق صورة من شهادة التسجيل - إرفاق نسخة من الخطاب الذي يتضمن الموافقة على مجلس إدارة المؤسسة مع نسخة من نظام المؤسسة. - إرفاق نسخة من نظام الجمعية التعاونية. - إرفاق تفويض من مجلس المؤسسة لشخص سعودي لاستكمال إجراءات القيد في السجل التجاري.</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-gray-800">
+                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                    <span className="text-base font-medium leading-relaxed">التحقق من الآتي في حال كان طالب القيد مؤسسة وقفية: - إرفاق صك الوقفية من محكمة الأحوال الشخصية. - إرفاق وكالة شرعية من الواقف أو ناظر الوقف أو مجلس النظارة لاستخراج سجل تجاري بصك الوقفية.</span>
+                  </div>
                 </div>
               )}
               
