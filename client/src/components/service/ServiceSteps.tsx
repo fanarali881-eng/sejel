@@ -40,6 +40,20 @@ const steps = [
 export default function ServiceSteps() {
   return (
     <div className="py-4">
+      {/* YouTube Video Section */}
+      <div className="mb-8 rounded-lg overflow-hidden shadow-sm border border-gray-200">
+        <div className="relative pb-[56.25%] h-0 bg-black">
+          <iframe
+            className="absolute top-0 left-0 w-full h-full"
+            src="https://www.youtube.com/embed/uMDpYAV1oFA"
+            title="شرح خدمة قيد سجل تجاري لمؤسسة فردية"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+
       <ul className="space-y-3 list-none p-0 m-0">
         {steps.map((step, index) => (
           <li key={index} className="flex items-start gap-2 text-sm leading-relaxed text-gray-700">
