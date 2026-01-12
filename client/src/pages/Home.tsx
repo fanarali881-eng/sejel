@@ -144,7 +144,7 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="mt-6 text-left" dir="ltr">
+            <div className="mt-6 text-right">
               <p className="text-xs text-gray-400 font-medium">
                 تاريخ آخر تحديث لمحتوى الصفحة : 03/09/2025 بتمام الساعة 12:19 مساء بتوقيت المملكة العربية السعودية
               </p>
