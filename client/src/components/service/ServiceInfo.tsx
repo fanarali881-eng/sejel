@@ -137,11 +137,10 @@ export default function ServiceInfo() {
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
-        </div>
-
-        {/* User Guide Button (Image ONLY) */}
-        <div className="flex flex-col items-start gap-1 mt-4 w-full">
-          <img src="/images/user-guide-button-v7.png" alt="" className="h-20 object-contain cursor-pointer -mt-8" />
+          {/* User Guide Button moved inside Location section */}
+          <div className="pr-7 mt-2">
+            <img src="/images/user-guide-button-v7.png" alt="" className="h-20 object-contain cursor-pointer" />
+          </div>
         </div>
 
         {/* Related Apps */}
