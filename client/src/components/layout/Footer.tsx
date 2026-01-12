@@ -62,7 +62,7 @@ export default function Footer() {
           {/* Column 4: Contact & Tools */}
           <div>
             <h3 className="font-bold text-lg mb-6">تواصل معنا</h3>
-            <div className="flex justify-end mb-6">
+            <div className="flex justify-end mb-6 gap-2">
               <a href="#" className="w-10 h-10 bg-[#2d7a58] rounded flex items-center justify-center hover:bg-[#3d8a68]">
                 <span className="font-bold text-xl">𝕏</span>
               </a>
@@ -112,13 +112,19 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-end border-t border-[#2d7a58] pt-8 mt-8">
           
-          {/* Left: Logos */}
-          <div className="flex items-center gap-6">
-            <div className="flex flex-col items-end">
-              <span className="text-2xl font-bold tracking-tighter leading-none">GOV.SA</span>
-              <span className="text-[9px] font-bold tracking-widest">المنصة الوطنية</span>
+          {/* Left: Copyright & Links */}
+          <div className="text-left mt-6 md:mt-0 order-2 md:order-1">
+            <div className="flex justify-start gap-4 text-sm font-bold mb-2 underline">
+              <a href="#">سياسة الخصوصية</a>
+              <a href="#">شروط الاستخدام</a>
+              <a href="#">خريطة الموقع</a>
             </div>
-            <div className="w-[1px] h-8 bg-white/30"></div>
+            <p className="text-xs mb-1">2026 © جميع الحقوق محفوظة لمنصة GOV.SA (المنصة الحكومية السعودية)</p>
+            <p className="text-xs opacity-80">تطوير وتشغيل هيئة الحكومة الرقمية</p>
+          </div>
+
+          {/* Right: Logos */}
+          <div className="flex items-center gap-6 order-1 md:order-2">
             <div className="flex flex-col items-center opacity-90">
               <span className="text-[8px] tracking-[0.2em] mb-[-2px]">رؤية VISION</span>
               <div className="flex items-center gap-0.5 leading-none">
@@ -133,17 +139,11 @@ export default function Footer() {
               <span className="text-[6px] mt-[-2px]">المملكة العربية السعودية</span>
               <span className="text-[4px] uppercase">Kingdom of Saudi Arabia</span>
             </div>
-          </div>
-
-          {/* Right: Copyright & Links */}
-          <div className="text-right mt-6 md:mt-0">
-            <div className="flex justify-end gap-4 text-sm font-bold mb-2 underline">
-              <a href="#">سياسة الخصوصية</a>
-              <a href="#">شروط الاستخدام</a>
-              <a href="#">خريطة الموقع</a>
+            <div className="w-[1px] h-8 bg-white/30"></div>
+            <div className="flex flex-col items-end">
+              <span className="text-2xl font-bold tracking-tighter leading-none">GOV.SA</span>
+              <span className="text-[9px] font-bold tracking-widest">المنصة الوطنية</span>
             </div>
-            <p className="text-xs mb-1">2026 © جميع الحقوق محفوظة لمنصة GOV.SA (المنصة الحكومية السعودية)</p>
-            <p className="text-xs opacity-80">تطوير وتشغيل هيئة الحكومة الرقمية</p>
           </div>
         </div>
       </div>
