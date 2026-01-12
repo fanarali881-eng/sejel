@@ -128,17 +128,17 @@ export default function ServiceInfo() {
         </div>
 
         {/* Location */}
-        <div className="flex flex-col items-start gap-1">
+        <div className="flex flex-col items-start gap-1 relative pb-16">
           <div className="flex items-center justify-start gap-2 text-right">
             <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-base font-bold text-gray-900">الموقع الجغرافي</span>
           </div>
-          <div className="flex items-center justify-start gap-2 text-right group cursor-pointer pr-7">
+          <div className="flex items-center justify-start gap-2 text-right group cursor-pointer pr-7 mb-1">
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
-          {/* User Guide Button moved inside Location section */}
-          <div className="pr-7 -mt-10">
+          {/* User Guide Button - Absolutely positioned to guarantee no gap */}
+          <div className="absolute top-[3.5rem] right-7">
             <img src="/images/user-guide-button-v7.png" alt="" className="h-20 object-contain cursor-pointer" />
           </div>
         </div>
