@@ -4,7 +4,7 @@ export default function ServiceHero() {
   return (
     <div className="bg-[#f8f9fa] py-12 relative">
       <div className="container">
-        <div className="flex flex-col md:flex-row justify-between items-start">
+        <div className="flex flex-col md:flex-row justify-between items-center">
           
           {/* Right Side: Content */}
           <div className="flex flex-col items-start text-right flex-1 md:pl-12 w-full">

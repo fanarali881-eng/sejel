@@ -127,7 +127,7 @@ export default function Header() {
       </div>
 
       {/* Breadcrumb Bar - Green Background */}
-      <div className="bg-[#006C35] py-3">
+      <div className="bg-[#006C35] py-5">
         <div className="container flex items-center gap-2 text-sm text-white font-medium">
           <Link href="/" className="hover:opacity-80">الرئيسية</Link>
           <span className="opacity-60">&gt;</span>
