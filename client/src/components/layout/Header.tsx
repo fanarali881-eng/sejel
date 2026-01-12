@@ -47,7 +47,7 @@ export default function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3">
               <img 
-                src="https://www.my.gov.sa/wps/contenthandler/dav/fs-type1/themes/GOV_SA_Theme/images/logo.png" 
+                src="/images/gov_sa_logo.png" 
                 alt="GOV.SA Logo" 
                 className="h-12 object-contain"
               />
@@ -103,9 +103,9 @@ export default function Header() {
             {/* Vision 2030 Logo */}
             <div className="hidden lg:block">
               <img 
-                src="https://www.vision2030.gov.sa/img/logo/logo.svg" 
+                src="/images/vision_2030_logo.png" 
                 alt="Saudi Vision 2030" 
-                className="h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
               />
             </div>
           </div>
