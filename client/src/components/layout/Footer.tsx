@@ -62,7 +62,7 @@ export default function Footer() {
           {/* Column 4: Contact & Tools */}
           <div>
             <h3 className="font-bold text-lg mb-6">تواصل معنا</h3>
-            <div className="flex justify-end mb-6 gap-2">
+            <div className="flex justify-start mb-6 gap-2">
               <a href="#" className="w-10 h-10 bg-[#2d7a58] rounded flex items-center justify-center hover:bg-[#3d8a68]">
                 <span className="font-bold text-xl">𝕏</span>
               </a>
@@ -86,8 +86,8 @@ export default function Footer() {
             </div>
 
             <h3 className="font-bold text-lg mb-4">تطبيقاتنا</h3>
-            <div className="flex justify-end gap-2">
-              <img src="/images/app-store-badges.png" alt="Download on App Store and Google Play" className="h-10 object-contain" />
+            <div className="flex justify-start gap-2">
+              <img src="/images/app-store-badges.png" alt="Download on App Store and Google Play" className="h-14 object-contain" />
             </div>
           </div>
         </div>
