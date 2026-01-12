@@ -133,7 +133,7 @@ export default function ServiceInfo() {
             <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-base font-bold text-gray-900">الموقع الجغرافي</span>
           </div>
-          <div className="flex items-center justify-start gap-2 text-right group cursor-pointer pr-7 mb-1">
+          <div className="flex items-center justify-start gap-2 text-right group cursor-pointer pr-7">
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
@@ -142,7 +142,7 @@ export default function ServiceInfo() {
         {/* Related Apps */}
         <div className="flex flex-col items-start gap-2 w-full">
           {/* Negative margin to pull the image up and cover the gap */}
-          <div className="-mt-8 w-full flex justify-start">
+          <div className="w-full flex justify-start">
              <img src="/images/related-apps.png" alt="" className="w-full max-w-[200px] object-contain" />
           </div>
         </div>
