@@ -3,10 +3,13 @@ import Footer from "@/components/layout/Footer";
 import ServiceHero from "@/components/service/ServiceHero";
 import ServiceSteps from "@/components/service/ServiceSteps";
 import ServiceInfo from "@/components/service/ServiceInfo";
-import { MessageSquare, ThumbsUp, ThumbsDown } from "lucide-react";
+import { MessageSquare, ThumbsUp, ThumbsDown, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState("steps");
+
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans" dir="rtl">
       <Header />
@@ -21,12 +24,50 @@ export default function Home() {
             <div className="flex-1 order-2 lg:order-1">
               {/* Tabs-like Header */}
               <div className="flex border-b border-gray-200 mb-6">
-                <button className="px-4 py-2 text-[#006C35] border-b-2 border-[#006C35] font-bold text-sm">الخطوات</button>
-                <button className="px-4 py-2 text-gray-500 hover:text-[#006C35] text-sm">المتطلبات</button>
-                <button className="px-4 py-2 text-gray-500 hover:text-[#006C35] text-sm">المستندات المطلوبة</button>
+                <button 
+                  onClick={() => setActiveTab("steps")}
+                  className={`px-4 py-2 text-sm font-bold transition-colors ${activeTab === "steps" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
+                >
+                  الخطوات
+                </button>
+                <button 
+                  onClick={() => setActiveTab("requirements")}
+                  className={`px-4 py-2 text-sm font-bold transition-colors ${activeTab === "requirements" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
+                >
+                  المتطلبات
+                </button>
+                <button 
+                  onClick={() => setActiveTab("documents")}
+                  className={`px-4 py-2 text-sm font-bold transition-colors ${activeTab === "documents" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
+                >
+                  المستندات المطلوبة
+                </button>
               </div>
               
-              <ServiceSteps />
+              {activeTab === "steps" && <ServiceSteps />}
+              
+              {activeTab === "requirements" && (
+                <div className="py-4 space-y-4">
+                  <div className="flex items-center gap-2 text-gray-800">
+                    <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
+                    <span className="text-base font-medium">ألا يقل العمر عن 18 سنة.</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-800">
+                    <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
+                    <span className="text-base font-medium">ألا يكون موظفًا حكوميًا.</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-800">
+                    <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
+                    <span className="text-base font-medium">ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية.</span>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "documents" && (
+                <div className="py-4 text-gray-600 text-sm">
+                  لا توجد مستندات مطلوبة لهذه الخدمة حالياً.
+                </div>
+              )}
               
               {/* Feedback Section */}
               <div className="mt-12 pt-8 border-t border-gray-200">
