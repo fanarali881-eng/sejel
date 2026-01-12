@@ -1,4 +1,4 @@
-import { User, Clock, Monitor, Languages, HelpCircle, ExternalLink, MapPin, FileText, Phone, Mail } from "lucide-react";
+import { User, Clock, Monitor, Languages, HelpCircle, ExternalLink, MapPin, Phone, Mail, FileText } from "lucide-react";
 
 export default function ServiceInfo() {
   return (
@@ -73,45 +73,82 @@ export default function ServiceInfo() {
       </div>
 
       {/* Links List */}
-      <div className="space-y-4 pt-8 mt-4 border-t border-gray-100 w-full">
-        <div className="flex items-center justify-end gap-2 text-right group cursor-pointer">
-          <span className="text-sm font-bold text-gray-900 group-hover:text-[#006C35]">الأسئلة الشائعة</span>
-          <HelpCircle className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
-        </div>
-        <div className="flex items-center justify-end gap-2 text-right group cursor-pointer">
-          <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الأسئلة الشائعة</span>
-          <ExternalLink className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
-        </div>
-        <div className="flex items-center justify-end gap-2 text-right group cursor-pointer">
-          <span className="text-sm font-bold text-gray-900 group-hover:text-[#006C35]">رابط الفروع</span>
-          <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
-        </div>
-        <div className="flex items-center justify-end gap-2 text-right group cursor-pointer">
-          <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على رابط الفروع</span>
-          <ExternalLink className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
-        </div>
-        <div className="flex items-center justify-end gap-2 text-right group cursor-pointer">
-          <span className="text-sm font-bold text-gray-900 group-hover:text-[#006C35]">أوقات عمل الفروع</span>
-          <Clock className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
-        </div>
-        <div className="text-right pr-7">
-          <p className="text-xs text-gray-500">8 صباحا - 5 مساء (من الأحد إلى الخميس)</p>
-        </div>
-        
-        <div className="flex items-center justify-end gap-2 text-right group cursor-pointer mt-6">
-          <span className="text-sm font-bold text-gray-900 group-hover:text-[#006C35]">اتصل بنا</span>
-          <Phone className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
-        </div>
-        <div className="text-right pr-7">
-          <p className="text-sm font-bold text-[#006C35]" dir="ltr">1900</p>
+      <div className="space-y-6 pt-8 mt-4 border-t border-gray-100 w-full">
+        {/* FAQ */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-2 text-right">
+            <span className="text-base font-bold text-gray-900">الأسئلة الشائعة</span>
+            <HelpCircle className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+          </div>
+          <div className="flex items-center justify-end gap-2 text-right group cursor-pointer pr-7">
+            <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الأسئلة الشائعة</span>
+            <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
+          </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 text-right group cursor-pointer mt-4">
-          <span className="text-sm font-bold text-gray-900 group-hover:text-[#006C35]">البريد الإلكتروني</span>
-          <Mail className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+        {/* Branches */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-2 text-right">
+            <span className="text-base font-bold text-gray-900">رابط الفروع</span>
+            <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+          </div>
+          <div className="flex items-center justify-end gap-2 text-right group cursor-pointer pr-7">
+            <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على رابط الفروع</span>
+            <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
+          </div>
         </div>
-        <div className="text-right pr-7">
-          <p className="text-sm text-[#006C35]">CS@mc.gov.sa</p>
+
+        {/* Working Hours */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-2 text-right">
+            <span className="text-base font-bold text-gray-900">أوقات عمل الفروع</span>
+            <Clock className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+          </div>
+          <div className="text-right pr-7">
+            <p className="text-sm text-gray-500">8 صباحا - 5 مساء (من الأحد إلى الخميس)</p>
+          </div>
+        </div>
+        
+        {/* Phone */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-2 text-right">
+            <span className="text-base font-bold text-gray-900">الهاتف</span>
+            <Phone className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+          </div>
+          <div className="text-right pr-7">
+            <p className="text-base font-bold text-[#006C35]" dir="ltr">1900</p>
+          </div>
+        </div>
+
+        {/* Email */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-2 text-right">
+            <span className="text-base font-bold text-gray-900">البريد الإلكتروني</span>
+            <Mail className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+          </div>
+          <div className="text-right pr-7">
+            <p className="text-sm text-[#006C35]">CS@mc.gov.sa</p>
+          </div>
+        </div>
+
+        {/* Location */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-2 text-right">
+            <span className="text-base font-bold text-gray-900">الموقع الجغرافي</span>
+            <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+          </div>
+          <div className="flex items-center justify-end gap-2 text-right group cursor-pointer pr-7">
+            <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
+            <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
+          </div>
+        </div>
+
+        {/* User Guide */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-2 text-right">
+            <span className="text-base font-bold text-gray-900">تحميل دليل المستخدم</span>
+            <FileText className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+          </div>
         </div>
       </div>
     </div>
