@@ -6,6 +6,7 @@ import ServiceInfo from "@/components/service/ServiceInfo";
 import { MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import CommentModal from "@/components/service/CommentModal";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("steps");
@@ -109,7 +110,9 @@ export default function Home() {
                 </div>
                 
                 <div>
-                  <Button className="bg-[#198754] hover:bg-[#157347] text-white px-6 h-10 text-sm font-bold rounded">اضافة تعليق</Button>
+                  <CommentModal trigger={
+                    <Button className="bg-[#198754] hover:bg-[#157347] text-white px-6 h-10 text-sm font-bold rounded">اضافة تعليق</Button>
+                  } />
                 </div>
               </div>
             </div>
