@@ -141,13 +141,13 @@ export default function ServiceInfo() {
 
         {/* User Guide Button (Image) */}
         <div className="flex flex-col items-start gap-1 mt-4 w-full">
-          <img src="/images/user-guide-btn.png" alt="تحميل دليل المستخدم" className="h-12 object-contain cursor-pointer" />
+          <img src="/images/user-guide-button-v2.png" alt="" className="h-12 object-contain cursor-pointer" />
         </div>
 
         {/* Related Apps */}
         <div className="flex flex-col items-start gap-2 mt-8 pt-6 border-t border-gray-100 w-full">
           
-          <img src="/images/related-apps.png" alt="تطبيقات ذات صلة - توكلنا" className="w-full max-w-[200px] object-contain" />
+          <img src="/images/related-apps.png" alt="" className="w-full max-w-[200px] object-contain" />
         </div>
       </div>
     </div>
