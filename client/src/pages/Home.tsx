@@ -83,60 +83,6 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              
-              {/* Feedback Section */}
-              <div className="mt-12 pt-8 border-t border-gray-200">
-                {/* Comments Section */}
-                <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6 mb-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-[#006C35] text-base flex items-center gap-2">
-                      <MessageSquare className="w-5 h-5" />
-                      التعليقات والاقتراحات
-                    </h3>
-                  </div>
-                  <p className="text-xs text-gray-500 mb-4">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
-                  
-                  <div className="mb-2">
-                    <Button variant="outline" className="text-xs h-9 bg-white border-gray-200 text-gray-600 hover:bg-gray-50 px-4">اضافة تعليق</Button>
-                  </div>
-                </div>
-
-                {/* Share Opinion Section */}
-                <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6">
-                  <div className="flex justify-between items-start mb-6">
-                    <h3 className="font-bold text-[#006C35] text-lg">
-                      شاركنا رأيك، وساهم بالتحسين
-                    </h3>
-                  </div>
-                  
-                  <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div className="flex items-center gap-6 w-full md:w-auto">
-                      <span className="text-base font-bold text-gray-800">هل أعجبك محتوى الصفحة ؟</span>
-                      <div className="flex gap-6">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <span className="text-sm font-bold text-gray-700">نعم</span>
-                          <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <span className="text-sm font-bold text-gray-700">لا</span>
-                          <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
-                        </label>
-                      </div>
-                    </div>
-                    
-                    <div className="text-sm text-gray-600 font-medium flex items-center gap-1 w-full md:w-auto justify-end">
-                      <span className="font-bold text-[#006C35]">3</span>
-                      من الزوّار للموقع أعجبهم محتوى هذه الصفحة
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-6 text-left" dir="ltr">
-                  <p className="text-xs text-gray-400 font-medium">
-                    تاريخ آخر تحديث لمحتوى الصفحة : 03/09/2025 بتمام الساعة 12:19 مساء بتوقيت المملكة العربية السعودية
-                  </p>
-                </div>
-              </div>
             </div>
             
             {/* Left Column: Sidebar Info */}
@@ -144,6 +90,65 @@ export default function Home() {
               <ServiceInfo />
             </div>
             
+          </div>
+
+          {/* Feedback Section - Full Width at Bottom */}
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            {/* Comments Section */}
+            <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6 mb-6">
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-[#e6f4ea] rounded-full flex items-center justify-center text-[#006C35]">
+                    <MessageSquare className="w-5 h-5" />
+                  </div>
+                  <div className="h-8 w-[1px] bg-gray-200"></div>
+                  <h3 className="font-bold text-gray-700 text-base">
+                    التعليقات والاقتراحات
+                  </h3>
+                  <p className="text-sm text-gray-500 mr-2">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
+                </div>
+                
+                <div>
+                  <Button className="bg-[#198754] hover:bg-[#157347] text-white px-6 h-10 text-sm font-bold rounded">اضافة تعليق</Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Share Opinion Section */}
+            <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="font-bold text-[#006C35] text-lg">
+                  شاركنا رأيك، وساهم بالتحسين
+                </h3>
+              </div>
+              
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="flex items-center gap-6 w-full md:w-auto">
+                  <span className="text-base font-bold text-gray-800">هل أعجبك محتوى الصفحة ؟</span>
+                  <div className="flex gap-6">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <span className="text-sm font-bold text-gray-700">نعم</span>
+                      <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <span className="text-sm font-bold text-gray-700">لا</span>
+                      <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
+                    </label>
+                  </div>
+                </div>
+                
+                <div className="text-sm text-gray-600 font-medium flex items-center gap-1 w-full md:w-auto justify-end">
+                  <span className="font-bold text-[#006C35]">3</span>
+                  من الزوّار للموقع أعجبهم محتوى هذه الصفحة
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-6 text-left" dir="ltr">
+              <p className="text-xs text-gray-400 font-medium">
+                تاريخ آخر تحديث لمحتوى الصفحة : 03/09/2025 بتمام الساعة 12:19 مساء بتوقيت المملكة العربية السعودية
+              </p>
+            </div>
           </div>
         </div>
       </main>
