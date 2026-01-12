@@ -141,7 +141,7 @@ export default function ServiceInfo() {
 
         {/* User Guide Button (Image ONLY) */}
         <div className="flex flex-col items-start gap-1 mt-4 w-full">
-          <img src="/images/user-guide-button-v2.png" alt="" className="h-12 object-contain cursor-pointer" />
+          <img src="/images/user-guide-button-v3.png" alt="" className="h-12 object-contain cursor-pointer" />
         </div>
 
         {/* Related Apps */}
