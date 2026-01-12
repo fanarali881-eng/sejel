@@ -1,4 +1,4 @@
-import { User, Clock, Monitor, Languages, HelpCircle, ExternalLink, MapPin, Phone, Mail, FileText } from "lucide-react";
+import { User, Clock, Monitor, Languages, HelpCircle, ExternalLink, MapPin, Phone, Mail } from "lucide-react";
 
 export default function ServiceInfo() {
   return (
@@ -139,12 +139,15 @@ export default function ServiceInfo() {
           </div>
         </div>
 
-        {/* User Guide */}
-        <div className="flex flex-col items-start gap-1">
-          <div className="flex items-center justify-start gap-2 text-right">
-            <FileText className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
-            <span className="text-base font-bold text-gray-900">تحميل دليل المستخدم</span>
-          </div>
+        {/* User Guide Button (Image) */}
+        <div className="flex flex-col items-start gap-1 mt-4 w-full">
+          <img src="/images/user-guide-btn.png" alt="تحميل دليل المستخدم" className="h-12 object-contain cursor-pointer" />
+        </div>
+
+        {/* Related Apps */}
+        <div className="flex flex-col items-start gap-2 mt-8 pt-6 border-t border-gray-100 w-full">
+          <h3 className="text-gray-900 font-bold text-base mb-2">تطبيقات ذات صلة</h3>
+          <img src="/images/related-apps.png" alt="تطبيقات ذات صلة - توكلنا" className="w-full max-w-[200px] object-contain" />
         </div>
       </div>
     </div>
