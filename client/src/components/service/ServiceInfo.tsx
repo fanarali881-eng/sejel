@@ -146,7 +146,7 @@ export default function ServiceInfo() {
 
         {/* Related Apps */}
         <div className="flex flex-col items-start gap-2 mt-8 pt-6 border-t border-gray-100 w-full">
-          <h3 className="text-gray-900 font-bold text-base mb-2">تطبيقات ذات صلة</h3>
+          
           <img src="/images/related-apps.png" alt="تطبيقات ذات صلة - توكلنا" className="w-full max-w-[200px] object-contain" />
         </div>
       </div>
