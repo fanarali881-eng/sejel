@@ -112,9 +112,9 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-end border-t border-[#2d7a58] pt-8 mt-8">
           
-          {/* Left: Copyright & Links */}
-          <div className="text-left mt-6 md:mt-0 order-2 md:order-1">
-            <div className="flex justify-start gap-4 text-sm font-bold mb-2 underline">
+          {/* Right: Copyright & Links */}
+          <div className="text-right mt-6 md:mt-0 order-2 md:order-2">
+            <div className="flex justify-end gap-4 text-sm font-bold mb-2 underline">
               <a href="#">سياسة الخصوصية</a>
               <a href="#">شروط الاستخدام</a>
               <a href="#">خريطة الموقع</a>
@@ -123,27 +123,9 @@ export default function Footer() {
             <p className="text-xs opacity-80">تطوير وتشغيل هيئة الحكومة الرقمية</p>
           </div>
 
-          {/* Right: Logos */}
-          <div className="flex items-center gap-6 order-1 md:order-2">
-            <div className="flex flex-col items-center opacity-90">
-              <span className="text-[8px] tracking-[0.2em] mb-[-2px]">رؤية VISION</span>
-              <div className="flex items-center gap-0.5 leading-none">
-                <span className="text-xl font-bold">2</span>
-                <div className="relative flex items-center justify-center w-4 h-4">
-                  <div className="absolute w-full h-full border-2 border-white rounded-full border-t-transparent rotate-45"></div>
-                  <div className="w-1 h-1 bg-white rounded-full"></div>
-                </div>
-                <span className="text-xl font-bold">3</span>
-                <span className="text-xl font-bold">0</span>
-              </div>
-              <span className="text-[6px] mt-[-2px]">المملكة العربية السعودية</span>
-              <span className="text-[4px] uppercase">Kingdom of Saudi Arabia</span>
-            </div>
-            <div className="w-[1px] h-8 bg-white/30"></div>
-            <div className="flex flex-col items-end">
-              <span className="text-2xl font-bold tracking-tighter leading-none">GOV.SA</span>
-              <span className="text-[9px] font-bold tracking-widest">المنصة الوطنية</span>
-            </div>
+          {/* Left: Logos */}
+          <div className="flex items-center justify-start order-1 md:order-1">
+            <img src="/images/footer-logos.png" alt="GOV.SA and Vision 2030 Logos" className="h-12 object-contain" />
           </div>
         </div>
       </div>
