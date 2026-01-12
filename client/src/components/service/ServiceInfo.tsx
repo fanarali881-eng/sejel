@@ -138,7 +138,7 @@ export default function ServiceInfo() {
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
           {/* User Guide Button - Absolutely positioned to guarantee no gap */}
-          <div className="absolute top-[2.5rem] right-7">
+          <div className="absolute top-[3rem] right-7">
             <img src="/images/user-guide-button-v7.png" alt="" className="h-20 object-contain cursor-pointer" />
           </div>
         </div>
