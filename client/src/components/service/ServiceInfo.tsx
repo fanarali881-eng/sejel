@@ -4,59 +4,59 @@ export default function ServiceInfo() {
   return (
     <div className="space-y-8 hidden lg:block text-right">
       {/* Target Audience */}
-      <div className="flex items-start justify-end gap-3 text-right">
-        <div className="flex flex-col items-end">
+      <div className="flex items-start justify-start gap-4 text-right">
+        <User className="w-6 h-6 text-[#006C35] mt-1 shrink-0" strokeWidth={1.5} />
+        <div className="flex flex-col items-start">
           <p className="text-base text-gray-900 font-medium mb-1">أعمال , التجار</p>
           <h3 className="text-gray-500 text-sm mb-2">الجمهور المستهدف</h3>
           <p className="text-sm text-gray-900 font-medium mb-1">كبار السن , المرأة , الشباب , الأشخاص</p>
           <p className="text-sm text-gray-900 font-medium mb-1">ذوي الإعاقة</p>
           <h3 className="text-gray-500 text-sm">صفة المستخدم</h3>
         </div>
-        <User className="w-6 h-6 text-[#006C35] mt-1" strokeWidth={1.5} />
       </div>
 
       {/* Duration */}
-      <div className="flex items-start justify-end gap-3 text-right">
-        <div className="flex flex-col items-end">
+      <div className="flex items-start justify-start gap-4 text-right">
+        <Clock className="w-6 h-6 text-[#006C35] mt-1 shrink-0" strokeWidth={1.5} />
+        <div className="flex flex-col items-start">
           <p className="text-base text-gray-900 font-medium mb-1">فوري</p>
           <h3 className="text-gray-500 text-sm">مدة الخدمة</h3>
         </div>
-        <Clock className="w-6 h-6 text-[#006C35] mt-1" strokeWidth={1.5} />
       </div>
 
       {/* Channels */}
-      <div className="flex items-start justify-end gap-3 text-right">
-        <div className="flex flex-col items-end">
+      <div className="flex items-start justify-start gap-4 text-right">
+        <Monitor className="w-6 h-6 text-[#006C35] mt-1 shrink-0" strokeWidth={1.5} />
+        <div className="flex flex-col items-start">
           <p className="text-base text-gray-900 font-medium mb-1">بوابة إلكترونية</p>
           <h3 className="text-gray-500 text-sm">قنوات تقديم الخدمة</h3>
         </div>
-        <Monitor className="w-6 h-6 text-[#006C35] mt-1" strokeWidth={1.5} />
       </div>
 
       {/* Language */}
-      <div className="flex items-start justify-end gap-3 text-right">
-        <div className="flex flex-col items-end">
+      <div className="flex items-start justify-start gap-4 text-right">
+        <Languages className="w-6 h-6 text-[#006C35] mt-1 shrink-0" strokeWidth={1.5} />
+        <div className="flex flex-col items-start">
           <p className="text-base text-gray-900 font-medium mb-1">إنجليزي , عربي</p>
           <h3 className="text-gray-500 text-sm">الخدمة مقدمة باللغة</h3>
         </div>
-        <Languages className="w-6 h-6 text-[#006C35] mt-1" strokeWidth={1.5} />
       </div>
 
       {/* Cost */}
-      <div className="flex items-start justify-end gap-3 text-right">
-        <div className="flex flex-col items-end">
+      <div className="flex items-start justify-start gap-4 text-right">
+        <div className="w-6 h-6 flex items-center justify-center mt-1 shrink-0">
+          <span className="text-[#006C35] font-bold text-xl">﷼</span>
+        </div>
+        <div className="flex flex-col items-start">
           <p className="text-lg font-bold text-gray-900 mb-1">500 <span className="text-sm font-normal text-[#006C35]">ر.س</span></p>
           <h3 className="text-gray-500 text-sm">تكلفة الخدمة</h3>
-        </div>
-        <div className="w-6 h-6 flex items-center justify-center mt-1">
-          <span className="text-[#006C35] font-bold text-xl">﷼</span>
         </div>
       </div>
 
       {/* Payment Channels */}
-      <div className="flex flex-col items-end gap-2 mt-4 w-full">
+      <div className="flex flex-col items-start gap-2 mt-4 w-full">
         <h3 className="text-gray-900 font-bold text-base mb-2">قنوات الدفع</h3>
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-start">
           <img src="/images/payment-methods.png" alt="قنوات الدفع: مدى، سداد، البطاقة الائتمانية" className="max-w-full h-auto object-contain" />
         </div>
       </div>
@@ -64,34 +64,34 @@ export default function ServiceInfo() {
       {/* Links List */}
       <div className="space-y-6 pt-8 mt-4 border-t border-gray-100 w-full">
         {/* FAQ */}
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center justify-end gap-2 text-right">
-            <span className="text-base font-bold text-gray-900">الأسئلة الشائعة</span>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center justify-start gap-2 text-right">
             <HelpCircle className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+            <span className="text-base font-bold text-gray-900">الأسئلة الشائعة</span>
           </div>
-          <div className="flex items-center justify-end gap-2 text-right group cursor-pointer pr-7">
+          <div className="flex items-center justify-start gap-2 text-right group cursor-pointer pr-7">
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الأسئلة الشائعة</span>
           </div>
         </div>
 
         {/* Branches */}
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center justify-end gap-2 text-right">
-            <span className="text-base font-bold text-gray-900">رابط الفروع</span>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center justify-start gap-2 text-right">
             <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+            <span className="text-base font-bold text-gray-900">رابط الفروع</span>
           </div>
-          <div className="flex items-center justify-end gap-2 text-right group cursor-pointer pr-7">
+          <div className="flex items-center justify-start gap-2 text-right group cursor-pointer pr-7">
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على رابط الفروع</span>
           </div>
         </div>
 
         {/* Working Hours */}
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center justify-end gap-2 text-right">
-            <span className="text-base font-bold text-gray-900">أوقات عمل الفروع</span>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center justify-start gap-2 text-right">
             <Clock className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+            <span className="text-base font-bold text-gray-900">أوقات عمل الفروع</span>
           </div>
           <div className="text-right pr-7">
             <p className="text-sm text-gray-500">8 صباحا - 5 مساء (من الأحد إلى الخميس)</p>
@@ -99,10 +99,10 @@ export default function ServiceInfo() {
         </div>
         
         {/* Phone */}
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center justify-end gap-2 text-right">
-            <span className="text-base font-bold text-gray-900">الهاتف</span>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center justify-start gap-2 text-right">
             <Phone className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+            <span className="text-base font-bold text-gray-900">الهاتف</span>
           </div>
           <div className="text-right pr-7">
             <p className="text-base font-bold text-[#006C35]" dir="ltr">1900</p>
@@ -110,10 +110,10 @@ export default function ServiceInfo() {
         </div>
 
         {/* Email */}
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center justify-end gap-2 text-right">
-            <span className="text-base font-bold text-gray-900">البريد الإلكتروني</span>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center justify-start gap-2 text-right">
             <Mail className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+            <span className="text-base font-bold text-gray-900">البريد الإلكتروني</span>
           </div>
           <div className="text-right pr-7">
             <p className="text-sm text-[#006C35]">CS@mc.gov.sa</p>
@@ -121,22 +121,22 @@ export default function ServiceInfo() {
         </div>
 
         {/* Location */}
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center justify-end gap-2 text-right">
-            <span className="text-base font-bold text-gray-900">الموقع الجغرافي</span>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center justify-start gap-2 text-right">
             <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+            <span className="text-base font-bold text-gray-900">الموقع الجغرافي</span>
           </div>
-          <div className="flex items-center justify-end gap-2 text-right group cursor-pointer pr-7">
+          <div className="flex items-center justify-start gap-2 text-right group cursor-pointer pr-7">
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
         </div>
 
         {/* User Guide */}
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center justify-end gap-2 text-right">
-            <span className="text-base font-bold text-gray-900">تحميل دليل المستخدم</span>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center justify-start gap-2 text-right">
             <FileText className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
+            <span className="text-base font-bold text-gray-900">تحميل دليل المستخدم</span>
           </div>
         </div>
       </div>
