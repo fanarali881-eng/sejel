@@ -7,6 +7,7 @@ import { MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import CommentModal from "@/components/service/CommentModal";
+import FeedbackComponent from "@/components/service/FeedbackComponent";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("steps");
@@ -125,26 +126,7 @@ export default function Home() {
                 </h3>
               </div>
               
-              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex items-center gap-6 w-full md:w-auto">
-                  <span className="text-base font-bold text-gray-800">هل أعجبك محتوى الصفحة ؟</span>
-                  <div className="flex gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <span className="text-sm font-bold text-gray-700">نعم</span>
-                      <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <span className="text-sm font-bold text-gray-700">لا</span>
-                      <div className="w-5 h-5 rounded-full border border-gray-300 bg-white"></div>
-                    </label>
-                  </div>
-                </div>
-                
-                <div className="text-sm text-gray-600 font-medium flex items-center gap-1 w-full md:w-auto justify-end">
-                  <span className="font-bold text-[#006C35]">3</span>
-                  من الزوّار للموقع أعجبهم محتوى هذه الصفحة
-                </div>
-              </div>
+                  <FeedbackComponent />
             </div>
             
             <div className="mt-6 text-right">
