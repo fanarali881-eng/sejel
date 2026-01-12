@@ -7,7 +7,7 @@ export default function ServiceHero() {
         <div className="flex flex-col md:flex-row justify-between items-start">
           
           {/* Left Side: Share Box */}
-          <div className="w-full md:w-auto order-2 md:order-1 mt-8 md:mt-0">
+          <div className="w-full md:w-auto order-2 md:order-2 mt-8 md:mt-0">
             <div className="bg-[#f0fdf4] p-4 rounded-lg shadow-sm border border-gray-100">
               <h3 className="text-[#006c35] text-center font-bold mb-3 text-sm">مشاركة الصفحة</h3>
               <div className="flex gap-2">
@@ -31,7 +31,7 @@ export default function ServiceHero() {
           </div>
 
           {/* Right Side: Content */}
-          <div className="flex flex-col items-end text-right flex-1 md:pl-12 order-1 md:order-2 w-full">
+          <div className="flex flex-col items-end text-right flex-1 md:pl-12 order-1 md:order-1 w-full">
             
             {/* Title */}
             <h1 className="text-3xl md:text-4xl font-bold text-[#004d30] mb-3">
