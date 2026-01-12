@@ -143,7 +143,7 @@ export default function ServiceInfo() {
         {/* Related Apps */}
         <div className="flex flex-col items-start gap-2 mt-8 pt-6 border-t border-gray-100 w-full">
           {/* Negative margin to pull the image up and cover the gap */}
-          <div className="-mt-12 w-full flex justify-start">
+          <div className="-mt-16 w-full flex justify-start">
              <img src="/images/related-apps.png" alt="" className="w-full max-w-[200px] object-contain" />
           </div>
         </div>
