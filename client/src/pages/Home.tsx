@@ -3,80 +3,75 @@ import Footer from "@/components/layout/Footer";
 import ServiceHero from "@/components/service/ServiceHero";
 import ServiceSteps from "@/components/service/ServiceSteps";
 import ServiceInfo from "@/components/service/ServiceInfo";
-import RelatedServices from "@/components/service/RelatedServices";
 import { MessageSquare, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcfcfc]">
+    <div className="min-h-screen flex flex-col bg-white font-sans" dir="rtl">
       <Header />
       
       <main className="flex-1">
         <ServiceHero />
         
-        <div className="container py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content Column */}
-            <div className="lg:col-span-2 space-y-8">
+        <div className="container py-8">
+          <div className="flex flex-col lg:flex-row gap-12">
+            
+            {/* Right Column: Main Content */}
+            <div className="flex-1 order-2 lg:order-1">
+              {/* Tabs-like Header */}
+              <div className="flex border-b border-gray-200 mb-6">
+                <button className="px-4 py-2 text-[#006C35] border-b-2 border-[#006C35] font-bold text-sm">الخطوات</button>
+                <button className="px-4 py-2 text-gray-500 hover:text-[#006C35] text-sm">المتطلبات</button>
+                <button className="px-4 py-2 text-gray-500 hover:text-[#006C35] text-sm">المستندات المطلوبة</button>
+              </div>
+              
               <ServiceSteps />
               
-              <RelatedServices />
-              
               {/* Feedback Section */}
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-8 mt-8">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                  <div>
-                    <h3 className="font-bold text-gray-900 mb-2">شاركنا رأيك</h3>
-                    <p className="text-sm text-gray-500">هل أعجبك محتوى هذه الصفحة؟ ساهم معنا في التحسين.</p>
+              <div className="mt-12 pt-8 border-t border-gray-200">
+                <div className="bg-[#f8f9fa] p-6 rounded border border-gray-100">
+                  <h3 className="font-bold text-[#006C35] mb-4 flex items-center gap-2 text-sm">
+                    <MessageSquare className="w-4 h-4" />
+                    التعليقات والاقتراحات
+                  </h3>
+                  <p className="text-xs text-gray-500 mb-4">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
+                  
+                  <div className="mb-6">
+                    <Button variant="outline" className="text-xs h-8 bg-white border-gray-300 text-gray-600">اضافة تعليق</Button>
                   </div>
-                  <div className="flex gap-3">
-                    <Button variant="outline" className="gap-2 hover:bg-green-50 hover:text-green-700 hover:border-green-200">
-                      <ThumbsUp className="w-4 h-4" />
-                      نعم
-                    </Button>
-                    <Button variant="outline" className="gap-2 hover:bg-red-50 hover:text-red-700 hover:border-red-200">
-                      <ThumbsDown className="w-4 h-4" />
-                      لا
-                    </Button>
+
+                  <div className="border-t border-gray-200 pt-6">
+                    <h4 className="font-bold text-gray-700 mb-2 text-sm">شاركنا رأيك، وساهم بالتحسين</h4>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <span className="text-xs text-gray-600">هل أعجبك محتوى الصفحة ؟</span>
+                        <div className="flex gap-2">
+                          <button className="px-3 py-1 bg-white border border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50">نعم</button>
+                          <button className="px-3 py-1 bg-white border border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50">لا</button>
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-gray-400">
+                        <span className="font-bold text-[#006C35] text-sm mx-1">3</span>
+                        من الزوّار للموقع أعجبهم محتوى هذه الصفحة
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="mt-8 pt-8 border-t border-gray-100">
-                  <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-[#006C35]" />
-                    التعليقات والاقتراحات
-                  </h4>
-                  <form className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-xs font-medium text-gray-700">الاسم *</label>
-                        <input type="text" className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#006C35] focus:ring-1 focus:ring-[#006C35]" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-medium text-gray-700">البريد الإلكتروني *</label>
-                        <input type="email" className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#006C35] focus:ring-1 focus:ring-[#006C35]" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-medium text-gray-700">الرسالة *</label>
-                      <textarea rows={4} className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#006C35] focus:ring-1 focus:ring-[#006C35]"></textarea>
-                    </div>
-                    <div className="flex justify-end gap-3">
-                      <Button variant="ghost">إلغاء</Button>
-                      <Button variant="saudi">إرسال</Button>
-                    </div>
-                  </form>
+                <div className="mt-4 text-left">
+                  <p className="text-[10px] text-gray-400">
+                    تاريخ آخر تحديث لمحتوى الصفحة : 03/09/2025 بتمام الساعة 12:19 مساء بتوقيت المملكة العربية السعودية
+                  </p>
                 </div>
               </div>
             </div>
             
-            {/* Sidebar Column */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-24">
-                <ServiceInfo />
-              </div>
+            {/* Left Column: Sidebar Info */}
+            <div className="w-full lg:w-64 order-1 lg:order-2">
+              <ServiceInfo />
             </div>
+            
           </div>
         </div>
       </main>

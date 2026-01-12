@@ -1,90 +1,89 @@
-import { Users, Clock, Globe, CreditCard, Phone, Mail, MapPin, Calendar } from "lucide-react";
+import { Users, Clock, Globe, CreditCard, Phone, Mail, MapPin, Calendar, HelpCircle, FileText, ExternalLink } from "lucide-react";
 
 export default function ServiceInfo() {
   return (
-    <div className="space-y-6">
-      {/* Service Details Card */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h3 className="font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">تفاصيل الخدمة</h3>
-        
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <Users className="w-5 h-5 text-[#006C35] mt-0.5" />
-            <div>
-              <span className="block text-xs text-gray-400 mb-1">الجمهور المستهدف</span>
-              <p className="text-sm text-gray-700 font-medium">أعمال، التجار</p>
-              <p className="text-xs text-gray-500 mt-1">كبار السن، المرأة، الشباب، ذوي الإعاقة</p>
-            </div>
-          </div>
-          
-          <div className="flex items-start gap-3">
-            <Clock className="w-5 h-5 text-[#006C35] mt-0.5" />
-            <div>
-              <span className="block text-xs text-gray-400 mb-1">مدة الخدمة</span>
-              <p className="text-sm text-gray-700 font-medium">فوري</p>
-            </div>
-          </div>
-          
-          <div className="flex items-start gap-3">
-            <Globe className="w-5 h-5 text-[#006C35] mt-0.5" />
-            <div>
-              <span className="block text-xs text-gray-400 mb-1">اللغة</span>
-              <p className="text-sm text-gray-700 font-medium">عربي، إنجليزي</p>
-            </div>
-          </div>
-          
-          <div className="flex items-start gap-3">
-            <CreditCard className="w-5 h-5 text-[#006C35] mt-0.5" />
-            <div>
-              <span className="block text-xs text-gray-400 mb-1">تكلفة الخدمة</span>
-              <p className="text-sm text-gray-700 font-medium">500 ر.س</p>
-              <div className="flex gap-2 mt-2">
-                <div className="h-6 w-10 bg-gray-100 rounded border border-gray-200 flex items-center justify-center text-[8px] text-gray-500">MADA</div>
-                <div className="h-6 w-10 bg-gray-100 rounded border border-gray-200 flex items-center justify-center text-[8px] text-gray-500">SADAD</div>
-                <div className="h-6 w-10 bg-gray-100 rounded border border-gray-200 flex items-center justify-center text-[8px] text-gray-500">VISA</div>
-              </div>
-            </div>
-          </div>
+    <div className="space-y-8 border-r border-gray-100 pr-8 hidden lg:block">
+      {/* Target Audience */}
+      <div>
+        <h3 className="text-[#006C35] font-bold text-sm mb-2">الجمهور المستهدف</h3>
+        <p className="text-xs text-gray-600 mb-1">أعمال , التجار</p>
+        <p className="text-[10px] text-gray-400">كبار السن , المرأة , الشباب , الأشخاص ذوي الإعاقة</p>
+      </div>
+
+      {/* User Type */}
+      <div>
+        <h3 className="text-[#006C35] font-bold text-sm mb-2">صفة المستخدم</h3>
+        <p className="text-xs text-gray-600">فوري</p>
+      </div>
+
+      {/* Duration */}
+      <div>
+        <h3 className="text-[#006C35] font-bold text-sm mb-2">مدة الخدمة</h3>
+        <p className="text-xs text-gray-600">بوابة إلكترونية</p>
+      </div>
+
+      {/* Channels */}
+      <div>
+        <h3 className="text-[#006C35] font-bold text-sm mb-2">قنوات تقديم الخدمة</h3>
+        <p className="text-xs text-gray-600">بوابة إلكترونية</p>
+      </div>
+
+      {/* Language */}
+      <div>
+        <h3 className="text-[#006C35] font-bold text-sm mb-2">الخدمة مقدمة باللغة</h3>
+        <p className="text-xs text-gray-600">إنجليزي , عربي</p>
+      </div>
+
+      {/* Cost */}
+      <div>
+        <h3 className="text-[#006C35] font-bold text-sm mb-2">تكلفة الخدمة</h3>
+        <p className="text-lg font-bold text-[#006C35]">500 <span className="text-xs font-normal text-gray-500">ر.س</span></p>
+      </div>
+
+      {/* Payment Channels */}
+      <div>
+        <h3 className="text-[#006C35] font-bold text-sm mb-2">قنوات الدفع</h3>
+        <div className="flex gap-2">
+          <div className="w-10 h-6 bg-gray-100 border border-gray-200 rounded flex items-center justify-center text-[8px]">Mada</div>
+          <div className="w-10 h-6 bg-gray-100 border border-gray-200 rounded flex items-center justify-center text-[8px]">Sadad</div>
+          <div className="w-10 h-6 bg-gray-100 border border-gray-200 rounded flex items-center justify-center text-[8px]">Visa</div>
         </div>
       </div>
 
-      {/* Contact Info Card */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h3 className="font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">معلومات التواصل</h3>
-        
-        <div className="space-y-4 text-sm">
-          <div className="flex items-center gap-3">
-            <Phone className="w-4 h-4 text-gray-400" />
-            <span className="text-gray-700 font-medium" dir="ltr">1900</span>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <Mail className="w-4 h-4 text-gray-400" />
-            <span className="text-gray-700">CS@mc.gov.sa</span>
-          </div>
-          
-          <div className="flex items-start gap-3">
-            <Calendar className="w-4 h-4 text-gray-400 mt-0.5" />
-            <div>
-              <span className="block text-gray-700">أوقات العمل</span>
-              <span className="text-xs text-gray-500">8 صباحاً - 5 مساءً (الأحد - الخميس)</span>
-            </div>
-          </div>
-          
-          <div className="pt-2">
-            <a href="#" className="text-[#006C35] text-xs font-medium hover:underline flex items-center gap-1">
-              <MapPin className="w-3 h-3" />
-              الاطلاع على مواقع الفروع
-            </a>
-          </div>
-        </div>
+      {/* Links List */}
+      <div className="space-y-3 pt-4 border-t border-gray-100">
+        <a href="#" className="flex items-center gap-2 text-xs text-[#006C35] hover:underline">
+          <HelpCircle className="w-4 h-4" />
+          الأسئلة الشائعة
+        </a>
+        <a href="#" className="flex items-center gap-2 text-xs text-[#006C35] hover:underline">
+          <ExternalLink className="w-4 h-4" />
+          رابط الفروع
+        </a>
+        <a href="#" className="flex items-center gap-2 text-xs text-[#006C35] hover:underline">
+          <MapPin className="w-4 h-4" />
+          الموقع الجغرافي
+        </a>
+        <a href="#" className="flex items-center gap-2 text-xs text-[#006C35] hover:underline">
+          <FileText className="w-4 h-4" />
+          تحميل دليل المستخدم
+        </a>
       </div>
-      
-      {/* Last Update */}
-      <div className="text-center">
-        <p className="text-[10px] text-gray-400">
-          آخر تحديث: 03/09/2025 - 12:19 م
-        </p>
+
+      {/* Contact Info */}
+      <div className="space-y-3 pt-4 border-t border-gray-100">
+        <div>
+          <h4 className="text-xs font-bold text-gray-700 mb-1">أوقات عمل الفروع</h4>
+          <p className="text-[10px] text-gray-500">8 صباحا - 5 مساء (من الأحد إلى الخميس)</p>
+        </div>
+        <div>
+          <h4 className="text-xs font-bold text-gray-700 mb-1">الهاتف</h4>
+          <p className="text-xs text-[#006C35] font-bold" dir="ltr">1900</p>
+        </div>
+        <div>
+          <h4 className="text-xs font-bold text-gray-700 mb-1">البريد الإلكتروني</h4>
+          <p className="text-xs text-[#006C35]">CS@mc.gov.sa</p>
+        </div>
       </div>
     </div>
   );
