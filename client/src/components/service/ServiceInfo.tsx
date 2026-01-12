@@ -139,7 +139,7 @@ export default function ServiceInfo() {
           </div>
           {/* User Guide Button - Absolutely positioned to guarantee no gap */}
           <div className="absolute top-[3rem] right-7">
-            <img src="/images/user-guide-button-v7.png" alt="" className="h-20 object-contain cursor-pointer" />
+            <img src="/images/user-guide-dl.png" alt="" className="h-20 object-contain cursor-pointer" />
           </div>
         </div>
 
