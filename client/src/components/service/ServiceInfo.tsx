@@ -128,7 +128,7 @@ export default function ServiceInfo() {
         </div>
 
         {/* Location */}
-        <div className="flex flex-col items-start gap-1 relative pb-16">
+        <div className="flex flex-col items-start gap-1 relative">
           <div className="flex items-center justify-start gap-2 text-right">
             <MapPin className="w-5 h-5 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-base font-bold text-gray-900">الموقع الجغرافي</span>
@@ -137,13 +137,12 @@ export default function ServiceInfo() {
             <ExternalLink className="w-4 h-4 text-[#006C35]" strokeWidth={1.5} />
             <span className="text-sm font-bold text-[#006C35] underline">الاطلاع على الموقع</span>
           </div>
-          {/* User Guide Button removed as it is part of the related-apps image below */}
         </div>
 
         {/* Related Apps */}
-        <div className="flex flex-col items-start gap-2 mt-8 pt-6 border-t border-gray-100 w-full">
+        <div className="flex flex-col items-start gap-2 w-full">
           {/* Negative margin to pull the image up and cover the gap */}
-          <div className="-mt-16 w-full flex justify-start">
+          <div className="-mt-12 w-full flex justify-start">
              <img src="/images/related-apps.png" alt="" className="w-full max-w-[200px] object-contain" />
           </div>
         </div>
