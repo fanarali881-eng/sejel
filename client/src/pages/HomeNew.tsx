@@ -3,6 +3,7 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Plus, Search, Settings, User } from "lucide-react";
+import { Link } from "wouter";
 
 export default function HomeNew() {
   return (
@@ -83,12 +84,13 @@ export default function HomeNew() {
           
           <div className="divide-y divide-gray-100">
             {[
-              { name: "قيد سجل تجاري", desc: "إصدار سجل تجاري جديد لمؤسسة فردية", icon: "🏢" },
+              { name: "قيد سجل تجاري", desc: "إصدار سجل تجاري جديد لمؤسسة فردية", icon: "🏢", link: "/service" },
               { name: "تجديد سجل تجاري", desc: "تجديد صلاحية السجل التجاري القائم", icon: "🔄" },
               { name: "حجز اسم تجاري", desc: "حجز اسم تجاري جديد قبل إصدار السجل", icon: "abc" },
               { name: "تعديل سجل تجاري", desc: "تعديل بيانات السجل التجاري الحالي", icon: "✏️" },
             ].map((service, i) => (
-              <div key={i} className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between group cursor-pointer">
+              <Link key={i} href={service.link || "#"}>
+              <div className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between group cursor-pointer">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 bg-[#e6f4ea] rounded-lg flex items-center justify-center text-xl">
                     {service.icon}
@@ -102,6 +104,7 @@ export default function HomeNew() {
                   بدء الخدمة ←
                 </Button>
               </div>
+              </Link>
             ))}
           </div>
         </div>
