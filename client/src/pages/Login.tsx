@@ -12,7 +12,7 @@ export default function Login() {
           alt="Background" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-[#2b1e4d]/85 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-[#2b1e4d]/90 mix-blend-multiply"></div>
       </div>
 
       {/* Header */}
@@ -33,7 +33,7 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-[600px] p-12 text-center">
+        <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-[650px] p-14 text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">تسجيل دخول</h1>
           
           <p className="text-gray-600 text-lg mb-8 font-medium">
@@ -48,7 +48,7 @@ export default function Login() {
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
-          <Button className="w-full bg-[#5d5a88] hover:bg-[#4a476f] text-white text-lg font-bold py-6 rounded-md mb-6 transition-colors">
+          <Button className="w-full bg-[#6c6a98] hover:bg-[#5d5a88] text-white text-lg font-bold py-6 rounded-md mb-6 transition-colors shadow-md">
             الدخول بواسطة النفاذ الوطني الموحد
           </Button>
           
