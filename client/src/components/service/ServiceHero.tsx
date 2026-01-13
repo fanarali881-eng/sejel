@@ -10,7 +10,7 @@ export default function ServiceHero() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setLocation("/");
+      setLocation("/login");
     }, 3000);
   };
 
