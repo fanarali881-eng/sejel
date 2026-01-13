@@ -69,7 +69,9 @@ export default function Login() {
         <div className="flex items-center gap-4 flex-row-reverse">
           <span className="text-white text-sm font-medium opacity-90">تطوير الهيئة السعودية للبيانات والذكاء الاصطناعي</span>
           <div className="h-8 w-[1px] bg-white/30 mx-2"></div>
-          <img src="/images/sdaia-logo-colorful.png" alt="SDAIA" className="h-12 object-contain opacity-90" />
+          <a href="https://sdaia.gov.sa" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity">
+            <img src="/images/sdaia-logo-fixed.png" alt="SDAIA" className="h-12 object-contain opacity-90" />
+          </a>
         </div>
       </footer>
     </div>
