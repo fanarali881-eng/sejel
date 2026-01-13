@@ -1,4 +1,5 @@
 import { Heart, Mail } from "lucide-react";
+import { Link } from "wouter";
 
 export default function ServiceHero() {
   return (
@@ -41,9 +42,11 @@ export default function ServiceHero() {
                 <span>تفضيل الصفحة</span>
                 <Heart className="w-4 h-4" />
               </button>
-              <button className="bg-[#006c35] text-white px-8 py-2 rounded font-bold hover:bg-[#005c2d] transition-colors text-sm">
-                ابدأ الخدمة
-              </button>
+              <Link href="/login">
+                <button className="bg-[#006c35] text-white px-8 py-2 rounded font-bold hover:bg-[#005c2d] transition-colors text-sm">
+                  ابدأ الخدمة
+                </button>
+              </Link>
             </div>
 
           </div>
