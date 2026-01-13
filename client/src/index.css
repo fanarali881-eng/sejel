@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "IBM Plex Sans Arabic", sans-serif;
+  --font-sans: "Cairo", sans-serif;
   
   --radius-sm: 2px;
   --radius-md: 4px;
