@@ -44,7 +44,7 @@ export default function Login() {
             <img src="/images/nafath-logo.png" alt="Nafath" className="h-[180px] object-contain" />
           </div>
           
-          <p className="text-[#212529] text-[16px] mb-[44px] leading-[26px] max-w-full mx-auto font-normal">
+          <p className="text-[#212529] text-[16px] mb-[24px] leading-[26px] max-w-full mx-auto font-normal">
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
