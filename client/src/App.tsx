@@ -12,8 +12,9 @@ import Login from "./pages/Login";
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={HomeNew} />
       <Route path={"/login"} component={Login} />
+      <Route path={"/service"} component={Home} />
       
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
