@@ -33,18 +33,18 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[760px] p-8 text-center">
-          <h1 className="text-[32px] font-bold text-[#35363a] mb-[2.5rem]">تسجيل دخول</h1>
+        <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[600px] p-6 text-center">
+          <h1 className="text-[32px] font-bold text-[#35363a] mb-[1.5rem]">تسجيل دخول</h1>
           
-          <p className="text-[#3b3b3b] text-[20px] mb-[24px] font-normal leading-[32px]">
+          <p className="text-[#3b3b3b] text-[20px] mb-[16px] font-normal leading-[32px]">
             للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
           </p>
           
-          <div className="flex justify-center mb-[30px]">
-            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[180px] object-contain" />
+          <div className="flex justify-center mb-[20px]">
+            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[140px] object-contain" />
           </div>
           
-          <p className="text-[#212529] text-[16px] mb-[24px] leading-[26px] max-w-full mx-auto font-normal">
+          <p className="text-[#212529] text-[16px] mb-[16px] leading-[26px] max-w-full mx-auto font-normal">
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
