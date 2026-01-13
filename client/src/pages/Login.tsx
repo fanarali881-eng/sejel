@@ -66,10 +66,10 @@ export default function Login() {
 
       {/* Footer */}
       <footer className="relative z-10 w-full p-8 flex justify-center items-center">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-row-reverse">
           <span className="text-white text-sm font-medium opacity-90">تطوير الهيئة السعودية للبيانات والذكاء الاصطناعي</span>
           <div className="h-8 w-[1px] bg-white/30 mx-2"></div>
-          <img src="/images/sdaia-logo.png" alt="SDAIA" className="h-12 object-contain brightness-0 invert opacity-90" />
+          <img src="/images/sdaia-logo-new.png" alt="SDAIA" className="h-12 object-contain brightness-0 invert opacity-90" />
         </div>
       </footer>
     </div>
