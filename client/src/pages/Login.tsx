@@ -8,11 +8,11 @@ export default function Login() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="/images/hero-bg.jpg" 
+          src="/images/login-bg.jpg" 
           alt="Background" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-[#2b1e4d]/80 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-[#2b1e4d]/85 mix-blend-multiply"></div>
       </div>
 
       {/* Header */}
