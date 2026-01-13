@@ -48,11 +48,11 @@ export default function Login() {
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
-          <Button className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold py-2 px-5 rounded-[7px] mb-[15px] transition-colors shadow-none h-auto border-[3px] border-[#716da5]">
+          <Button className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[60px] border-[3px] border-[#716da5] flex items-center justify-center">
             الدخول بواسطة النفاذ الوطني الموحد
           </Button>
           
-          <div className="w-full flex items-center gap-2 text-[14px] text-[#212529] bg-[#f4f7fe] mt-[15px] py-[0.4rem] px-[1.25rem] border border-[#E1E1E8] rounded-[7px]">
+          <div className="w-full flex items-center gap-2 text-[14px] text-[#212529] bg-[#f4f7fe] mt-[15px] h-[60px] px-[1.25rem] border border-[#E1E1E8] rounded-[7px]">
             <div className="flex-shrink-0">
               <img src="/images/info-icon.png" alt="info" className="w-6 h-6" />
             </div>
