@@ -33,8 +33,8 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-[4px] shadow-lg w-full max-w-[760px] p-8 text-center">
-          <h1 className="text-[46px] font-bold text-[#793699] mb-[30px]">تسجيل دخول</h1>
+        <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[760px] p-8 text-center">
+          <h1 className="text-[40px] font-bold text-black mb-[30px]">تسجيل دخول</h1>
           
           <p className="text-black text-[19.2px] mb-[30px] font-bold">
             للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
