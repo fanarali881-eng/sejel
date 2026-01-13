@@ -3,9 +3,23 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Plus, Search, Settings, User } from "lucide-react";
-import { Link } from "wouter";
+import { useLocation } from "wouter";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function HomeNew() {
+  const [, setLocation] = useLocation();
+  const [loadingService, setLoadingService] = useState<string | null>(null);
+
+  const handleServiceClick = (link: string | undefined, name: string) => {
+    if (!link) return;
+    setLoadingService(name);
+    setTimeout(() => {
+      setLocation(link);
+      setLoadingService(null);
+    }, 3000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-sans" dir="rtl">
       <Header />
@@ -89,22 +103,28 @@ export default function HomeNew() {
               { name: "حجز اسم تجاري", desc: "حجز اسم تجاري جديد قبل إصدار السجل", icon: "abc" },
               { name: "تعديل سجل تجاري", desc: "تعديل بيانات السجل التجاري الحالي", icon: "✏️" },
             ].map((service, i) => (
-              <Link key={i} href={service.link || "#"}>
-              <div className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between group cursor-pointer">
+              <div 
+                key={i} 
+                onClick={() => handleServiceClick(service.link, service.name)}
+                className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between group cursor-pointer"
+              >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-[#e6f4ea] rounded-lg flex items-center justify-center text-xl">
-                    {service.icon}
+                  <div className="w-10 h-10 bg-[#e6f4ea] rounded-lg flex items-center justify-center text-xl relative">
+                    {loadingService === service.name ? (
+                      <Loader2 className="w-6 h-6 text-[#006C35] animate-spin" />
+                    ) : (
+                      service.icon
+                    )}
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-800 group-hover:text-[#006C35] transition-colors">{service.name}</h3>
                     <p className="text-sm text-gray-500">{service.desc}</p>
                   </div>
                 </div>
-                <Button variant="ghost" className="text-[#006C35] opacity-0 group-hover:opacity-100 transition-opacity">
-                  بدء الخدمة ←
+                <Button variant="ghost" className="text-[#006C35] opacity-0 group-hover:opacity-100 transition-opacity" disabled={loadingService === service.name}>
+                  {loadingService === service.name ? "جاري التحميل..." : "بدء الخدمة ←"}
                 </Button>
               </div>
-              </Link>
             ))}
           </div>
         </div>
