@@ -108,14 +108,7 @@ export default function Footer() {
 
           {/* Left: Logos */}
           <div className="flex items-center justify-end order-2 md:order-2 gap-6 mt-6 md:mt-0">
-            <div className="flex items-center h-16">
-               <img 
-                 src="/images/sdaia-logo-original.png" 
-                 alt="SDAIA Logo" 
-                 className="h-full w-auto object-contain max-w-[200px]" 
-               />
-            </div>
-            <div className="h-12 w-px bg-white/20 mx-2"></div>
+
             <div className="flex items-center h-16">
                <span className="text-sm font-bold">تطوير الهيئة السعودية للبيانات والذكاء الاصطناعي</span>
             </div>
