@@ -52,9 +52,9 @@ export default function Login() {
             الدخول بواسطة النفاذ الوطني الموحد
           </Button>
           
-          <div className="flex items-center gap-2 text-[14px] text-[#212529]" style={{ backgroundColor: '#f4f7fe', marginTop: '15px', padding: '0.4rem 1.25rem', border: 'solid 1px #E1E1E8', borderRadius: '0' }}>
+          <div className="flex items-center gap-2 text-[14px] text-[#212529]" style={{ backgroundColor: '#f4f7fe', marginTop: '15px', padding: '0.4rem 1.25rem', border: 'solid 1px #E1E1E8', borderRadius: '7px' }}>
             <div className="flex-shrink-0">
-              <img src="/images/customLoginInfp.svg" alt="info" className="w-5 h-5" />
+              <img src="/images/info-icon.png" alt="info" className="w-6 h-6" />
             </div>
             <div className="flex-grow text-right">
               <span className="">للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء </span>
