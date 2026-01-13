@@ -52,13 +52,13 @@ export default function Login() {
             الدخول بواسطة النفاذ الوطني الموحد
           </Button>
           
-          <div className="w-full flex items-center gap-2 text-[14px] text-[#212529]" style={{ backgroundColor: '#f4f7fe', marginTop: '15px', padding: '0.4rem 1.25rem', border: 'solid 1px #E1E1E8', borderRadius: '7px' }}>
+          <div className="w-full flex items-center gap-2 text-[14px] text-[#212529] bg-[#f4f7fe] mt-[15px] py-[0.4rem] px-[1.25rem] border border-[#E1E1E8] rounded-[7px]">
             <div className="flex-shrink-0">
               <img src="/images/info-icon.png" alt="info" className="w-6 h-6" />
             </div>
             <div className="flex-grow text-right">
               <span className="">للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء </span>
-              <a href="#" className="font-bold hover:no-underline" style={{ color: '#35363A', textDecoration: 'none', backgroundColor: 'transparent', cursor: 'pointer' }}>الضغط هنا </a>
+              <a href="#" className="font-bold hover:no-underline text-[#35363A] no-underline bg-transparent cursor-pointer">الضغط هنا </a>
             </div>
           </div>
         </div>
