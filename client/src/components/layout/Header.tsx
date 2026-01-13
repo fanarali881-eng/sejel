@@ -93,10 +93,10 @@ export default function Header() {
               English
             </button>
             
-            <button className="hidden lg:flex items-center gap-2 text-sm font-medium text-gray-800 hover:text-[#006C35]">
+            <Link href="/login" className="hidden lg:flex items-center gap-2 text-sm font-medium text-gray-800 hover:text-[#006C35]">
               <User className="w-5 h-5" />
               تسجيل الدخول
-            </button>
+            </Link>
 
             <div className="w-[1px] h-8 bg-gray-200 mx-2 hidden lg:block"></div>
 
