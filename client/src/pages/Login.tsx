@@ -18,7 +18,7 @@ export default function Login() {
       {/* Header */}
       <header className="relative z-10 w-full p-6 flex justify-between items-start">
         <div className="flex items-center gap-2 text-white">
-          <img src="/images/sbc-logo-white.png" alt="Saudi Business Center" className="h-16 object-contain" />
+          <img src="/images/sbc-logo-white.png" alt="Saudi Business Center" className="h-16 object-contain brightness-0 invert" />
         </div>
         
         <div className="flex items-center gap-2 text-white cursor-pointer hover:text-gray-200 transition-colors">
