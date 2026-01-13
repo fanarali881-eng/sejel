@@ -10,9 +10,9 @@ export default function Login() {
         <img 
           src="/images/official-bg-final.png" 
           alt="Background" 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-[#2b1e4d]/40 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-[#2b1e4d]/30 mix-blend-multiply"></div>
       </div>
 
       {/* Header */}
