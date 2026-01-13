@@ -60,10 +60,7 @@ export default function ServiceHero() {
                 className="bg-[#006c35] text-white px-8 py-2 rounded font-bold hover:bg-[#005c2d] transition-colors text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed min-w-[120px] justify-center"
               >
                 {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>جاري التحويل...</span>
-                  </>
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   "ابدأ الخدمة"
                 )}
