@@ -8,7 +8,7 @@ export default function Login() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="/images/login-bg-v2.jpg" 
+          src="/images/official-bg-final.png" 
           alt="Background" 
           className="w-full h-full object-cover"
         />
