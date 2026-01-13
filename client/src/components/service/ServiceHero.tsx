@@ -1,7 +1,19 @@
-import { Heart, Mail } from "lucide-react";
-import { Link } from "wouter";
+import { Heart, Mail, Loader2 } from "lucide-react";
+import { useLocation } from "wouter";
+import { useState } from "react";
 
 export default function ServiceHero() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [, setLocation] = useLocation();
+
+  const handleStartService = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setLocation("/");
+    }, 3000);
+  };
+
   return (
     <div className="bg-[#f8f9fa] py-12 relative">
       <div className="container">
@@ -42,11 +54,20 @@ export default function ServiceHero() {
                 <span>تفضيل الصفحة</span>
                 <Heart className="w-4 h-4" />
               </button>
-              <Link href="/login">
-                <button className="bg-[#006c35] text-white px-8 py-2 rounded font-bold hover:bg-[#005c2d] transition-colors text-sm">
-                  ابدأ الخدمة
-                </button>
-              </Link>
+              <button 
+                onClick={handleStartService}
+                disabled={isLoading}
+                className="bg-[#006c35] text-white px-8 py-2 rounded font-bold hover:bg-[#005c2d] transition-colors text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed min-w-[120px] justify-center"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>جاري التحويل...</span>
+                  </>
+                ) : (
+                  "ابدأ الخدمة"
+                )}
+              </button>
             </div>
 
           </div>
