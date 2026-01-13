@@ -48,15 +48,18 @@ export default function Login() {
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
-          <Button className="w-full bg-[#793699] hover:bg-[#4c2260] text-white text-[19.2px] font-bold py-[18px] rounded-[5px] mb-6 transition-colors shadow-none">
+          <Button className="w-full bg-[#793699] hover:bg-[#4c2260] text-white text-[19.2px] font-bold py-2 px-5 rounded-[5px] mb-[15px] transition-colors shadow-none h-auto">
             الدخول بواسطة النفاذ الوطني الموحد
           </Button>
           
-          <div className="bg-[#f8f9fa] rounded-md p-4 flex items-start gap-3 text-right border border-gray-100">
-            <Info className="w-5 h-5 text-[#5d5a88] mt-1 flex-shrink-0" />
-            <p className="text-sm text-gray-600">
-              للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء <a href="#" className="text-[#198754] font-bold hover:underline decoration-2 underline-offset-4">الضغط هنا</a>
-            </p>
+          <div className="flex items-center gap-2 text-[14px] text-[#212529]" style={{ backgroundColor: '#f4f7fe', marginTop: '15px', padding: '0.4rem 1.25rem', border: 'solid 1px #E1E1E8', borderRadius: '0' }}>
+            <div className="flex-shrink-0">
+              <img src="/images/customLoginInfp.svg" alt="info" className="w-5 h-5" />
+            </div>
+            <div className="flex-grow text-right">
+              <span className="">للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء </span>
+              <a href="#" className="font-bold hover:no-underline" style={{ color: '#35363A', textDecoration: 'none', backgroundColor: 'transparent', cursor: 'pointer' }}>الضغط هنا </a>
+            </div>
           </div>
         </div>
       </main>
