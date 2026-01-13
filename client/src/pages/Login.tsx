@@ -12,7 +12,7 @@ export default function Login() {
           alt="Background" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-[#2b1e4d]/50 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-[#2b1e4d]/40 mix-blend-multiply"></div>
       </div>
 
       {/* Header */}
