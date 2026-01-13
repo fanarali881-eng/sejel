@@ -33,7 +33,7 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-[5px] shadow-lg w-full max-w-[600px] p-[40px] text-center">
+        <div className="bg-white rounded-[5px] shadow-lg w-full max-w-[760px] p-8 text-center">
           <h1 className="text-[46px] font-bold text-[#793699] mb-[30px]">تسجيل دخول</h1>
           
           <p className="text-black text-[19.2px] mb-[30px] font-bold">
