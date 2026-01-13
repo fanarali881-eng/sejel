@@ -34,9 +34,9 @@ export default function Login() {
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
         <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[760px] p-8 text-center">
-          <h1 className="text-[32px] font-bold text-black mb-[30px]">تسجيل دخول</h1>
+          <h1 className="text-[32px] font-bold text-[#35363a] mb-[2.5rem]">تسجيل دخول</h1>
           
-          <p className="text-black text-[19.2px] mb-[30px] font-normal">
+          <p className="text-[#3b3b3b] text-[24px] mb-[24px] font-normal leading-[32px]">
             للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
           </p>
           
@@ -48,7 +48,7 @@ export default function Login() {
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
-          <Button className="w-full bg-[#793699] hover:bg-[#4c2260] text-white text-[19.2px] font-bold py-2 px-5 rounded-[5px] mb-[15px] transition-colors shadow-none h-auto">
+          <Button className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold py-2 px-5 rounded-[7px] mb-[15px] transition-colors shadow-none h-auto border-[3px] border-[#716da5]">
             الدخول بواسطة النفاذ الوطني الموحد
           </Button>
           
