@@ -33,7 +33,7 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-[5px] shadow-lg w-full max-w-[760px] p-8 text-center">
+        <div className="bg-white rounded-[4px] shadow-lg w-full max-w-[760px] p-8 text-center">
           <h1 className="text-[46px] font-bold text-[#793699] mb-[30px]">تسجيل دخول</h1>
           
           <p className="text-black text-[19.2px] mb-[30px] font-bold">
@@ -41,7 +41,7 @@ export default function Login() {
           </p>
           
           <div className="flex justify-center mb-[30px]">
-            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[100px] object-contain" />
+            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[140px] object-contain" />
           </div>
           
           <p className="text-[#212529] text-[16px] mb-[44px] leading-[26px] max-w-full mx-auto font-normal">
