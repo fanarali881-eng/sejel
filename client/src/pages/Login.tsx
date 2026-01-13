@@ -33,15 +33,15 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[660px] p-8 text-center">
+        <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[700px] p-8 text-center">
           <h1 className="text-[32px] font-bold text-[#35363a] mb-[1.5rem]">تسجيل دخول</h1>
           
           <p className="text-[#3b3b3b] text-[20px] mb-[16px] font-normal leading-[32px]">
             للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
           </p>
           
-          <div className="flex justify-center mb-[20px]">
-            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[150px] object-contain" />
+          <div className="flex justify-center mb-[24px]">
+            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[160px] object-contain" />
           </div>
           
           <p className="text-[#212529] text-[16px] mb-[16px] leading-[26px] max-w-full mx-auto font-normal">
