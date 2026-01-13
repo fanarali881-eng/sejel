@@ -33,22 +33,22 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-[750px] px-20 py-16 text-center">
-          <h1 className="text-4xl font-bold text-[#2b1e4d] mb-10">تسجيل دخول</h1>
+        <div className="bg-white rounded-[5px] shadow-lg w-full max-w-[600px] p-[40px] text-center">
+          <h1 className="text-[46px] font-bold text-[#793699] mb-[30px]">تسجيل دخول</h1>
           
-          <p className="text-[#5d5a88] text-xl mb-12 font-medium">
+          <p className="text-black text-[19.2px] mb-[30px] font-bold">
             للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
           </p>
           
-          <div className="flex justify-center mb-10">
-            <img src="/images/nafath-logo.png" alt="Nafath" className="h-32 object-contain" />
+          <div className="flex justify-center mb-[30px]">
+            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[100px] object-contain" />
           </div>
           
-          <p className="text-[#5d5a88] text-base mb-10 leading-loose max-w-lg mx-auto font-medium">
+          <p className="text-[#212529] text-[16px] mb-[44px] leading-[26px] max-w-full mx-auto font-normal">
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
-          <Button className="w-full bg-[#6c6a98] hover:bg-[#5d5a88] text-white text-lg font-bold py-6 rounded-md mb-6 transition-colors shadow-md">
+          <Button className="w-full bg-[#793699] hover:bg-[#4c2260] text-white text-[19.2px] font-bold py-[18px] rounded-[5px] mb-6 transition-colors shadow-none">
             الدخول بواسطة النفاذ الوطني الموحد
           </Button>
           
