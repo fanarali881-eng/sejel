@@ -93,10 +93,10 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end border-t border-[#2d7a58] pt-8 mt-8">
+        <div className="flex flex-col md:flex-row justify-between items-center border-t border-[#2d7a58] pt-8 mt-8">
           
           {/* Right: Copyright & Links */}
-          <div className="text-right mt-6 md:mt-0 order-1 md:order-1">
+          <div className="text-right mt-6 md:mt-0 order-1 md:order-1 w-full md:w-auto">
             <div className="flex justify-start gap-4 text-sm font-bold mb-2 underline">
               <a href="#">سياسة الخصوصية</a>
               <a href="#">شروط الاستخدام</a>
@@ -107,8 +107,18 @@ export default function Footer() {
           </div>
 
           {/* Left: Logos */}
-          <div className="flex items-center justify-end order-2 md:order-2">
-            <img src="/images/footer-logos-v2.png" alt="GOV.SA and Vision 2030 Logos" className="h-16 object-contain" />
+          <div className="flex items-center justify-end order-2 md:order-2 gap-6 mt-6 md:mt-0">
+            <div className="flex items-center h-16">
+               <img 
+                 src="/images/sdaia-logo-final-v3.png" 
+                 alt="SDAIA Logo" 
+                 className="h-full w-auto object-contain max-w-[200px]" 
+               />
+            </div>
+            <div className="h-12 w-px bg-white/20 mx-2"></div>
+            <div className="flex items-center h-16">
+               <span className="text-sm font-bold">تطوير الهيئة السعودية للبيانات والذكاء الاصطناعي</span>
+            </div>
           </div>
         </div>
       </div>
