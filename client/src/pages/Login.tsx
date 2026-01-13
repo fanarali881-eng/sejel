@@ -36,7 +36,7 @@ export default function Login() {
         <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[760px] p-8 text-center">
           <h1 className="text-[32px] font-bold text-[#35363a] mb-[2.5rem]">تسجيل دخول</h1>
           
-          <p className="text-[#3b3b3b] text-[24px] mb-[24px] font-normal leading-[32px]">
+          <p className="text-[#3b3b3b] text-[24px] mb-[24px] font-bold leading-[32px]">
             للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
           </p>
           
