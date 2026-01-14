@@ -128,15 +128,15 @@ export default function NafathLogin() {
 
                         <div className="flex justify-between gap-4 pt-6">
                           {/* Reset Password Button (Right in RTL) */}
-                          <button type="button" className="w-[60%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2 h-[40px]">
-                            <Lock className="w-4 h-4" />
-                            <span>إعادة تعيين/تغيير كلمة المرور</span>
+                          <button type="button" className="w-[60%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal px-2 rounded-[4px] transition-colors text-[11px] flex items-center justify-center gap-2 h-[36px]">
+                            <Lock className="w-3.5 h-3.5" />
+                            <span className="whitespace-nowrap">إعادة تعيين/تغيير كلمة المرور</span>
                           </button>
                           
                           {/* New Account Button (Left in RTL) */}
-                          <button type="button" className="w-[40%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2 h-[40px]">
-                            <User className="w-4 h-4" />
-                            <span>حساب جديد</span>
+                          <button type="button" className="w-[40%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal px-2 rounded-[4px] transition-colors text-[11px] flex items-center justify-center gap-2 h-[36px]">
+                            <User className="w-3.5 h-3.5" />
+                            <span className="whitespace-nowrap">حساب جديد</span>
                           </button>
                         </div>
                       </form>
