@@ -120,6 +120,21 @@ const issueLicenseSteps = [
   }
 ];
 
+const renewLicenseSteps = [
+  {
+    title: "الدخول على المنصة و إختيار الترخيص.",
+    description: ""
+  },
+  {
+    title: "إرفاق صورة من المستندات المطلوبة.",
+    description: ""
+  },
+  {
+    title: "تسديد المقابل المالي إن وجد.",
+    description: ""
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -131,6 +146,8 @@ export default function ServiceSteps() {
     steps = commercialExtractSteps;
   } else if (serviceId === 'issue-license') {
     steps = issueLicenseSteps;
+  } else if (serviceId === 'renew-license') {
+    steps = renewLicenseSteps;
   }
   
   // Video ID logic
@@ -145,8 +162,8 @@ export default function ServiceSteps() {
     videoTitle = 'شرح خدمة إصدار رخصة تجارية';
   }
   
-  // Hide video for commercial-extract
-  const showVideo = serviceId !== 'commercial-extract';
+  // Hide video for commercial-extract and renew-license
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license';
 
   return (
     <div className="py-4">
