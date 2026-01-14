@@ -33,7 +33,7 @@ export default function NafathLogin() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[120px]">
-        <h1 className="text-[28px] font-bold text-[#1b9c75] mt-8 mb-4">الدخول على النظام</h1>
+        <h1 className="text-[28px] font-bold text-[#11998e] mt-8 mb-4">الدخول على النظام</h1>
 
         {/* Login Card */}
         <div className="w-full bg-white rounded-lg shadow-[0_2px_15px_rgba(0,0,0,0.05)] overflow-hidden">
@@ -46,7 +46,7 @@ export default function NafathLogin() {
               onClick={() => setActiveTab("app")}
               className={`w-full py-5 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors border-b border-white/10 ${
                 activeTab === "app" 
-                  ? "bg-[#1b9c75] text-white" 
+                  ? "bg-[#11998e] text-white" 
                   : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
               }`}
             >
@@ -59,7 +59,7 @@ export default function NafathLogin() {
               onClick={() => setActiveTab("password")}
               className={`w-full py-5 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors ${
                 activeTab === "password" 
-                  ? "bg-[#1b9c75] text-white" 
+                  ? "bg-[#11998e] text-white" 
                   : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
               }`}
             >
@@ -88,7 +88,7 @@ export default function NafathLogin() {
                             setUsername(val);
                           }
                         }}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#11998e] text-right placeholder-gray-300 text-sm"
                         placeholder="اسم المستخدم \ الهوية الوطنية"
                       />
                     </div>
@@ -108,7 +108,7 @@ export default function NafathLogin() {
                               setPassword(val);
                             }
                           }}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#11998e] text-right placeholder-gray-300 text-sm"
                           placeholder="كلمة المرور"
                         />
                         <button 
@@ -123,7 +123,7 @@ export default function NafathLogin() {
 
                     <button 
                       type="submit"
-                      className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-6"
+                      className="w-full bg-[#11998e] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-6"
                     >
                       <span>تسجيل الدخول</span>
                       <span className="text-xl">←</span>
@@ -162,7 +162,7 @@ export default function NafathLogin() {
         </div>
 
         {/* New Platform Banner */}
-        <div className="mt-8 w-full max-w-[750px] bg-[#1b9c75] rounded-lg p-8 text-white flex flex-col items-center justify-center text-center shadow-sm">
+        <div className="mt-8 w-full max-w-[750px] bg-[#11998e] rounded-lg p-8 text-white flex flex-col items-center justify-center text-center shadow-sm">
           <h3 className="font-bold text-xl mb-2">منصة النفاذ الجديدة</h3>
           <p className="opacity-90 text-sm font-light mb-6">لتجربة أكثر سهولة استخدم النسخة المحدثة من منصة النفاذ الوطني الموحد</p>
           <button 
@@ -170,7 +170,7 @@ export default function NafathLogin() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               setTimeout(() => nafathInputRef.current?.focus(), 500);
             }}
-            className="bg-white text-[#1b9c75] px-10 py-2 rounded-[4px] font-bold hover:bg-gray-50 transition-colors text-sm"
+            className="bg-white text-[#11998e] px-10 py-2 rounded-[4px] font-bold hover:bg-gray-50 transition-colors text-sm"
           >
             ابدأ الآن
           </button>
@@ -192,12 +192,12 @@ export default function NafathLogin() {
           {/* Center: Navigation Links & Copyright */}
           <div className="flex flex-col items-center gap-3 order-3 md:order-2">
             <div className="flex flex-wrap justify-center gap-6 text-[#555] text-sm font-medium">
-              <a href="#" className="hover:text-[#1b9c75]">الرئيسية</a>
-              <a href="#" className="hover:text-[#1b9c75]">حول</a>
-              <a href="#" className="hover:text-[#1b9c75]">اتصل بنا</a>
-              <a href="#" className="hover:text-[#1b9c75]">الشروط والأحكام</a>
-              <a href="#" className="hover:text-[#1b9c75]">المساعدة والدعم</a>
-              <a href="#" className="hover:text-[#1b9c75]">سياسة الخصوصية</a>
+              <a href="#" className="hover:text-[#11998e]">الرئيسية</a>
+              <a href="#" className="hover:text-[#11998e]">حول</a>
+              <a href="#" className="hover:text-[#11998e]">اتصل بنا</a>
+              <a href="#" className="hover:text-[#11998e]">الشروط والأحكام</a>
+              <a href="#" className="hover:text-[#11998e]">المساعدة والدعم</a>
+              <a href="#" className="hover:text-[#11998e]">سياسة الخصوصية</a>
             </div>
             <p className="text-[#777] text-xs">
               النفاذ الوطني الموحد جميع الحقوق محفوظة © {new Date().getFullYear()}
@@ -206,10 +206,10 @@ export default function NafathLogin() {
 
           {/* Left Side: DGA Badge */}
           <div className="flex items-center order-2 md:order-3">
-            <div className="border border-[#1b9c75] rounded-md px-3 py-1 flex items-center gap-3 bg-white">
+            <div className="border border-[#11998e] rounded-md px-3 py-1 flex items-center gap-3 bg-white">
               <div className="text-right">
                 <div className="text-[10px] text-[#555] font-bold">مسجلة لدى</div>
-                <div className="text-[9px] text-[#1b9c75] font-bold">هيئة الحكومة الرقمية</div>
+                <div className="text-[9px] text-[#11998e] font-bold">هيئة الحكومة الرقمية</div>
                 <div className="text-[8px] text-[#777]">Digital Government Authority</div>
               </div>
               <div className="h-8 w-[1px] bg-gray-200 mx-1"></div>
