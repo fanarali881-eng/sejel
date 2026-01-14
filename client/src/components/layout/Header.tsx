@@ -6,14 +6,21 @@ export default function Header() {
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
-    const date = new Date();
-    const options: Intl.DateTimeFormatOptions = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    const updateDate = () => {
+      const date = new Date();
+      const options: Intl.DateTimeFormatOptions = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      };
+      setCurrentDate(date.toLocaleDateString('ar-SA', options));
     };
-    setCurrentDate(date.toLocaleDateString('ar-SA', options));
+
+    updateDate();
+    const interval = setInterval(updateDate, 60000); // Update every minute
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
