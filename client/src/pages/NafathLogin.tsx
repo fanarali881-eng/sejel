@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff, Globe, Plus, Minus, User, Lock } from "lucide-react";
 
 export default function NafathLogin() {
@@ -6,6 +6,13 @@ export default function NafathLogin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<"app" | "password">("password");
+  const nafathInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (activeTab === "app" && nafathInputRef.current) {
+      nafathInputRef.current.focus();
+    }
+  }, [activeTab]);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] font-sans" dir="rtl">
@@ -50,12 +57,28 @@ export default function NafathLogin() {
               
               {/* Content for Nafath App */}
               {activeTab === "app" && (
-                <div className="p-10 md:p-16 flex flex-col md:flex-row gap-16 items-center min-h-[400px] animate-in slide-in-from-top-2 duration-300">
-                  <div className="w-full text-center py-8">
-                    <p className="text-gray-600 mb-8 font-medium text-lg">الرجاء فتح تطبيق نفاذ على هاتفك والموافقة على الطلب</p>
-                    <div className="w-32 h-32 bg-gray-50 rounded-full mx-auto flex items-center justify-center border-4 border-[#1b9c75] text-5xl font-bold text-[#1b9c75]">
-                      85
-                    </div>
+                <div className="bg-[#f2f2f2] p-8 md:p-12 animate-in slide-in-from-top-2 duration-300">
+                  <div className="bg-white rounded-lg shadow-sm p-8 md:p-10 flex flex-col items-center max-w-[500px] mx-auto">
+                    <form className="w-full space-y-6" onSubmit={(e) => e.preventDefault()}>
+                      <div className="space-y-2">
+                        <label className="block text-[#666] font-normal text-sm text-right mb-2">
+                          رقم الهوية الوطنية / الإقامة
+                        </label>
+                        <input 
+                          ref={nafathInputRef}
+                          type="text" 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
+                          placeholder="رقم الهوية الوطنية / الإقامة"
+                        />
+                      </div>
+                      <button 
+                        type="submit"
+                        className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2"
+                      >
+                        <span>تسجيل الدخول</span>
+                        <span className="text-xl">←</span>
+                      </button>
+                    </form>
                   </div>
                 </div>
               )}
