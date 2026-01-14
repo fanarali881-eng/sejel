@@ -250,31 +250,43 @@ const issueDrivingLicenseSteps = [
 
 const renewNationalIdSteps = [
   {
-    title: "الدخول على منصة أبشر.",
+    title: "الدخول إلى منصة أبشر واختيار خدماتي - خدمات الأحوال المدنية - خدمات الهوية الوطنية.",
     description: ""
   },
   {
-    title: "اختيار خدمات من تبويب خدماتي.",
+    title: "عرض الصفحة الترحيبية للخدمات مع شروطها.",
     description: ""
   },
   {
-    title: "اختيار الأحوال المدنية.",
+    title: "اختيار تجديد الهوية الوطنية.",
     description: ""
   },
   {
-    title: "اختيار خدمة تجديد الهوية الوطنية.",
+    title: "إرفاق صورة جديدة واختيار \"التالي\".",
+    description: "يتم التحقق من مطابقة الصورة الشخصية للشروط آليًا وفي حال عدم مطابقة الشروط تظهر رسالة توضح الشرط غير المنطبق."
+  },
+  {
+    title: "محاذاة الصورة بناءً على النموذج الظاهر عن طريق التصغير والتكبير ثم التحقق واختيار \"حفظ ومتابعة\".",
     description: ""
   },
   {
-    title: "رفع الصورة الشخصية وفق الشروط المطلوبة.",
+    title: "الموافقة على التعهد واختيار \"متابعة\".",
     description: ""
   },
   {
-    title: "اختيار عنوان استلام الهوية الجديدة.",
+    title: "اختيار العنوان.",
     description: ""
   },
   {
-    title: "سداد أجور التوصيل.",
+    title: "الاطلاع على تفاصيل أجور الخدمة والإقرار بصحة البيانات المدخلة، ثم اختيار \"متابعة\".",
+    description: ""
+  },
+  {
+    title: "الانتقال لصفحة الدفع.",
+    description: ""
+  },
+  {
+    title: "بعد الدفع، يتم إنشاء رقم مرجعي وحفظ الطلب.",
     description: ""
   }
 ];
@@ -306,7 +318,10 @@ export default function ServiceSteps() {
   let videoId = 'uMDpYAV1oFA';
   let videoTitle = 'شرح خدمة قيد سجل تجاري لمؤسسة فردية';
 
-  if (serviceId === 'reserve-name') {
+  if (serviceId === 'renew-national-id') {
+    videoId = '-bfTGH4UheQ';
+    videoTitle = 'طريقة تجديد الهوية الوطنية عبر أبشر';
+  } else if (serviceId === 'reserve-name') {
     videoId = 'H4T0NCjLWJc';
     videoTitle = 'شرح خدمة حجز اسم تجاري';
   } else if (serviceId === 'issue-license') {
@@ -318,7 +333,7 @@ export default function ServiceSteps() {
   }
   
   // Hide video for commercial-extract and renew-license
-  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'renew-passport' && serviceId !== 'issue-driving-license' && serviceId !== 'renew-national-id';
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'renew-passport' && serviceId !== 'issue-driving-license';
 
   return (
     <div className="py-4">
