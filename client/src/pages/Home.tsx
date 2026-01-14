@@ -6,18 +6,21 @@ import ServiceInfo from "@/components/service/ServiceInfo";
 import { MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useRoute } from "wouter";
 import CommentModal from "@/components/service/CommentModal";
 import FeedbackComponent from "@/components/service/FeedbackComponent";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("steps");
+  const [match, params] = useRoute("/service/:id?");
+  const serviceId = match ? params?.id : null;
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans" dir="rtl">
       <Header />
       
       <main className="flex-1">
-        <ServiceHero />
+        <ServiceHero serviceId={serviceId} />
         
         <div className="container py-8">
           <div className="flex flex-col lg:flex-row gap-12">

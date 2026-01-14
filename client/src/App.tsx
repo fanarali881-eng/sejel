@@ -14,7 +14,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={HomeNew} />
       <Route path={"/login"} component={Login} />
-      <Route path={"/service"} component={Home} />
+      <Route path={"/service/:id?"} component={Home} />
       
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

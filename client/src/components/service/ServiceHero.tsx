@@ -2,9 +2,23 @@ import { Heart, Mail, Loader2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useState } from "react";
 
-export default function ServiceHero() {
+interface ServiceHeroProps {
+  serviceId?: string | null;
+}
+
+export default function ServiceHero({ serviceId }: ServiceHeroProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
+
+  const getServiceTitle = () => {
+    switch (serviceId) {
+      case 'renew-cr':
+        return 'تجديد سجل تجاري';
+      case 'new-cr':
+      default:
+        return 'قيد سجل تجاري لمؤسسة فردية';
+    }
+  };
 
   const handleStartService = () => {
     setIsLoading(true);
@@ -24,7 +38,7 @@ export default function ServiceHero() {
             
             {/* Title */}
             <h1 className="text-3xl md:text-4xl font-bold text-[#004d30] mb-3">
-              قيد سجل تجاري لمؤسسة فردية
+              {getServiceTitle()}
             </h1>
 
             {/* Tags */}
