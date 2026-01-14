@@ -256,6 +256,49 @@ const issueDrivingLicenseSteps = [
   }
 ];
 
+const renewDrivingLicenseSteps = [
+  {
+    title: "تسجيل الدخول إلى موقع منصة أبشر",
+    description: ""
+  },
+  {
+    title: "اختيار خدماتي",
+    description: ""
+  },
+  {
+    title: "اختيار \"المرور\" من قائمة الخدمات",
+    description: ""
+  },
+  {
+    title: "اختيار خدمة \"تجديد رخصة القيادة\"",
+    description: ""
+  },
+  {
+    title: "قراءة وصف الخدمة وشروطها وأحكامها، ثم اختيار \"التالي\"",
+    description: ""
+  },
+  {
+    title: "مراجعة البيانات الشخصية، وتحديد عدد سنوات التجديد (سنتين، 5 سنوات، 10 سنوات) واختيار \"تأكيد التجديد\"",
+    description: ""
+  },
+  {
+    title: "تعبئة بيانات العنوان الوطني لطلب توصيل الرخصة",
+    description: ""
+  },
+  {
+    title: "مراجعة البيانات المدخلة",
+    description: ""
+  },
+  {
+    title: "دفع أجور التوصيل باستخدام بطاقة (فيزا، مدى، ماستركارد)",
+    description: ""
+  },
+  {
+    title: "تم تجديد رخصة القيادة",
+    description: ""
+  }
+];
+
 const renewNationalIdSteps = [
   {
     title: "الدخول إلى منصة أبشر واختيار خدماتي - خدمات الأحوال المدنية - خدمات الهوية الوطنية.",
@@ -318,6 +361,8 @@ export default function ServiceSteps() {
     steps = renewPassportSteps;
   } else if (serviceId === 'issue-driving-license') {
     steps = issueDrivingLicenseSteps;
+  } else if (serviceId === 'renew-driving-license') {
+    steps = renewDrivingLicenseSteps;
   } else if (serviceId === 'renew-national-id') {
     steps = renewNationalIdSteps;
   }
