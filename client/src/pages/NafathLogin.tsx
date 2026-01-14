@@ -18,7 +18,7 @@ export default function NafathLogin() {
     <div className="min-h-screen bg-[#f9f9f9] font-sans" dir="rtl">
       {/* Header */}
       <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[120px] flex items-center">
-        <div className="container mx-auto px-4 flex justify-between items-center h-full flex-row-reverse">
+        <div className="container mx-auto px-4 flex justify-between items-center h-full">
           <div className="flex items-center gap-6 h-full">
             {/* Logos */}
             <img src="/images/nafath-logo.png" alt="Nafath Logo" className="h-full object-contain" />
