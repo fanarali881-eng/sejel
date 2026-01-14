@@ -32,10 +32,7 @@ export default function HomeNew() {
               <h1 className="text-2xl font-bold text-[#006C35] mb-2">مرحباً بك في بوابة الخدمات</h1>
               <p className="text-gray-600">يمكنك الآن الوصول إلى جميع الخدمات الحكومية وإدارة طلباتك بسهولة.</p>
             </div>
-            <Button className="bg-[#006C35] hover:bg-[#005a2b] gap-2">
-              <Plus className="w-4 h-4" />
-              طلب جديد
-            </Button>
+
           </div>
         </div>
 
