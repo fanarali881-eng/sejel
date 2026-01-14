@@ -42,6 +42,22 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'commercial-extract') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "التحقق من الآتي في حال طلب إفادة تجارية: أن يكون مقدم الطلب له صفة في السجل التجاري. ألا يكون هناك سجلًا تجاريًا في حال طلب إفادة بعدم وجود سجل.",
+            "ملاحظة: يمكن للمستفيد طلب مستخرج سجل تجاري، وإن لم تكن له صفة في السجل."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-2 text-gray-800">
@@ -78,6 +94,17 @@ export default function Home() {
               <span className="text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'commercial-extract') {
+      return (
+        <div className="py-4 space-y-4">
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <span className="text-base font-medium leading-relaxed">حسب نوع الإفادة</span>
+          </div>
         </div>
       );
     }
