@@ -176,6 +176,25 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'renew-vehicle-registration') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "وثيقة تأمين سارية على المركبة.",
+            "شهادة الفحص الفني سارية المفعول.",
+            "سداد رسوم التجديد ومخالفة التأخير إن وجدت.",
+            "سداد المخالفات المرورية إن وجدت.",
+            "ألا تقل صلاحية رخصة سير المركبة عن 180 يومًا."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     if (serviceId === 'renew-national-id') {
       return (
         <div className="py-4 space-y-4">
@@ -350,6 +369,21 @@ export default function Home() {
             "سداد المخالفات المرورية؛ -إن وجدت-.",
             "سداد رسوم تجديد الرخصة من خلال المدفوعات الحكومية عبر البنوك.",
             "وجود فحص طبي من أحد المراكز الطبية المعتمدة."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'renew-vehicle-registration') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "وجود رخصة سير سابقة."
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
