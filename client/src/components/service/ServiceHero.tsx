@@ -78,7 +78,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
             {/* Tags */}
             <div className="flex gap-2 mb-4">
               <span className="bg-[#e6f2ff] text-[#0075c9] text-xs font-bold px-3 py-1 rounded">
-                وزارة التجارة
+                {serviceId === 'issue-license' ? 'وزارة البلديات والإسكان' : 'وزارة التجارة'}
               </span>
               <span className="bg-[#e6fffa] text-[#006c35] text-xs font-bold px-3 py-1 rounded">
                 الاكثر استخداما
