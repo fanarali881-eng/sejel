@@ -97,6 +97,11 @@ export default function HomeNew() {
             ))}
           </div>
         </div>
+        
+        {/* Pagination */}
+        <div className="flex justify-center mt-6 mb-2">
+          <img src="/images/pagination.png" alt="Pagination" className="h-8 object-contain" />
+        </div>
       </main>
       
       <Footer />
