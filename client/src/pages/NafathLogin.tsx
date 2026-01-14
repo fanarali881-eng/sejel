@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Globe, Plus, Minus } from "lucide-react";
+import { Eye, EyeOff, Globe, Plus, Minus, User, Lock } from "lucide-react";
 
 export default function NafathLogin() {
   const [username, setUsername] = useState("");
@@ -127,13 +127,16 @@ export default function NafathLogin() {
                         </button>
 
                         <div className="flex justify-between gap-4 pt-6">
+                          {/* Reset Password Button (Right in RTL) */}
                           <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal py-2 px-4 rounded-[4px] transition-colors text-sm flex items-center justify-center gap-2">
-                            <span className="text-lg">👤</span>
-                            <span>حساب جديد</span>
-                          </button>
-                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal py-2 px-4 rounded-[4px] transition-colors text-sm flex items-center justify-center gap-2">
-                            <span className="text-lg">🔓</span>
                             <span>إعادة تعيين/تغيير كلمة المرور</span>
+                            <Lock className="w-5 h-5 text-[#f59e0b]" />
+                          </button>
+                          
+                          {/* New Account Button (Left in RTL) */}
+                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal py-2 px-4 rounded-[4px] transition-colors text-sm flex items-center justify-center gap-2">
+                            <User className="w-5 h-5 text-[#4c1d95]" />
+                            <span>حساب جديد</span>
                           </button>
                         </div>
                       </form>
