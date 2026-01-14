@@ -58,6 +58,28 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'issue-license') {
+      return (
+        <div className="py-4 space-y-4">
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <div className="flex flex-col gap-1">
+              <span className="text-base font-bold leading-relaxed">الاشتراطات والموافقات الحكومية</span>
+              <span className="text-base font-medium leading-relaxed">تختلف قائمة الاشتراطات والموافقات الحكومية المطلوبة بحسب نوع النشاط ويمكن الاطلاع عليها من خلال خدمة الاستعلام عن اشتراطات الأنشطة البلدية من خلال الرابط.</span>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <div className="flex flex-col gap-1">
+              <span className="text-base font-bold leading-relaxed">ملاحظات/تنبيهات</span>
+              <span className="text-base font-medium leading-relaxed">يرجى الالتزام بتجديد الرخصة قبل انتهاءها أو إلغاءها في حالة عدم الرغبة في تجديدها وذلك لتجنب رسوم غرامة المشترطة على التأخير في التجديد.</span>
+              <span className="text-base font-medium leading-relaxed">يمكن الاطلاع على حاسبة الرسوم المعلوماتية من خلال الرابط.</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-2 text-gray-800">
@@ -105,6 +127,25 @@ export default function Home() {
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
             <span className="text-base font-medium leading-relaxed">حسب نوع الإفادة</span>
           </div>
+        </div>
+      );
+    }
+
+    if (serviceId === 'issue-license') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "صورة خارجية للمحل ويتم إبراز لوحة المحل.",
+            "عقد الإيجار أو صك الملكية أو عقد الاستثمار للموقع من البلدية أو الجهات الحكومية الأخرى.",
+            "عقد النظافة (اختياري حسب التعاقد ونوع النشاط).",
+            "فاتورة أدوات السلامة أو تقرير سلامة من الدفاع المدني للأنشطة الفورية.",
+            "صورة من رخصة البناء."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
         </div>
       );
     }
