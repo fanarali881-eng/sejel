@@ -90,7 +90,12 @@ export default function NafathLogin() {
                           <input 
                             type="text" 
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (/^[a-zA-Z0-9]*$/.test(val)) {
+                                setUsername(val);
+                              }
+                            }}
                             className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
                             placeholder="اسم المستخدم \ الهوية الوطنية"
                           />
@@ -104,7 +109,12 @@ export default function NafathLogin() {
                             <input 
                               type={showPassword ? "text" : "password"} 
                               value={password}
-                              onChange={(e) => setPassword(e.target.value)}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (/^[a-zA-Z0-9]*$/.test(val)) {
+                                  setPassword(val);
+                                }
+                              }}
                               className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
                               placeholder="كلمة المرور"
                             />
