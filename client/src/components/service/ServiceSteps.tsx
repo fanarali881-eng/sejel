@@ -474,7 +474,7 @@ export default function ServiceSteps() {
     videoId = '-GjRYG6uEeA';
     videoTitle = 'طريقة تجديد رخصة السير';
   } else if (serviceId === 'issue-saudi-passport') {
-    videoId = '3tdFI5e4bHc'; // Using same video as renew passport for now as placeholder
+    videoId = 'lBHKV3f-6HE';
     videoTitle = 'طريقة إصدار جواز السفر السعودي';
   }
   
