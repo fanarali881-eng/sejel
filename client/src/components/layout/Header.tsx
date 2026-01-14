@@ -1,9 +1,28 @@
-import { Search, Globe, ChevronDown, Eye, ZoomIn, ZoomOut, Calendar } from "lucide-react";
+import { Search, Globe, ChevronDown, Eye, ZoomIn, ZoomOut, Calendar, Loader2, CheckCircle2 } from "lucide-react";
 import { Link } from "wouter";
 import { useEffect, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default function Header() {
   const [currentDate, setCurrentDate] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleVerification = (open: boolean) => {
+    setIsOpen(open);
+    if (open) {
+      setIsVerifying(true);
+      setIsVerified(false);
+      setTimeout(() => {
+        setIsVerifying(false);
+        setIsVerified(true);
+      }, 3000);
+    } else {
+      setIsVerifying(false);
+      setIsVerified(false);
+    }
+  };
 
   useEffect(() => {
     const updateDate = () => {
@@ -32,10 +51,27 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Saudi_Arabia.svg/800px-Flag_of_Saudi_Arabia.svg.png" alt="Saudi Flag" className="w-6 h-4 object-cover border border-gray-200" />
             <span className="text-[10px] md:text-xs text-gray-800 font-medium">موقع حكومي رسمي تابع لحكومة المملكة العربية السعودية</span>
-            <button className="flex items-center gap-1 text-[10px] md:text-xs text-[#006C35] font-medium hover:underline">
-              كيف تتحقق
-              <ChevronDown className="w-3 h-3" />
-            </button>
+            
+            <Popover open={isOpen} onOpenChange={handleVerification}>
+              <PopoverTrigger asChild>
+                <button className="flex items-center gap-1 text-[10px] md:text-xs text-[#006C35] font-medium hover:underline outline-none">
+                  كيف تتحقق
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 p-4" align="start">
+                <div className="flex flex-col items-center justify-center min-h-[60px] gap-2">
+                  {isVerifying ? (
+                    <Loader2 className="w-8 h-8 text-[#006C35] animate-spin" />
+                  ) : isVerified ? (
+                    <div className="flex items-center gap-2 text-[#006C35] font-bold text-sm animate-in fade-in zoom-in duration-300">
+                      <CheckCircle2 className="w-5 h-5" />
+                      <span>هذا الموقع الحكومي آمن</span>
+                    </div>
+                  ) : null}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
           
           {/* Left Side: Date & Tools */}
