@@ -9,6 +9,9 @@ export default function ServiceInfo() {
     if (serviceId === 'reserve-name') {
       return '100';
     }
+    if (serviceId === 'renew-cr' || serviceId === 'edit-cr') {
+      return '200';
+    }
     return '500';
   };
 
