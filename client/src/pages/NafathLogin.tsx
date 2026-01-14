@@ -165,7 +165,13 @@ export default function NafathLogin() {
         <div className="mt-8 w-full max-w-[750px] bg-[#1b9c75] rounded-lg p-8 text-white flex flex-col items-center justify-center text-center shadow-sm">
           <h3 className="font-bold text-xl mb-2">منصة النفاذ الجديدة</h3>
           <p className="opacity-90 text-sm font-light mb-6">لتجربة أكثر سهولة استخدم النسخة المحدثة من منصة النفاذ الوطني الموحد</p>
-          <button className="bg-white text-[#1b9c75] px-10 py-2 rounded-[4px] font-bold hover:bg-gray-50 transition-colors text-sm">
+          <button 
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setTimeout(() => nafathInputRef.current?.focus(), 500);
+            }}
+            className="bg-white text-[#1b9c75] px-10 py-2 rounded-[4px] font-bold hover:bg-gray-50 transition-colors text-sm"
+          >
             ابدأ الآن
           </button>
         </div>
