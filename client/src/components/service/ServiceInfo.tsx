@@ -12,6 +12,9 @@ export default function ServiceInfo() {
     if (serviceId === 'renew-cr' || serviceId === 'edit-cr') {
       return '200';
     }
+    if (serviceId === 'renew-license') {
+      return '800';
+    }
     if (serviceId === 'issue-license') {
       return '5000';
     }
