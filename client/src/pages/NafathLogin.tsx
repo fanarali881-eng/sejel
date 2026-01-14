@@ -10,13 +10,13 @@ export default function NafathLogin() {
   return (
     <div className="min-h-screen bg-[#f9f9f9] font-sans" dir="rtl">
       {/* Header */}
-      <header className="bg-white py-10 shadow-md fixed top-0 left-0 right-0 z-50">
+      <header className="bg-white py-6 shadow-md fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-6">
             {/* Logos */}
-            <img src="/images/nafath-logo.png" alt="Nafath Logo" className="h-12 object-contain" />
-            <div className="w-px h-8 bg-gray-300 mx-2"></div>
-            <img src="/images/vision2030-logo.png" alt="Vision 2030 Logo" className="h-10 object-contain opacity-80" />
+            <img src="/images/nafath-logo.png" alt="Nafath Logo" className="h-16 object-contain" />
+            <div className="w-px h-10 bg-gray-300 mx-4"></div>
+            <img src="/images/vision2030-logo.png" alt="Vision 2030 Logo" className="h-14 object-contain opacity-80" />
           </div>
           <button className="flex items-center gap-2 text-black hover:text-gray-700 transition-colors font-medium text-sm">
             <Globe className="w-5 h-5" />
@@ -26,7 +26,7 @@ export default function NafathLogin() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[140px]">
+      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[120px]">
         <h1 className="text-[28px] font-bold text-[#1b9c75] mt-8 mb-4">الدخول على النظام</h1>
 
         {/* Login Card */}
