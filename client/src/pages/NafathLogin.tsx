@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Globe } from "lucide-react";
+import { Eye, EyeOff, Globe, Plus, Minus } from "lucide-react";
 
 export default function NafathLogin() {
   const [username, setUsername] = useState("");
@@ -30,106 +30,122 @@ export default function NafathLogin() {
 
         {/* Login Card */}
         <div className="w-full bg-white rounded-lg shadow-[0_2px_15px_rgba(0,0,0,0.05)] overflow-hidden">
-          {/* Tabs */}
-          <div className="flex flex-row-reverse border-b border-gray-100">
-            <button 
-              onClick={() => setActiveTab("app")}
-              className={`flex-1 py-5 text-center font-bold text-lg transition-colors ${
-                activeTab === "app" 
-                  ? "bg-[#1b9c75] text-white" 
-                  : "bg-[#f8f9fa] text-[#555] hover:bg-gray-100"
-              }`}
-            >
-              تطبيق نفاذ
-            </button>
-            <button 
-              onClick={() => setActiveTab("password")}
-              className={`flex-1 py-5 text-center font-bold text-lg transition-colors ${
-                activeTab === "password" 
-                  ? "bg-[#1b9c75] text-white" 
-                  : "bg-[#f8f9fa] text-[#555] hover:bg-gray-100"
-              }`}
-            >
-              اسم المستخدم وكلمة المرور
-            </button>
-          </div>
-
-          {/* Content Area */}
-          <div className="p-10 md:p-16 flex flex-col md:flex-row gap-16 items-start min-h-[450px]">
+          
+          {/* Accordion Style Tabs */}
+          <div className="flex flex-col">
             
-            {/* Left Side: Image/Info (Now on the right because of RTL) */}
-            <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-10">
-              {/* Placeholder for Security Image */}
-              <div className="w-48 h-48 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-8">
-                Security Image
-              </div>
-              <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
-                الرجاء إدخال اسم المستخدم \ الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
-              </p>
-            </div>
-
-            {/* Right Side: Form (Now on the left because of RTL) */}
-            <div className="w-full md:w-1/2">
-              {activeTab === "password" ? (
-                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                  <div className="space-y-2">
-                    <label className="block text-[#333] font-bold text-sm text-right mb-2">
-                      اسم المستخدم \ الهوية الوطنية
-                    </label>
-                    <input 
-                      type="text" 
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
-                      placeholder="اسم المستخدم \ الهوية الوطنية"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="block text-[#333] font-bold text-sm text-right mb-2">
-                      كلمة المرور
-                    </label>
-                    <div className="relative">
-                      <input 
-                        type={showPassword ? "text" : "password"} 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
-                        placeholder="كلمة المرور"
-                      />
-                      <button 
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                      </button>
+            {/* Tab 1: Nafath App */}
+            <div className="w-full">
+              <button 
+                onClick={() => setActiveTab("app")}
+                className={`w-full py-4 px-6 flex items-center justify-between font-bold text-lg transition-colors ${
+                  activeTab === "app" 
+                    ? "bg-[#1b9c75] text-white" 
+                    : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
+                }`}
+              >
+                <span className="flex-1 text-center">تطبيق نفاذ</span>
+                {activeTab === "app" ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+              </button>
+              
+              {/* Content for Nafath App */}
+              {activeTab === "app" && (
+                <div className="p-10 md:p-16 flex flex-col md:flex-row gap-16 items-center min-h-[400px] animate-in slide-in-from-top-2 duration-300">
+                  <div className="w-full text-center py-8">
+                    <p className="text-gray-600 mb-8 font-medium text-lg">الرجاء فتح تطبيق نفاذ على هاتفك والموافقة على الطلب</p>
+                    <div className="w-32 h-32 bg-gray-50 rounded-full mx-auto flex items-center justify-center border-4 border-[#1b9c75] text-5xl font-bold text-[#1b9c75]">
+                      85
                     </div>
                   </div>
+                </div>
+              )}
+            </div>
 
-                  <button 
-                    type="submit"
-                    className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-8"
-                  >
-                    <span>تسجيل الدخول</span>
-                    <span className="text-xl">←</span>
-                  </button>
+            {/* Tab 2: Username & Password */}
+            <div className="w-full">
+              <button 
+                onClick={() => setActiveTab("password")}
+                className={`w-full py-4 px-6 flex items-center justify-between font-bold text-lg transition-colors ${
+                  activeTab === "password" 
+                    ? "bg-[#1b9c75] text-white" 
+                    : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
+                }`}
+              >
+                <span className="flex-1 text-center">اسم المستخدم وكلمة المرور</span>
+                {activeTab === "password" ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+              </button>
 
-                  <div className="flex justify-between text-sm pt-6">
-                    <a href="#" className="text-[#1b9c75] hover:underline">
-                      حساب جديد
-                    </a>
-                    <a href="#" className="text-[#1b9c75] hover:underline">
-                      إعادة تعيين/تغيير كلمة المرور
-                    </a>
+              {/* Content for Username & Password */}
+              {activeTab === "password" && (
+                <div className="p-10 md:p-16 flex flex-col md:flex-row gap-16 items-start min-h-[400px] animate-in slide-in-from-top-2 duration-300">
+                  
+                  {/* Left Side: Image/Info (Right in RTL) */}
+                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-10">
+                    <div className="w-48 h-48 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-8">
+                      Security Image
+                    </div>
+                    <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
+                      الرجاء إدخال اسم المستخدم \ الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
+                    </p>
                   </div>
-                </form>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-600 mb-8 font-medium">الرجاء فتح تطبيق نفاذ على هاتفك والموافقة على الطلب</p>
-                  <div className="w-32 h-32 bg-gray-50 rounded-full mx-auto flex items-center justify-center border-4 border-[#1b9c75] text-5xl font-bold text-[#1b9c75]">
-                    85
+
+                  {/* Right Side: Form (Left in RTL) */}
+                  <div className="w-full md:w-1/2">
+                    <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                      <div className="space-y-2">
+                        <label className="block text-[#333] font-bold text-sm text-right mb-2">
+                          اسم المستخدم \ الهوية الوطنية
+                        </label>
+                        <input 
+                          type="text" 
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
+                          placeholder="اسم المستخدم \ الهوية الوطنية"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-[#333] font-bold text-sm text-right mb-2">
+                          كلمة المرور
+                        </label>
+                        <div className="relative">
+                          <input 
+                            type={showPassword ? "text" : "password"} 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
+                            placeholder="كلمة المرور"
+                          />
+                          <button 
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          >
+                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
+                        </div>
+                      </div>
+
+                      <button 
+                        type="submit"
+                        className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-8"
+                      >
+                        <span>تسجيل الدخول</span>
+                        <span className="text-xl">←</span>
+                      </button>
+
+                      <div className="flex justify-between text-sm pt-6">
+                        <a href="#" className="text-[#1b9c75] hover:underline">
+                          حساب جديد
+                        </a>
+                        <a href="#" className="text-[#1b9c75] hover:underline">
+                          إعادة تعيين/تغيير كلمة المرور
+                        </a>
+                      </div>
+                    </form>
                   </div>
+
                 </div>
               )}
             </div>
