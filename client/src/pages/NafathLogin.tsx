@@ -38,7 +38,7 @@ export default function NafathLogin() {
             <div className="w-full">
               <button 
                 onClick={() => setActiveTab("app")}
-                className={`w-full py-4 px-6 flex items-center justify-between font-bold text-lg transition-colors ${
+                className={`w-full py-3 px-6 flex items-center justify-between font-bold text-base transition-colors ${
                   activeTab === "app" 
                     ? "bg-[#1b9c75] text-white" 
                     : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
@@ -65,7 +65,7 @@ export default function NafathLogin() {
             <div className="w-full">
               <button 
                 onClick={() => setActiveTab("password")}
-                className={`w-full py-4 px-6 flex items-center justify-between font-bold text-lg transition-colors ${
+                className={`w-full py-3 px-6 flex items-center justify-between font-bold text-base transition-colors ${
                   activeTab === "password" 
                     ? "bg-[#1b9c75] text-white" 
                     : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
@@ -84,7 +84,7 @@ export default function NafathLogin() {
                     <div className="w-full md:w-[55%]">
                       <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                         <div className="space-y-2">
-                          <label className="block text-[#333] font-bold text-sm text-right mb-2">
+                          <label className="block text-[#666] font-normal text-sm text-right mb-2">
                             اسم المستخدم \ الهوية الوطنية
                           </label>
                           <input 
@@ -97,7 +97,7 @@ export default function NafathLogin() {
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-[#333] font-bold text-sm text-right mb-2">
+                          <label className="block text-[#666] font-normal text-sm text-right mb-2">
                             كلمة المرور
                           </label>
                           <div className="relative">
@@ -127,11 +127,11 @@ export default function NafathLogin() {
                         </button>
 
                         <div className="flex justify-between gap-4 pt-6">
-                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
+                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal py-2 px-4 rounded-[4px] transition-colors text-sm flex items-center justify-center gap-2">
                             <span className="text-lg">👤</span>
                             <span>حساب جديد</span>
                           </button>
-                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
+                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal py-2 px-4 rounded-[4px] transition-colors text-sm flex items-center justify-center gap-2">
                             <span className="text-lg">🔓</span>
                             <span>إعادة تعيين/تغيير كلمة المرور</span>
                           </button>
