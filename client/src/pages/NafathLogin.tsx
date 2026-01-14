@@ -77,77 +77,79 @@ export default function NafathLogin() {
 
               {/* Content for Username & Password */}
               {activeTab === "password" && (
-                <div className="p-4 md:p-8 flex flex-col md:flex-row gap-6 items-start animate-in slide-in-from-top-2 duration-300 max-w-[900px] mx-auto">
+                <div className="bg-[#f2f2f2] p-8 md:p-12 animate-in slide-in-from-top-2 duration-300">
+                  <div className="bg-white rounded-lg shadow-sm p-8 md:p-10 flex flex-col md:flex-row gap-12 items-center max-w-[900px] mx-auto">
                   
-                  {/* Right Side: Form (First in RTL = Right) */}
-                  <div className="w-full md:w-1/2">
-                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                      <div className="space-y-2">
-                        <label className="block text-[#333] font-bold text-sm text-right mb-2">
-                          اسم المستخدم \ الهوية الوطنية
-                        </label>
-                        <input 
-                          type="text" 
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
-                          placeholder="اسم المستخدم \ الهوية الوطنية"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-[#333] font-bold text-sm text-right mb-2">
-                          كلمة المرور
-                        </label>
-                        <div className="relative">
+                    {/* Right Side: Form (First in RTL = Right) */}
+                    <div className="w-full md:w-[55%]">
+                      <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                        <div className="space-y-2">
+                          <label className="block text-[#333] font-bold text-sm text-right mb-2">
+                            اسم المستخدم \ الهوية الوطنية
+                          </label>
                           <input 
-                            type={showPassword ? "text" : "password"} 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            type="text" 
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
-                            placeholder="كلمة المرور"
+                            placeholder="اسم المستخدم \ الهوية الوطنية"
                           />
-                          <button 
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                          >
-                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="block text-[#333] font-bold text-sm text-right mb-2">
+                            كلمة المرور
+                          </label>
+                          <div className="relative">
+                            <input 
+                              type={showPassword ? "text" : "password"} 
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#1b9c75] text-right placeholder-gray-300 text-sm"
+                              placeholder="كلمة المرور"
+                            />
+                            <button 
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
+                          </div>
+                        </div>
+
+                        <button 
+                          type="submit"
+                          className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-6"
+                        >
+                          <span>تسجيل الدخول</span>
+                          <span className="text-xl">←</span>
+                        </button>
+
+                        <div className="flex justify-between gap-4 pt-6">
+                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
+                            <span className="text-lg">👤</span>
+                            <span>حساب جديد</span>
+                          </button>
+                          <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
+                            <span className="text-lg">🔓</span>
+                            <span>إعادة تعيين/تغيير كلمة المرور</span>
                           </button>
                         </div>
-                      </div>
-
-                      <button 
-                        type="submit"
-                        className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-6"
-                      >
-                        <span>تسجيل الدخول</span>
-                        <span className="text-xl">←</span>
-                      </button>
-
-                      <div className="flex justify-between gap-4 pt-6">
-                        <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
-                          <span className="text-lg">👤</span>
-                          <span>حساب جديد</span>
-                        </button>
-                        <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
-                          <span className="text-lg">🔓</span>
-                          <span>إعادة تعيين/تغيير كلمة المرور</span>
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-
-                  {/* Left Side: Image/Info (Second in RTL = Left) */}
-                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-2">
-                    <div className="w-40 h-40 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-6">
-                      Security Image
+                      </form>
                     </div>
-                    <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
-                      الرجاء إدخال اسم المستخدم \ الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
-                    </p>
-                  </div>
 
+                    {/* Left Side: Image/Info (Second in RTL = Left) */}
+                    <div className="hidden md:flex flex-col items-center justify-center w-[45%] pt-2">
+                      <div className="w-40 h-40 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-6">
+                        Security Image
+                      </div>
+                      <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
+                        الرجاء إدخال اسم المستخدم \ الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
+                      </p>
+                    </div>
+
+                  </div>
                 </div>
               )}
             </div>
