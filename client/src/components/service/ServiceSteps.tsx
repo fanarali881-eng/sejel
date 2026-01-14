@@ -342,6 +342,45 @@ const renewNationalIdSteps = [
   }
 ];
 
+const issueSaudiPassportSteps = [
+  {
+    title: "تسجيل الدخول إلى منصة أبشر",
+    description: ""
+  },
+  {
+    title: "اختيار خدماتي",
+    description: ""
+  },
+  {
+    title: "اختيار الجوازات",
+    description: ""
+  },
+  {
+    title: "اختيار إصدار جواز السفر السعودي",
+    description: ""
+  },
+  {
+    title: "اختيار طلب إصدار جواز",
+    description: ""
+  },
+  {
+    title: "تحديد مدة الإصدار والإقرار بالموافقة على الشروط المطلوبة",
+    description: ""
+  },
+  {
+    title: "تعبئة بيانات عنوان التوصيل واختيار طريقة التوصيل والموافقة على الإقرار المطلوب",
+    description: ""
+  },
+  {
+    title: "مراجعة المعلومات وسداد الرسوم",
+    description: ""
+  },
+  {
+    title: "تم تقديم الطلب بنجاح",
+    description: ""
+  }
+];
+
 const renewVehicleRegistrationSteps = [
   {
     title: "تسجيل الدخول إلى منصة أبشر",
@@ -402,6 +441,8 @@ export default function ServiceSteps() {
     steps = renewNationalIdSteps;
   } else if (serviceId === 'renew-vehicle-registration') {
     steps = renewVehicleRegistrationSteps;
+  } else if (serviceId === 'issue-saudi-passport') {
+    steps = issueSaudiPassportSteps;
   }
   
   // Video ID logic
@@ -432,6 +473,9 @@ export default function ServiceSteps() {
   } else if (serviceId === 'renew-vehicle-registration') {
     videoId = '-GjRYG6uEeA';
     videoTitle = 'طريقة تجديد رخصة السير';
+  } else if (serviceId === 'issue-saudi-passport') {
+    videoId = '3tdFI5e4bHc'; // Using same video as renew passport for now as placeholder
+    videoTitle = 'طريقة إصدار جواز السفر السعودي';
   }
   
   // Hide video for commercial-extract and renew-license

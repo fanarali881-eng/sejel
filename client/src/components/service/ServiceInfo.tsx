@@ -36,6 +36,9 @@ export default function ServiceInfo() {
     if (serviceId === 'renew-passport') {
       return '300';
     }
+    if (serviceId === 'issue-saudi-passport') {
+      return '300';
+    }
     return '500';
   };
 

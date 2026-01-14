@@ -28,6 +28,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'تجديد رخصة تجارية';
       case 'renew-passport':
         return 'تجديد الجواز السعودي';
+      case 'issue-saudi-passport':
+        return 'إصدار الجواز السعودي';
       case 'issue-driving-license':
         return 'إصدار رخصة قيادة';
       case 'renew-national-id':
@@ -60,6 +62,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'من خلال هذه الخدمة الإلكترونية يمكنك تعزيز استمرارية عملك التجاري حيث تمكنك هذه الخدمة من تجديد رخصتك التجارية، كما يمكنك تجديد مع تعديل بيانات الرخصة.';
       case 'renew-passport':
         return 'تتيح هذه الخدمة للمواطنين والمواطنات تجديد جواز السفر السعودي إلكترونيًا بكل سهولة ويسر، دون الحاجة لزيارة مكاتب الجوازات، عبر خطوات بسيطة وسريعة بعد تقديم الطلب واستكمال الإجراءات عن طريق منصة أبشر.';
+      case 'issue-saudi-passport':
+        return 'خدمة إلكترونية تمكن المواطن من إصدار جواز السفر السعودي لأفراد الأسرة إلكترونياً عبر منصة أبشر، مع إمكانية طلب توصيل الوثيقة إلى العنوان الوطني.';
       case 'issue-driving-license':
         return 'تتيح الخدمة للمواطن والمقيم الحجز أو التحديث على مواعيد التدريب في أحد مدارس تعلّم القيادة المعتمدة من الإدارة العامة للمرور إلكترونيًا عبر منصة أبشر، كما يمكن للمستفيد إصدار رخصة السير بعد اجتياز التدريب والاختبارات اللازمة لاستلام الرخصة.';
       case 'renew-national-id':
@@ -98,7 +102,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
             {/* Tags */}
             <div className="flex gap-2 mb-4">
               <span className="bg-[#e6f2ff] text-[#0075c9] text-xs font-bold px-3 py-1 rounded">
-                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : serviceId === 'renew-passport' ? 'وزارة الداخلية' : serviceId === 'issue-driving-license' || serviceId === 'renew-driving-license' || serviceId === 'renew-vehicle-registration' ? 'الإدارة العامة للمرور' : serviceId === 'renew-national-id' ? 'وزارة الداخلية' : 'وزارة التجارة'}
+                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : serviceId === 'renew-passport' || serviceId === 'issue-saudi-passport' ? 'وزارة الداخلية' : serviceId === 'issue-driving-license' || serviceId === 'renew-driving-license' || serviceId === 'renew-vehicle-registration' ? 'الإدارة العامة للمرور' : serviceId === 'renew-national-id' ? 'وزارة الداخلية' : 'وزارة التجارة'}
               </span>
               <span className="bg-[#e6fffa] text-[#006c35] text-xs font-bold px-3 py-1 rounded">
                 الاكثر استخداما

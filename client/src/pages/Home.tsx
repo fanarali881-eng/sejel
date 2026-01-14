@@ -115,6 +115,30 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'issue-saudi-passport') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "سداد رسوم إصدار الجواز بما يتوافق مع مدة الصلاحية المختارة.",
+            "سداد جميع المخالفات المرورية.",
+            "صلاحية هوية المواطن/ المواطنة.",
+            "يمكن إصدار الجواز لمدة 5 سنوات فقط في حال كان المستفيد في عمر أقل من 21 عام.",
+            "إذا كان عمر المستفيد 21 سنة أو أكثر، يمكن اختيار مدة صلاحية الجواز لتكون 5 أو 10 سنوات.",
+            "توفر بصمة وصورة للمواطن/ المواطنة في أنظمة وزارة الداخلية.",
+            "تواجد المستفيد داخل المملكة العربية السعودية.",
+            "ألا يكون لدى المستفيد جواز سفر.",
+            "أن يكون المستفيد على قيد الحياة.",
+            "الصورة المسجلة في أنظمة وزارة الداخلية هي التي سيتم اعتمادها في الجواز المصدر."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     if (serviceId === 'renew-passport') {
       return (
         <div className="py-4 space-y-4">
@@ -412,21 +436,20 @@ export default function Home() {
               </ul>
             </div>
           </div>
+        </div>
+      );
+    }
+
+    if (serviceId === 'issue-saudi-passport') {
+      return (
+        <div className="py-4 space-y-4">
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">تسديد أجور توصيل الهوية عبر القنوات المتاحة.</span>
+            <span className="text-base font-medium leading-relaxed">سداد رسوم إصدار الجواز.</span>
           </div>
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">تسديد مخالفات المستفيد لقطاع الأحوال المدنية.</span>
-          </div>
-          <div className="flex items-start gap-2 text-gray-800">
-            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">إقرار بصحة البيانات المدخلة والموافقة على الشروط أثناء تقديم الطلب.</span>
-          </div>
-          <div className="flex items-start gap-2 text-gray-800">
-            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">تفعيل بطاقة الهوية الوطنية المجددة بعد استلامها لضمان سريانها.</span>
+            <span className="text-base font-medium leading-relaxed">سداد المخالفات المرورية.</span>
           </div>
         </div>
       );
