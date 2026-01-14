@@ -29,7 +29,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
       case 'renew-passport':
         return 'تجديد الجواز السعودي';
       case 'issue-driving-license':
-        return 'تتيح الخدمة للمواطن والمقيم الحجز أو التحديث على مواعيد التدريب في أحد مدارس تعلّم القيادة المعتمدة من الإدارة العامة للمرور إلكترونيًا عبر منصة أبشر، كما يمكن للمستفيد إصدار رخصة السير بعد اجتياز التدريب والاختبارات اللازمة لاستلام الرخصة.';
+        return 'إصدار رخصة قيادة';
       case 'renew-national-id':
         return 'تجديد الهوية الوطنية';
       case 'new-cr':
