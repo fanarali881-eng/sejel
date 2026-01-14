@@ -392,6 +392,9 @@ export default function ServiceSteps() {
   } else if (serviceId === 'renew-driving-license') {
     videoId = '9PuWUBncY7M';
     videoTitle = 'طريقة تجديد رخصة القيادة';
+  } else if (serviceId === 'renew-vehicle-registration') {
+    videoId = '-GjRYG6uEeA';
+    videoTitle = 'طريقة تجديد رخصة السير';
   }
   
   // Hide video for commercial-extract and renew-license
