@@ -21,6 +21,9 @@ export default function ServiceInfo() {
     if (serviceId === 'register-trademark') {
       return '7500';
     }
+    if (serviceId === 'renew-national-id') {
+      return '39';
+    }
     return '500';
   };
 
