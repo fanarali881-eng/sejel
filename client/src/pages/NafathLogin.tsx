@@ -111,7 +111,8 @@ export default function NafathLogin() {
                               value={password}
                               onChange={(e) => {
                                 const val = e.target.value;
-                                if (/^[a-zA-Z0-9]*$/.test(val)) {
+                                // Allow ASCII printable characters (letters, numbers, symbols) but exclude Arabic
+                                if (/^[\x20-\x7E]*$/.test(val)) {
                                   setPassword(val);
                                 }
                               }}
