@@ -29,7 +29,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
       case 'renew-passport':
         return 'تجديد الجواز السعودي';
       case 'issue-driving-license':
-        return 'إصدار رخصة قيادة';
+        return 'خدمة إلكترونية تمكن المواطن والمقيم من إصدار رخصة قيادة خاصة أو عامة بعد إتمام المتطلبات اللازمة.';
       case 'renew-national-id':
         return 'تجديد الهوية الوطنية';
       case 'new-cr':
