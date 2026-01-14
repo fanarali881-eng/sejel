@@ -25,7 +25,7 @@ export default function NafathLogin() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1000px]">
+      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px]">
         <h1 className="text-[28px] font-bold text-[#1b9c75] mb-10">الدخول على النظام</h1>
 
         {/* Login Card */}
@@ -77,11 +77,11 @@ export default function NafathLogin() {
 
               {/* Content for Username & Password */}
               {activeTab === "password" && (
-                <div className="p-4 md:p-6 flex flex-col md:flex-row gap-4 items-start animate-in slide-in-from-top-2 duration-300">
+                <div className="p-4 md:p-8 flex flex-col md:flex-row gap-6 items-start animate-in slide-in-from-top-2 duration-300">
                   
                   {/* Right Side: Form (First in RTL = Right) */}
-                  <div className="w-full md:w-[55%]">
-                    <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+                  <div className="w-full md:w-1/2">
+                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                       <div className="space-y-2">
                         <label className="block text-[#333] font-bold text-sm text-right mb-2">
                           اسم المستخدم \ الهوية الوطنية
@@ -139,8 +139,8 @@ export default function NafathLogin() {
                   </div>
 
                   {/* Left Side: Image/Info (Second in RTL = Left) */}
-                  <div className="hidden md:flex flex-col items-center justify-center w-[45%] pt-2">
-                    <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
+                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-2">
+                    <div className="w-40 h-40 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-6">
                       Security Image
                     </div>
                     <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
