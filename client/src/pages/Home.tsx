@@ -15,6 +15,95 @@ export default function Home() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
 
+  const renderRequirements = () => {
+    if (serviceId === 'reserve-name') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "ألا يقل العمر عن 18 سنة.",
+            "أن يكون مقدم الطلب هو المستفيد من الاسم التجاري، أو مفوضًا عنه.",
+            "أن يتكون الاسم من ألفاظ عربية، أو معربة، أو من حروف، أو أرقام عربية، أو من واحد أو أكثر منهما، في حال حجز اسم تجاري باللغة العربية.",
+            "أن يتكون الاسم من ألفاظ أو حروف أو أرقام إنجليزية، أو من واحد أو أكثر منها، في حال حجز اسم تجاري باللغة الإنجليزية.",
+            "ألا يكون مخالفًا للنظام العام، أو الآداب العامة، أو يؤدي إلى التضليل، أو محظور استعماله.",
+            "ألا يشابه اسما تجاريًا محجوزًا أو مقيدًا في السجل التجاري أيًا كان نوع النشاط.",
+            "ألا يشابه اسمًا تجاريًا، أو علامة تجارية مشهورة عالميًا، أو يشابه علامة تجارية مسجلة أو مشهورة في المملكة.",
+            "ألا يحتوي على معنى أو دلالة أو مضمونًا سياسيًا أو عسكريًا أو دينيًا.",
+            "ألا يشابه اسمًا أو شارة شرفية أو رمزًا خاصًا بأي من المنظمات المحلية أو الإقليمية أو الدولية أو إحدى مؤسساتها.",
+            "ألا يحتوي على اسم محظور حسب قائمة الأسماء المحظورة، وللاطلاع على الأسماء المحظورة اضغط هنا ​",
+            "ألا يحتوي على اسم حكومي أو جهة حكومية أو شبه حكومية.",
+            "الالتزام بضوابط حجز أو قيد اسم (السعودية)، أو أسماء المدن والمناطق والأماكن العامة، وفق الضوابط الواردة في نظام الأسماء التجارية ولائحته التنفيذية."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="py-4 space-y-4">
+        <div className="flex items-center gap-2 text-gray-800">
+          <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
+          <span className="text-base font-medium">ألا يقل العمر عن 18 سنة.</span>
+        </div>
+        <div className="flex items-center gap-2 text-gray-800">
+          <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
+          <span className="text-base font-medium">ألا يكون موظفًا حكوميًا.</span>
+        </div>
+        {serviceId !== 'renew-cr' && (
+          <div className="flex items-center gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
+            <span className="text-base font-medium">ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية.</span>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderDocuments = () => {
+    if (serviceId === 'reserve-name') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "التقيد بالأحكام الواردة في اللائحة التنفيذية المتعلقة بحجز الأسماء العائلية بصفة الأسماء التجارية.",
+            "تقديم خطاب من الجهة بطلب الخدمة، في حال كان المستفيد جهة حكومية أو جهة تابعة لها.",
+            "تقديم ترخيص الجمعية أو شهادة الوقف عند طلب حجز اسم تجاري لجمعية أو وقف.",
+            "تقديم شهادة ملكية العلامة التجارية عند التقدم بطلب حجز اسم تجاري بناء على علامة تجارية.",
+            "ملاحظة: لن تتم عملية حجز اسم علامة تجارية في حال وجود أسماء مشابهة أو مطابقة مسجلة."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="py-4 space-y-4">
+        <div className="flex items-start gap-2 text-gray-800">
+          <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+          <span className="text-base font-medium leading-relaxed">إرفاق موافقة الجهة المرخصة في حال كان النشاط الممارس من الأنشطة التي تتطلب ترخيصًا قبل الإصدار.</span>
+        </div>
+        <div className="flex items-start gap-2 text-gray-800">
+          <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+          <span className="text-base font-medium leading-relaxed">تحديد ممارسة التجارة الإلكترونية في حال كان مقدم الطلب ممارسًا لها.</span>
+        </div>
+        <div className="flex items-start gap-2 text-gray-800">
+          <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+          <span className="text-base font-medium leading-relaxed">في حال كان طالب القيد جمعية تعاونية أو خيرية يتطلب تقديم المستندات التالية من وزارة الموارد البشرية والتنمية الاجتماعية أو المركز الوطني لتنمية القطاع غير الربحي: - إرفاق صورة من شهادة التسجيل - إرفاق نسخة من الخطاب الذي يتضمن الموافقة على مجلس إدارة المؤسسة مع نسخة من نظام المؤسسة. - إرفاق نسخة من نظام الجمعية التعاونية. - إرفاق تفويض من مجلس المؤسسة لشخص سعودي لاستكمال إجراءات القيد في السجل التجاري.</span>
+        </div>
+        <div className="flex items-start gap-2 text-gray-800">
+          <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+          <span className="text-base font-medium leading-relaxed">التحقق من الآتي في حال كان طالب القيد مؤسسة وقفية: - إرفاق صك الوقفية من محكمة الأحوال الشخصية. - إرفاق وكالة شرعية من الواقف أو ناظر الوقف أو مجلس النظارة لاستخراج سجل تجاري بصك الوقفية.</span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans" dir="rtl">
       <Header />
@@ -51,45 +140,9 @@ export default function Home() {
               
               {activeTab === "steps" && <ServiceSteps />}
               
-              {activeTab === "requirements" && (
-                <div className="py-4 space-y-4">
-                  <div className="flex items-center gap-2 text-gray-800">
-                    <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
-                    <span className="text-base font-medium">ألا يقل العمر عن 18 سنة.</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-800">
-                    <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
-                    <span className="text-base font-medium">ألا يكون موظفًا حكوميًا.</span>
-                  </div>
-                  {serviceId !== 'renew-cr' && (
-                    <div className="flex items-center gap-2 text-gray-800">
-                      <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
-                      <span className="text-base font-medium">ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية.</span>
-                    </div>
-                  )}
-                </div>
-              )}
+              {activeTab === "requirements" && renderRequirements()}
 
-              {activeTab === "documents" && (
-                <div className="py-4 space-y-4">
-                  <div className="flex items-start gap-2 text-gray-800">
-                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-                    <span className="text-base font-medium leading-relaxed">إرفاق موافقة الجهة المرخصة في حال كان النشاط الممارس من الأنشطة التي تتطلب ترخيصًا قبل الإصدار.</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-gray-800">
-                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-                    <span className="text-base font-medium leading-relaxed">تحديد ممارسة التجارة الإلكترونية في حال كان مقدم الطلب ممارسًا لها.</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-gray-800">
-                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-                    <span className="text-base font-medium leading-relaxed">في حال كان طالب القيد جمعية تعاونية أو خيرية يتطلب تقديم المستندات التالية من وزارة الموارد البشرية والتنمية الاجتماعية أو المركز الوطني لتنمية القطاع غير الربحي: - إرفاق صورة من شهادة التسجيل - إرفاق نسخة من الخطاب الذي يتضمن الموافقة على مجلس إدارة المؤسسة مع نسخة من نظام المؤسسة. - إرفاق نسخة من نظام الجمعية التعاونية. - إرفاق تفويض من مجلس المؤسسة لشخص سعودي لاستكمال إجراءات القيد في السجل التجاري.</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-gray-800">
-                    <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-                    <span className="text-base font-medium leading-relaxed">التحقق من الآتي في حال كان طالب القيد مؤسسة وقفية: - إرفاق صك الوقفية من محكمة الأحوال الشخصية. - إرفاق وكالة شرعية من الواقف أو ناظر الوقف أو مجلس النظارة لاستخراج سجل تجاري بصك الوقفية.</span>
-                  </div>
-                </div>
-              )}
+              {activeTab === "documents" && renderDocuments()}
             </div>
             
             {/* Left Column: Sidebar Info */}
