@@ -1,6 +1,17 @@
 import { User, Clock, Monitor, Languages, HelpCircle, ExternalLink, MapPin, Phone, Mail } from "lucide-react";
+import { useRoute } from "wouter";
 
 export default function ServiceInfo() {
+  const [match, params] = useRoute("/service/:id?");
+  const serviceId = match ? params?.id : null;
+
+  const getServiceFee = () => {
+    if (serviceId === 'reserve-name') {
+      return '100';
+    }
+    return '500';
+  };
+
   return (
     <div className="space-y-8 hidden lg:block text-right">
       {/* Target Audience - Part 1 */}
@@ -55,7 +66,7 @@ export default function ServiceInfo() {
           <span className="text-[#006C35] font-bold text-xl">﷼</span>
         </div>
         <div className="flex flex-col items-start">
-          <p className="text-lg font-bold text-gray-900 mb-1">500 <span className="text-sm font-normal text-[#006C35]">ر.س</span></p>
+          <p className="text-lg font-bold text-gray-900 mb-1">{getServiceFee()} <span className="text-sm font-normal text-[#006C35]">ر.س</span></p>
           <h3 className="text-gray-500 text-sm">تكلفة الخدمة</h3>
         </div>
       </div>
