@@ -318,15 +318,37 @@ export default function Home() {
     if (serviceId === 'renew-national-id') {
       return (
         <div className="py-4 space-y-4">
-          {[
-            "صورة شخصية حديثة (ملونة، خلفية بيضاء، بدون نظارات، تغطية شعر الرأس للرجل، تغطية شعر الرأس للمرأة).",
-            "أصل بطاقة الهوية الوطنية القديمة (عند استلام الجديدة)."
-          ].map((doc, index) => (
-            <div key={index} className="flex items-start gap-2 text-gray-800">
-              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <span className="text-base font-medium leading-relaxed">عدم وجود غرامات غير مسددة على المستفيد لقطاع الأحوال المدنية.</span>
+          </div>
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <div className="flex flex-col gap-1">
+              <span className="text-base font-medium leading-relaxed">صورة شخصية حديثة مطابقة لاشتراطات الأحوال المدنية، وفقًا للمعايير التالية:</span>
+              <ul className="list-disc list-inside mr-4 space-y-1 text-gray-700">
+                <li>الصيغة: JPEG 2000</li>
+                <li>الحجم: لا يتجاوز 1MB</li>
+                <li>الأبعاد: من مضاعفات 4×6</li>
+              </ul>
             </div>
-          ))}
+          </div>
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <span className="text-base font-medium leading-relaxed">تسديد أجور توصيل الهوية عبر القنوات المتاحة.</span>
+          </div>
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <span className="text-base font-medium leading-relaxed">تسديد مخالفات المستفيد لقطاع الأحوال المدنية.</span>
+          </div>
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <span className="text-base font-medium leading-relaxed">إقرار بصحة البيانات المدخلة والموافقة على الشروط أثناء تقديم الطلب.</span>
+          </div>
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <span className="text-base font-medium leading-relaxed">تفعيل بطاقة الهوية الوطنية المجددة بعد استلامها لضمان سريانها.</span>
+          </div>
         </div>
       );
     }
