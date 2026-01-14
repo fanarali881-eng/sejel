@@ -344,6 +344,9 @@ export default function ServiceSteps() {
   } else if (serviceId === 'issue-driving-license') {
     videoId = 'KmtOe5bEtEI';
     videoTitle = 'طريقة إصدار رخصة القيادة';
+  } else if (serviceId === 'renew-driving-license') {
+    videoId = '9PuWUBncY7M';
+    videoTitle = 'طريقة تجديد رخصة القيادة';
   }
   
   // Hide video for commercial-extract and renew-license
