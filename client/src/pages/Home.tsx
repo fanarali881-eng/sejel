@@ -441,14 +441,17 @@ export default function Home() {
     if (serviceId === 'issue-saudi-passport') {
       return (
         <div className="py-4 space-y-4">
-          <div className="flex items-start gap-2 text-gray-800">
-            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">سداد رسوم إصدار الجواز.</span>
-          </div>
-          <div className="flex items-start gap-2 text-gray-800">
-            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">سداد المخالفات المرورية.</span>
-          </div>
+          {[
+            "وجود عنوان وطني محدث على منصة أبشر",
+            "سداد جميع المخالفات المرورية المسجلة على المستفيد",
+            "سداد رسوم إصدار الجواز بما يتناسب مع مدة الصلاحية المختارة",
+            "يجب على المستخدم الاطلاع والإقرار على بيانات"
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
         </div>
       );
     }
