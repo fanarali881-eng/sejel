@@ -91,6 +91,23 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'register-trademark') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "ألا يقل العمر عن 18 سنة.",
+            "ألا يكون موظفًا حكوميًا.",
+            "ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-2 text-gray-800">
@@ -168,6 +185,30 @@ export default function Home() {
             "عقد الإيجار، أو صك الملكية، أو عقد الاستثمار للموقع من البلدية أو الجهات الحكومية الأخرى.",
             "عقد تنظيف (اختياري، يعتمد على العقد ونوع النشاط).",
             "رخصة تجارية سارية تنتهي خلال 3 أشهر أو رخصة منتهية لمدة أقصاها سنة واحدة."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'register-trademark') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "صورة العلامة التجارية",
+            "إرفاق ترجمة العلامة مع بيان كيفية نطقها للعبارات الأجنبية من مكتب مترجم معتمد",
+            "إرفاق معنى الكلمة العربية في حال كانت الكلمة غير مفهومة للعامة",
+            "إرفاق شهادة اثبات تطابق مالك النطاق (.com) في حال الصورة تحتوي على اسم نطاق.",
+            "ارفاق الوثائق الثبوتية لصحة التاريخ المذكور في حال احتواء صورة العلامة لتاريخ ميلادي او هجري",
+            "في حال كانت العلامة مقدمة مسبقاً خلال ستة أشهر في دولة أخرى يتم ارفاق شهادة ايداع شهادة تبين تاريخ الايداع صادرة من الجهة المودع فيها الطلب مع صورة من الطلب السابق وترجمة إلى اللغة العربية وذلك خلال ستة أشهر من تاريخ تقديم طلب التسجيل",
+            "إرفاق ما يثبت استحقاق الدرجة العلمية المشار إليها في صورة العلامة التجارية المُراد تسجيلها.",
+            "موافقة صاحب الاسم/الصورة/اللقب/الشعار الظاهر/ة في صورة العلامة التجارية المُراد تسجيلها.",
+            "ارفاق الأوراق الثبوتية في حال كان الاسم عائلي (السجل التجاري – الهوية الوطنية)",
+            "ارفاق شهادة تسجيل العلامة في حال كانت العلامة منتهية وتجاوزت مهلة التجديد ويرغب المالك تسجيلها على سجل تجاري مختلف او معدل."
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
