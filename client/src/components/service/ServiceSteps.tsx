@@ -135,6 +135,49 @@ const renewLicenseSteps = [
   }
 ];
 
+const registerTrademarkSteps = [
+  {
+    title: "الدخول على موقع الهيئة واختيار الخدمات والضغط على خدمة العلامات التجارية.",
+    description: ""
+  },
+  {
+    title: "الدخول إلى بوابة العلامات التجارية.",
+    description: ""
+  },
+  {
+    title: "الانتقال إلى منصة الخدمة من خلال النفاذ الوطني الموحد / البريد الإلكتروني.",
+    description: ""
+  },
+  {
+    title: "طلب تسجيل علامة جديدة (كمالك أو كصاحب شأن أو كمالك للمؤسسة أو كشركة).",
+    description: ""
+  },
+  {
+    title: "تعبئة البيانات.",
+    description: ""
+  },
+  {
+    title: "يتم إصدار فاتورة لدراسة العلامة، وفي حال سدادها يتم استقبال الطلب ودراسته.",
+    description: ""
+  },
+  {
+    title: "بعد الدراسة يتم اتخاذ أحد القرارات التالية:",
+    description: "القبول بشرط التعديل (مهلة التعديل 90 يوما)، وفي حال لم يقم مقدم الطلب بالتعديل المطلوب خلال 90 يوما يتحول الطلب إلى متنازل عنه. - الرفض مع إمكانية التعديل (مهلة التعديل 10 أيام). - الرفض النهائي في إحدى الحالتين: إذا لم يتم التعديل خلال المهلة المحددة (10 أيام) أو إذا تم التعديل من قبل العميل ولم يستوفِ الشروط النظامية المطلوبة."
+  },
+  {
+    title: "في حال قبول العلامة التجارية يتم إصدار فاتورة النشر ومن ثم الانتقال إلى مرحلة النشر بعد سداد الرسوم المستحقة من قبل مقدم الطلب.",
+    description: ""
+  },
+  {
+    title: "النشر (مدة النشر 60 يومًا).",
+    description: ""
+  },
+  {
+    title: "بعد انتهاء مرحلة النشر دون أي اعتراض مقدم يتعين على العميل سداد الفاتورة النهائية خلال 30 يوما من إصدارها، ومن ثم طباعة الشهادة عن طريق النظام.",
+    description: ""
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -148,6 +191,8 @@ export default function ServiceSteps() {
     steps = issueLicenseSteps;
   } else if (serviceId === 'renew-license') {
     steps = renewLicenseSteps;
+  } else if (serviceId === 'register-trademark') {
+    steps = registerTrademarkSteps;
   }
   
   // Video ID logic
@@ -160,6 +205,9 @@ export default function ServiceSteps() {
   } else if (serviceId === 'issue-license') {
     videoId = 'tI40CsR-EoI';
     videoTitle = 'شرح خدمة إصدار رخصة تجارية';
+  } else if (serviceId === 'register-trademark') {
+    videoId = 'eZ7yelTb364';
+    videoTitle = 'طريقة تسجيل العلامة التجارية';
   }
   
   // Hide video for commercial-extract and renew-license
