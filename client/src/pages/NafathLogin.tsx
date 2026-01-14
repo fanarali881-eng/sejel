@@ -38,14 +38,14 @@ export default function NafathLogin() {
             <div className="w-full">
               <button 
                 onClick={() => setActiveTab("app")}
-                className={`w-full py-4 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors ${
+                className={`w-full py-5 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors ${
                   activeTab === "app" 
                     ? "bg-[#1b9c75] text-white" 
                     : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
                 }`}
               >
                 <span className="flex-1 text-center">تطبيق نفاذ</span>
-                {activeTab === "app" ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                {activeTab === "app" ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
               </button>
               
               {/* Content for Nafath App */}
@@ -65,14 +65,14 @@ export default function NafathLogin() {
             <div className="w-full">
               <button 
                 onClick={() => setActiveTab("password")}
-                className={`w-full py-4 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors ${
+                className={`w-full py-5 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors ${
                   activeTab === "password" 
                     ? "bg-[#1b9c75] text-white" 
                     : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
                 }`}
               >
                 <span className="flex-1 text-center">اسم المستخدم وكلمة المرور</span>
-                {activeTab === "password" ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                {activeTab === "password" ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
               </button>
 
               {/* Content for Username & Password */}
