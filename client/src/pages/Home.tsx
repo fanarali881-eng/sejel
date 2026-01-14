@@ -144,12 +144,9 @@ export default function Home() {
       return (
         <div className="py-4 space-y-4">
           {[
-            "ألا يقل العمر عن 18 عاماً.",
-            "إجراء الكشف الطبي.",
-            "إحضار صورة من الهوية الوطنية.",
-            "إحضار 6 صور شمسية مقاس 4*6.",
-            "دفع الرسوم المقررة.",
-            "إحضار ملف لحفظ الأوراق."
+            "ألّا يقل عمر المتقدم عن 18 عامًا.",
+            "التأكد من حجز موعد في أحد مدارس تعليم القيادة.",
+            "وجود فحص طبي من أحد المراكز الطبية المعتمدة."
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
@@ -316,9 +313,7 @@ export default function Home() {
       return (
         <div className="py-4 space-y-4">
           {[
-            "الهوية الوطنية.",
-            "تقرير الكشف الطبي.",
-            "6 صور شمسية مقاس 4*6."
+            "سداد رسوم إصدار الرخصة عبر المدفوعات الحكومية من خلال البنوك."
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
