@@ -219,27 +219,39 @@ const renewPassportSteps = [
 
 const issueDrivingLicenseSteps = [
   {
-    title: "إجراء الكشف الطبي.",
+    title: "تسجيل الدخول إلى موقع منصة أبشر",
     description: ""
   },
   {
-    title: "التوجه إلى مدرسة تعليم القيادة.",
+    title: "اختيار خدماتي",
     description: ""
   },
   {
-    title: "اجتياز الاختبار النظري.",
+    title: "اختيار \"المرور\" من قائمة الخدمات",
     description: ""
   },
   {
-    title: "اجتياز الاختبار العملي.",
+    title: "اختيار خدمة \"إصدار رخصة القيادة\"",
     description: ""
   },
   {
-    title: "سداد الرسوم المقررة.",
+    title: "قراءة وصف الخدمة, ثم اختيار \"الانتقال إلى الخدمة\"",
     description: ""
   },
   {
-    title: "استلام الرخصة.",
+    title: "اختيار أحد مدارس تعليم القيادة المتاحة",
+    description: ""
+  },
+  {
+    title: "تأكيد التاريخ",
+    description: ""
+  },
+  {
+    title: "اختيار \"حجز موعد\"",
+    description: ""
+  },
+  {
+    title: "ستصلك رسالة تؤكد حجز موعدك",
     description: ""
   }
 ];
@@ -329,10 +341,13 @@ export default function ServiceSteps() {
   } else if (serviceId === 'renew-passport') {
     videoId = '3tdFI5e4bHc';
     videoTitle = 'طريقة تجديد جواز السفر السعودي';
+  } else if (serviceId === 'issue-driving-license') {
+    videoId = 'KmtOe5bEtEI';
+    videoTitle = 'طريقة إصدار رخصة القيادة';
   }
   
   // Hide video for commercial-extract and renew-license
-  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'issue-driving-license';
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license';
 
   return (
     <div className="py-4">
