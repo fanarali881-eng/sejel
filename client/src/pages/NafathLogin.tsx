@@ -178,17 +178,49 @@ export default function NafathLogin() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto py-8 border-t border-gray-200">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex justify-center gap-8 mb-4 text-sm text-[#777]">
-            <a href="#" className="hover:text-[#1b9c75]">سياسة الخصوصية</a>
-            <a href="#" className="hover:text-[#1b9c75]">شروط الاستخدام</a>
-            <a href="#" className="hover:text-[#1b9c75]">الأسئلة الشائعة</a>
-            <a href="#" className="hover:text-[#1b9c75]">اتصل بنا</a>
+      <footer className="mt-auto bg-[#f5f5f5] py-6 border-t border-gray-200">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+          
+          {/* Right Side: SDAIA Logo & Text */}
+          <div className="flex items-center gap-4 order-1 md:order-1">
+            <div className="flex flex-col items-end text-right">
+              <span className="text-[#555] text-xs mb-1">تطوير وتشغيل</span>
+              <img src="/images/sdaia-logo.jpg" alt="SDAIA Logo" className="h-12 object-contain mix-blend-multiply" />
+            </div>
           </div>
-          <p className="text-xs text-[#999]">
-            جميع الحقوق محفوظة © {new Date().getFullYear()} النفاذ الوطني الموحد
-          </p>
+
+          {/* Center: Navigation Links & Copyright */}
+          <div className="flex flex-col items-center gap-3 order-3 md:order-2">
+            <div className="flex flex-wrap justify-center gap-6 text-[#555] text-sm font-medium">
+              <a href="#" className="hover:text-[#1b9c75]">الرئيسية</a>
+              <a href="#" className="hover:text-[#1b9c75]">حول</a>
+              <a href="#" className="hover:text-[#1b9c75]">اتصل بنا</a>
+              <a href="#" className="hover:text-[#1b9c75]">الشروط والأحكام</a>
+              <a href="#" className="hover:text-[#1b9c75]">المساعدة والدعم</a>
+              <a href="#" className="hover:text-[#1b9c75]">سياسة الخصوصية</a>
+            </div>
+            <p className="text-[#777] text-xs">
+              النفاذ الوطني الموحد جميع الحقوق محفوظة © {new Date().getFullYear()}
+            </p>
+          </div>
+
+          {/* Left Side: DGA Badge */}
+          <div className="flex items-center order-2 md:order-3">
+            <div className="border border-[#1b9c75] rounded-md px-3 py-1 flex items-center gap-3 bg-white">
+              <div className="text-right">
+                <div className="text-[10px] text-[#555] font-bold">مسجلة لدى</div>
+                <div className="text-[9px] text-[#1b9c75] font-bold">هيئة الحكومة الرقمية</div>
+                <div className="text-[8px] text-[#777]">Digital Government Authority</div>
+              </div>
+              <div className="h-8 w-[1px] bg-gray-200 mx-1"></div>
+              <div className="text-left">
+                <div className="text-[10px] text-[#555] font-bold">Registered on</div>
+                <div className="text-[9px] text-[#555]">20240916626</div>
+              </div>
+              <img src="/images/dga-logo.jpg" alt="DGA Logo" className="h-8 w-8 object-contain ml-2 mix-blend-multiply" />
+            </div>
+          </div>
+
         </div>
       </footer>
     </div>
