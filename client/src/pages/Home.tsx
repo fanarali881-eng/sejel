@@ -61,10 +61,12 @@ export default function Home() {
                     <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
                     <span className="text-base font-medium">ألا يكون موظفًا حكوميًا.</span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-800">
-                    <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
-                    <span className="text-base font-medium">ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية.</span>
-                  </div>
+                  {serviceId !== 'renew-cr' && (
+                    <div className="flex items-center gap-2 text-gray-800">
+                      <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
+                      <span className="text-base font-medium">ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية.</span>
+                    </div>
+                  )}
                 </div>
               )}
 
