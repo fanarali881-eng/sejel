@@ -161,6 +161,23 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'renew-license') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "عقد الإيجار، أو صك الملكية، أو عقد الاستثمار للموقع من البلدية أو الجهات الحكومية الأخرى.",
+            "عقد تنظيف (اختياري، يعتمد على العقد ونوع النشاط).",
+            "رخصة تجارية سارية تنتهي خلال 3 أشهر أو رخصة منتهية لمدة أقصاها سنة واحدة."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-start gap-2 text-gray-800">
