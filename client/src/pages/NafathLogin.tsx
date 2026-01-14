@@ -18,13 +18,13 @@ export default function NafathLogin() {
     <div className="min-h-screen bg-[#f9f9f9] font-sans" dir="rtl">
       {/* Header */}
       <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[120px] flex items-center">
-        <div className="container mx-auto px-4 flex justify-between items-center h-full">
+        <div className="container mx-auto px-4 flex justify-between items-center h-full flex-row-reverse">
           <div className="flex items-center gap-6 h-full">
             {/* Logos */}
             <img src="/images/nafath-logo.png" alt="Nafath Logo" className="h-full object-contain" />
             <img src="/images/vision2030-new-logo.png" alt="Vision 2030 Logo" className="h-20 object-contain opacity-80" />
           </div>
-          <button className="flex items-center gap-2 text-black hover:text-gray-700 transition-colors font-medium text-sm">
+          <button className="flex items-center gap-2 text-[#555] hover:text-[#333] transition-colors font-medium text-sm flex-row-reverse">
             <Globe className="w-5 h-5" />
             <span>English</span>
           </button>
