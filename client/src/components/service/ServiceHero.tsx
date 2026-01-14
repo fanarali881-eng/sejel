@@ -20,6 +20,16 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
     }
   };
 
+  const getServiceDescription = () => {
+    switch (serviceId) {
+      case 'renew-cr':
+        return 'تجديد السجل';
+      case 'new-cr':
+      default:
+        return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين البدء في مُمارسة النشاط التجاري، دون الحاجة إلى زيارة مراكز الخدمة.';
+    }
+  };
+
   const handleStartService = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -53,7 +63,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
 
             {/* Description */}
             <p className="text-gray-800 mb-2 max-w-3xl leading-relaxed text-base font-medium">
-              خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين البدء في مُمارسة النشاط التجاري، دون الحاجة إلى زيارة مراكز الخدمة.
+              {getServiceDescription()}
             </p>
 
             {/* SLA Link */}
