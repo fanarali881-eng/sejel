@@ -70,31 +70,72 @@ const reserveNameSteps = [
   }
 ];
 
+const commercialExtractSteps = [
+  {
+    title: "الدخول على المنصة:",
+    description: "من خلال النفاذ الوطني الموحد عبر منصة المركز السعودي للأعمال."
+  },
+  {
+    title: "اختيار الخدمة:",
+    description: "الخدمات العامة < وزارة التجارة < مُستخرج سجل تجاري / الإفادة التجارية."
+  },
+  {
+    title: "بدء الخدمة:",
+    description: "ضغط على الاستمرار للموافقة على الشروط - الضغط على تقديم الخدمة."
+  },
+  {
+    title: "تحديد نوع المستخرج / إفادة:",
+    description: "الضغط على اختيار نوع المستخرج \\ إفادة - الضغظ على استمرار ."
+  },
+  {
+    title: "استكمال المتطلبات:",
+    description: "تسجيل بيانات المستفيد - اختيار لغة الطباعة - الضغط على استمرار ."
+  },
+  {
+    title: "تقديم الطلب:",
+    description: "مراجعة البيانات - الضغط على الموافقة على الإقرار."
+  },
+  {
+    title: "الضغط على تقديم الطلب.",
+    description: ""
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
 
-  const steps = serviceId === 'reserve-name' ? reserveNameSteps : defaultSteps;
+  let steps = defaultSteps;
+  if (serviceId === 'reserve-name') {
+    steps = reserveNameSteps;
+  } else if (serviceId === 'commercial-extract') {
+    steps = commercialExtractSteps;
+  }
   
   // Video ID logic
   const videoId = serviceId === 'reserve-name' ? 'H4T0NCjLWJc' : 'uMDpYAV1oFA';
   const videoTitle = serviceId === 'reserve-name' ? 'شرح خدمة حجز اسم تجاري' : 'شرح خدمة قيد سجل تجاري لمؤسسة فردية';
+  
+  // Hide video for commercial-extract
+  const showVideo = serviceId !== 'commercial-extract';
 
   return (
     <div className="py-4">
       {/* YouTube Video Section */}
-      <div className="mb-8 rounded-lg overflow-hidden shadow-sm border border-gray-200">
-        <div className="relative pb-[56.25%] h-0 bg-black">
-          <iframe
-            className="absolute top-0 left-0 w-full h-full"
-            src={`https://www.youtube.com/embed/${videoId}`}
-            title={videoTitle}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+      {showVideo && (
+        <div className="mb-8 rounded-lg overflow-hidden shadow-sm border border-gray-200">
+          <div className="relative pb-[56.25%] h-0 bg-black">
+            <iframe
+              className="absolute top-0 left-0 w-full h-full"
+              src={`https://www.youtube.com/embed/${videoId}`}
+              title={videoTitle}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
-      </div>
+      )}
 
       <ul className="space-y-3 list-none p-0 m-0">
         {steps.map((step, index) => (
