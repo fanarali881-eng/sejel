@@ -77,7 +77,7 @@ export default function NafathLogin() {
 
               {/* Content for Username & Password */}
               {activeTab === "password" && (
-                <div className="p-10 md:p-16 flex flex-col md:flex-row gap-16 items-start min-h-[400px] animate-in slide-in-from-top-2 duration-300">
+                <div className="p-6 md:p-10 flex flex-col md:flex-row gap-8 items-start min-h-[300px] animate-in slide-in-from-top-2 duration-300">
                   
                   {/* Right Side: Form (First in RTL = Right) */}
                   <div className="w-full md:w-1/2">
@@ -125,19 +125,21 @@ export default function NafathLogin() {
                         <span className="text-xl">←</span>
                       </button>
 
-                      <div className="flex justify-between text-sm pt-6">
-                        <a href="#" className="text-[#1b9c75] hover:underline">
-                          حساب جديد
-                        </a>
-                        <a href="#" className="text-[#1b9c75] hover:underline">
-                          إعادة تعيين/تغيير كلمة المرور
-                        </a>
+                      <div className="flex justify-between gap-4 pt-6">
+                        <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
+                          <span className="text-lg">👤</span>
+                          <span>حساب جديد</span>
+                        </button>
+                        <button type="button" className="flex-1 border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-medium py-2 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2">
+                          <span className="text-lg">🔓</span>
+                          <span>إعادة تعيين/تغيير كلمة المرور</span>
+                        </button>
                       </div>
                     </form>
                   </div>
 
                   {/* Left Side: Image/Info (Second in RTL = Left) */}
-                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-10">
+                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-4">
                     <div className="w-48 h-48 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-8">
                       Security Image
                     </div>
