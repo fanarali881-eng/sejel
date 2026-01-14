@@ -10,7 +10,7 @@ export default function NafathLogin() {
   return (
     <div className="min-h-screen bg-[#f9f9f9] font-sans" dir="rtl">
       {/* Header */}
-      <header className="bg-white py-4 shadow-md fixed top-0 left-0 right-0 z-50">
+      <header className="bg-white py-10 shadow-md fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-6">
             {/* Placeholders for logos */}
@@ -25,7 +25,7 @@ export default function NafathLogin() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[80px]">
+      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[140px]">
         <h1 className="text-[28px] font-bold text-[#1b9c75] mt-8 mb-4">الدخول على النظام</h1>
 
         {/* Login Card */}
