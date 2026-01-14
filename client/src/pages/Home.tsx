@@ -154,6 +154,24 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'renew-national-id') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "أن تكون الهوية منتهية الصلاحية أو متبقي على انتهائها 180 يوماً أو أقل.",
+            "وجود صورة وبصمة للمستفيد في أنظمة وزارة الداخلية.",
+            "سداد الغرامات المالية المسجلة من قبل الأحوال المدنية (إن وجدت).",
+            "وجود عنوان وطني مسجل في البريد السعودي."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-2 text-gray-800">
@@ -288,6 +306,22 @@ export default function Home() {
             "الهوية الوطنية.",
             "تقرير الكشف الطبي.",
             "6 صور شمسية مقاس 4*6."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'renew-national-id') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "صورة شخصية حديثة (ملونة، خلفية بيضاء، بدون نظارات، تغطية شعر الرأس للرجل، تغطية شعر الرأس للمرأة).",
+            "أصل بطاقة الهوية الوطنية القديمة (عند استلام الجديدة)."
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />

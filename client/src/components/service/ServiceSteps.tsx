@@ -248,6 +248,37 @@ const issueDrivingLicenseSteps = [
   }
 ];
 
+const renewNationalIdSteps = [
+  {
+    title: "الدخول على منصة أبشر.",
+    description: ""
+  },
+  {
+    title: "اختيار خدمات من تبويب خدماتي.",
+    description: ""
+  },
+  {
+    title: "اختيار الأحوال المدنية.",
+    description: ""
+  },
+  {
+    title: "اختيار خدمة تجديد الهوية الوطنية.",
+    description: ""
+  },
+  {
+    title: "رفع الصورة الشخصية وفق الشروط المطلوبة.",
+    description: ""
+  },
+  {
+    title: "اختيار عنوان استلام الهوية الجديدة.",
+    description: ""
+  },
+  {
+    title: "سداد أجور التوصيل.",
+    description: ""
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -267,6 +298,8 @@ export default function ServiceSteps() {
     steps = renewPassportSteps;
   } else if (serviceId === 'issue-driving-license') {
     steps = issueDrivingLicenseSteps;
+  } else if (serviceId === 'renew-national-id') {
+    steps = renewNationalIdSteps;
   }
   
   // Video ID logic
@@ -285,7 +318,7 @@ export default function ServiceSteps() {
   }
   
   // Hide video for commercial-extract and renew-license
-  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'renew-passport' && serviceId !== 'issue-driving-license';
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'renew-passport' && serviceId !== 'issue-driving-license' && serviceId !== 'renew-national-id';
 
   return (
     <div className="py-4">
