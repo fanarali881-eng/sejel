@@ -171,7 +171,7 @@ export default function ServiceSteps() {
           <li key={index} className="flex items-start gap-2 text-sm leading-relaxed text-black">
             <span className="text-[#006C35] mt-1">•</span>
             <span>
-              <strong className="text-[#006C35] font-bold ml-1">{step.title}</strong>
+              <strong className="text-black font-bold ml-1">{step.title}</strong>
               {step.description}
             </span>
           </li>
