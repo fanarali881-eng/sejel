@@ -178,6 +178,76 @@ const registerTrademarkSteps = [
   }
 ];
 
+const renewPassportSteps = [
+  {
+    title: "الدخول على منصة أبشر.",
+    description: ""
+  },
+  {
+    title: "اختيار خدمات من تبويب خدماتي.",
+    description: ""
+  },
+  {
+    title: "اختيار الجوازات.",
+    description: ""
+  },
+  {
+    title: "اختيار تجديد الجواز الإلكتروني.",
+    description: ""
+  },
+  {
+    title: "طلب تجديد الجواز.",
+    description: ""
+  },
+  {
+    title: "تحديد مدة الجواز.",
+    description: ""
+  },
+  {
+    title: "الموافقة على الشروط والأحكام.",
+    description: ""
+  },
+  {
+    title: "اختيار عنوان استلام الجواز الجديد.",
+    description: ""
+  },
+  {
+    title: "الإقرار بصحة المعلومات.",
+    description: ""
+  },
+  {
+    title: "سداد رسوم التجديد.",
+    description: ""
+  }
+];
+
+const issueDrivingLicenseSteps = [
+  {
+    title: "إجراء الكشف الطبي.",
+    description: ""
+  },
+  {
+    title: "التوجه إلى مدرسة تعليم القيادة.",
+    description: ""
+  },
+  {
+    title: "اجتياز الاختبار النظري.",
+    description: ""
+  },
+  {
+    title: "اجتياز الاختبار العملي.",
+    description: ""
+  },
+  {
+    title: "سداد الرسوم المقررة.",
+    description: ""
+  },
+  {
+    title: "استلام الرخصة.",
+    description: ""
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -193,6 +263,10 @@ export default function ServiceSteps() {
     steps = renewLicenseSteps;
   } else if (serviceId === 'register-trademark') {
     steps = registerTrademarkSteps;
+  } else if (serviceId === 'renew-passport') {
+    steps = renewPassportSteps;
+  } else if (serviceId === 'issue-driving-license') {
+    steps = issueDrivingLicenseSteps;
   }
   
   // Video ID logic
@@ -211,7 +285,7 @@ export default function ServiceSteps() {
   }
   
   // Hide video for commercial-extract and renew-license
-  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license';
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'renew-passport' && serviceId !== 'issue-driving-license';
 
   return (
     <div className="py-4">

@@ -115,6 +115,45 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'renew-passport') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "سداد رسوم تجديد الجواز.",
+            "سداد المخالفات المرورية المسجلة على المستفيد.",
+            "وجود بصمة وصورة للمستفيد في أنظمة وزارة الداخلية.",
+            "تواجد المستفيد داخل المملكة أثناء طلب التجديد.",
+            "أن يكون الجواز الحالي منتهي الصلاحية أو متبقي على انتهائه 6 أشهر أو أقل."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'issue-driving-license') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "ألا يقل العمر عن 18 عاماً.",
+            "إجراء الكشف الطبي.",
+            "إحضار صورة من الهوية الوطنية.",
+            "إحضار 6 صور شمسية مقاس 4*6.",
+            "دفع الرسوم المقررة.",
+            "إحضار ملف لحفظ الأوراق."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-2 text-gray-800">
@@ -216,6 +255,39 @@ export default function Home() {
             "موافقة صاحب الاسم/الصورة/اللقب/الشعار الظاهر/ة في صورة العلامة التجارية المُراد تسجيلها.",
             "ارفاق الأوراق الثبوتية في حال كان الاسم عائلي (السجل التجاري – الهوية الوطنية)",
             "ارفاق شهادة تسجيل العلامة في حال كانت العلامة منتهية وتجاوزت مهلة التجديد ويرغب المالك تسجيلها على سجل تجاري مختلف او معدل."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'renew-passport') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "صورة شخصية حديثة (في حال عدم وجود صورة في النظام).",
+            "الجواز القديم (عند الاستلام من البريد السعودي)."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'issue-driving-license') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "الهوية الوطنية.",
+            "تقرير الكشف الطبي.",
+            "6 صور شمسية مقاس 4*6."
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />

@@ -26,6 +26,10 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'تسجيل علامة تجارية';
       case 'renew-license':
         return 'تجديد رخصة تجارية';
+      case 'renew-passport':
+        return 'تجديد الجواز السعودي';
+      case 'issue-driving-license':
+        return 'إصدار رخصة قيادة';
       case 'new-cr':
       default:
         return 'قيد سجل تجاري لمؤسسة فردية';
@@ -48,6 +52,10 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'خدمة تقدم الكترونيا تتيح للمستخدم طلب تسجيل العلامة التجارية. العلامات التجارية هي الإبداعات التي تكون على شكل أسماء، كلمات ، إمضاءات، حروف، رموز، وأرقام، عناوين، وأختام، وكذلك التصميمات والرسوم والصور، والنقوش المميزة، أو طريقة تغليف عناصر تصويرية؛ أو أشكال، أو لون أو مجموعة ألوان أو مزيج من ذلك أو أية إشارة أو مجموعة إشارات إذا كانت تستخدم أو يراد استخدامها في تمييز سلع أو خدمات منشأة ما.';
       case 'renew-license':
         return 'من خلال هذه الخدمة الإلكترونية يمكنك تعزيز استمرارية عملك التجاري حيث تمكنك هذه الخدمة من تجديد رخصتك التجارية، كما يمكنك تجديد مع تعديل بيانات الرخصة.';
+      case 'renew-passport':
+        return 'خدمة إلكترونية تمكن المواطن من تجديد جواز السفر السعودي له أو لأحد أفراد أسرته إلكترونياً.';
+      case 'issue-driving-license':
+        return 'خدمة إلكترونية تمكن المواطن والمقيم من إصدار رخصة قيادة خاصة أو عامة بعد إتمام المتطلبات اللازمة.';
       case 'new-cr':
       default:
         return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين البدء في مُمارسة النشاط التجاري، دون الحاجة إلى زيارة مراكز الخدمة.';
@@ -78,7 +86,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
             {/* Tags */}
             <div className="flex gap-2 mb-4">
               <span className="bg-[#e6f2ff] text-[#0075c9] text-xs font-bold px-3 py-1 rounded">
-                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : 'وزارة التجارة'}
+                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : serviceId === 'renew-passport' ? 'المديرية العامة للجوازات' : serviceId === 'issue-driving-license' ? 'الإدارة العامة للمرور' : 'وزارة التجارة'}
               </span>
               <span className="bg-[#e6fffa] text-[#006c35] text-xs font-bold px-3 py-1 rounded">
                 الاكثر استخداما
