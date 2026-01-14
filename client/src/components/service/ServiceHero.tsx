@@ -55,7 +55,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
       case 'renew-license':
         return 'من خلال هذه الخدمة الإلكترونية يمكنك تعزيز استمرارية عملك التجاري حيث تمكنك هذه الخدمة من تجديد رخصتك التجارية، كما يمكنك تجديد مع تعديل بيانات الرخصة.';
       case 'renew-passport':
-        return 'خدمة إلكترونية تمكن المواطن من تجديد جواز السفر السعودي له أو لأحد أفراد أسرته إلكترونياً.';
+        return 'تتيح هذه الخدمة للمواطنين والمواطنات تجديد جواز السفر السعودي إلكترونيًا بكل سهولة ويسر، دون الحاجة لزيارة مكاتب الجوازات، عبر خطوات بسيطة وسريعة بعد تقديم الطلب واستكمال الإجراءات عن طريق منصة أبشر.';
       case 'issue-driving-license':
         return 'خدمة إلكترونية تمكن المواطن والمقيم من إصدار رخصة قيادة خاصة أو عامة بعد إتمام المتطلبات اللازمة.';
       case 'renew-national-id':
@@ -90,7 +90,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
             {/* Tags */}
             <div className="flex gap-2 mb-4">
               <span className="bg-[#e6f2ff] text-[#0075c9] text-xs font-bold px-3 py-1 rounded">
-                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : serviceId === 'renew-passport' ? 'المديرية العامة للجوازات' : serviceId === 'issue-driving-license' ? 'الإدارة العامة للمرور' : serviceId === 'renew-national-id' ? 'وزارة الداخلية' : 'وزارة التجارة'}
+                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : serviceId === 'renew-passport' ? 'وزارة الداخلية' : serviceId === 'issue-driving-license' ? 'الإدارة العامة للمرور' : serviceId === 'renew-national-id' ? 'وزارة الداخلية' : 'وزارة التجارة'}
               </span>
               <span className="bg-[#e6fffa] text-[#006c35] text-xs font-bold px-3 py-1 rounded">
                 الاكثر استخداما
