@@ -180,43 +180,39 @@ const registerTrademarkSteps = [
 
 const renewPassportSteps = [
   {
-    title: "الدخول على منصة أبشر.",
+    title: "تسجيل الدخول إلى منصّة أبشر",
     description: ""
   },
   {
-    title: "اختيار خدمات من تبويب خدماتي.",
+    title: "اختيار خدماتي",
     description: ""
   },
   {
-    title: "اختيار الجوازات.",
+    title: "اختيار الجوازات",
     description: ""
   },
   {
-    title: "اختيار تجديد الجواز الإلكتروني.",
+    title: "اختيار تجديد جواز السفر السعودي",
     description: ""
   },
   {
-    title: "طلب تجديد الجواز.",
+    title: "اختيار طلب تجديد جواز",
     description: ""
   },
   {
-    title: "تحديد مدة الجواز.",
+    title: "تحديد مدة التجديد والإقرار بالموافقة على الشروط المطلوبة",
     description: ""
   },
   {
-    title: "الموافقة على الشروط والأحكام.",
+    title: "تعبئة بيانات عنوان التوصيل واختيار طريقة التوصيل والموافقة على الإقرار المطلوب",
     description: ""
   },
   {
-    title: "اختيار عنوان استلام الجواز الجديد.",
+    title: "مراجعة المعلومات وسداد الرسوم",
     description: ""
   },
   {
-    title: "الإقرار بصحة المعلومات.",
-    description: ""
-  },
-  {
-    title: "سداد رسوم التجديد.",
+    title: "تم تقديم الطلب بنجاح",
     description: ""
   }
 ];
@@ -330,10 +326,13 @@ export default function ServiceSteps() {
   } else if (serviceId === 'register-trademark') {
     videoId = 'eZ7yelTb364';
     videoTitle = 'طريقة تسجيل العلامة التجارية';
+  } else if (serviceId === 'renew-passport') {
+    videoId = '3tdFI5e4bHc';
+    videoTitle = 'طريقة تجديد جواز السفر السعودي';
   }
   
   // Hide video for commercial-extract and renew-license
-  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'renew-passport' && serviceId !== 'issue-driving-license';
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'issue-driving-license';
 
   return (
     <div className="py-4">

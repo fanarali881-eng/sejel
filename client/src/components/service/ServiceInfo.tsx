@@ -24,6 +24,9 @@ export default function ServiceInfo() {
     if (serviceId === 'renew-national-id') {
       return '39';
     }
+    if (serviceId === 'renew-passport') {
+      return '300';
+    }
     return '500';
   };
 
