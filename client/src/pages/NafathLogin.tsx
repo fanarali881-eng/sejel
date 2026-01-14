@@ -78,7 +78,7 @@ export default function NafathLogin() {
               {/* Content for Username & Password */}
               {activeTab === "password" && (
                 <div className="bg-[#f2f2f2] p-8 md:p-12 animate-in slide-in-from-top-2 duration-300">
-                  <div className="bg-white rounded-lg shadow-sm p-8 md:p-10 flex flex-col md:flex-row gap-12 items-center max-w-[900px] mx-auto">
+                  <div className="bg-white rounded-lg shadow-sm p-8 md:p-10 flex flex-col md:flex-row gap-12 items-center max-w-[750px] mx-auto">
                   
                     {/* Right Side: Form (First in RTL = Right) */}
                     <div className="w-full md:w-[55%]">
