@@ -101,6 +101,25 @@ const commercialExtractSteps = [
   }
 ];
 
+const issueLicenseSteps = [
+  {
+    title: "يمكنك التقديم لطلب رخصة تجارية لنشاطك - على سبيل المثال لا الحصر - رخصة أعمال، تراخيص البيئة، ترخيص شركة صناعية، ترخيص شركة طبية، ترخيص شركة أطعمة، ترخيص شركة سياحة، ترخيص مؤسسة احترافية من خلال الخطوات التالية:",
+    description: ""
+  },
+  {
+    title: "إدخال سجل المنشأة وتحديد النشاط والمساحة.",
+    description: ""
+  },
+  {
+    title: "تحديد الموقع وتعبئة تفاصيل المحل أو العربة.",
+    description: ""
+  },
+  {
+    title: "دفع الرسوم إذا كان النشاط فوري أو إرسال الطلب للبلدية في حال الأنشطة غير الفورية.",
+    description: ""
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -110,11 +129,21 @@ export default function ServiceSteps() {
     steps = reserveNameSteps;
   } else if (serviceId === 'commercial-extract') {
     steps = commercialExtractSteps;
+  } else if (serviceId === 'issue-license') {
+    steps = issueLicenseSteps;
   }
   
   // Video ID logic
-  const videoId = serviceId === 'reserve-name' ? 'H4T0NCjLWJc' : 'uMDpYAV1oFA';
-  const videoTitle = serviceId === 'reserve-name' ? 'شرح خدمة حجز اسم تجاري' : 'شرح خدمة قيد سجل تجاري لمؤسسة فردية';
+  let videoId = 'uMDpYAV1oFA';
+  let videoTitle = 'شرح خدمة قيد سجل تجاري لمؤسسة فردية';
+
+  if (serviceId === 'reserve-name') {
+    videoId = 'H4T0NCjLWJc';
+    videoTitle = 'شرح خدمة حجز اسم تجاري';
+  } else if (serviceId === 'issue-license') {
+    videoId = 'tI40CsR-EoI';
+    videoTitle = 'شرح خدمة إصدار رخصة تجارية';
+  }
   
   // Hide video for commercial-extract
   const showVideo = serviceId !== 'commercial-extract';
