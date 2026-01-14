@@ -41,7 +41,10 @@ export default function HomeNew() {
         {/* Services List */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-            <h2 className="text-xl font-bold text-gray-800">الخدمات المتاحة</h2>
+            <div className="flex items-center gap-4">
+              <h2 className="text-xl font-bold text-gray-800">الخدمات المتاحة</h2>
+              <span className="bg-[#e6f4ea] text-[#006C35] text-xs font-bold px-3 py-1 rounded-md">الاكثر استخداما</span>
+            </div>
             <div className="relative w-64">
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input 
