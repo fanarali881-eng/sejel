@@ -23,7 +23,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
   const getServiceDescription = () => {
     switch (serviceId) {
       case 'renew-cr':
-        return 'تجديد السجل';
+        return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين تجديد السجل التجاري، دون الحاجة إلى زيارة مراكز الخدمة.';
       case 'new-cr':
       default:
         return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين البدء في مُمارسة النشاط التجاري، دون الحاجة إلى زيارة مراكز الخدمة.';
