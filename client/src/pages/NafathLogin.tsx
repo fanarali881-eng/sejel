@@ -38,7 +38,7 @@ export default function NafathLogin() {
             <div className="w-full">
               <button 
                 onClick={() => setActiveTab("app")}
-                className={`w-full py-3 px-6 flex items-center justify-between font-bold text-base transition-colors ${
+                className={`w-full py-4 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors ${
                   activeTab === "app" 
                     ? "bg-[#1b9c75] text-white" 
                     : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
@@ -65,7 +65,7 @@ export default function NafathLogin() {
             <div className="w-full">
               <button 
                 onClick={() => setActiveTab("password")}
-                className={`w-full py-3 px-6 flex items-center justify-between font-bold text-base transition-colors ${
+                className={`w-full py-4 px-6 flex flex-row-reverse items-center justify-between font-bold text-base transition-colors ${
                   activeTab === "password" 
                     ? "bg-[#1b9c75] text-white" 
                     : "bg-[#bfbfbf] text-white hover:bg-[#a6a6a6]"
