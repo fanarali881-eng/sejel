@@ -128,17 +128,14 @@ export default function NafathLogin() {
 
                         <div className="flex justify-between gap-4 pt-6">
                           {/* Reset Password Button (Right in RTL) */}
-                          <button type="button" className="w-[60%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal py-3 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-between gap-2 h-[60px]">
-                            <div className="flex flex-col items-start text-right w-full">
-                              <span>إعادة تعيين/تغيير</span>
-                              <span>كلمة المرور</span>
-                            </div>
-                            <Lock className="w-5 h-5 flex-shrink-0" />
+                          <button type="button" className="w-[60%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2 h-[40px]">
+                            <Lock className="w-4 h-4" />
+                            <span>إعادة تعيين/تغيير كلمة المرور</span>
                           </button>
                           
                           {/* New Account Button (Left in RTL) */}
-                          <button type="button" className="w-[40%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal py-3 px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2 h-[60px]">
-                            <User className="w-5 h-5" />
+                          <button type="button" className="w-[40%] border border-[#777] text-[#777] hover:bg-gray-50 hover:text-[#555] font-normal px-4 rounded-[4px] transition-colors text-xs flex items-center justify-center gap-2 h-[40px]">
+                            <User className="w-4 h-4" />
                             <span>حساب جديد</span>
                           </button>
                         </div>
