@@ -157,6 +157,25 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'renew-driving-license') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "تشمل هذه الخدمة تجديد رخصة القيادة من نوع خصوصي، والدراجات الآلية فقط.",
+            "سداد رسوم تجديد الرخصة من خلال المدفوعات الحكومية عبر البنوك.",
+            "سداد المخالفات المرورية؛ -إن وجدت-.",
+            "أن تكون المدة المتبقية من صلاحية رخصة القيادة أقل من 365 يومًا.",
+            "وجود فحص طبي من أحد المراكز الطبية المعتمدة."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     if (serviceId === 'renew-national-id') {
       return (
         <div className="py-4 space-y-4">
@@ -314,6 +333,23 @@ export default function Home() {
         <div className="py-4 space-y-4">
           {[
             "سداد رسوم إصدار الرخصة عبر المدفوعات الحكومية من خلال البنوك."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'renew-driving-license') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "سداد المخالفات المرورية؛ -إن وجدت-.",
+            "سداد رسوم تجديد الرخصة من خلال المدفوعات الحكومية عبر البنوك.",
+            "وجود فحص طبي من أحد المراكز الطبية المعتمدة."
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
