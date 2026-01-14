@@ -1,4 +1,6 @@
-const steps = [
+import { useRoute } from "wouter";
+
+const defaultSteps = [
   {
     title: "الدخول على المنصة:",
     description: "عبر النفاذ الوطني الموحد من خلال منصة المركز السعودي للأعمال."
@@ -37,7 +39,47 @@ const steps = [
   }
 ];
 
+const reserveNameSteps = [
+  {
+    title: "الدخول على المنصة:",
+    description: "عبر النفاذ الوطني الموحد من خلال منصة المركز السعودي للأعمال."
+  },
+  {
+    title: "اختيار الخدمة:",
+    description: 'من "ممارسة الأعمال" > "وزارة التجارة" > "حجز اسم تجاري" - أو من "الخدمات العامة" > "إدارة الأسماء التجارية المحجوزة" > "حجز اسم تجاري".'
+  },
+  {
+    title: "بدء الخدمة:",
+    description: 'الاطلاع على الشروط والمتطلبات، ثم الموافقة والضغط على "التقديم على الخدمة".'
+  },
+  {
+    title: "إدخال البيانات:",
+    description: "اختيار نوع الحجز ولغة الاسم التجاري - إدخال حتى 5 أسماء تجارية مقترحة."
+  },
+  {
+    title: "مراجعة وتقديم الطلب:",
+    description: "مراجعة ملخص الطلب، تعديل الأسماء إن لزم، ثم الموافقة على الإقرار وتقديم الطلب."
+  },
+  {
+    title: "المعالجة والدفع:",
+    description: "بعد موافقة وزارة التجارة، تُصدر الفاتورة ويتم دفعها عبر نظام المدفوعات المركزي."
+  },
+  {
+    title: "إتمام الطلب:",
+    description: 'بعد الدفع، يتم نشر الاسم التجاري وتتحول حالة الطلب إلى "مكتمل" - يمكن طباعة الطلب أو تعديله في حال الإعادة أو الرفض.'
+  }
+];
+
 export default function ServiceSteps() {
+  const [match, params] = useRoute("/service/:id?");
+  const serviceId = match ? params?.id : null;
+
+  const steps = serviceId === 'reserve-name' ? reserveNameSteps : defaultSteps;
+  
+  // Video ID logic
+  const videoId = serviceId === 'reserve-name' ? 'H4T0NCjLWJc' : 'uMDpYAV1oFA';
+  const videoTitle = serviceId === 'reserve-name' ? 'شرح خدمة حجز اسم تجاري' : 'شرح خدمة قيد سجل تجاري لمؤسسة فردية';
+
   return (
     <div className="py-4">
       {/* YouTube Video Section */}
@@ -45,8 +87,8 @@ export default function ServiceSteps() {
         <div className="relative pb-[56.25%] h-0 bg-black">
           <iframe
             className="absolute top-0 left-0 w-full h-full"
-            src="https://www.youtube.com/embed/uMDpYAV1oFA"
-            title="شرح خدمة قيد سجل تجاري لمؤسسة فردية"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title={videoTitle}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
