@@ -1,7 +1,21 @@
-import { Search, Globe, User, ChevronDown, Eye, ZoomIn, ZoomOut, Calendar, AlertCircle } from "lucide-react";
+import { Search, Globe, ChevronDown, Eye, ZoomIn, ZoomOut, Calendar } from "lucide-react";
 import { Link } from "wouter";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const date = new Date();
+    const options: Intl.DateTimeFormatOptions = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    setCurrentDate(date.toLocaleDateString('ar-SA', options));
+  }, []);
+
   return (
     <header className="w-full bg-white font-sans">
       {/* Top Bar - Gray Background */}
@@ -21,18 +35,13 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center gap-2 text-xs text-gray-600">
               <Calendar className="w-4 h-4" />
-              <span className="font-medium">الاثنين، 12 يناير 2026</span>
+              <span className="font-medium">{currentDate}</span>
             </div>
             
             <div className="hidden md:flex items-center gap-3 text-[#006C35] border-l border-gray-300 pl-4 ml-2 h-4">
               <button title="Zoom In"><ZoomIn className="w-4 h-4" /></button>
               <button title="Zoom Out"><ZoomOut className="w-4 h-4" /></button>
               <button title="High Contrast"><Eye className="w-4 h-4" /></button>
-            </div>
-            
-            <div className="bg-white border border-gray-200 rounded-full px-3 py-1 flex items-center gap-2 shadow-sm">
-              <AlertCircle className="w-3 h-3 text-gray-800" />
-              <span className="text-[10px] font-bold text-gray-800">نسخة تجريبية</span>
             </div>
           </div>
         </div>
@@ -93,8 +102,6 @@ export default function Header() {
               English
             </button>
             
-
-
             <div className="w-[1px] h-8 bg-gray-200 mx-2 hidden lg:block"></div>
 
             {/* Vision 2030 Logo */}
