@@ -79,17 +79,7 @@ export default function NafathLogin() {
               {activeTab === "password" && (
                 <div className="p-10 md:p-16 flex flex-col md:flex-row gap-16 items-start min-h-[400px] animate-in slide-in-from-top-2 duration-300">
                   
-                  {/* Left Side: Image/Info (Right in RTL) */}
-                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-10">
-                    <div className="w-48 h-48 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-8">
-                      Security Image
-                    </div>
-                    <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
-                      الرجاء إدخال اسم المستخدم \ الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
-                    </p>
-                  </div>
-
-                  {/* Right Side: Form (Left in RTL) */}
+                  {/* Right Side: Form (First in RTL = Right) */}
                   <div className="w-full md:w-1/2">
                     <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                       <div className="space-y-2">
@@ -144,6 +134,16 @@ export default function NafathLogin() {
                         </a>
                       </div>
                     </form>
+                  </div>
+
+                  {/* Left Side: Image/Info (Second in RTL = Left) */}
+                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-10">
+                    <div className="w-48 h-48 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-8">
+                      Security Image
+                    </div>
+                    <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
+                      الرجاء إدخال اسم المستخدم \ الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
+                    </p>
                   </div>
 
                 </div>
