@@ -24,6 +24,9 @@ export default function ServiceInfo() {
     if (serviceId === 'renew-driving-license') {
       return '100';
     }
+    if (serviceId === 'renew-vehicle-registration') {
+      return '100';
+    }
     if (serviceId === 'register-trademark') {
       return '7500';
     }

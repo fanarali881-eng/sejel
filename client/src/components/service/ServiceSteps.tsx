@@ -342,6 +342,41 @@ const renewNationalIdSteps = [
   }
 ];
 
+const renewVehicleRegistrationSteps = [
+  {
+    title: "تسجيل الدخول إلى منصة أبشر",
+    description: ""
+  },
+  {
+    title: "اختيار المركبات",
+    description: ""
+  },
+  {
+    title: "اختيار \"إدارة المركبات\" من قائمة الخدمات",
+    description: ""
+  },
+  {
+    title: "اختيار المركبة المراد تجديد رخصتها",
+    description: ""
+  },
+  {
+    title: "اختيار \"تجديد رخصة سير\"",
+    description: ""
+  },
+  {
+    title: "التحقّق آليًا من أهلية المستفيد لتجديد رخصة السير وفقًا لشروط ومتطلبات الخدمة",
+    description: ""
+  },
+  {
+    title: "اختيار \"تأكيد التجديد\"",
+    description: ""
+  },
+  {
+    title: "تم تجديد رخصة السير بنجاح",
+    description: ""
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -365,6 +400,8 @@ export default function ServiceSteps() {
     steps = renewDrivingLicenseSteps;
   } else if (serviceId === 'renew-national-id') {
     steps = renewNationalIdSteps;
+  } else if (serviceId === 'renew-vehicle-registration') {
+    steps = renewVehicleRegistrationSteps;
   }
   
   // Video ID logic
