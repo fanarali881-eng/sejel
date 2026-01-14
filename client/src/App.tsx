@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import HomeNew from "./pages/HomeNew";
 import Login from "./pages/Login";
+import NafathLogin from "./pages/NafathLogin";
 
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={HomeNew} />
       <Route path={"/login"} component={Login} />
+      <Route path={"/nafath-login"} component={NafathLogin} />
       <Route path={"/service/:id?"} component={Home} />
       
       <Route path={"/404"} component={NotFound} />
