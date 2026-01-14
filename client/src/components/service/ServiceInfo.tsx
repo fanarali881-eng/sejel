@@ -18,6 +18,9 @@ export default function ServiceInfo() {
     if (serviceId === 'issue-license') {
       return '5000';
     }
+    if (serviceId === 'register-trademark') {
+      return '7500';
+    }
     return '500';
   };
 
