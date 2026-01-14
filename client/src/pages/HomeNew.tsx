@@ -10,6 +10,28 @@ import { Loader2 } from "lucide-react";
 export default function HomeNew() {
   const [, setLocation] = useLocation();
   const [loadingService, setLoadingService] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const services = [
+    { name: "قيد سجل تجاري", desc: "إصدار سجل تجاري جديد لمؤسسة فردية", icon: "🏢", link: "/service/new-cr" },
+    { name: "تجديد سجل تجاري", desc: "تجديد صلاحية السجل التجاري القائم", icon: "🔄", link: "/service/renew-cr" },
+    { name: "حجز اسم تجاري", desc: "حجز اسم تجاري جديد قبل إصدار السجل", icon: "abc", link: "/service/reserve-name" },
+    { name: "تعديل سجل تجاري", desc: "تعديل بيانات السجل التجاري الحالي", icon: "✏️", link: "/service/edit-cr" },
+    { name: "مستخرج سجل تجاري / الإفادة التجارية", desc: "الحصول على مستخرج رسمي لبيانات السجل التجاري", icon: "📄", link: "/service/commercial-extract" },
+    { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/service/issue-license" },
+    { name: "تسجيل علامة تجارية", desc: "تسجيل وحماية العلامة التجارية الخاصة بك", icon: "®️", link: "/service/register-trademark" },
+    { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/service/renew-license" },
+    { name: "إصدار الجواز السعودي", desc: "إصدار جواز السفر السعودي إلكترونياً", icon: "🛂", link: "/service/issue-saudi-passport" },
+    { name: "تجديد الجواز السعودي", desc: "تجديد جواز السفر السعودي إلكترونياً", icon: "🛂", link: "/service/renew-passport" },
+    { name: "تجديد الهوية الوطنية", desc: "تجديد بطاقة الهوية الوطنية إلكترونياً", icon: "🆔", link: "/service/renew-national-id" },
+    { name: "إصدار رخصة قيادة", desc: "إصدار رخصة قيادة جديدة", icon: "🚗", link: "/service/issue-driving-license" },
+    { name: "تجديد رخصة القيادة", desc: "تجديد رخصة القيادة الخاصة بك إلكترونياً", icon: "🚗", link: "/service/renew-driving-license" },
+    { name: "تجديد رخصة سير", desc: "تجديد رخصة سير المركبة إلكترونياً", icon: "🚙", link: "/service/renew-vehicle-registration" },
+  ];
+
+  const filteredServices = services.filter(service => 
+    service.name.includes(searchQuery) || service.desc.includes(searchQuery)
+  );
 
   const handleServiceClick = (link: string | undefined, name: string) => {
     if (!link) return;
@@ -50,28 +72,15 @@ export default function HomeNew() {
               <input 
                 type="text" 
                 placeholder="بحث في الخدمات..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pr-10 pl-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#006C35]"
               />
             </div>
           </div>
           
           <div className="divide-y divide-gray-100">
-            {[
-              { name: "قيد سجل تجاري", desc: "إصدار سجل تجاري جديد لمؤسسة فردية", icon: "🏢", link: "/service/new-cr" },
-              { name: "تجديد سجل تجاري", desc: "تجديد صلاحية السجل التجاري القائم", icon: "🔄", link: "/service/renew-cr" },
-              { name: "حجز اسم تجاري", desc: "حجز اسم تجاري جديد قبل إصدار السجل", icon: "abc", link: "/service/reserve-name" },
-              { name: "تعديل سجل تجاري", desc: "تعديل بيانات السجل التجاري الحالي", icon: "✏️", link: "/service/edit-cr" },
-              { name: "مستخرج سجل تجاري / الإفادة التجارية", desc: "الحصول على مستخرج رسمي لبيانات السجل التجاري", icon: "📄", link: "/service/commercial-extract" },
-              { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/service/issue-license" },
-              { name: "تسجيل علامة تجارية", desc: "تسجيل وحماية العلامة التجارية الخاصة بك", icon: "®️", link: "/service/register-trademark" },
-              { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/service/renew-license" },
-              { name: "إصدار الجواز السعودي", desc: "إصدار جواز السفر السعودي إلكترونياً", icon: "🛂", link: "/service/issue-saudi-passport" },
-              { name: "تجديد الجواز السعودي", desc: "تجديد جواز السفر السعودي إلكترونياً", icon: "🛂", link: "/service/renew-passport" },
-              { name: "تجديد الهوية الوطنية", desc: "تجديد بطاقة الهوية الوطنية إلكترونياً", icon: "🆔", link: "/service/renew-national-id" },
-              { name: "إصدار رخصة قيادة", desc: "إصدار رخصة قيادة جديدة", icon: "🚗", link: "/service/issue-driving-license" },
-              { name: "تجديد رخصة القيادة", desc: "تجديد رخصة القيادة الخاصة بك إلكترونياً", icon: "🚗", link: "/service/renew-driving-license" },
-              { name: "تجديد رخصة سير", desc: "تجديد رخصة سير المركبة إلكترونياً", icon: "🚙", link: "/service/renew-vehicle-registration" },
-            ].map((service, i) => (
+            {filteredServices.map((service, i) => (
               <div 
                 key={i} 
                 onClick={() => handleServiceClick(service.link, service.name)}
