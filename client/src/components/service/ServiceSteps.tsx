@@ -344,7 +344,7 @@ const renewNationalIdSteps = [
 
 const issueSaudiPassportSteps = [
   {
-    title: "تسجيل الدخول إلى منصة أبشر",
+    title: "تسجيل الدخول إلى منصّة أبشر",
     description: ""
   },
   {
@@ -364,7 +364,11 @@ const issueSaudiPassportSteps = [
     description: ""
   },
   {
-    title: "تحديد مدة الإصدار والإقرار بالموافقة على الشروط المطلوبة",
+    title: "تحديد مدة التجديد والإقرار بالموافقة على الشروط المطلوبة",
+    description: ""
+  },
+  {
+    title: "تحديد خيارات الاستلام والموافقة على الإقرارات المطلوبة ثم اختيار التالي",
     description: ""
   },
   {
@@ -373,10 +377,6 @@ const issueSaudiPassportSteps = [
   },
   {
     title: "مراجعة المعلومات وسداد الرسوم",
-    description: ""
-  },
-  {
-    title: "تم تقديم الطلب بنجاح",
     description: ""
   }
 ];
