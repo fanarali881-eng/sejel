@@ -14,6 +14,10 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
     switch (serviceId) {
       case 'renew-cr':
         return 'تجديد سجل تجاري';
+      case 'reserve-name':
+        return 'حجز اسم تجاري';
+      case 'edit-cr':
+        return 'تعديل سجل تجاري';
       case 'new-cr':
       default:
         return 'قيد سجل تجاري لمؤسسة فردية';
@@ -24,6 +28,10 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
     switch (serviceId) {
       case 'renew-cr':
         return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين تجديد السجل التجاري، دون الحاجة إلى زيارة مراكز الخدمة.';
+      case 'reserve-name':
+        return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين حجز اسم تجاري جديد قبل إصدار السجل، دون الحاجة إلى زيارة مراكز الخدمة.';
+      case 'edit-cr':
+        return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين تعديل بيانات السجل التجاري الحالي، دون الحاجة إلى زيارة مراكز الخدمة.';
       case 'new-cr':
       default:
         return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين البدء في مُمارسة النشاط التجاري، دون الحاجة إلى زيارة مراكز الخدمة.';
