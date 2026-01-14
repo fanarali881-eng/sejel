@@ -39,48 +39,7 @@ export default function HomeNew() {
           </div>
         </div>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Active Requests */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-bold text-gray-700">الطلبات النشطة</CardTitle>
-              <FileText className="w-5 h-5 text-[#006C35]" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-[#006C35]">0</div>
-              <p className="text-xs text-gray-500 mt-1">لا توجد طلبات قيد المعالجة حالياً</p>
-            </CardContent>
-          </Card>
 
-          {/* Profile Status */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-bold text-gray-700">حالة الملف</CardTitle>
-              <User className="w-5 h-5 text-[#006C35]" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg font-bold text-green-600">مكتمل</div>
-              <p className="text-xs text-gray-500 mt-1">تم التحقق من الهوية الوطنية</p>
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-bold text-gray-700">إجراءات سريعة</CardTitle>
-              <Settings className="w-5 h-5 text-[#006C35]" />
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start text-right h-8 text-sm">
-                تحديث البيانات الشخصية
-              </Button>
-              <Button variant="outline" className="w-full justify-start text-right h-8 text-sm">
-                سجل العناوين
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* Services List */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
