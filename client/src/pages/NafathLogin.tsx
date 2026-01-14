@@ -77,11 +77,11 @@ export default function NafathLogin() {
 
               {/* Content for Username & Password */}
               {activeTab === "password" && (
-                <div className="p-6 md:p-10 flex flex-col md:flex-row gap-8 items-start min-h-[300px] animate-in slide-in-from-top-2 duration-300">
+                <div className="p-4 md:p-8 flex flex-col md:flex-row gap-6 items-start animate-in slide-in-from-top-2 duration-300">
                   
                   {/* Right Side: Form (First in RTL = Right) */}
                   <div className="w-full md:w-1/2">
-                    <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                       <div className="space-y-2">
                         <label className="block text-[#333] font-bold text-sm text-right mb-2">
                           اسم المستخدم \ الهوية الوطنية
@@ -119,7 +119,7 @@ export default function NafathLogin() {
 
                       <button 
                         type="submit"
-                        className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-8"
+                        className="w-full bg-[#1b9c75] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-6"
                       >
                         <span>تسجيل الدخول</span>
                         <span className="text-xl">←</span>
@@ -139,8 +139,8 @@ export default function NafathLogin() {
                   </div>
 
                   {/* Left Side: Image/Info (Second in RTL = Left) */}
-                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-4">
-                    <div className="w-48 h-48 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-8">
+                  <div className="hidden md:flex flex-col items-center justify-center w-1/2 pt-2">
+                    <div className="w-40 h-40 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-6">
                       Security Image
                     </div>
                     <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
