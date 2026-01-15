@@ -276,9 +276,7 @@ const UpdateInfo = () => {
                       <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
                     </div>
                     <div>
-                      <Button variant="outline" className="w-full border-gray-300 text-gray-600 hover:bg-gray-50">
-                        التحقق من رقم الجوال
-                      </Button>
+                      {/* Verification button removed */}
                     </div>
                   </div>
 
@@ -294,9 +292,7 @@ const UpdateInfo = () => {
                       <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
                     </div>
                     <div>
-                      <Button variant="outline" className="w-full border-gray-300 text-gray-600 hover:bg-gray-50">
-                        التحقق من البريد الإلكتروني
-                      </Button>
+                      {/* Verification button removed */}
                     </div>
                   </div>
 
