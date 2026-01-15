@@ -305,11 +305,18 @@ const UpdateInfo = () => {
                       <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
                       <div className="flex gap-2" dir="ltr">
                         <Select value={countryCode} onValueChange={setCountryCode}>
-                          <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 h-11 px-3">
+                          <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 px-3">
                             <div className="flex items-center gap-2 w-full">
                               {selectedCountry && (
                                 <>
-                                  <span className="text-lg leading-none">{selectedCountry.flag}</span>
+                                  <img 
+                                    src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
+                                    srcSet={`https://flagcdn.com/w80/${selectedCountry.code.toLowerCase()}.png 2x`}
+                                    width="24"
+                                    height="16"
+                                    alt={selectedCountry.name}
+                                    className="rounded-sm object-cover"
+                                  />
                                   <span className="text-sm font-medium text-gray-700">{selectedCountry.dial_code.replace('+', '')}</span>
                                 </>
                               )}
@@ -318,8 +325,15 @@ const UpdateInfo = () => {
                           <SelectContent className="max-h-[200px]">
                             {countries.map((country) => (
                               <SelectItem key={country.code} value={country.dial_code}>
-                                <span className="flex items-center gap-2">
-                                  <span className="text-lg leading-none">{country.flag}</span>
+                                <span className="flex items-center gap-3">
+                                  <img 
+                                    src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                                    srcSet={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png 2x`}
+                                    width="24"
+                                    height="16"
+                                    alt={country.name}
+                                    className="rounded-sm object-cover"
+                                  />
                                   <span className="text-sm text-gray-700">{country.name}</span>
                                   <span className="text-xs text-gray-500 ml-auto">{country.dial_code}</span>
                                 </span>
@@ -331,7 +345,7 @@ const UpdateInfo = () => {
                           value={mobileNumber}
                           onChange={handleMobileNumberChange}
                           placeholder="5xxxxxxxx" 
-                          className={`text-left h-11 ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                       </div>
                       {mobileNumberError ? (
