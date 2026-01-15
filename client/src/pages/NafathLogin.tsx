@@ -182,13 +182,13 @@ export default function NafathLogin() {
         <div className="w-full px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           
            {/* Right Side: SDAIA Logo & Text */}
+          {/* Right Side: Empty for now */}
           <div className="flex flex-col items-start order-1 md:order-1">
-            <p className="text-[#999] text-[12px] mb-2">تطوير وتشغيل</p>
-            {/* Image placeholder */}
-            <div className="h-8 w-24"></div>
-          </div> {/* Center: Navigation Links & Copyright */}
-          <div className="flex flex-col items-center gap-3 order-3 md:order-2">
-            <div className="flex flex-wrap justify-center gap-6 text-[#555] text-[13px] font-bold">
+          </div>
+
+          {/* Left Side: Links & Digital Seal */}
+          <div className="flex items-center gap-8 order-2 md:order-3">
+            <div className="flex flex-wrap justify-end gap-6 text-[#555] text-[13px]">
               <a href="#" className="hover:text-[#11998e]">الرئيسية</a>
               <a href="#" className="hover:text-[#11998e]">حول</a>
               <a href="#" className="hover:text-[#11998e]">اتصل بنا</a>
@@ -196,14 +196,7 @@ export default function NafathLogin() {
               <a href="#" className="hover:text-[#11998e]">المساعدة والدعم</a>
               <a href="#" className="hover:text-[#11998e]">سياسة الخصوصية</a>
             </div>
-            <p className="text-[#777] text-[12px] mt-2">
-              النفاذ الوطني الموحد جميع الحقوق محفوظة © {new Date().getFullYear()}
-            </p>
-          </div>
-
-          {/* Left Side: Digital Seal Image */}
-          <div className="flex items-center order-2 md:order-3">
-             <img src="/images/digital-seal.png" alt="Digital Seal" className="h-16 object-contain" />
+            <img src="/images/digital-seal.png" alt="Digital Seal" className="h-16 object-contain" />
           </div>
         </div>
       </footer>
