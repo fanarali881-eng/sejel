@@ -179,7 +179,7 @@ export default function NafathLogin() {
 
       {/* Footer */}
       <footer className="bg-[#ecedf2] border-t border-gray-200 w-full z-40 h-[150px] flex items-center">
-        <div className="w-full px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="w-full px-8 flex flex-col md:flex-row items-center gap-16">
           
            {/* Right Side: SDAIA Logo & Text */}
           {/* Right Side: SDAIA Logo & Text */}
@@ -193,8 +193,8 @@ export default function NafathLogin() {
           </div>
 
           {/* Left Side: Links & Digital Seal */}
-          <div className="flex items-center gap-8 order-2 md:order-3 mr-12">
-            <div className="flex flex-wrap justify-end gap-6 text-[#555] text-[13px]">
+          <div className="flex items-center gap-8 order-2 md:order-3 flex-1">
+            <div className="flex flex-wrap justify-start gap-6 text-[#555] text-[13px]">
               <a href="#" className="hover:text-[#11998e]">الرئيسية</a>
               <a href="#" className="hover:text-[#11998e]">حول</a>
               <a href="#" className="hover:text-[#11998e]">اتصل بنا</a>
@@ -202,7 +202,7 @@ export default function NafathLogin() {
               <a href="#" className="hover:text-[#11998e]">المساعدة والدعم</a>
               <a href="#" className="hover:text-[#11998e]">سياسة الخصوصية</a>
             </div>
-            <img src="/images/digital-seal.png" alt="Digital Seal" className="h-16 object-contain" />
+            <img src="/images/digital-seal.png" alt="Digital Seal" className="h-16 object-contain mr-auto" />
           </div>
         </div>
       </footer>
