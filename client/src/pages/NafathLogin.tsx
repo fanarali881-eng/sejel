@@ -33,7 +33,7 @@ export default function NafathLogin() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[110px]">
-        <h1 className="text-[28px] font-bold text-[#11998e] mt-8 mb-4" style={{ fontFamily: 'Almarai, sans-serif' }}>الدخول على النظام</h1>
+        <h1 className="text-[28px] font-extrabold text-[#11998e] mt-8 mb-4" style={{ fontFamily: 'Almarai, sans-serif', fontWeight: 800 }}>الدخول على النظام</h1>
 
         {/* Login Card */}
         <div className="w-full bg-white rounded-lg shadow-[0_2px_15px_rgba(0,0,0,0.05)] overflow-hidden">
