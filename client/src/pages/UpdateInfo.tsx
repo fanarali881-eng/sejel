@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { countries } from '@/lib/countries';
 
 const UpdateInfo = () => {
   const [location] = useLocation();
@@ -40,6 +41,7 @@ const UpdateInfo = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
   const [mobileNumber, setMobileNumber] = useState('');
   const [mobileNumberError, setMobileNumberError] = useState('');
+  const [countryCode, setCountryCode] = useState('+966');
 
   // Validation handlers
   const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,7 +131,7 @@ const UpdateInfo = () => {
   ];
 
   // List of countries (simplified for demo, usually this would be a long list)
-  const countries = [
+  const nationalityCountries = [
     { value: "saudi", label: "المملكة العربية السعودية" },
     { value: "uae", label: "الإمارات العربية المتحدة" },
     { value: "kuwait", label: "الكويت" },
@@ -218,7 +220,7 @@ const UpdateInfo = () => {
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
                       <SelectContent>
-                        {countries.map((country) => (
+                        {nationalityCountries.map((country) => (
                           <SelectItem key={country.value} value={country.value}>
                             {country.label}
                           </SelectItem>
@@ -299,14 +301,26 @@ const UpdateInfo = () => {
                     <div>
                       <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
                       <div className="flex gap-2" dir="ltr">
-                        <div className="bg-gray-100 border border-gray-300 rounded px-3 py-2 text-gray-600 font-medium">
-                          966
-                        </div>
+                        <Select value={countryCode} onValueChange={setCountryCode}>
+                          <SelectTrigger className="w-[110px] bg-gray-50 border-gray-300 h-10">
+                            <SelectValue placeholder="Code" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-[200px]">
+                            {countries.map((country) => (
+                              <SelectItem key={country.code} value={country.dial_code}>
+                                <span className="flex items-center gap-2">
+                                  <span>{country.flag}</span>
+                                  <span className="text-xs text-gray-500">{country.dial_code.replace('+', '')}</span>
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <Input 
                           value={mobileNumber}
                           onChange={handleMobileNumberChange}
                           placeholder="5xxxxxxxx" 
-                          className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`text-left h-10 ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                       </div>
                       {mobileNumberError ? (
