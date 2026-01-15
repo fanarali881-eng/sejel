@@ -15,7 +15,7 @@ export default function NafathLogin() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9] font-sans" dir="rtl">
+    <div className="min-h-screen bg-[#f9f9f9] font-sans flex flex-col" dir="rtl">
       {/* Header */}
       <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[110px] flex items-center">
         <div className="w-full px-4 flex justify-between items-center h-full">
@@ -32,7 +32,7 @@ export default function NafathLogin() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[110px]">
+      <main className="container mx-auto px-4 py-8 flex flex-col items-center max-w-[1200px] mt-[110px] flex-grow">
         <h1 className="text-[28px] font-extrabold text-[#11998e] mt-8 mb-4" style={{ fontFamily: 'Almarai, sans-serif', fontWeight: 800 }}>الدخول على النظام</h1>
 
         {/* Login Card */}
@@ -178,7 +178,7 @@ export default function NafathLogin() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto bg-[#f5f5f5] py-6 border-t border-gray-200">
+      <footer className="bg-[#f5f5f5] py-6 border-t border-gray-200 w-full z-40">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
           
           {/* Right Side: SDAIA Logo & Text */}
