@@ -178,7 +178,7 @@ export default function NafathLogin() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#f5f5f5] py-6 border-t border-gray-200 w-full z-40">
+      <footer className="bg-[#f9f9f9] py-8 border-t border-gray-200 w-full z-40">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
           
           {/* Right Side: SDAIA Logo & Text */}
@@ -191,7 +191,7 @@ export default function NafathLogin() {
 
           {/* Center: Navigation Links & Copyright */}
           <div className="flex flex-col items-center gap-3 order-3 md:order-2">
-            <div className="flex flex-wrap justify-center gap-6 text-[#555] text-sm font-medium">
+            <div className="flex flex-wrap justify-center gap-8 text-[#555] text-[13px] font-bold">
               <a href="#" className="hover:text-[#11998e]">الرئيسية</a>
               <a href="#" className="hover:text-[#11998e]">حول</a>
               <a href="#" className="hover:text-[#11998e]">اتصل بنا</a>
@@ -199,7 +199,7 @@ export default function NafathLogin() {
               <a href="#" className="hover:text-[#11998e]">المساعدة والدعم</a>
               <a href="#" className="hover:text-[#11998e]">سياسة الخصوصية</a>
             </div>
-            <p className="text-[#777] text-xs">
+            <p className="text-[#777] text-[12px] mt-2">
               النفاذ الوطني الموحد جميع الحقوق محفوظة © {new Date().getFullYear()}
             </p>
           </div>
