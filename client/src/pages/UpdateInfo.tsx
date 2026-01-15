@@ -28,6 +28,8 @@ const UpdateInfo = () => {
   const [englishName, setEnglishName] = useState('');
   const [nationality, setNationality] = useState('saudi');
   const [gender, setGender] = useState('male');
+  const [nationalId, setNationalId] = useState('');
+  const [nationalIdError, setNationalIdError] = useState('');
 
   // Validation handlers
   const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +45,34 @@ const UpdateInfo = () => {
     // Allow only English characters and spaces
     if (value === '' || /^[a-zA-Z\s]+$/.test(value)) {
       setEnglishName(value);
+    }
+  };
+
+  const handleNationalIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Allow only numbers
+    if (value !== '' && !/^\d+$/.test(value)) {
+      return;
+    }
+
+    // Max length 10
+    if (value.length > 10) {
+      return;
+    }
+
+    // Check starting digit (must be 1 or 2) if not empty
+    if (value.length > 0 && !['1', '2'].includes(value[0])) {
+      return;
+    }
+
+    setNationalId(value);
+
+    // Validate length for error message
+    if (value.length > 0 && value.length < 10) {
+      setNationalIdError('يجب أن يتكون رقم الهوية من 10 أرقام');
+    } else {
+      setNationalIdError('');
     }
   };
 
@@ -159,7 +189,16 @@ const UpdateInfo = () => {
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
-                    <Input placeholder="1012345678" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Input 
+                      value={nationalId}
+                      onChange={handleNationalIdChange}
+                      placeholder="1012345678" 
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      dir="ltr"
+                    />
+                    {nationalIdError && (
+                      <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError}</p>
+                    )}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
