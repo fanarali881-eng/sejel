@@ -38,6 +38,8 @@ const UpdateInfo = () => {
   const [nationalId, setNationalId] = useState('');
   const [nationalIdError, setNationalIdError] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [mobileNumberError, setMobileNumberError] = useState('');
 
   // Validation handlers
   const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +83,39 @@ const UpdateInfo = () => {
       setNationalIdError('يجب أن يتكون رقم الهوية من 10 أرقام');
     } else {
       setNationalIdError('');
+    }
+  };
+
+  const handleMobileNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    // Allow only numbers
+    if (value !== '' && !/^\d+$/.test(value)) {
+      return;
+    }
+
+    // Max length 10
+    if (value.length > 10) {
+      return;
+    }
+
+    setMobileNumber(value);
+
+    // Validate length and prefix
+    if (value.length > 0) {
+      if (value.length < 10) {
+        setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+      } else {
+        const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
+        const prefix = value.substring(0, 3);
+        if (!validPrefixes.includes(prefix)) {
+          setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+        } else {
+          setMobileNumberError('');
+        }
+      }
+    } else {
+      setMobileNumberError('');
     }
   };
 
@@ -268,39 +303,35 @@ const UpdateInfo = () => {
                           966
                         </div>
                         <Input 
-                          type="tel" 
+                          value={mobileNumber}
+                          onChange={handleMobileNumberChange}
                           placeholder="5xxxxxxxx" 
-                          className="text-right placeholder:font-normal placeholder:text-gray-400"
+                          className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                       </div>
-                      <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
+                      {mobileNumberError ? (
+                        <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>
+                      ) : (
+                        <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
+                      )}
                     </div>
-                    <div>
-                      {/* Verification button removed */}
-                    </div>
+                    <div></div>
                   </div>
 
                   {/* Email */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
                       <Label className="text-gray-700 mb-2 block">البريد الإلكتروني</Label>
-                      <Input 
-                        type="email" 
-                        placeholder="someone@example.org" 
-                        className="text-left placeholder:font-normal placeholder:text-gray-400"
-                        />
+                      <Input placeholder="someone@example.org" className="text-left" dir="ltr" />
                       <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
                     </div>
-                    <div>
-                      {/* Verification button removed */}
-                    </div>
+                    <div></div>
                   </div>
 
-                  {/* Address */}
-                  <div>
-                    <Label className="text-gray-700 mb-2 block">إضافة العنوان</Label>
-                    <Button variant="outline" className="w-full md:w-auto border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
+                  {/* Add Address Button */}
+                  <div className="flex justify-end pt-4">
+                    <Button variant="outline" className="gap-2">
+                      <MapPin className="h-4 w-4" />
                       عنوان داخل المملكة
                     </Button>
                   </div>
@@ -309,22 +340,16 @@ const UpdateInfo = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between items-center mt-8 pt-4 border-t border-gray-200">
-              <Button variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50 gap-2">
-                <X className="w-4 h-4" />
-                إلغاء الطلب
-              </Button>
-              
-              <Button className="bg-[#483D8B] hover:bg-[#3a316f] text-white px-8 gap-2">
-                استمرار
-                <ArrowRight className="w-4 h-4 rotate-180" />
-              </Button>
+            <div className="flex justify-between pt-4">
+              <Button variant="outline" className="px-8">رجوع</Button>
+              <div className="flex gap-4">
+                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
+                <Button className="px-8 bg-green-600 hover:bg-green-700">حفظ</Button>
+              </div>
             </div>
-
           </div>
         </main>
-
-        </div>
+      </div>
     </div>
   );
 };
