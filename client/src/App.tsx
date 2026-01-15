@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import HomeNew from "./pages/HomeNew";
 import Login from "./pages/Login";
 import NafathLogin from "./pages/NafathLogin";
+import UpdateInfo from "./pages/UpdateInfo";
 
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path={"/"} component={HomeNew} />
       <Route path={"/login"} component={Login} />
       <Route path={"/nafath-login"} component={NafathLogin} />
+      <Route path={"/update-info"} component={UpdateInfo} />
       <Route path={"/service/:id?"} component={Home} />
       
       <Route path={"/404"} component={NotFound} />
