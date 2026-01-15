@@ -16,6 +16,11 @@ export default function NafathLogin() {
 
   return (
     <div className="min-h-screen bg-[#f4f6f9] font-sans flex flex-col" dir="rtl">
+      {/* Left Side - Background Pattern */}
+      <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-[30%] bg-repeat z-0"
+           style={{ backgroundImage: 'url(/images/bg-pattern.png)', backgroundSize: 'auto' }}>
+      </div>
+
       {/* Header */}
       <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[110px] flex items-center">
         <div className="w-full px-4 flex justify-between items-center h-full">
