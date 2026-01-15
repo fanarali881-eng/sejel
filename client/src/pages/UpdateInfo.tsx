@@ -29,15 +29,9 @@ const UpdateInfo = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans" dir="rtl">
       {/* Top Navigation Bar (Simplified for this page) */}
       <header className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-8">
           <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-12" />
-        </div>
-        <div className="flex items-center gap-6 text-sm text-gray-600">
-          <span>الرئيسية</span>
-          <span>طلباتي</span>
-          <span>صندوق الوارد</span>
-          <span>تواصل معنا</span>
-          <span>تقديم شكوى</span>
+          <a href="/" className="text-sm text-gray-600 hover:text-green-600 font-medium">الرئيسية</a>
         </div>
       </header>
 
