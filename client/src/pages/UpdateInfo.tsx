@@ -30,9 +30,7 @@ const UpdateInfo = () => {
       {/* Top Navigation Bar (Simplified for this page) */}
       <header className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <img src="/images/vision-2030-logo.svg" alt="Vision 2030" className="h-10" />
-          <div className="h-8 w-px bg-gray-300 mx-2"></div>
-          <img src="/images/gov-sa-logo.svg" alt="GOV.SA" className="h-10" />
+          <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-12" />
         </div>
         <div className="flex items-center gap-6 text-sm text-gray-600">
           <span>الرئيسية</span>
