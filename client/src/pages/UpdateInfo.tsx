@@ -143,6 +143,9 @@ const UpdateInfo = () => {
     { value: "other", label: "أخرى" }
   ];
 
+  // Helper to get selected country details
+  const selectedCountry = countries.find(c => c.dial_code === countryCode);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans" dir="rtl">
       {/* Top Navigation Bar (Simplified for this page) */}
@@ -302,15 +305,23 @@ const UpdateInfo = () => {
                       <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
                       <div className="flex gap-2" dir="ltr">
                         <Select value={countryCode} onValueChange={setCountryCode}>
-                          <SelectTrigger className="w-[110px] bg-gray-50 border-gray-300 h-10">
-                            <SelectValue placeholder="Code" />
+                          <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 h-11 px-3">
+                            <div className="flex items-center gap-2 w-full">
+                              {selectedCountry && (
+                                <>
+                                  <span className="text-lg leading-none">{selectedCountry.flag}</span>
+                                  <span className="text-sm font-medium text-gray-700">{selectedCountry.dial_code.replace('+', '')}</span>
+                                </>
+                              )}
+                            </div>
                           </SelectTrigger>
                           <SelectContent className="max-h-[200px]">
                             {countries.map((country) => (
                               <SelectItem key={country.code} value={country.dial_code}>
                                 <span className="flex items-center gap-2">
-                                  <span>{country.flag}</span>
-                                  <span className="text-xs text-gray-500">{country.dial_code.replace('+', '')}</span>
+                                  <span className="text-lg leading-none">{country.flag}</span>
+                                  <span className="text-sm text-gray-700">{country.name}</span>
+                                  <span className="text-xs text-gray-500 ml-auto">{country.dial_code}</span>
                                 </span>
                               </SelectItem>
                             ))}
@@ -320,7 +331,7 @@ const UpdateInfo = () => {
                           value={mobileNumber}
                           onChange={handleMobileNumberChange}
                           placeholder="5xxxxxxxx" 
-                          className={`text-left h-10 ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`text-left h-11 ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                       </div>
                       {mobileNumberError ? (
