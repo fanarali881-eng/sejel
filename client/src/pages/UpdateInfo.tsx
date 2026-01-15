@@ -81,16 +81,16 @@ const UpdateInfo = () => {
                     <Input defaultValue="محمد عبدالله أحمد" className="font-bold text-gray-800" />
                   </div>
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
-                    <Input defaultValue="سعودي" className="font-bold text-gray-800" />
+                    <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
+                    <Input defaultValue="Mohammed Abdullah Ahmed" className="font-bold text-gray-800 text-left" dir="ltr" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
                     <Input defaultValue="المملكة العربية السعودية" className="font-bold text-gray-800" />
                   </div>
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
-                    <Input defaultValue="Mohammed Abdullah Ahmed" className="font-bold text-gray-800 text-left" dir="ltr" />
+                    <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
+                    <Input defaultValue="سعودي" className="font-bold text-gray-800" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
