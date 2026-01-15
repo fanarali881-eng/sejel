@@ -78,31 +78,31 @@ const UpdateInfo = () => {
                 <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
-                    <Input defaultValue="محمد عبدالله أحمد" className="font-bold text-gray-800" />
+                    <Input placeholder="محمد عبدالله أحمد" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
-                    <Input defaultValue="Mohammed Abdullah Ahmed" className="font-bold text-gray-800 text-left" dir="ltr" />
+                    <Input placeholder="Mohammed Abdullah Ahmed" className="font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400" dir="ltr" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
-                    <Input defaultValue="المملكة العربية السعودية" className="font-bold text-gray-800" />
+                    <Input placeholder="المملكة العربية السعودية" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
-                    <Input defaultValue="سعودي" className="font-bold text-gray-800" />
+                    <Input placeholder="سعودي" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
-                    <Input defaultValue="1012345678" className="font-bold text-gray-800" />
+                    <Input placeholder="1012345678" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
-                    <Input defaultValue="1985-10-25" className="font-bold text-gray-800" />
+                    <Input placeholder="1985-10-25" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
-                    <Input defaultValue="ذكر" className="font-bold text-gray-800" />
+                    <Input placeholder="ذكر" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
                   </div>
                 </CardContent>
               </Card>
@@ -127,8 +127,7 @@ const UpdateInfo = () => {
                         <Input 
                           type="tel" 
                           placeholder="5xxxxxxxx" 
-                          className="text-right"
-                          defaultValue="0512345678"
+                          className="text-right placeholder:font-normal placeholder:text-gray-400"
                         />
                       </div>
                       <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
@@ -147,9 +146,8 @@ const UpdateInfo = () => {
                       <Input 
                         type="email" 
                         placeholder="someone@example.org" 
-                        className="text-left"
-                        defaultValue="mohammed@example.com"
-                      />
+                        className="text-left placeholder:font-normal placeholder:text-gray-400"
+                        />
                       <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
                     </div>
                     <div>
