@@ -57,23 +57,7 @@ export const SBCSidebar = () => {
             <div className="text-sm text-gray-500 py-1 cursor-pointer hover:text-gray-700">حجز اسم تجاري</div>
           </div>
 
-          <SidebarItem 
-            icon={<Briefcase />} 
-            label="ممارسة الأعمال" 
-            hasSubmenu={true}
-          />
-          
-          <SidebarItem 
-            icon={<FileText />} 
-            label="إنهاء الأعمال" 
-            hasSubmenu={true}
-          />
-          
-          <SidebarItem 
-            icon={<LayoutDashboard />} 
-            label="الخدمات العامة" 
-            hasSubmenu={true}
-          />
+
         </div>
       </div>
     </div>
