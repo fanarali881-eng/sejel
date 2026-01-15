@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { MapPin, ArrowRight, X } from 'lucide-react';
+import { MapPin, ArrowRight, X, CalendarIcon } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -14,6 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 const UpdateInfo = () => {
   const [location] = useLocation();
@@ -30,6 +37,7 @@ const UpdateInfo = () => {
   const [gender, setGender] = useState('male');
   const [nationalId, setNationalId] = useState('');
   const [nationalIdError, setNationalIdError] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
 
   // Validation handlers
   const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,7 +209,28 @@ const UpdateInfo = () => {
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
-                    <Input placeholder="1985-10-25" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
+                            !dateOfBirth && "text-muted-foreground font-normal"
+                          )}
+                        >
+                          <CalendarIcon className="ml-2 h-4 w-4" />
+                          {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={dateOfBirth}
+                          onSelect={setDateOfBirth}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
