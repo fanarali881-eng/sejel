@@ -201,10 +201,9 @@ export default function NafathLogin() {
             </p>
           </div>
 
-          {/* Left Side: DGA Logo Placeholder */}
+          {/* Left Side: Digital Seal Image */}
           <div className="flex items-center order-2 md:order-3">
-             {/* Image placeholder */}
-             <div className="h-10 w-32"></div>
+             <img src="/images/digital-seal.png" alt="Digital Seal" className="h-12 object-contain" />
           </div>
         </div>
       </footer>
