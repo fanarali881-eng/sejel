@@ -193,7 +193,7 @@ export default function NafathLogin() {
           </div>
 
           {/* Left Side: Links & Digital Seal */}
-          <div className="flex items-center gap-8 order-2 md:order-3">
+          <div className="flex items-center gap-8 order-2 md:order-3 mr-12">
             <div className="flex flex-wrap justify-end gap-6 text-[#555] text-[13px]">
               <a href="#" className="hover:text-[#11998e]">الرئيسية</a>
               <a href="#" className="hover:text-[#11998e]">حول</a>
