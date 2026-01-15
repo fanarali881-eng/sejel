@@ -182,8 +182,10 @@ export default function NafathLogin() {
         <div className="w-full px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           
            {/* Right Side: SDAIA Logo & Text */}
-          {/* Right Side: Empty for now */}
+          {/* Right Side: SDAIA Logo */}
           <div className="flex flex-col items-start order-1 md:order-1">
+            <p className="text-[#999] text-[12px] mb-2">تطوير وتشغيل</p>
+            <img src="/images/sdaia-logo.png" alt="SDAIA Logo" className="h-12 object-contain" />
           </div>
 
           {/* Left Side: Links & Digital Seal */}
