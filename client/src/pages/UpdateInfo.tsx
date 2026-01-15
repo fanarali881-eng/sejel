@@ -194,7 +194,6 @@ const UpdateInfo = () => {
                       onChange={handleNationalIdChange}
                       placeholder="1012345678" 
                       className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      dir="ltr"
                     />
                     {nationalIdError && (
                       <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError}</p>
