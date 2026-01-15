@@ -179,7 +179,7 @@ export default function NafathLogin() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 w-full z-40 h-[150px] flex items-center">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="w-full px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           
            {/* Right Side: SDAIA Logo & Text */}
           <div className="flex flex-col items-start order-1 md:order-1">
@@ -203,7 +203,7 @@ export default function NafathLogin() {
 
           {/* Left Side: Digital Seal Image */}
           <div className="flex items-center order-2 md:order-3">
-             <img src="/images/digital-seal.png" alt="Digital Seal" className="h-12 object-contain" />
+             <img src="/images/digital-seal.png" alt="Digital Seal" className="h-16 object-contain" />
           </div>
         </div>
       </footer>
