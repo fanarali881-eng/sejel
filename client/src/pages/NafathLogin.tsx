@@ -15,7 +15,7 @@ export default function NafathLogin() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9] font-sans flex flex-col" dir="rtl">
+    <div className="min-h-screen bg-[#f4f6f9] font-sans flex flex-col" dir="rtl">
       {/* Header */}
       <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[110px] flex items-center">
         <div className="w-full px-4 flex justify-between items-center h-full">
