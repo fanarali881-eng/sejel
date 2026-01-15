@@ -178,20 +178,17 @@ export default function NafathLogin() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#f9f9f9] py-8 border-t border-gray-200 w-full z-40">
+      <footer className="bg-white py-6 border-t border-gray-200 w-full z-40">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
           
-          {/* Right Side: SDAIA Logo & Text */}
-          <div className="flex items-center gap-4 order-1 md:order-1">
-            <div className="flex flex-col items-end text-right">
-              <span className="text-[#555] text-xs mb-1">تطوير وتشغيل</span>
-              <img src="/images/sdaia-logo.jpg" alt="SDAIA Logo" className="h-12 object-contain mix-blend-multiply" />
-            </div>
-          </div>
-
-          {/* Center: Navigation Links & Copyright */}
+           {/* Right Side: SDAIA Logo & Text */}
+          <div className="flex flex-col items-start order-1 md:order-1">
+            <p className="text-[#999] text-[12px] mb-2">تطوير وتشغيل</p>
+            {/* Image placeholder */}
+            <div className="h-8 w-24"></div>
+          </div> {/* Center: Navigation Links & Copyright */}
           <div className="flex flex-col items-center gap-3 order-3 md:order-2">
-            <div className="flex flex-wrap justify-center gap-8 text-[#555] text-[13px] font-bold">
+            <div className="flex flex-wrap justify-center gap-6 text-[#555] text-[13px] font-bold">
               <a href="#" className="hover:text-[#11998e]">الرئيسية</a>
               <a href="#" className="hover:text-[#11998e]">حول</a>
               <a href="#" className="hover:text-[#11998e]">اتصل بنا</a>
@@ -204,23 +201,11 @@ export default function NafathLogin() {
             </p>
           </div>
 
-          {/* Left Side: DGA Badge */}
+          {/* Left Side: DGA Logo Placeholder */}
           <div className="flex items-center order-2 md:order-3">
-            <div className="border border-[#11998e] rounded-md px-3 py-1 flex items-center gap-3 bg-white">
-              <div className="text-right">
-                <div className="text-[10px] text-[#555] font-bold">مسجلة لدى</div>
-                <div className="text-[9px] text-[#11998e] font-bold">هيئة الحكومة الرقمية</div>
-                <div className="text-[8px] text-[#777]">Digital Government Authority</div>
-              </div>
-              <div className="h-8 w-[1px] bg-gray-200 mx-1"></div>
-              <div className="text-left">
-                <div className="text-[10px] text-[#555] font-bold">Registered on</div>
-                <div className="text-[9px] text-[#555]">20240916626</div>
-              </div>
-              <img src="/images/dga-logo.jpg" alt="DGA Logo" className="h-8 w-8 object-contain ml-2 mix-blend-multiply" />
-            </div>
+             {/* Image placeholder */}
+             <div className="h-10 w-32"></div>
           </div>
-
         </div>
       </footer>
     </div>
