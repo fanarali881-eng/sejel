@@ -7,6 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, ArrowRight, X } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const UpdateInfo = () => {
   const [location] = useLocation();
@@ -19,6 +26,8 @@ const UpdateInfo = () => {
   // State for form fields
   const [arabicName, setArabicName] = useState('');
   const [englishName, setEnglishName] = useState('');
+  const [nationality, setNationality] = useState('saudi');
+  const [gender, setGender] = useState('male');
 
   // Validation handlers
   const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +53,19 @@ const UpdateInfo = () => {
     { id: 4, label: 'عنوان وبيانات اتصال المؤسسة', status: 'upcoming' as const },
     { id: 5, label: 'بيانات المديرين', status: 'upcoming' as const },
     { id: 6, label: 'ملخص الطلب', status: 'upcoming' as const },
+  ];
+
+  // List of countries (simplified for demo, usually this would be a long list)
+  const countries = [
+    { value: "saudi", label: "المملكة العربية السعودية" },
+    { value: "uae", label: "الإمارات العربية المتحدة" },
+    { value: "kuwait", label: "الكويت" },
+    { value: "bahrain", label: "البحرين" },
+    { value: "oman", label: "عمان" },
+    { value: "qatar", label: "قطر" },
+    { value: "egypt", label: "مصر" },
+    { value: "jordan", label: "الأردن" },
+    { value: "other", label: "أخرى" }
   ];
 
   return (
@@ -118,7 +140,18 @@ const UpdateInfo = () => {
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
-                    <Input placeholder="المملكة العربية السعودية" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Select value={nationality} onValueChange={setNationality} dir="rtl">
+                      <SelectTrigger className="font-bold text-gray-800 w-full text-right">
+                        <SelectValue placeholder="اختر الجنسية" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {countries.map((country) => (
+                          <SelectItem key={country.value} value={country.value}>
+                            {country.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
@@ -134,7 +167,15 @@ const UpdateInfo = () => {
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
-                    <Input placeholder="ذكر" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Select value={gender} onValueChange={setGender} dir="rtl">
+                      <SelectTrigger className="font-bold text-gray-800 w-full text-right">
+                        <SelectValue placeholder="اختر الجنس" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">ذكر</SelectItem>
+                        <SelectItem value="female">أنثى</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </CardContent>
               </Card>
