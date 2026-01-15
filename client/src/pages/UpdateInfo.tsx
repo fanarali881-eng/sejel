@@ -77,32 +77,32 @@ const UpdateInfo = () => {
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
-                    <div className="font-bold text-gray-800">سعودي</div>
-                  </div>
-                  <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
-                    <div className="font-bold text-gray-800">محمد عبدالله أحمد</div>
+                    <Input defaultValue="محمد عبدالله أحمد" className="font-bold text-gray-800" />
                   </div>
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
-                    <div className="font-bold text-gray-800">Mohammed Abdullah Ahmed</div>
+                    <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
+                    <Input defaultValue="سعودي" className="font-bold text-gray-800" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
-                    <div className="font-bold text-gray-800">المملكة العربية السعودية</div>
+                    <Input defaultValue="المملكة العربية السعودية" className="font-bold text-gray-800" />
                   </div>
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
-                    <div className="font-bold text-gray-800">1985-10-25</div>
+                    <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
+                    <Input defaultValue="Mohammed Abdullah Ahmed" className="font-bold text-gray-800 text-left" dir="ltr" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
-                    <div className="font-bold text-gray-800">1012345678</div>
+                    <Input defaultValue="1012345678" className="font-bold text-gray-800" />
+                  </div>
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
+                    <Input defaultValue="1985-10-25" className="font-bold text-gray-800" />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
-                    <div className="font-bold text-gray-800">ذكر</div>
+                    <Input defaultValue="ذكر" className="font-bold text-gray-800" />
                   </div>
                 </CardContent>
               </Card>
