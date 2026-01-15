@@ -178,7 +178,7 @@ export default function NafathLogin() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white py-6 border-t border-gray-200 w-full z-40">
+      <footer className="bg-white border-t border-gray-200 w-full z-40 h-[140px] flex items-center">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
           
            {/* Right Side: SDAIA Logo & Text */}
