@@ -17,11 +17,11 @@ export default function NafathLogin() {
   return (
     <div className="min-h-screen bg-[#f9f9f9] font-sans" dir="rtl">
       {/* Header */}
-      <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[140px] flex items-center">
+      <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[120px] flex items-center">
         <div className="container mx-auto px-4 flex justify-between items-center h-full">
           <div className="flex items-center gap-6 h-full">
             {/* Logos */}
-            <img src="/images/nafath-logo.png" alt="Nafath Logo" className="h-[136px] object-contain" />
+            <img src="/images/nafath-logo.png" alt="Nafath Logo" className="h-[136px] object-contain mix-blend-multiply" />
             <img src="/images/vision2030-new-logo.png" alt="Vision 2030 Logo" className="h-20 object-contain opacity-80" />
           </div>
           <button className="flex items-center gap-2 text-[#555] hover:text-[#333] transition-colors font-medium text-sm flex-row-reverse">
@@ -32,7 +32,7 @@ export default function NafathLogin() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[140px]">
+      <main className="container mx-auto px-4 py-12 flex flex-col items-center max-w-[1200px] mt-[120px]">
         <h1 className="text-[28px] font-bold text-[#11998e] mt-8 mb-4">الدخول على النظام</h1>
 
         {/* Login Card */}
