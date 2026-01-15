@@ -16,6 +16,27 @@ const UpdateInfo = () => {
   const serviceName = searchParams.get('service') || 'تحديث بيانات الخدمة';
   const requestId = searchParams.get('id') || 'ECR100138';
 
+  // State for form fields
+  const [arabicName, setArabicName] = useState('');
+  const [englishName, setEnglishName] = useState('');
+
+  // Validation handlers
+  const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setArabicName(value);
+    }
+  };
+
+  const handleEnglishNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only English characters and spaces
+    if (value === '' || /^[a-zA-Z\s]+$/.test(value)) {
+      setEnglishName(value);
+    }
+  };
+
   const steps = [
     { id: 1, label: 'بيانات مالك المؤسسة', status: 'current' as const },
     { id: 2, label: 'بيانات الاسم التجاري و الأنشطة', status: 'upcoming' as const },
@@ -78,11 +99,22 @@ const UpdateInfo = () => {
                 <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
-                    <Input placeholder="محمد عبدالله أحمد" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Input 
+                      value={arabicName}
+                      onChange={handleArabicNameChange}
+                      placeholder="محمد عبدالله أحمد" 
+                      className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" 
+                    />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
-                    <Input placeholder="Mohammed Abdullah Ahmed" className="font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400" dir="ltr" />
+                    <Input 
+                      value={englishName}
+                      onChange={handleEnglishNameChange}
+                      placeholder="Mohammed Abdullah Ahmed" 
+                      className="font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400" 
+                      dir="ltr" 
+                    />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
