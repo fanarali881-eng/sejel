@@ -32,7 +32,11 @@ export default function NafathLogin() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 pt-8 pb-24 flex flex-col items-center max-w-[1200px] mt-[110px] flex-grow">
+      <main className="container mx-auto px-4 pt-8 pb-24 flex flex-col items-center max-w-[1200px] mt-[110px] flex-grow relative">
+        {/* Background Pattern */}
+        <div className="absolute left-0 top-0 bottom-0 w-[350px] pointer-events-none hidden xl:block">
+          <img src="/images/nafath-pattern.png" alt="" className="w-full h-full object-cover opacity-50 mix-blend-multiply" />
+        </div>
         <h1 className="text-[28px] font-extrabold text-[#11998e] mt-8 mb-4" style={{ fontFamily: 'Almarai, sans-serif', fontWeight: 800 }}>الدخول على النظام</h1>
 
         {/* Login Card */}
