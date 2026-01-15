@@ -44,6 +44,9 @@ const UpdateInfo = () => {
       </header>
 
       <div className="flex flex-1">
+        {/* Sidebar */}
+        <SBCSidebar />
+
         {/* Main Content Area */}
         <main className="flex-1 p-8">
           <div className="max-w-5xl mx-auto">
@@ -192,9 +195,7 @@ const UpdateInfo = () => {
           </div>
         </main>
 
-        {/* Sidebar */}
-        <SBCSidebar />
-      </div>
+        </div>
     </div>
   );
 };
