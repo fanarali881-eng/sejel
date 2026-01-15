@@ -182,8 +182,13 @@ export default function NafathLogin() {
         <div className="w-full px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           
            {/* Right Side: SDAIA Logo & Text */}
-          {/* Right Side: SDAIA Logo */}
-          <div className="flex flex-col items-start order-1 md:order-1">
+          {/* Right Side: SDAIA Logo & Text */}
+          <div className="flex items-center gap-4 order-1 md:order-1">
+            <div className="flex flex-col items-end text-right">
+              <p className="text-[#555] text-[12px] mb-1">تطوير وتشغيل</p>
+              <p className="text-[#555] font-bold text-[14px] mb-1">الهيئة السعودية للبيانات والذكاء الاصطناعي</p>
+              <p className="text-[#555] text-[12px]">النفاذ الوطني الموحد جميع الحقوق محفوظة © 2025</p>
+            </div>
             <img src="/images/sdaia-logo.png" alt="SDAIA Logo" className="h-24 object-contain" />
           </div>
 
