@@ -184,7 +184,7 @@ export default function NafathLogin() {
            {/* Right Side: SDAIA Logo & Text */}
           {/* Right Side: SDAIA Logo */}
           <div className="flex flex-col items-start order-1 md:order-1">
-            <img src="/images/sdaia-logo.png" alt="SDAIA Logo" className="h-20 object-contain" />
+            <img src="/images/sdaia-logo.png" alt="SDAIA Logo" className="h-24 object-contain" />
           </div>
 
           {/* Left Side: Links & Digital Seal */}
