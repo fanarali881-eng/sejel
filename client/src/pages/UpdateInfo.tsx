@@ -800,29 +800,80 @@ const UpdateInfo = () => {
                     </div>
                   </div>
 
-                  <div className="flex w-full gap-0">
-                    {/* Right Dropdown (Proposed Name) */}
-                    <div className="w-1/2 pl-6">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم المقترح</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    {/* 1. Name Type (Rightmost) */}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
+                      <Select>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
+                          <SelectValue placeholder="اختر" />
+                        </SelectTrigger>
+                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                          <SelectItem value="triple" className="text-right justify-start cursor-pointer pr-8">إسم ثلاثي</SelectItem>
+                          <SelectItem value="quadruple" className="text-right justify-start cursor-pointer pr-8">إسم رباعي</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* 2. Shop Type (Optional) */}
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <div className="flex items-center gap-1">
+                          <div className="w-3 h-3 rounded-full bg-[#6B46C1] text-white flex items-center justify-center text-[8px] font-bold">i</div>
+                          <Label className="text-gray-500 text-xs block text-right">نوع المحل (اختياري)</Label>
+                        </div>
+                      </div>
+                      <Select>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
+                          <SelectValue placeholder="غير محدد" />
+                        </SelectTrigger>
+                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                          <SelectItem value="shop" className="text-right justify-start cursor-pointer pr-8">محل</SelectItem>
+                          <SelectItem value="exhibition" className="text-right justify-start cursor-pointer pr-8">معرض</SelectItem>
+                          <SelectItem value="office" className="text-right justify-start cursor-pointer pr-8">مكتب</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* 3. Personal Commercial Name */}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">اسم تجاري شخصي</Label>
                       <Input 
-                        placeholder="أدخل الاسم التجاري المقترح" 
+                        placeholder="" 
                         className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
                       />
                     </div>
 
-                    {/* Left Dropdown (Name Type) */}
-                    <div className="w-1/2 pr-6">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
+                    {/* 4. Activity Type (Optional) (Leftmost) */}
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <div className="flex items-center gap-1">
+                          <div className="w-3 h-3 rounded-full bg-[#6B46C1] text-white flex items-center justify-center text-[8px] font-bold">i</div>
+                          <Label className="text-gray-500 text-xs block text-right">نوع النشاط (اختياري)</Label>
+                        </div>
+                      </div>
                       <Select>
                         <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
-                          <SelectValue placeholder="اختر نوع الاسم" />
+                          <SelectValue placeholder="غير محدد" />
                         </SelectTrigger>
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                          <SelectItem value="personal" className="text-right justify-start cursor-pointer pr-8">اسم شخصي</SelectItem>
-                          <SelectItem value="distinctive" className="text-right justify-start cursor-pointer pr-8">اسم مميز</SelectItem>
+                          <SelectItem value="contracting" className="text-right justify-start cursor-pointer pr-8">للمقاولات</SelectItem>
+                          <SelectItem value="trading" className="text-right justify-start cursor-pointer pr-8">للتجارة</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
+                  </div>
+
+                  {/* Formed Name Bar */}
+                  <div className="bg-[#edeaf4] rounded-md p-3 flex items-center justify-between text-[#374151]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                        <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                      </div>
+                      <span className="text-xs font-bold">الاسم الذي تم تشكيله:</span>
+                      <span className="text-sm font-bold mr-2">مؤسسة عبدالله محمد عبدالله محمد</span>
+                    </div>
+                    <div className="w-5 h-5 rounded-full border border-red-500 flex items-center justify-center text-red-500 font-bold text-xs cursor-pointer">!</div>
                   </div>
                 </CardContent>
               </Card>
