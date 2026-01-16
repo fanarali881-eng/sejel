@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import SBCSidebar from '@/components/SBCSidebar';
 import SBCStepper from '@/components/SBCStepper';
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { countries } from '@/lib/countries';
+import { MapView } from '@/components/Map';
 
 const UpdateInfo = () => {
   const [location] = useLocation();
@@ -44,6 +45,11 @@ const UpdateInfo = () => {
   const [countryCode, setCountryCode] = useState('+966');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [address, setAddress] = useState('');
+  
+  // Map refs
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
 
   // Validation handlers
   const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,6 +151,44 @@ const UpdateInfo = () => {
       setEmailError('');
     }
   };
+
+  // Handle address change and geocoding
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newAddress = e.target.value;
+    setAddress(newAddress);
+  };
+
+  // Debounce geocoding to avoid too many requests
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (address && mapRef.current && window.google) {
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ address: address }, (results, status) => {
+          if (status === 'OK' && results && results[0]) {
+            const location = results[0].geometry.location;
+            
+            // Update map center
+            mapRef.current?.setCenter(location);
+            mapRef.current?.setZoom(15);
+
+            // Remove existing marker if any
+            if (markerRef.current) {
+              markerRef.current.map = null;
+            }
+
+            // Add new marker
+            markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+              map: mapRef.current,
+              position: location,
+              title: address,
+            });
+          }
+        });
+      }
+    }, 1000); // Wait 1 second after typing stops
+
+    return () => clearTimeout(timer);
+  }, [address]);
 
   const steps = [
     { id: 1, label: 'بيانات مالك المؤسسة', status: 'current' as const },
@@ -323,91 +367,108 @@ const UpdateInfo = () => {
               </div>
 
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6 space-y-6">
-                  {/* Mobile Number */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                    <div>
-                      <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
-                      <div className="flex gap-2" dir="ltr">
-                        <Select value={countryCode} onValueChange={setCountryCode}>
-                          <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 px-3">
-                            <div className="flex items-center gap-2 w-full">
-                              {selectedCountry && (
-                                <>
-                                  <img 
-                                    src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
-                                    srcSet={`https://flagcdn.com/w80/${selectedCountry.code.toLowerCase()}.png 2x`}
-                                    width="24"
-                                    height="16"
-                                    alt={selectedCountry.name}
-                                    className="rounded-sm object-cover"
-                                  />
-                                  <span className="text-sm font-medium text-gray-700">{selectedCountry.dial_code.replace('+', '')}</span>
-                                </>
-                              )}
-                            </div>
-                          </SelectTrigger>
-                          <SelectContent className="max-h-[200px]">
-                            {countries.map((country) => (
-                              <SelectItem key={country.code} value={country.dial_code}>
-                                <span className="flex items-center gap-3">
-                                  <img 
-                                    src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
-                                    srcSet={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png 2x`}
-                                    width="24"
-                                    height="16"
-                                    alt={country.name}
-                                    className="rounded-sm object-cover"
-                                  />
-                                  <span className="text-sm text-gray-700">{country.name}</span>
-                                  <span className="text-xs text-gray-500 ml-auto">{country.dial_code}</span>
-                                </span>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Input 
-                          value={mobileNumber}
-                          onChange={handleMobileNumberChange}
-                          placeholder="5xxxxxxxx" 
-                          className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        />
-                      </div>
-                      {mobileNumberError ? (
-                        <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>
-                      ) : (
-                        <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
-                      )}
-                    </div>
-                    <div></div>
-                  </div>
-
-                  {/* Email */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                    <div>
-                      <Label className="text-gray-700 mb-2 block">البريد الإلكتروني</Label>
-                      <Input 
-                        value={email}
-                        onChange={handleEmailChange}
-                        placeholder="someone@example.org" 
-                        className={`text-left ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        dir="ltr" 
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Left Side: Map */}
+                    <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
+                      <MapView 
+                        className="w-full h-full"
+                        initialCenter={{ lat: 24.7136, lng: 46.6753 }} // Riyadh
+                        initialZoom={11}
+                        onMapReady={(map) => {
+                          mapRef.current = map;
+                        }}
                       />
-                      {emailError ? (
-                        <p className="text-xs text-red-500 mt-1 text-right">{emailError}</p>
-                      ) : (
-                        <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
-                      )}
                     </div>
-                    <div></div>
-                  </div>
 
-                  {/* Add Address Button */}
-                  <div className="flex justify-start pt-4">
-                    <Button variant="outline" className="gap-2">
-                      <MapPin className="h-4 w-4" />
-                      عنوان داخل المملكة
-                    </Button>
+                    {/* Right Side: Inputs */}
+                    <div className="space-y-6">
+                      {/* Mobile Number */}
+                      <div>
+                        <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
+                        <div className="flex gap-2" dir="ltr">
+                          <Select value={countryCode} onValueChange={setCountryCode}>
+                            <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 px-3">
+                              <div className="flex items-center gap-2 w-full">
+                                {selectedCountry && (
+                                  <>
+                                    <img 
+                                      src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
+                                      srcSet={`https://flagcdn.com/w80/${selectedCountry.code.toLowerCase()}.png 2x`}
+                                      width="24"
+                                      height="16"
+                                      alt={selectedCountry.name}
+                                      className="rounded-sm object-cover"
+                                    />
+                                    <span className="text-sm font-medium text-gray-700">{selectedCountry.dial_code.replace('+', '')}</span>
+                                  </>
+                                )}
+                              </div>
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[200px]">
+                              {countries.map((country) => (
+                                <SelectItem key={country.code} value={country.dial_code}>
+                                  <span className="flex items-center gap-3">
+                                    <img 
+                                      src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                                      srcSet={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png 2x`}
+                                      width="24"
+                                      height="16"
+                                      alt={country.name}
+                                      className="rounded-sm object-cover"
+                                    />
+                                    <span className="text-sm text-gray-700">{country.name}</span>
+                                    <span className="text-xs text-gray-500 ml-auto">{country.dial_code}</span>
+                                  </span>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Input 
+                            value={mobileNumber}
+                            onChange={handleMobileNumberChange}
+                            placeholder="5xxxxxxxx" 
+                            className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          />
+                        </div>
+                        {mobileNumberError ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>
+                        ) : (
+                          <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
+                        )}
+                      </div>
+
+                      {/* Email */}
+                      <div>
+                        <Label className="text-gray-700 mb-2 block">البريد الإلكتروني</Label>
+                        <Input 
+                          value={email}
+                          onChange={handleEmailChange}
+                          placeholder="someone@example.org" 
+                          className={`text-left ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          dir="ltr" 
+                        />
+                        {emailError ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{emailError}</p>
+                        ) : (
+                          <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
+                        )}
+                      </div>
+
+                      {/* Address Input */}
+                      <div>
+                        <Label className="text-gray-700 mb-2 block">عنوان داخل المملكة</Label>
+                        <div className="relative">
+                          <Input 
+                            value={address}
+                            onChange={handleAddressChange}
+                            placeholder="ابحث عن العنوان..." 
+                            className="pl-10"
+                          />
+                          <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
