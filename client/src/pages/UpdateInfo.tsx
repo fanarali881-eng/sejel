@@ -700,7 +700,7 @@ const UpdateInfo = () => {
                           min="1000"
                         />
                         {/* Info Alert Bar - Moved here to be under Capital input only */}
-                        <div className="bg-[#F3F4F6] rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
+                        <div className="bg-[#edeaf4] rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
                           <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
                             <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
                           </div>
