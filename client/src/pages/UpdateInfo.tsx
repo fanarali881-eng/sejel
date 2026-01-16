@@ -403,7 +403,7 @@ const UpdateInfo = () => {
                   </div>
 
                   {/* Add Address Button */}
-                  <div className="flex justify-end pt-4">
+                  <div className="flex justify-start pt-4">
                     <Button variant="outline" className="gap-2">
                       <MapPin className="h-4 w-4" />
                       عنوان داخل المملكة
