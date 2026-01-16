@@ -800,12 +800,12 @@ const UpdateInfo = () => {
                   <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
                     {/* Right Panel (Main Activities) */}
                     <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
-                      الاسم التجاري المقترح
+                      نوع الاسم التجاري
                     </div>
                     
                     {/* Left Panel (Commercial Activity Name) */}
                     <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
-                      نوع الاسم التجاري
+                      الاسم التجاري
                     </div>
 
                     {/* The Arrow Overlay - Centered */}
