@@ -42,6 +42,8 @@ const UpdateInfo = () => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [mobileNumberError, setMobileNumberError] = useState('');
   const [countryCode, setCountryCode] = useState('+966');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   // Validation handlers
   const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,6 +120,29 @@ const UpdateInfo = () => {
       }
     } else {
       setMobileNumberError('');
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Allow only English characters, numbers, and standard email symbols
+    if (value !== '' && !/^[a-zA-Z0-9@._-]+$/.test(value)) {
+      return;
+    }
+
+    setEmail(value);
+
+    // Validate email format
+    if (value.length > 0) {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (!emailRegex.test(value)) {
+        setEmailError('البريد الإلكتروني غير صحيح');
+      } else {
+        setEmailError('');
+      }
+    } else {
+      setEmailError('');
     }
   };
 
@@ -361,8 +386,18 @@ const UpdateInfo = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
                       <Label className="text-gray-700 mb-2 block">البريد الإلكتروني</Label>
-                      <Input placeholder="someone@example.org" className="text-left" dir="ltr" />
-                      <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
+                      <Input 
+                        value={email}
+                        onChange={handleEmailChange}
+                        placeholder="someone@example.org" 
+                        className={`text-left ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        dir="ltr" 
+                      />
+                      {emailError ? (
+                        <p className="text-xs text-red-500 mt-1 text-right">{emailError}</p>
+                      ) : (
+                        <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
+                      )}
                     </div>
                     <div></div>
                   </div>
