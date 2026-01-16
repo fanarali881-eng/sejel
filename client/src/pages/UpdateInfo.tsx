@@ -57,8 +57,7 @@ const UpdateInfo = () => {
   const [nameType, setNameType] = useState('triple');
   const [nameParts, setNameParts] = useState({ first: '', second: '', third: '', fourth: '' });
   const [addManagers, setAddManagers] = useState(false);
-  const [managerType, setManagerType] = useState('');
-  const [managerName, setManagerName] = useState('');
+  const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -923,37 +922,66 @@ const UpdateInfo = () => {
                     </div>
 
                     {addManagers && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <div>
-                          <Label className="text-gray-500 text-xs mb-1 block text-right">نوع المدير</Label>
-                          <Select value={managerType} onValueChange={setManagerType}>
-                            <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
-                              <SelectValue placeholder="اختر" />
-                            </SelectTrigger>
-                            <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                              <SelectItem value="saudi" className="text-right justify-start cursor-pointer pr-8">مواطن سعودي</SelectItem>
-                              <SelectItem value="resident" className="text-right justify-start cursor-pointer pr-8">مقيم</SelectItem>
-                              <SelectItem value="foreigner" className="text-right justify-start cursor-pointer pr-8">أجنبي</SelectItem>
-                              <SelectItem value="gcc" className="text-right justify-start cursor-pointer pr-8">خليجي</SelectItem>
-                              <SelectItem value="gcc_resident" className="text-right justify-start cursor-pointer pr-8">خليجي مقيم</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        <div>
-                          <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير</Label>
-                          <Input 
-                            value={managerName}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
-                                setManagerName(val);
-                              }
-                            }}
-                            placeholder="الاسم الكامل" 
-                            className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
-                          />
-                        </div>
+                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        {managers.map((manager, index) => (
+                          <div key={manager.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+                            <div>
+                              <Label className="text-gray-500 text-xs mb-1 block text-right">نوع المدير {managers.length > 1 ? index + 1 : ''}</Label>
+                              <Select 
+                                value={manager.type} 
+                                onValueChange={(val) => {
+                                  const newManagers = [...managers];
+                                  newManagers[index].type = val;
+                                  setManagers(newManagers);
+                                }}
+                              >
+                                <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                                  <SelectValue placeholder="اختر" />
+                                </SelectTrigger>
+                                <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                                  <SelectItem value="saudi" className="text-right justify-start cursor-pointer pr-8">مواطن سعودي</SelectItem>
+                                  <SelectItem value="resident" className="text-right justify-start cursor-pointer pr-8">مقيم</SelectItem>
+                                  <SelectItem value="foreigner" className="text-right justify-start cursor-pointer pr-8">أجنبي</SelectItem>
+                                  <SelectItem value="gcc" className="text-right justify-start cursor-pointer pr-8">خليجي</SelectItem>
+                                  <SelectItem value="gcc_resident" className="text-right justify-start cursor-pointer pr-8">خليجي مقيم</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            <div>
+                              <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير {managers.length > 1 ? index + 1 : ''}</Label>
+                              <Input 
+                                value={manager.name}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
+                                    const newManagers = [...managers];
+                                    newManagers[index].name = val;
+                                    setManagers(newManagers);
+                                  }
+                                }}
+                                placeholder="الاسم الكامل" 
+                                className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                              />
+                            </div>
+                          </div>
+                        ))}
+
+                        {/* Add Manager Button */}
+                        {managers.length < 5 && (
+                          <div className="flex justify-center mt-2">
+                            <button 
+                              onClick={() => setManagers([...managers, { id: Date.now(), type: '', name: '' }])}
+                              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors border border-gray-300"
+                              title="إضافة مدير آخر"
+                            >
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                              </svg>
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
