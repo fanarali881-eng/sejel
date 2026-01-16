@@ -944,7 +944,12 @@ const UpdateInfo = () => {
                           <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير</Label>
                           <Input 
                             value={managerName}
-                            onChange={(e) => setManagerName(e.target.value)}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
+                                setManagerName(val);
+                              }
+                            }}
                             placeholder="الاسم الكامل" 
                             className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
                           />
