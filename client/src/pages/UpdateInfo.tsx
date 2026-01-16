@@ -878,7 +878,7 @@ const UpdateInfo = () => {
                   </div>
 
                   {/* Formed Name Bar */}
-                  <div className="bg-[#edeaf4] rounded-md p-3 flex items-center justify-between text-[#374151]">
+                  <div className="bg-[#eef6ff] rounded-md p-3 flex items-center justify-between text-[#374151]">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
                         <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
