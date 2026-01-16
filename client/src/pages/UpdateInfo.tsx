@@ -771,6 +771,63 @@ const UpdateInfo = () => {
               </Card>
             </div>
 
+            {/* Commercial Name Data Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                <h2 className="text-lg font-bold text-gray-800">بيانات الاسم التجاري</h2>
+              </div>
+              
+              <Card className="border-none shadow-sm bg-white">
+                <CardContent className="p-6">
+                  {/* Styled Header Bar */}
+                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
+                    {/* Right Panel (Main Activities) */}
+                    <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
+                      الاسم التجاري المقترح
+                    </div>
+                    
+                    {/* Left Panel (Commercial Activity Name) */}
+                    <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
+                      نوع الاسم التجاري
+                    </div>
+
+                    {/* The Arrow Overlay - Centered */}
+                    <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
+                      <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
+                        <path d="M24 0L0 24L24 48" fill="white" />
+                        <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="flex w-full gap-0">
+                    {/* Right Dropdown (Proposed Name) */}
+                    <div className="w-1/2 pl-6">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم المقترح</Label>
+                      <Input 
+                        placeholder="أدخل الاسم التجاري المقترح" 
+                        className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
+                      />
+                    </div>
+
+                    {/* Left Dropdown (Name Type) */}
+                    <div className="w-1/2 pr-6">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
+                      <Select>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
+                          <SelectValue placeholder="اختر نوع الاسم" />
+                        </SelectTrigger>
+                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                          <SelectItem value="personal" className="text-right justify-start cursor-pointer pr-8">اسم شخصي</SelectItem>
+                          <SelectItem value="distinctive" className="text-right justify-start cursor-pointer pr-8">اسم مميز</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Action Buttons */}
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
