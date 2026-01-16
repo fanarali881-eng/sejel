@@ -50,6 +50,7 @@ const UpdateInfo = () => {
   // State for Commercial Activities
   const [generalActivity, setGeneralActivity] = useState('');
   const [specialActivity, setSpecialActivity] = useState('');
+  const [capitalAmount, setCapitalAmount] = useState('');
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -89,6 +90,32 @@ const UpdateInfo = () => {
   const handleGeneralActivityChange = (value: string) => {
     setGeneralActivity(value);
     setSpecialActivity('');
+  };
+
+  // Capital Amount Handler
+  const handleCapitalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCapitalAmount(e.target.value);
+  };
+
+  const handleCapitalBlur = () => {
+    if (!capitalAmount) return;
+    
+    let value = parseInt(capitalAmount, 10);
+    
+    if (isNaN(value)) {
+      setCapitalAmount('');
+      return;
+    }
+
+    // Enforce minimum of 1000
+    if (value < 1000) {
+      value = 1000;
+    } else {
+      // Round to nearest 1000
+      value = Math.round(value / 1000) * 1000;
+    }
+
+    setCapitalAmount(value.toString());
   };
   
   // Map refs
@@ -663,11 +690,14 @@ const UpdateInfo = () => {
                       <div className="w-1/2 pr-6">
                         <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
                         <Input 
+                          value={capitalAmount}
+                          onChange={handleCapitalChange}
+                          onBlur={handleCapitalBlur}
                           placeholder="1000"
                           className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300"
                           type="number"
                           step="1000"
-                          min="0"
+                          min="1000"
                         />
                         {/* Info Alert Bar - Moved here to be under Capital input only */}
                         <div className="bg-[#F3F4F6] rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
