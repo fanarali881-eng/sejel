@@ -435,7 +435,7 @@ const UpdateInfo = () => {
             </div>
 
             {/* Request Info Bar */}
-            <div className="bg-[#edeaf4] rounded-lg p-4 mb-8 flex justify-between items-center text-sm">
+            <div className="bg-blue-50 rounded-lg p-4 mb-8 flex justify-between items-center text-sm">
               <div className="flex gap-8">
                 <div>
                   <span className="text-gray-500 ml-2">رقم الطلب</span>
@@ -772,7 +772,7 @@ const UpdateInfo = () => {
                           min="1000"
                         />
                         {/* Info Alert Bar - Moved here to be under Capital input only */}
-                        <div className="bg-[#edeaf4] rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
+                        <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
                           <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
                             <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
                           </div>
