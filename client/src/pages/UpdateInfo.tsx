@@ -714,7 +714,7 @@ const UpdateInfo = () => {
                     <div className="w-1/2 pl-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
                       <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between">
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
                           <SelectValue placeholder="اختر النشاط العام" />
                         </SelectTrigger>
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -731,7 +731,7 @@ const UpdateInfo = () => {
                     <div className="w-1/2 pr-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
                       <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between">
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
                           <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
                         </SelectTrigger>
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -752,7 +752,7 @@ const UpdateInfo = () => {
                       <div className="w-1/2 pl-6">
                         <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
                         <Select defaultValue="sar">
-                          <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between">
+                          <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
                             <SelectValue placeholder="اختر العملة" />
                           </SelectTrigger>
                           <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -822,7 +822,7 @@ const UpdateInfo = () => {
                     <div>
                       <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
                       <Select value={nameType} onValueChange={setNameType}>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between">
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
                           <SelectValue placeholder="اختر" />
                         </SelectTrigger>
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -840,7 +840,7 @@ const UpdateInfo = () => {
                         value={nameParts.first}
                         onChange={(e) => handleNamePartChange('first', e.target.value)}
                         placeholder="الاسم الأول" 
-                        className="bg-gray-50 border-gray-200 h-10 text-right placeholder:text-gray-400"
+                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
                       />
                     </div>
 
@@ -851,7 +851,7 @@ const UpdateInfo = () => {
                         value={nameParts.second}
                         onChange={(e) => handleNamePartChange('second', e.target.value)}
                         placeholder="الاسم الثاني" 
-                        className="bg-gray-50 border-gray-200 h-10 text-right placeholder:text-gray-400"
+                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
                       />
                     </div>
 
@@ -862,7 +862,7 @@ const UpdateInfo = () => {
                         value={nameParts.third}
                         onChange={(e) => handleNamePartChange('third', e.target.value)}
                         placeholder="الاسم الثالث" 
-                        className="bg-gray-50 border-gray-200 h-10 text-right placeholder:text-gray-400"
+                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
                       />
                     </div>
 
@@ -874,7 +874,7 @@ const UpdateInfo = () => {
                           value={nameParts.fourth}
                           onChange={(e) => handleNamePartChange('fourth', e.target.value)}
                           placeholder="الاسم الرابع" 
-                          className="bg-gray-50 border-gray-200 h-10 text-right placeholder:text-gray-400"
+                          className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
                         />
                       </div>
                     )}
