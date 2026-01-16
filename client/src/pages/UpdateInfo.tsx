@@ -137,6 +137,14 @@ const UpdateInfo = () => {
     setCapitalAmount(value.toString());
   };
   
+  // Name Parts Handler (Arabic Only)
+  const handleNamePartChange = (part: keyof typeof nameParts, value: string) => {
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setNameParts(prev => ({ ...prev, [part]: value }));
+    }
+  };
+
   // Map refs
   const mapRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
@@ -830,7 +838,7 @@ const UpdateInfo = () => {
                       <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الأول</Label>
                       <Input 
                         value={nameParts.first}
-                        onChange={(e) => setNameParts({...nameParts, first: e.target.value})}
+                        onChange={(e) => handleNamePartChange('first', e.target.value)}
                         placeholder="الاسم الأول" 
                         className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
                       />
@@ -841,7 +849,7 @@ const UpdateInfo = () => {
                       <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثاني</Label>
                       <Input 
                         value={nameParts.second}
-                        onChange={(e) => setNameParts({...nameParts, second: e.target.value})}
+                        onChange={(e) => handleNamePartChange('second', e.target.value)}
                         placeholder="الاسم الثاني" 
                         className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
                       />
@@ -852,7 +860,7 @@ const UpdateInfo = () => {
                       <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثالث</Label>
                       <Input 
                         value={nameParts.third}
-                        onChange={(e) => setNameParts({...nameParts, third: e.target.value})}
+                        onChange={(e) => handleNamePartChange('third', e.target.value)}
                         placeholder="الاسم الثالث" 
                         className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
                       />
@@ -864,7 +872,7 @@ const UpdateInfo = () => {
                         <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الرابع</Label>
                         <Input 
                           value={nameParts.fourth}
-                          onChange={(e) => setNameParts({...nameParts, fourth: e.target.value})}
+                          onChange={(e) => handleNamePartChange('fourth', e.target.value)}
                           placeholder="الاسم الرابع" 
                           className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
                         />
