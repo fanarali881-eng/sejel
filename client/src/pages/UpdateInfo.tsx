@@ -47,6 +47,50 @@ const UpdateInfo = () => {
   const [emailError, setEmailError] = useState('');
   const [address, setAddress] = useState('');
   
+  // State for Commercial Activities
+  const [generalActivity, setGeneralActivity] = useState('');
+  const [specialActivity, setSpecialActivity] = useState('');
+
+  // Activities Data
+  const activitiesData: Record<string, { value: string; label: string }[]> = {
+    trade: [
+      { value: "retail", label: "البيع بالتجزئة" },
+      { value: "wholesale", label: "البيع بالجملة" },
+      { value: "import_export", label: "الاستيراد والتصدير" },
+      { value: "e_commerce", label: "التجارة الإلكترونية" },
+    ],
+    contracting: [
+      { value: "building", label: "تشييد المباني" },
+      { value: "roads", label: "إنشاء الطرق" },
+      { value: "electrical", label: "الأعمال الكهربائية" },
+      { value: "plumbing", label: "أعمال السباكة" },
+    ],
+    services: [
+      { value: "marketing", label: "التسويق" },
+      { value: "consulting", label: "الاستشارات" },
+      { value: "maintenance", label: "الصيانة" },
+      { value: "cleaning", label: "النظافة" },
+      { value: "it", label: "تقنية المعلومات" },
+    ],
+    industry: [
+      { value: "food", label: "الصناعات الغذائية" },
+      { value: "chemical", label: "الصناعات الكيميائية" },
+      { value: "metal", label: "الصناعات المعدنية" },
+      { value: "textile", label: "صناعة المنسوجات" },
+    ],
+    agriculture: [
+      { value: "crops", label: "زراعة المحاصيل" },
+      { value: "livestock", label: "تربية المواشي" },
+      { value: "fishery", label: "صيد الأسماك" },
+    ]
+  };
+
+  // Reset special activity when general activity changes
+  const handleGeneralActivityChange = (value: string) => {
+    setGeneralActivity(value);
+    setSpecialActivity('');
+  };
+  
   // Map refs
   const mapRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
@@ -286,51 +330,86 @@ const UpdateInfo = () => {
                     <Input 
                       value={arabicName}
                       onChange={handleArabicNameChange}
-                      placeholder="محمد عبدالله أحمد" 
-                      className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" 
+                      className="bg-gray-50 border-gray-200 h-11 text-right" 
+                      placeholder="الاسم بالعربي" 
                     />
+                    <p className="text-xs text-gray-400 mt-1 text-left">يجب أن يكون باللغة العربية</p>
                   </div>
+                  
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
                     <Input 
                       value={englishName}
                       onChange={handleEnglishNameChange}
-                      placeholder="Mohammed Abdullah Ahmed" 
-                      className="font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400" 
-                      dir="ltr" 
+                      className="bg-gray-50 border-gray-200 h-11 text-left" 
+                      placeholder="English Name" 
+                      dir="ltr"
                     />
+                    <p className="text-xs text-gray-400 mt-1 text-left">يجب أن يكون باللغة الإنجليزية</p>
                   </div>
+
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
-                    <Select value={nationality} onValueChange={setNationality} dir="rtl">
-                      <SelectTrigger className="font-bold text-gray-800 w-full text-right">
+                    <Select value={nationality} onValueChange={setNationality}>
+                      <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
                       <SelectContent>
                         {nationalityCountries.map((country) => (
-                          <SelectItem key={country.value} value={country.value}>
+                          <SelectItem key={country.value} value={country.value} className="text-right flex-row-reverse justify-end">
                             {country.label}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
+
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
-                    <Input placeholder="سعودي" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
+                    <div className="flex gap-4">
+                      <div 
+                        className={cn(
+                          "flex-1 h-11 flex items-center justify-center border rounded-md cursor-pointer transition-colors",
+                          gender === 'male' 
+                            ? "bg-green-50 border-green-500 text-green-700" 
+                            : "bg-gray-50 border-gray-200 text-gray-500 hover:bg-gray-100"
+                        )}
+                        onClick={() => setGender('male')}
+                      >
+                        ذكر
+                      </div>
+                      <div 
+                        className={cn(
+                          "flex-1 h-11 flex items-center justify-center border rounded-md cursor-pointer transition-colors",
+                          gender === 'female' 
+                            ? "bg-green-50 border-green-500 text-green-700" 
+                            : "bg-gray-50 border-gray-200 text-gray-500 hover:bg-gray-100"
+                        )}
+                        onClick={() => setGender('female')}
+                      >
+                        أنثى
+                      </div>
+                    </div>
                   </div>
+
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
+                    <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية / الإقامة</Label>
                     <Input 
                       value={nationalId}
                       onChange={handleNationalIdChange}
-                      placeholder="1012345678" 
-                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={cn(
+                        "bg-gray-50 border-gray-200 h-11 text-right",
+                        nationalIdError ? "border-red-500 focus-visible:ring-red-500" : ""
+                      )}
+                      placeholder="1xxxxxxxxx" 
                     />
-                    {nationalIdError && (
-                      <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError}</p>
+                    {nationalIdError ? (
+                      <p className="text-xs text-red-500 mt-1 text-left">{nationalIdError}</p>
+                    ) : (
+                      <p className="text-xs text-gray-400 mt-1 text-left">يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2</p>
                     )}
                   </div>
+
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
                     <Popover>
@@ -338,12 +417,12 @@ const UpdateInfo = () => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
-                            !dateOfBirth && "text-muted-foreground font-normal"
+                            "w-full h-11 justify-start text-right font-normal bg-gray-50 border-gray-200 hover:bg-gray-100",
+                            !dateOfBirth && "text-muted-foreground"
                           )}
                         >
                           <CalendarIcon className="ml-2 h-4 w-4" />
-                          {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
+                          {dateOfBirth ? dateOfBirth.toLocaleDateString('en-US') : <span>اختر التاريخ</span>}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
@@ -352,24 +431,10 @@ const UpdateInfo = () => {
                           selected={dateOfBirth}
                           onSelect={setDateOfBirth}
                           initialFocus
-                          captionLayout="dropdown"
-                          fromYear={1900}
-                          toYear={new Date().getFullYear()}
                         />
                       </PopoverContent>
                     </Popover>
-                  </div>
-                  <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
-                    <Select value={gender} onValueChange={setGender} dir="rtl">
-                      <SelectTrigger className="font-bold text-gray-800 w-full text-right">
-                        <SelectValue placeholder="اختر الجنس" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="male">ذكر</SelectItem>
-                        <SelectItem value="female">أنثى</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <p className="text-xs text-gray-400 mt-1 text-left">التاريخ الميلادي</p>
                   </div>
                 </CardContent>
               </Card>
@@ -380,123 +445,175 @@ const UpdateInfo = () => {
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">عنوان وبيانات اتصال مالك المؤسسة</h2>
               </div>
-
+              
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Right Side: Inputs (Swapped to be first in RTL grid) */}
-                    <div className="space-y-6">
-                      {/* Mobile Number */}
-                      <div>
-                        <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
-                        <div className="flex gap-2" dir="ltr">
-                          <Select value={countryCode} onValueChange={setCountryCode}>
-                            <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 px-3">
-                              <div className="flex items-center gap-2 w-full">
+                <CardContent className="p-6 grid grid-cols-12 gap-6">
+                  {/* Map Section - Left Side (5 columns) */}
+                  <div className="col-span-5 h-full min-h-[300px] rounded-lg overflow-hidden border border-gray-200">
+                    <MapView 
+                      onMapReady={(map) => {
+                        mapRef.current = map;
+                      }}
+                      className="w-full h-full"
+                    />
+                  </div>
+
+                  {/* Inputs Section - Right Side (7 columns) */}
+                  <div className="col-span-7 flex flex-col gap-6">
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">رقم الجوال</Label>
+                      <div className="flex gap-2" dir="ltr">
+                        <Select value={countryCode} onValueChange={setCountryCode}>
+                          <SelectTrigger className="w-[110px] bg-gray-50 border-gray-200 h-10">
+                            <SelectValue>
+                              <div className="flex items-center gap-2">
                                 {selectedCountry && (
                                   <>
                                     <img 
-                                      src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
-                                      srcSet={`https://flagcdn.com/w80/${selectedCountry.code.toLowerCase()}.png 2x`}
-                                      width="24"
-                                      height="16"
+                                      src={`https://flagcdn.com/w20/${selectedCountry.code.toLowerCase()}.png`}
+                                      srcSet={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png 2x`}
+                                      width="20"
+                                      height="15"
                                       alt={selectedCountry.name}
-                                      className="rounded-sm object-cover"
+                                      className="object-contain"
                                     />
-                                    <span className="text-sm font-medium text-gray-700">{selectedCountry.dial_code.replace('+', '')}</span>
+                                    <span>{selectedCountry.dial_code}</span>
                                   </>
                                 )}
                               </div>
-                            </SelectTrigger>
-                            <SelectContent className="max-h-[200px]">
-                              {countries.map((country) => (
-                                <SelectItem key={country.code} value={country.dial_code}>
-                                  <span className="flex items-center gap-3">
-                                    <img 
-                                      src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
-                                      srcSet={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png 2x`}
-                                      width="24"
-                                      height="16"
-                                      alt={country.name}
-                                      className="rounded-sm object-cover"
-                                    />
-                                    <span className="text-sm text-gray-700">{country.name}</span>
-                                    <span className="text-xs text-gray-500 ml-auto">{country.dial_code}</span>
-                                  </span>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <Input 
-                            value={mobileNumber}
-                            onChange={handleMobileNumberChange}
-                            placeholder="5xxxxxxxx" 
-                            className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                          />
-                        </div>
-                        {mobileNumberError ? (
-                          <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>
-                        ) : (
-                          <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
-                        )}
-                      </div>
-
-                      {/* Email */}
-                      <div>
-                        <Label className="text-gray-700 mb-2 block">البريد الإلكتروني</Label>
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent className="max-h-[200px]">
+                            {countries.map((country) => (
+                              <SelectItem key={country.code} value={country.dial_code}>
+                                <div className="flex items-center gap-2">
+                                  <img 
+                                    src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`}
+                                    srcSet={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x`}
+                                    width="20"
+                                    height="15"
+                                    alt={country.name}
+                                    className="object-contain"
+                                  />
+                                  <span>{country.name}</span>
+                                  <span className="text-gray-400 text-xs ml-auto">{country.dial_code}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <Input 
-                          value={email}
-                          onChange={handleEmailChange}
-                          placeholder="someone@example.org" 
-                          className={`text-left ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                          dir="ltr" 
+                          value={mobileNumber}
+                          onChange={handleMobileNumberChange}
+                          className={cn(
+                            "flex-1 bg-gray-50 border-gray-200 h-10 text-left",
+                            mobileNumberError ? "border-red-500 focus-visible:ring-red-500" : ""
+                          )}
+                          placeholder="5xxxxxxxx" 
                         />
-                        {emailError ? (
-                          <p className="text-xs text-red-500 mt-1 text-right">{emailError}</p>
-                        ) : (
-                          <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
-                        )}
                       </div>
-
-                      {/* Address Input */}
-                      <div>
-                        <Label className="text-gray-700 mb-2 block">عنوان داخل المملكة</Label>
-                        <div className="relative">
-                          <Input 
-                            value={address}
-                            onChange={handleAddressChange}
-                            placeholder="ابحث عن العنوان..." 
-                            className="pl-10"
-                          />
-                          <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        </div>
-                      </div>
+                      {mobileNumberError ? (
+                        <p className="text-xs text-red-500 mt-1 text-right" dir="rtl">{mobileNumberError}</p>
+                      ) : (
+                        <p className="text-xs text-gray-400 mt-1 text-right" dir="rtl">يجب أن يكون بصيغة 05xxxxxxxx</p>
+                      )}
                     </div>
 
-                    {/* Left Side: Map (Swapped to be second in RTL grid) */}
-                    <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
-                      <MapView 
-                        className="w-full h-full"
-                        initialCenter={{ lat: 24.7136, lng: 46.6753 }} // Riyadh
-                        initialZoom={11}
-                        onMapReady={(map) => {
-                          mapRef.current = map;
-                        }}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">البريد الإلكتروني</Label>
+                      <Input 
+                        value={email}
+                        onChange={handleEmailChange}
+                        className={cn(
+                          "bg-gray-50 border-gray-200 h-11 text-left",
+                          emailError ? "border-red-500 focus-visible:ring-red-500" : ""
+                        )}
+                        placeholder="someone@example.org" 
+                        dir="ltr"
                       />
+                      {emailError ? (
+                        <p className="text-xs text-red-500 mt-1 text-right" dir="rtl">{emailError}</p>
+                      ) : (
+                        <p className="text-xs text-gray-400 mt-1 text-right" dir="rtl">يجب أن يكون بصيغة someone@example.org</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">عنوان داخل المملكة</Label>
+                      <div className="relative">
+                        <Input 
+                          value={address}
+                          onChange={handleAddressChange}
+                          className="bg-gray-50 border-gray-200 h-11 text-right pr-10" 
+                          placeholder="ابحث عن العنوان..." 
+                        />
+                        <MapPin className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex justify-between pt-4">
-              <Button variant="outline" className="px-8">رجوع</Button>
-              <div className="flex gap-4">
-                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
-                <Button className="px-8 bg-green-600 hover:bg-green-700">حفظ</Button>
+            {/* Commercial Activities Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                <h2 className="text-lg font-bold text-gray-800">تحديد الأنشطة التجارية</h2>
               </div>
+              
+              <Card className="border-none shadow-sm bg-white">
+                <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">النشاط العام</Label>
+                    <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
+                      <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
+                        <SelectValue placeholder="اختر النشاط العام" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="trade" className="text-right flex-row-reverse justify-end">التجارة</SelectItem>
+                        <SelectItem value="contracting" className="text-right flex-row-reverse justify-end">المقاولات</SelectItem>
+                        <SelectItem value="services" className="text-right flex-row-reverse justify-end">الخدمات</SelectItem>
+                        <SelectItem value="industry" className="text-right flex-row-reverse justify-end">الصناعة</SelectItem>
+                        <SelectItem value="agriculture" className="text-right flex-row-reverse justify-end">الزراعة</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">النشاط الخاص</Label>
+                    <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
+                      <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
+                        <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {generalActivity && activitiesData[generalActivity]?.map((activity) => (
+                          <SelectItem key={activity.value} value={activity.value} className="text-right flex-row-reverse justify-end">
+                            {activity.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-between mt-8">
+              <div className="flex gap-4">
+                <Button className="bg-green-600 hover:bg-green-700 text-white px-8 h-11">
+                  حفظ
+                </Button>
+                <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 px-8 h-11">
+                  إلغاء
+                </Button>
+              </div>
+              
+              <Button variant="ghost" className="text-gray-500 hover:text-gray-700">
+                رجوع
+              </Button>
+            </div>
+
           </div>
         </main>
       </div>
