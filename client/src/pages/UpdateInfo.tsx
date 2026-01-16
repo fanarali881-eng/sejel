@@ -664,7 +664,7 @@ const UpdateInfo = () => {
                         <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
                         <Input 
                           defaultValue="5000"
-                          className="bg-gray-50 border-gray-200 h-11 text-right"
+                          className="bg-gray-50 border-gray-200 h-11 text-right !h-11"
                           type="number"
                         />
                         {/* Info Alert Bar - Moved here to be under Capital input only */}
