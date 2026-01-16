@@ -642,6 +642,42 @@ const UpdateInfo = () => {
                       </Select>
                     </div>
                   </div>
+
+                  {/* Capital and Currency Section */}
+                  <div className="mt-8">
+                    <div className="flex w-full gap-0 mb-4">
+                      {/* Right: Currency */}
+                      <div className="w-1/2 pl-6">
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
+                        <Select defaultValue="sar">
+                          <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
+                            <SelectValue placeholder="اختر العملة" />
+                          </SelectTrigger>
+                          <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                            <SelectItem value="sar" className="text-right justify-start cursor-pointer pr-8">ريال سعودي</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Left: Capital Amount */}
+                      <div className="w-1/2 pr-6">
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
+                        <Input 
+                          defaultValue="5000"
+                          className="bg-gray-50 border-gray-200 h-11 text-right"
+                          type="number"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Info Alert Bar */}
+                    <div className="bg-[#F3F4F6] rounded-md p-3 flex items-center justify-end gap-2 text-[#374151]">
+                      <span className="text-sm font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
+                      <div className="w-5 h-5 rounded-full border-2 border-[#6B7280] flex items-center justify-center">
+                        <span className="text-xs font-bold text-[#6B7280]">i</span>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
