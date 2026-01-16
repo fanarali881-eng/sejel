@@ -52,6 +52,15 @@ const UpdateInfo = () => {
   const [specialActivity, setSpecialActivity] = useState('');
   const [capitalAmount, setCapitalAmount] = useState('');
   const [ownerType, setOwnerType] = useState('');
+  
+  // Commercial Name State
+  const [nameType, setNameType] = useState('triple');
+  const [nameParts, setNameParts] = useState({
+    first: '',
+    second: '',
+    third: '',
+    fourth: ''
+  });
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -800,11 +809,11 @@ const UpdateInfo = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                     {/* 1. Name Type (Rightmost) */}
                     <div>
                       <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
-                      <Select>
+                      <Select value={nameType} onValueChange={setNameType}>
                         <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
                           <SelectValue placeholder="اختر" />
                         </SelectTrigger>
@@ -815,53 +824,52 @@ const UpdateInfo = () => {
                       </Select>
                     </div>
 
-                    {/* 2. Shop Type (Optional) */}
+                    {/* Dynamic Name Fields */}
+                    {/* First Name */}
                     <div>
-                      <div className="flex justify-between items-center mb-1">
-                        <div className="flex items-center gap-1">
-                          <div className="w-3 h-3 rounded-full bg-[#6B46C1] text-white flex items-center justify-center text-[8px] font-bold">i</div>
-                          <Label className="text-gray-500 text-xs block text-right">نوع المحل (اختياري)</Label>
-                        </div>
-                      </div>
-                      <Select>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
-                          <SelectValue placeholder="غير محدد" />
-                        </SelectTrigger>
-                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                          <SelectItem value="shop" className="text-right justify-start cursor-pointer pr-8">محل</SelectItem>
-                          <SelectItem value="exhibition" className="text-right justify-start cursor-pointer pr-8">معرض</SelectItem>
-                          <SelectItem value="office" className="text-right justify-start cursor-pointer pr-8">مكتب</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* 3. Personal Commercial Name */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">اسم تجاري شخصي</Label>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الأول</Label>
                       <Input 
-                        placeholder="" 
+                        value={nameParts.first}
+                        onChange={(e) => setNameParts({...nameParts, first: e.target.value})}
+                        placeholder="الاسم الأول" 
                         className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
                       />
                     </div>
 
-                    {/* 4. Activity Type (Optional) (Leftmost) */}
+                    {/* Second Name */}
                     <div>
-                      <div className="flex justify-between items-center mb-1">
-                        <div className="flex items-center gap-1">
-                          <div className="w-3 h-3 rounded-full bg-[#6B46C1] text-white flex items-center justify-center text-[8px] font-bold">i</div>
-                          <Label className="text-gray-500 text-xs block text-right">نوع النشاط (اختياري)</Label>
-                        </div>
-                      </div>
-                      <Select>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
-                          <SelectValue placeholder="غير محدد" />
-                        </SelectTrigger>
-                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                          <SelectItem value="contracting" className="text-right justify-start cursor-pointer pr-8">للمقاولات</SelectItem>
-                          <SelectItem value="trading" className="text-right justify-start cursor-pointer pr-8">للتجارة</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثاني</Label>
+                      <Input 
+                        value={nameParts.second}
+                        onChange={(e) => setNameParts({...nameParts, second: e.target.value})}
+                        placeholder="الاسم الثاني" 
+                        className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
+                      />
                     </div>
+
+                    {/* Third Name */}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثالث</Label>
+                      <Input 
+                        value={nameParts.third}
+                        onChange={(e) => setNameParts({...nameParts, third: e.target.value})}
+                        placeholder="الاسم الثالث" 
+                        className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
+                      />
+                    </div>
+
+                    {/* Fourth Name (Conditional) */}
+                    {nameType === 'quadruple' && (
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الرابع</Label>
+                        <Input 
+                          value={nameParts.fourth}
+                          onChange={(e) => setNameParts({...nameParts, fourth: e.target.value})}
+                          placeholder="الاسم الرابع" 
+                          className="bg-gray-50 border-gray-200 h-11 text-right placeholder:text-gray-400"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   {/* Formed Name Bar */}
@@ -871,7 +879,9 @@ const UpdateInfo = () => {
                         <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
                       </div>
                       <span className="text-xs font-bold">الاسم الذي تم تشكيله:</span>
-                      <span className="text-sm font-bold mr-2">مؤسسة عبدالله محمد عبدالله محمد</span>
+                      <span className="text-sm font-bold mr-2">
+                        {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''}`.trim()}
+                      </span>
                     </div>
                     <div className="w-5 h-5 rounded-full border border-red-500 flex items-center justify-center text-red-500 font-bold text-xs cursor-pointer">!</div>
                   </div>
