@@ -585,9 +585,21 @@ const UpdateInfo = () => {
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
-                  <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">النشاط العام</Label>
+                <CardContent className="p-6">
+                  {/* Styled Header Bar */}
+                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12">
+                    <div className="flex-1 bg-white flex items-center justify-center text-sm font-bold text-gray-700 relative">
+                      الأنشطة الرئيسية
+                      <div className="absolute left-0 top-0 bottom-0 w-4 bg-white border-l border-gray-200 transform -skew-x-12 origin-bottom-left translate-x-2 z-10"></div>
+                    </div>
+                    <div className="flex-1 bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500 border-r border-gray-200">
+                      اسم النشاط التجاري
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-12">
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">النشاط العام</Label>
                     <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
                       <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
                         <SelectValue placeholder="اختر النشاط العام" />
@@ -616,6 +628,7 @@ const UpdateInfo = () => {
                         ))}
                       </SelectContent>
                     </Select>
+                  </div>
                   </div>
                 </CardContent>
               </Card>
