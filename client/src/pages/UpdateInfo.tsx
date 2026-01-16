@@ -667,14 +667,13 @@ const UpdateInfo = () => {
                           className="bg-gray-50 border-gray-200 h-11 text-right"
                           type="number"
                         />
-                      </div>
-                    </div>
-
-                    {/* Info Alert Bar */}
-                    <div className="bg-[#F3F4F6] rounded-md p-3 flex items-center justify-end gap-2 text-[#374151]">
-                      <span className="text-sm font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
-                      <div className="w-5 h-5 rounded-full border-2 border-[#6B7280] flex items-center justify-center">
-                        <span className="text-xs font-bold text-[#6B7280]">i</span>
+                        {/* Info Alert Bar - Moved here to be under Capital input only */}
+                        <div className="bg-[#F3F4F6] rounded-md p-2 mt-2 flex items-center justify-end gap-2 text-[#374151]">
+                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
+                          <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                            <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
