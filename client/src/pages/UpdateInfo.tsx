@@ -607,38 +607,40 @@ const UpdateInfo = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-y-6 gap-x-12">
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block">النشاط العام</Label>
-                    <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
-                      <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
-                        <SelectValue placeholder="اختر النشاط العام" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="trade" className="text-right flex-row-reverse justify-end">التجارة</SelectItem>
-                        <SelectItem value="contracting" className="text-right flex-row-reverse justify-end">المقاولات</SelectItem>
-                        <SelectItem value="services" className="text-right flex-row-reverse justify-end">الخدمات</SelectItem>
-                        <SelectItem value="industry" className="text-right flex-row-reverse justify-end">الصناعة</SelectItem>
-                        <SelectItem value="agriculture" className="text-right flex-row-reverse justify-end">الزراعة</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <div className="flex w-full gap-0">
+                    {/* Right Dropdown (General Activity) - Matches "الأنشطة الرئيسية" width */}
+                    <div className="w-1/2 pl-6">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
+                      <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full">
+                          <SelectValue placeholder="اختر النشاط العام" />
+                        </SelectTrigger>
+                        <SelectContent align="end" side="bottom" className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                          <SelectItem value="trade" className="text-right justify-start flex-row-reverse cursor-pointer">التجارة</SelectItem>
+                          <SelectItem value="contracting" className="text-right justify-start flex-row-reverse cursor-pointer">المقاولات</SelectItem>
+                          <SelectItem value="services" className="text-right justify-start flex-row-reverse cursor-pointer">الخدمات</SelectItem>
+                          <SelectItem value="industry" className="text-right justify-start flex-row-reverse cursor-pointer">الصناعة</SelectItem>
+                          <SelectItem value="agriculture" className="text-right justify-start flex-row-reverse cursor-pointer">الزراعة</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">النشاط الخاص</Label>
-                    <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
-                      <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
-                        <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {generalActivity && activitiesData[generalActivity]?.map((activity) => (
-                          <SelectItem key={activity.value} value={activity.value} className="text-right flex-row-reverse justify-end">
-                            {activity.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    {/* Left Dropdown (Special Activity) - Matches "اسم النشاط التجاري" width */}
+                    <div className="w-1/2 pr-6">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
+                      <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full">
+                          <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
+                        </SelectTrigger>
+                        <SelectContent align="end" side="bottom" className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                          {generalActivity && activitiesData[generalActivity]?.map((activity) => (
+                            <SelectItem key={activity.value} value={activity.value} className="text-right justify-start flex-row-reverse cursor-pointer">
+                              {activity.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
