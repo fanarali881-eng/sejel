@@ -886,12 +886,12 @@ const UpdateInfo = () => {
                       <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
                         <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
                       </div>
-                      <span className="text-xs font-bold">الاسم الذي تم تشكيله:</span>
+                      <span className="text-xs font-bold">الاسم التجاري المعتمد</span>
                       <span className="text-sm font-bold mr-2">
                         {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''}`.trim()}
                       </span>
                     </div>
-                    <div className="w-5 h-5 rounded-full border border-red-500 flex items-center justify-center text-red-500 font-bold text-xs cursor-pointer">!</div>
+                    
                   </div>
                 </CardContent>
               </Card>
