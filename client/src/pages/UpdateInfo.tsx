@@ -55,12 +55,10 @@ const UpdateInfo = () => {
   
   // Commercial Name State
   const [nameType, setNameType] = useState('triple');
-  const [nameParts, setNameParts] = useState({
-    first: '',
-    second: '',
-    third: '',
-    fourth: ''
-  });
+  const [nameParts, setNameParts] = useState({ first: '', second: '', third: '', fourth: '' });
+  const [addManagers, setAddManagers] = useState(false);
+  const [managerType, setManagerType] = useState('');
+  const [managerName, setManagerName] = useState('');
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -892,6 +890,67 @@ const UpdateInfo = () => {
                       </span>
                     </div>
                     
+                  </div>
+
+                  {/* Managers Section */}
+                  <div className="mt-6 border-t border-gray-100 pt-4">
+                    <div className="flex items-center gap-4 mb-4">
+                      <Label className="text-sm font-bold text-gray-700">هل ترغب بإضافة مدراء؟</Label>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            id="managers-yes" 
+                            name="managers" 
+                            checked={addManagers === true} 
+                            onChange={() => setAddManagers(true)}
+                            className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                          />
+                          <label htmlFor="managers-yes" className="text-sm text-gray-700 cursor-pointer">نعم</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            id="managers-no" 
+                            name="managers" 
+                            checked={addManagers === false} 
+                            onChange={() => setAddManagers(false)}
+                            className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                          />
+                          <label htmlFor="managers-no" className="text-sm text-gray-700 cursor-pointer">لا</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {addManagers && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div>
+                          <Label className="text-gray-500 text-xs mb-1 block text-right">نوع المدير</Label>
+                          <Select value={managerType} onValueChange={setManagerType}>
+                            <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                              <SelectValue placeholder="اختر" />
+                            </SelectTrigger>
+                            <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                              <SelectItem value="saudi" className="text-right justify-start cursor-pointer pr-8">مواطن سعودي</SelectItem>
+                              <SelectItem value="resident" className="text-right justify-start cursor-pointer pr-8">مقيم</SelectItem>
+                              <SelectItem value="foreigner" className="text-right justify-start cursor-pointer pr-8">أجنبي</SelectItem>
+                              <SelectItem value="gcc" className="text-right justify-start cursor-pointer pr-8">خليجي</SelectItem>
+                              <SelectItem value="gcc_resident" className="text-right justify-start cursor-pointer pr-8">خليجي مقيم</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div>
+                          <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير</Label>
+                          <Input 
+                            value={managerName}
+                            onChange={(e) => setManagerName(e.target.value)}
+                            placeholder="الاسم الكامل" 
+                            className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
