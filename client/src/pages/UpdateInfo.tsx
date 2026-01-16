@@ -950,19 +950,38 @@ const UpdateInfo = () => {
                             
                             <div>
                               <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير {managers.length > 1 ? index + 1 : ''}</Label>
-                              <Input 
-                                value={manager.name}
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
-                                    const newManagers = [...managers];
-                                    newManagers[index].name = val;
+                              <div className="flex gap-2 items-center">
+                                <Input 
+                                  value={manager.name}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
+                                      const newManagers = [...managers];
+                                      newManagers[index].name = val;
+                                      setManagers(newManagers);
+                                    }
+                                  }}
+                                  placeholder="الاسم الكامل" 
+                                  className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 flex-1"
+                                />
+                                <button 
+                                  onClick={() => {
+                                    const newManagers = managers.filter((_, i) => i !== index);
                                     setManagers(newManagers);
-                                  }
-                                }}
-                                placeholder="الاسم الكامل" 
-                                className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
-                              />
+                                    if (newManagers.length === 0) {
+                                      setAddManagers(false);
+                                      setManagers([{ id: Date.now(), type: '', name: '' }]);
+                                    }
+                                  }}
+                                  className="w-9 h-9 rounded-md bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 transition-colors border border-red-100 flex-shrink-0"
+                                  title="حذف المدير"
+                                >
+                                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                  </svg>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         ))}
