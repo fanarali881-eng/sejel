@@ -664,15 +664,15 @@ const UpdateInfo = () => {
                         <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
                         <Input 
                           defaultValue="5000"
-                          className="bg-gray-50 border-gray-200 h-10 text-right"
+                          className="bg-gray-50 border-gray-200 h-9 text-right"
                           type="number"
                         />
                         {/* Info Alert Bar - Moved here to be under Capital input only */}
-                        <div className="bg-[#F3F4F6] rounded-md p-2 mt-2 flex items-center justify-end gap-2 text-[#374151]">
-                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
+                        <div className="bg-[#F3F4F6] rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
                           <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
                             <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
                           </div>
+                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
                         </div>
                       </div>
                     </div>
