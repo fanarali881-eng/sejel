@@ -205,6 +205,49 @@ const UpdateInfo = () => {
     return () => clearTimeout(timer);
   }, [address]);
 
+  // Handle map click
+  const handleMapClick = async (event: google.maps.MapMouseEvent) => {
+    if (event.latLng && mapRef.current && window.google) {
+      const newLat = event.latLng.lat();
+      const newLng = event.latLng.lng();
+      const location = { lat: newLat, lng: newLng };
+
+      // Remove existing marker if any
+      if (markerRef.current) {
+        markerRef.current.map = null;
+      }
+
+      // Add new marker
+      markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+        map: mapRef.current,
+        position: location,
+        gmpDraggable: true, // Enable dragging
+      });
+
+      // Add drag end listener to the new marker
+      markerRef.current.addListener('dragend', async (dragEvent: any) => {
+        const dragLat = dragEvent.latLng.lat();
+        const dragLng = dragEvent.latLng.lng();
+        
+        // Reverse geocoding
+        const geocoder = new window.google.maps.Geocoder();
+        const response = await geocoder.geocode({ location: { lat: dragLat, lng: dragLng } });
+        
+        if (response.results && response.results[0]) {
+          setAddress(response.results[0].formatted_address);
+        }
+      });
+
+      // Reverse geocoding for the clicked location
+      const geocoder = new window.google.maps.Geocoder();
+      const response = await geocoder.geocode({ location: location });
+      
+      if (response.results && response.results[0]) {
+        setAddress(response.results[0].formatted_address);
+      }
+    }
+  };
+
   const steps = [
     { id: 1, label: 'بيانات مالك المؤسسة', status: 'current' as const },
     { id: 2, label: 'بيانات الاسم التجاري و الأنشطة', status: 'upcoming' as const },
@@ -481,6 +524,8 @@ const UpdateInfo = () => {
                         initialZoom={11}
                         onMapReady={(map) => {
                           mapRef.current = map;
+                          // Add click listener to the map
+                          map.addListener('click', handleMapClick);
                         }}
                       />
                     </div>
