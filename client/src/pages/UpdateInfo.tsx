@@ -51,6 +51,7 @@ const UpdateInfo = () => {
   const [generalActivity, setGeneralActivity] = useState('');
   const [specialActivity, setSpecialActivity] = useState('');
   const [capitalAmount, setCapitalAmount] = useState('');
+  const [ownerType, setOwnerType] = useState('');
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -95,6 +96,15 @@ const UpdateInfo = () => {
   // Capital Amount Handler
   const handleCapitalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCapitalAmount(e.target.value);
+  };
+
+  // Owner Type Handler (Arabic Only)
+  const handleOwnerTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setOwnerType(value);
+    }
   };
 
   const handleCapitalBlur = () => {
@@ -472,7 +482,12 @@ const UpdateInfo = () => {
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
-                    <Input placeholder="سعودي" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Input 
+                      value={ownerType}
+                      onChange={handleOwnerTypeChange}
+                      placeholder="سعودي" 
+                      className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" 
+                    />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
