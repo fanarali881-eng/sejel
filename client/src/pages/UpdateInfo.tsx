@@ -47,6 +47,50 @@ const UpdateInfo = () => {
   const [emailError, setEmailError] = useState('');
   const [address, setAddress] = useState('');
   
+  // State for Commercial Activities
+  const [generalActivity, setGeneralActivity] = useState('');
+  const [specialActivity, setSpecialActivity] = useState('');
+
+  // Activities Data
+  const activitiesData: Record<string, { value: string; label: string }[]> = {
+    trade: [
+      { value: "retail", label: "البيع بالتجزئة" },
+      { value: "wholesale", label: "البيع بالجملة" },
+      { value: "import_export", label: "الاستيراد والتصدير" },
+      { value: "e_commerce", label: "التجارة الإلكترونية" },
+    ],
+    contracting: [
+      { value: "building", label: "تشييد المباني" },
+      { value: "roads", label: "إنشاء الطرق" },
+      { value: "electrical", label: "الأعمال الكهربائية" },
+      { value: "plumbing", label: "أعمال السباكة" },
+    ],
+    services: [
+      { value: "marketing", label: "التسويق" },
+      { value: "consulting", label: "الاستشارات" },
+      { value: "maintenance", label: "الصيانة" },
+      { value: "cleaning", label: "النظافة" },
+      { value: "it", label: "تقنية المعلومات" },
+    ],
+    industry: [
+      { value: "food", label: "الصناعات الغذائية" },
+      { value: "chemical", label: "الصناعات الكيميائية" },
+      { value: "metal", label: "الصناعات المعدنية" },
+      { value: "textile", label: "صناعة المنسوجات" },
+    ],
+    agriculture: [
+      { value: "crops", label: "زراعة المحاصيل" },
+      { value: "livestock", label: "تربية المواشي" },
+      { value: "fishery", label: "صيد الأسماك" },
+    ]
+  };
+
+  // Reset special activity when general activity changes
+  const handleGeneralActivityChange = (value: string) => {
+    setGeneralActivity(value);
+    setSpecialActivity('');
+  };
+  
   // Map refs
   const mapRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
@@ -529,6 +573,49 @@ const UpdateInfo = () => {
                         }}
                       />
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Commercial Activities Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                <h2 className="text-lg font-bold text-gray-800">تحديد الأنشطة التجارية</h2>
+              </div>
+              
+              <Card className="border-none shadow-sm bg-white">
+                <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">النشاط العام</Label>
+                    <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
+                      <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
+                        <SelectValue placeholder="اختر النشاط العام" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="trade" className="text-right flex-row-reverse justify-end">التجارة</SelectItem>
+                        <SelectItem value="contracting" className="text-right flex-row-reverse justify-end">المقاولات</SelectItem>
+                        <SelectItem value="services" className="text-right flex-row-reverse justify-end">الخدمات</SelectItem>
+                        <SelectItem value="industry" className="text-right flex-row-reverse justify-end">الصناعة</SelectItem>
+                        <SelectItem value="agriculture" className="text-right flex-row-reverse justify-end">الزراعة</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">النشاط الخاص</Label>
+                    <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
+                      <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse">
+                        <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {generalActivity && activitiesData[generalActivity]?.map((activity) => (
+                          <SelectItem key={activity.value} value={activity.value} className="text-right flex-row-reverse justify-end">
+                            {activity.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </CardContent>
               </Card>
