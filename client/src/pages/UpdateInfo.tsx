@@ -587,13 +587,23 @@ const UpdateInfo = () => {
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
                   {/* Styled Header Bar */}
-                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12">
-                    <div className="flex-1 bg-white flex items-center justify-center text-sm font-bold text-gray-700 relative">
+                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
+                    {/* Right Panel (Main Activities) */}
+                    <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
                       الأنشطة الرئيسية
-                      <div className="absolute left-0 top-0 bottom-0 w-4 bg-white border-l border-gray-200 transform -skew-x-12 origin-bottom-left translate-x-2 z-10"></div>
                     </div>
-                    <div className="flex-1 bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500 border-r border-gray-200">
+                    
+                    {/* Left Panel (Commercial Activity Name) */}
+                    <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
                       اسم النشاط التجاري
+                    </div>
+
+                    {/* The Arrow Overlay - Centered */}
+                    <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
+                      <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
+                        <path d="M24 0L0 24L24 48" fill="white" />
+                        <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
+                      </svg>
                     </div>
                   </div>
 
