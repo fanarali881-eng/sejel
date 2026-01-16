@@ -181,6 +181,21 @@ const UpdateInfo = () => {
               map: mapRef.current,
               position: location,
               title: address,
+              gmpDraggable: true, // Enable dragging
+            });
+
+            // Add drag end listener
+            markerRef.current.addListener('dragend', async (event: any) => {
+              const newLat = event.latLng.lat();
+              const newLng = event.latLng.lng();
+              
+              // Reverse geocoding
+              const geocoder = new window.google.maps.Geocoder();
+              const response = await geocoder.geocode({ location: { lat: newLat, lng: newLng } });
+              
+              if (response.results && response.results[0]) {
+                setAddress(response.results[0].formatted_address);
+              }
             });
           }
         });
