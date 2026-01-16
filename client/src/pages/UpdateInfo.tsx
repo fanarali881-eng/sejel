@@ -369,19 +369,7 @@ const UpdateInfo = () => {
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Left Side: Map */}
-                    <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
-                      <MapView 
-                        className="w-full h-full"
-                        initialCenter={{ lat: 24.7136, lng: 46.6753 }} // Riyadh
-                        initialZoom={11}
-                        onMapReady={(map) => {
-                          mapRef.current = map;
-                        }}
-                      />
-                    </div>
-
-                    {/* Right Side: Inputs */}
+                    {/* Right Side: Inputs (Swapped to be first in RTL grid) */}
                     <div className="space-y-6">
                       {/* Mobile Number */}
                       <div>
@@ -468,6 +456,18 @@ const UpdateInfo = () => {
                           <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                         </div>
                       </div>
+                    </div>
+
+                    {/* Left Side: Map (Swapped to be second in RTL grid) */}
+                    <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
+                      <MapView 
+                        className="w-full h-full"
+                        initialCenter={{ lat: 24.7136, lng: 46.6753 }} // Riyadh
+                        initialZoom={11}
+                        onMapReady={(map) => {
+                          mapRef.current = map;
+                        }}
+                      />
                     </div>
                   </div>
                 </CardContent>
