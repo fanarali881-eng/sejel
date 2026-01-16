@@ -175,30 +175,71 @@ const UpdateInfo = () => {
       return;
     }
 
-    // Max length 10
-    if (value.length > 10) {
-      return;
-    }
+    // Validation logic based on country code
+    if (countryCode === '+966') {
+      // Saudi Arabia Validation
+      if (value.length > 10) return; // Max length 10 for SA
 
-    setMobileNumber(value);
+      setMobileNumber(value);
 
-    // Validate length and prefix
-    if (value.length > 0) {
-      if (value.length < 10) {
-        setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+      if (value.length > 0) {
+        if (value.length < 10) {
+          setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+        } else {
+          const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
+          const prefix = value.substring(0, 3);
+          if (!validPrefixes.includes(prefix)) {
+            setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+          } else {
+            setMobileNumberError('');
+          }
+        }
       } else {
-        const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
-        const prefix = value.substring(0, 3);
-        if (!validPrefixes.includes(prefix)) {
-          setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+        setMobileNumberError('');
+      }
+    } else {
+      // International Validation (Generic)
+      if (value.length > 15) return; // Max length 15 for international
+
+      setMobileNumber(value);
+
+      if (value.length > 0) {
+        if (value.length < 7) {
+          setMobileNumberError('يجب أن يتكون رقم الجوال من 7 أرقام على الأقل');
         } else {
           setMobileNumberError('');
         }
+      } else {
+        setMobileNumberError('');
       }
-    } else {
-      setMobileNumberError('');
     }
   };
+
+  // Re-validate when country code changes
+  useEffect(() => {
+    // Trigger validation logic with current mobile number and new country code
+    // We can reuse the logic by calling a validation function, but for simplicity we'll just clear error if switching to non-SA
+    if (countryCode !== '+966') {
+       if (mobileNumber.length >= 7 && mobileNumber.length <= 15) {
+         setMobileNumberError('');
+       }
+    } else {
+       // Re-apply SA validation if switching back to SA
+       if (mobileNumber.length > 0) {
+          if (mobileNumber.length !== 10) {
+             setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+          } else {
+             const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
+             const prefix = mobileNumber.substring(0, 3);
+             if (!validPrefixes.includes(prefix)) {
+                setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+             } else {
+                setMobileNumberError('');
+             }
+          }
+       }
+    }
+  }, [countryCode]);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -544,14 +585,16 @@ const UpdateInfo = () => {
                           <Input 
                             value={mobileNumber}
                             onChange={handleMobileNumberChange}
-                            placeholder="5xxxxxxxx" 
+                            placeholder={countryCode === '+966' ? "5xxxxxxxx" : "xxxxxxxx"} 
                             className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
                         </div>
                         {mobileNumberError ? (
                           <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>
                         ) : (
-                          <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
+                          <p className="text-xs text-gray-400 mt-1 text-right">
+                            {countryCode === '+966' ? 'يجب أن يكون بصيغة 05xxxxxxxx' : 'أدخل رقم الجوال بدون الرمز الدولي'}
+                          </p>
                         )}
                       </div>
 
