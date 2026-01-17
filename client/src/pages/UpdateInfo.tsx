@@ -1009,12 +1009,25 @@ const UpdateInfo = () => {
                           <SelectValue placeholder="اختر النشاط العام" />
                         </SelectTrigger>
                         {validationErrors.generalActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.generalActivity}</p>}
-                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)] max-h-[300px]" dir="rtl">
                           <SelectItem value="trade" className="text-right justify-start cursor-pointer pr-8">التجارة</SelectItem>
                           <SelectItem value="contracting" className="text-right justify-start cursor-pointer pr-8">المقاولات</SelectItem>
-                          <SelectItem value="services" className="text-right justify-start cursor-pointer pr-8">الخدمات</SelectItem>
-                          <SelectItem value="industry" className="text-right justify-start cursor-pointer pr-8">الصناعة</SelectItem>
-                          <SelectItem value="agriculture" className="text-right justify-start cursor-pointer pr-8">الزراعة</SelectItem>
+                          <SelectItem value="services" className="text-right justify-start cursor-pointer pr-8">الخدمات العامة</SelectItem>
+                          <SelectItem value="industry" className="text-right justify-start cursor-pointer pr-8">الصناعة والتعدين</SelectItem>
+                          <SelectItem value="agriculture" className="text-right justify-start cursor-pointer pr-8">الزراعة والصيد</SelectItem>
+                          <SelectItem value="education" className="text-right justify-start cursor-pointer pr-8">التعليم والتدريب</SelectItem>
+                          <SelectItem value="health" className="text-right justify-start cursor-pointer pr-8">الصحة والأنشطة الطبية</SelectItem>
+                          <SelectItem value="technology" className="text-right justify-start cursor-pointer pr-8">تقنية المعلومات والاتصالات</SelectItem>
+                          <SelectItem value="tourism" className="text-right justify-start cursor-pointer pr-8">السياحة والضيافة</SelectItem>
+                          <SelectItem value="transport" className="text-right justify-start cursor-pointer pr-8">النقل والخدمات اللوجستية</SelectItem>
+                          <SelectItem value="real_estate" className="text-right justify-start cursor-pointer pr-8">الأنشطة العقارية</SelectItem>
+                          <SelectItem value="finance" className="text-right justify-start cursor-pointer pr-8">الأنشطة المالية والتأمين</SelectItem>
+                          <SelectItem value="media" className="text-right justify-start cursor-pointer pr-8">الإعلام والنشر</SelectItem>
+                          <SelectItem value="entertainment" className="text-right justify-start cursor-pointer pr-8">الترفيه والفنون</SelectItem>
+                          <SelectItem value="energy" className="text-right justify-start cursor-pointer pr-8">الطاقة والمرافق</SelectItem>
+                          <SelectItem value="consulting" className="text-right justify-start cursor-pointer pr-8">الخدمات الاستشارية والمهنية</SelectItem>
+                          <SelectItem value="security" className="text-right justify-start cursor-pointer pr-8">الخدمات الأمنية والسلامة</SelectItem>
+                          <SelectItem value="environment" className="text-right justify-start cursor-pointer pr-8">البيئة وإدارة النفايات</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
