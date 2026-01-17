@@ -1538,15 +1538,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
                       
-                      <div className="flex justify-end mt-8">
-                        <Button 
-                          size="sm" 
-                          className="bg-green-600 text-white hover:bg-green-700 px-6"
-                          onClick={() => handleSaveStep(4)}
-                        >
-                          حفظ
-                        </Button>
-                      </div>
+
                     </div>
                   ) : (
                     <>
