@@ -679,11 +679,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
+  const isCommercialLicenseService = selectedService === 'إصدار رخصة تجارية' || selectedService === 'تعديل رخصة تجارية';
+
   const steps = [
     { id: 1, label: 'بيانات مالك المؤسسة', status: completedSteps.includes(1) ? 'completed' : 'current' },
     { id: 2, label: 'عنوان وبيانات اتصال مالك المؤسسة', status: completedSteps.includes(2) ? 'completed' : 'upcoming' },
-    { id: 3, label: 'تحديد الأنشطة التجارية ورأس المال', status: completedSteps.includes(3) ? 'completed' : 'upcoming' },
-    { id: 4, label: 'بيانات الاسم التجاري', status: completedSteps.includes(4) ? 'completed' : 'upcoming' },
+    { id: 3, label: isCommercialLicenseService ? 'بيانات المحل' : 'تحديد الأنشطة التجارية ورأس المال', status: completedSteps.includes(3) ? 'completed' : 'upcoming' },
+    { id: 4, label: isCommercialLicenseService ? 'بيانات اللوحات' : 'بيانات الاسم التجاري', status: completedSteps.includes(4) ? 'completed' : 'upcoming' },
     { id: 5, label: 'الإقرار', status: completedSteps.includes(5) ? 'completed' : 'upcoming' },
   ];
 
