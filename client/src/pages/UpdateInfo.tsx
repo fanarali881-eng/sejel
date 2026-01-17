@@ -677,11 +677,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
   const isCommercialLicenseService = serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية';
   const isReserveTradeNameService = serviceName === 'حجز اسم تجاري';
+  const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
 
   // Define dynamic section titles
   const sectionTitles = {
-    step1: isCommercialLicenseService ? 'معلومات المالك' : (isReserveTradeNameService ? 'بيانات المالك' : 'بيانات مالك المؤسسة'),
-    step2: isCommercialLicenseService ? 'عنوان وبيانات اتصال المالك' : (isReserveTradeNameService ? 'عنوان وبيانات اتصال المالك' : 'عنوان وبيانات اتصال مالك المؤسسة'),
+    step1: isCommercialLicenseService ? 'معلومات المالك' : (isReserveTradeNameService || isRenewLicenseService ? 'بيانات المالك' : 'بيانات مالك المؤسسة'),
+    step2: isCommercialLicenseService ? 'عنوان وبيانات اتصال المالك' : (isReserveTradeNameService || isRenewLicenseService ? 'عنوان وبيانات اتصال المالك' : 'عنوان وبيانات اتصال مالك المؤسسة'),
     step3: isCommercialLicenseService ? 'بيانات المحل' : 'تحديد الأنشطة التجارية ورأس المال',
     step4: isCommercialLicenseService ? 'بيانات اللوحات' : 'بيانات الاسم التجاري',
     step5: 'الإقرار'
