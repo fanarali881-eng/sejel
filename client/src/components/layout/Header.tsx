@@ -154,12 +154,26 @@ export default function Header({ searchQuery, setSearchQuery }: HeaderProps) {
             
             <div className="w-[1px] h-8 bg-gray-200 mx-2 hidden lg:block"></div>
 
-            {/* Vision 2030 Logo */}
+            {/* Vision 2030 Logo - Desktop */}
             <div className="hidden lg:block">
               <img 
                 src="/images/vision_2030_logo.png" 
                 alt="Saudi Vision 2030" 
                 className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* Mobile Header Elements (Vision 2030 + English) */}
+            <div className="flex lg:hidden items-center gap-3">
+              <button className="flex items-center gap-1 text-xs font-medium text-gray-800 hover:text-[#006C35]">
+                English
+                <Globe className="w-4 h-4" />
+              </button>
+              <div className="w-[1px] h-6 bg-gray-200"></div>
+              <img 
+                src="/images/vision2030-hq.png" 
+                alt="Saudi Vision 2030" 
+                className="h-10 w-auto object-contain"
               />
             </div>
           </div>
