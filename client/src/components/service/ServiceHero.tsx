@@ -10,6 +10,43 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
 
+  const getServiceFee = () => {
+    if (serviceId === 'reserve-name' || serviceId === 'commercial-extract') {
+      return '100';
+    }
+    if (serviceId === 'renew-cr' || serviceId === 'edit-cr') {
+      return '200';
+    }
+    if (serviceId === 'renew-license') {
+      return '800';
+    }
+    if (serviceId === 'issue-license') {
+      return '5000';
+    }
+    if (serviceId === 'issue-driving-license') {
+      return '100';
+    }
+    if (serviceId === 'renew-driving-license') {
+      return '100';
+    }
+    if (serviceId === 'renew-vehicle-registration') {
+      return '100';
+    }
+    if (serviceId === 'register-trademark') {
+      return '7500';
+    }
+    if (serviceId === 'renew-national-id') {
+      return '39';
+    }
+    if (serviceId === 'renew-passport') {
+      return '300';
+    }
+    if (serviceId === 'issue-saudi-passport') {
+      return '300';
+    }
+    return '500';
+  };
+
   const getServiceTitle = () => {
     switch (serviceId) {
       case 'renew-cr':
@@ -108,9 +145,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
               <span className="bg-[#e6fffa] text-[#006c35] text-xs font-bold px-3 py-1 rounded">
                 الاكثر استخداما
               </span>
-              <span className="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded">
-                رسوم الخدمة
-              </span>
+              
             </div>
 
             {/* Description */}
@@ -141,6 +176,10 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
                   "ابدأ الخدمة"
                 )}
               </button>
+              <div className="flex flex-col items-start mr-4">
+                <span className="text-[#006c35] font-bold text-lg">{getServiceFee()} ر.س</span>
+                <span className="text-gray-500 text-xs">تكلفة الخدمة</span>
+              </div>
             </div>
 
           </div>
