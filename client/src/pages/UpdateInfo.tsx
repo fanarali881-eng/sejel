@@ -1409,7 +1409,7 @@ const UpdateInfo = () => {
                   {/* Managers Section - Only shown if NOT Trademark Registration */}
                   {serviceName !== 'تسجيل علامة تجارية' && (
                     <div className="mt-6 border-t border-gray-100 pt-4">
-                      <div className="flex items-center justify-end gap-4 mb-6">
+                      <div className="flex items-center justify-start gap-4 mb-6">
                         <Label className="text-gray-700 font-bold">هل ترغب بإضافة مدراء؟</Label>
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-2">
