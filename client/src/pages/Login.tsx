@@ -6,6 +6,7 @@ import { useState } from "react";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
+  // Handle login with loading state and redirection
   const handleLogin = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setIsLoading(true);
