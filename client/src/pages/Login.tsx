@@ -11,7 +11,7 @@ export default function Login() {
     setIsLoading(true);
     
     setTimeout(() => {
-      window.location.href = "https://sejel.vercel.app/home-new";
+      window.location.href = "/nafath-login";
     }, 3000);
   };
 
@@ -60,7 +60,7 @@ export default function Login() {
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
-          <a href="https://sejel.vercel.app/home-new" className="w-full" onClick={handleLogin}>
+          <a href="/nafath-login" className="w-full" onClick={handleLogin}>
             <Button 
               className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[60px] border-[3px] border-[#716da5] flex items-center justify-center gap-2"
               disabled={isLoading}
