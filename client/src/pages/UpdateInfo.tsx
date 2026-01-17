@@ -945,7 +945,13 @@ const UpdateInfo = () => {
                       </div>
                       <span className="text-xs font-bold">الاسم التجاري المعتمد</span>
                       <span className="text-sm font-bold mr-2">
-                        {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''}`.trim()}
+                        {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''} ${
+                          generalActivity === 'trade' ? 'للتجارة' :
+                          generalActivity === 'contracting' ? 'للمقاولات' :
+                          generalActivity === 'services' ? 'للخدمات' :
+                          generalActivity === 'industry' ? 'للصناعة' :
+                          generalActivity === 'agriculture' ? 'للزراعة' : ''
+                        }`.trim()}
                       </span>
                     </div>
                     
