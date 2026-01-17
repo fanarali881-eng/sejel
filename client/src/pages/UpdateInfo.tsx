@@ -473,17 +473,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   };
 
   const handleSaveStep = (stepId: number) => {
-    setCompletedSteps(prev => {
-      const newSteps = [...prev];
-      if (!newSteps.includes(stepId)) {
-        newSteps.push(stepId);
-      }
-      // Special handling for the last step (step 4) to also complete step 5
-      if (stepId === 4 && !newSteps.includes(5)) {
-        newSteps.push(5);
-      }
-      return newSteps;
-    });
+    if (validateForm()) {
+      setPendingStep(stepId);
+      setShowConfirmDialog(true);
+    }
   };
 
   const handleMobileNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
