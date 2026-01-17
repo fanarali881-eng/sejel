@@ -1126,7 +1126,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
-                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') ? (
+                  {['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? (
                     // Shop Information Form
                     <div className="space-y-6">
                       {/* Trademark Question */}
@@ -1540,7 +1540,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
-                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') ? (
+                  {['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? (
                     // Signage Information Form
                     <div className="space-y-6">
                       {/* Info Message */}
