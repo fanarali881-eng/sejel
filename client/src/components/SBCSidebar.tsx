@@ -56,7 +56,9 @@ export const SBCSidebar = ({ serviceName = 'تحديث بيانات الخدمة
             isOpen={true}
           />
           
-          
+          <div className="pr-9 space-y-1 mb-4">
+            <div className="text-sm text-blue-600 font-medium py-1 cursor-pointer">{serviceName}</div>
+          </div>
         </div>
       </div>
     </div>
