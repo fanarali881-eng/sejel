@@ -1237,6 +1237,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 setPropertyNumber(value);
                               }
                             }}
+                            placeholder={['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? "أدخل رقم العقار" : ""}
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
                         </div>
