@@ -68,7 +68,7 @@ export default function Login() {
             >
               {isLoading ? (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Loader2 className="h-[52px] w-[52px] animate-spin" strokeWidth={3} />
+                  <Loader2 style={{ width: '52px', height: '52px' }} className="animate-spin" strokeWidth={3} />
                 </div>
               ) : (
                 "الدخول بواسطة النفاذ الوطني الموحد"
