@@ -60,6 +60,10 @@ const UpdateInfo = () => {
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
+  // Calculate max date for 18 years old
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() - 18);
+
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
     trade: [
@@ -588,7 +592,8 @@ const UpdateInfo = () => {
                           initialFocus
                           captionLayout="dropdown"
                           fromYear={1900}
-                          toYear={new Date().getFullYear()}
+                          toYear={maxDate.getFullYear()}
+                          disabled={(date) => date > maxDate}
                         />
                       </PopoverContent>
                     </Popover>
