@@ -21,7 +21,7 @@ export default function FeedbackComponent() {
             <span>تم الإرسال</span>
           </div>
         ) : (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-8">
             <div className="flex gap-12">
               <label className="flex items-center gap-3 cursor-pointer group">
                 <div 
