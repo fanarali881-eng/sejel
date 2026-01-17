@@ -1594,6 +1594,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             onChange={(e) => setSignageArea(e.target.value)}
                             className="bg-gray-50 border-gray-200 h-10 text-right"
                             type="number"
+                            style={{ height: '40px' }} // Explicit height to match SelectTrigger
                           />
                         </div>
                       </div>
