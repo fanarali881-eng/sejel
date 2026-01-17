@@ -193,12 +193,21 @@ const UpdateInfo = () => {
     }
   };
 
-  // CR Number Handler (English Numbers Only)
+  // CR Number Handler (English Numbers Only, Max 10 digits)
   const handleCrNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Allow only English numbers
-    if (value === '' || /^\d+$/.test(value)) {
+    // Allow only English numbers and max 10 digits
+    if (value === '' || (/^\d+$/.test(value) && value.length <= 10)) {
       setCrNumber(value);
+      
+      // Clear error if exists
+      if (validationErrors.crNumber) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.crNumber;
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -214,8 +223,12 @@ const UpdateInfo = () => {
       'مستخرج سجل تجاري / الإفادة التجارية'
     ];
     
-    if (servicesRequiringCR.includes(serviceName) && !crNumber) {
-      errors.crNumber = 'مطلوب';
+    if (servicesRequiringCR.includes(serviceName)) {
+      if (!crNumber) {
+        errors.crNumber = 'مطلوب';
+      } else if (crNumber.length !== 10) {
+        errors.crNumber = 'يجب أن يتكون رقم السجل التجاري من 10 أرقام';
+      }
     }
 
     // Owner Data
