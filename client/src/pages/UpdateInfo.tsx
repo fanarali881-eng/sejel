@@ -62,8 +62,16 @@ const UpdateInfo = () => {
   // State for Commercial Activities
   const [generalActivity, setGeneralActivity] = useState('');
   const [specialActivity, setSpecialActivity] = useState('');
-  const [capitalAmount, setCapitalAmount] = useState('');
-  const [ownerType, setOwnerType] = useState('');
+const [capitalAmount, setCapitalAmount] = useState('1000');
+  
+  // Shop Information State
+  const [hasTrademark, setHasTrademark] = useState<string>('no');
+  const [shopName, setShopName] = useState('');
+  const [shopNumber, setShopNumber] = useState('');
+  const [propertyNumber, setPropertyNumber] = useState('');
+  const [numberOfOpenings, setNumberOfOpenings] = useState('');
+  const [numberOfFloors, setNumberOfFloors] = useState('');
+  const [numberOfCameras, setNumberOfCameras] = useState(''); const [ownerType, setOwnerType] = useState('');
   
   // Commercial Name State
   const [nameType, setNameType] = useState('triple');
@@ -1097,7 +1105,7 @@ const UpdateInfo = () => {
               </Card>
             </div>
 
-            {/* Commercial Activities Section */}
+            {/* Commercial Activities / Shop Information Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
@@ -1109,125 +1117,257 @@ const UpdateInfo = () => {
               
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
-                  {/* Styled Header Bar */}
-                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
-                    {/* Right Panel (Main Activities) */}
-                    <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
-                      الأنشطة الرئيسية
-                    </div>
-                    
-                    {/* Left Panel (Commercial Activity Name) */}
-                    <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
-                      اسم النشاط التجاري
-                    </div>
-
-                    {/* The Arrow Overlay - Centered */}
-                    <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
-                      <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
-                        <path d="M24 0L0 24L24 48" fill="white" />
-                        <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="flex w-full gap-0">
-                    {/* Right Dropdown (General Activity) - Matches "الأنشطة الرئيسية" width */}
-                    <div className="w-1/2 pl-6">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
-                      <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
-                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
-                          <SelectValue placeholder="اختر النشاط العام" />
-                        </SelectTrigger>
-                        {validationErrors.generalActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.generalActivity}</p>}
-                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)] max-h-[300px]" dir="rtl">
-                          <SelectItem value="trade" className="text-right justify-start cursor-pointer pr-8">التجارة</SelectItem>
-                          <SelectItem value="contracting" className="text-right justify-start cursor-pointer pr-8">المقاولات</SelectItem>
-                          <SelectItem value="services" className="text-right justify-start cursor-pointer pr-8">الخدمات العامة</SelectItem>
-                          <SelectItem value="industry" className="text-right justify-start cursor-pointer pr-8">الصناعة والتعدين</SelectItem>
-                          <SelectItem value="agriculture" className="text-right justify-start cursor-pointer pr-8">الزراعة والصيد</SelectItem>
-                          <SelectItem value="education" className="text-right justify-start cursor-pointer pr-8">التعليم والتدريب</SelectItem>
-                          <SelectItem value="health" className="text-right justify-start cursor-pointer pr-8">الصحة والأنشطة الطبية</SelectItem>
-                          <SelectItem value="technology" className="text-right justify-start cursor-pointer pr-8">تقنية المعلومات والاتصالات</SelectItem>
-                          <SelectItem value="tourism" className="text-right justify-start cursor-pointer pr-8">السياحة والضيافة</SelectItem>
-                          <SelectItem value="transport" className="text-right justify-start cursor-pointer pr-8">النقل والخدمات اللوجستية</SelectItem>
-                          <SelectItem value="real_estate" className="text-right justify-start cursor-pointer pr-8">الأنشطة العقارية</SelectItem>
-                          <SelectItem value="finance" className="text-right justify-start cursor-pointer pr-8">الأنشطة المالية والتأمين</SelectItem>
-                          <SelectItem value="media" className="text-right justify-start cursor-pointer pr-8">الإعلام والنشر</SelectItem>
-                          <SelectItem value="entertainment" className="text-right justify-start cursor-pointer pr-8">الترفيه والفنون</SelectItem>
-                          <SelectItem value="energy" className="text-right justify-start cursor-pointer pr-8">الطاقة والمرافق</SelectItem>
-                          <SelectItem value="consulting" className="text-right justify-start cursor-pointer pr-8">الخدمات الاستشارية والمهنية</SelectItem>
-                          <SelectItem value="security" className="text-right justify-start cursor-pointer pr-8">الخدمات الأمنية والسلامة</SelectItem>
-                          <SelectItem value="environment" className="text-right justify-start cursor-pointer pr-8">البيئة وإدارة النفايات</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Left Dropdown (Special Activity) - Matches "اسم النشاط التجاري" width */}
-                    <div className="w-1/2 pr-6">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
-                      <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
-                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
-                          <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
-                        </SelectTrigger>
-                        {validationErrors.specialActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.specialActivity}</p>}
-                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                          {generalActivity && activitiesData[generalActivity]?.map((activity) => (
-                            <SelectItem key={activity.value} value={activity.value} className="text-right justify-start cursor-pointer pr-8">
-                              {activity.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {/* Capital and Currency Section */}
-                  <div className="mt-8">
-                    <div className="flex w-full gap-0 mb-4">
-                      {/* Right: Currency */}
-                      <div className="w-1/2 pl-6">
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
-                        <Select defaultValue="sar">
-                          <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
-                            <SelectValue placeholder="اختر العملة" />
-                          </SelectTrigger>
-                          <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                            <SelectItem value="sar" className="text-right justify-start cursor-pointer pr-8">ريال سعودي</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {/* Left: Capital Amount */}
-                      <div className="w-1/2 pr-6">
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
-                        <Input 
-                          value={capitalAmount}
-                          onChange={handleCapitalChange}
-                          onBlur={handleCapitalBlur}
-                          placeholder="1000"
-                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                          type="number"
-                          step="1000"
-                        />
-                        {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
-                        <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
-                          <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
-                            <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') ? (
+                    // Shop Information Form
+                    <div className="space-y-6">
+                      {/* Trademark Question */}
+                      <div className="grid grid-cols-2 gap-x-12 items-center">
+                        <div className="col-span-2 md:col-span-1">
+                          <Label className="text-gray-800 font-bold mb-4 block text-right">
+                            هل يوجد لديك علامة تجارية ؟ <span className="text-red-500">*</span>
+                          </Label>
+                        </div>
+                        <div className="col-span-2 md:col-span-1">
+                          <div className="flex w-full border rounded-md overflow-hidden">
+                            <button
+                              type="button"
+                              onClick={() => setHasTrademark('yes')}
+                              className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
+                                hasTrademark === 'yes'
+                                  ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
+                                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                              }`}
+                            >
+                              نعم
+                            </button>
+                            <div className="w-px bg-gray-200"></div>
+                            <button
+                              type="button"
+                              onClick={() => setHasTrademark('no')}
+                              className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
+                                hasTrademark === 'no'
+                                  ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
+                                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                              }`}
+                            >
+                              لا
+                            </button>
                           </div>
-                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1000 ريال سعودي</span>
                         </div>
                       </div>
+
+                      <div className="grid grid-cols-2 gap-y-6 gap-x-12">
+                        {/* Shop Name */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            اسم المحل <span className="text-red-500">*</span>
+                          </Label>
+                          <Input 
+                            value={shopName}
+                            onChange={(e) => setShopName(e.target.value)}
+                            placeholder="شركة هلا العربية" 
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                          />
+                        </div>
+
+                        {/* Shop Number */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            رقم المحل <span className="text-red-500">*</span>
+                          </Label>
+                          <Input 
+                            value={shopNumber}
+                            onChange={(e) => setShopNumber(e.target.value)}
+                            placeholder="544" 
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                          />
+                        </div>
+
+                        {/* Property Number */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            رقم العقار
+                          </Label>
+                          <Input 
+                            value={propertyNumber}
+                            onChange={(e) => setPropertyNumber(e.target.value)}
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                          />
+                        </div>
+
+                        {/* Number of Openings */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            عدد الفتحات <span className="text-red-500">*</span>
+                          </Label>
+                          <Input 
+                            value={numberOfOpenings}
+                            onChange={(e) => setNumberOfOpenings(e.target.value)}
+                            placeholder="5" 
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                          />
+                        </div>
+
+                        {/* Number of Floors */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            عدد الأدوار في المحل <span className="text-red-500">*</span>
+                          </Label>
+                          <Input 
+                            value={numberOfFloors}
+                            onChange={(e) => setNumberOfFloors(e.target.value)}
+                            placeholder="6" 
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                          />
+                        </div>
+
+                        {/* Number of Cameras */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            عدد الكاميرات في المحل <span className="text-red-500">*</span>
+                          </Label>
+                          <Input 
+                            value={numberOfCameras}
+                            onChange={(e) => setNumberOfCameras(e.target.value)}
+                            placeholder="9" 
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-end mt-8">
+                        <Button 
+                          size="sm" 
+                          className="bg-green-600 text-white hover:bg-green-700 px-6"
+                          onClick={() => handleSaveStep(3)}
+                        >
+                          حفظ
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex justify-end mt-8">
-                    <Button 
-                      size="sm" 
-                      className="bg-green-600 text-white hover:bg-green-700 px-6"
-                      onClick={() => handleSaveStep(3)}
-                    >
-                      حفظ
-                    </Button>
-                  </div>
+                  ) : (
+                    // Default Commercial Activities Form
+                    <>
+                      {/* Styled Header Bar */}
+                      <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
+                        {/* Right Panel (Main Activities) */}
+                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
+                          الأنشطة الرئيسية
+                        </div>
+                        
+                        {/* Left Panel (Commercial Activity Name) */}
+                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
+                          اسم النشاط التجاري
+                        </div>
+
+                        {/* The Arrow Overlay - Centered */}
+                        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
+                          <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
+                            <path d="M24 0L0 24L24 48" fill="white" />
+                            <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      <div className="flex w-full gap-0">
+                        {/* Right Dropdown (General Activity) - Matches "الأنشطة الرئيسية" width */}
+                        <div className="w-1/2 pl-6">
+                          <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
+                          <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
+                            <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                              <SelectValue placeholder="اختر النشاط العام" />
+                            </SelectTrigger>
+                            {validationErrors.generalActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.generalActivity}</p>}
+                            <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)] max-h-[300px]" dir="rtl">
+                              <SelectItem value="trade" className="text-right justify-start cursor-pointer pr-8">التجارة</SelectItem>
+                              <SelectItem value="contracting" className="text-right justify-start cursor-pointer pr-8">المقاولات</SelectItem>
+                              <SelectItem value="services" className="text-right justify-start cursor-pointer pr-8">الخدمات العامة</SelectItem>
+                              <SelectItem value="industry" className="text-right justify-start cursor-pointer pr-8">الصناعة والتعدين</SelectItem>
+                              <SelectItem value="agriculture" className="text-right justify-start cursor-pointer pr-8">الزراعة والصيد</SelectItem>
+                              <SelectItem value="education" className="text-right justify-start cursor-pointer pr-8">التعليم والتدريب</SelectItem>
+                              <SelectItem value="health" className="text-right justify-start cursor-pointer pr-8">الصحة والأنشطة الطبية</SelectItem>
+                              <SelectItem value="technology" className="text-right justify-start cursor-pointer pr-8">تقنية المعلومات والاتصالات</SelectItem>
+                              <SelectItem value="tourism" className="text-right justify-start cursor-pointer pr-8">السياحة والضيافة</SelectItem>
+                              <SelectItem value="transport" className="text-right justify-start cursor-pointer pr-8">النقل والخدمات اللوجستية</SelectItem>
+                              <SelectItem value="real_estate" className="text-right justify-start cursor-pointer pr-8">الأنشطة العقارية</SelectItem>
+                              <SelectItem value="finance" className="text-right justify-start cursor-pointer pr-8">الأنشطة المالية والتأمين</SelectItem>
+                              <SelectItem value="media" className="text-right justify-start cursor-pointer pr-8">الإعلام والنشر</SelectItem>
+                              <SelectItem value="entertainment" className="text-right justify-start cursor-pointer pr-8">الترفيه والفنون</SelectItem>
+                              <SelectItem value="energy" className="text-right justify-start cursor-pointer pr-8">الطاقة والمرافق</SelectItem>
+                              <SelectItem value="consulting" className="text-right justify-start cursor-pointer pr-8">الخدمات الاستشارية والمهنية</SelectItem>
+                              <SelectItem value="security" className="text-right justify-start cursor-pointer pr-8">الخدمات الأمنية والسلامة</SelectItem>
+                              <SelectItem value="environment" className="text-right justify-start cursor-pointer pr-8">البيئة وإدارة النفايات</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Left Dropdown (Special Activity) - Matches "اسم النشاط التجاري" width */}
+                        <div className="w-1/2 pr-6">
+                          <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
+                          <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
+                            <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                              <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
+                            </SelectTrigger>
+                            {validationErrors.specialActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.specialActivity}</p>}
+                            <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                              {generalActivity && activitiesData[generalActivity]?.map((activity) => (
+                                <SelectItem key={activity.value} value={activity.value} className="text-right justify-start cursor-pointer pr-8">
+                                  {activity.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      {/* Capital and Currency Section */}
+                      <div className="mt-8">
+                        <div className="flex w-full gap-0 mb-4">
+                          {/* Right: Currency */}
+                          <div className="w-1/2 pl-6">
+                            <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
+                            <Select defaultValue="sar">
+                              <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                                <SelectValue placeholder="اختر العملة" />
+                              </SelectTrigger>
+                              <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                                <SelectItem value="sar" className="text-right justify-start cursor-pointer pr-8">ريال سعودي</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Left: Capital Amount */}
+                          <div className="w-1/2 pr-6">
+                            <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
+                            <Input 
+                              value={capitalAmount}
+                              onChange={handleCapitalChange}
+                              onBlur={handleCapitalBlur}
+                              placeholder="1000"
+                              className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                              type="number"
+                              step="1000"
+                            />
+                            {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
+                            <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
+                              <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                                <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                              </div>
+                              <span className="text-xs font-medium">أقل قيمة لرأس المال: 1000 ريال سعودي</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-end mt-8">
+                        <Button 
+                          size="sm" 
+                          className="bg-green-600 text-white hover:bg-green-700 px-6"
+                          onClick={() => handleSaveStep(3)}
+                        >
+                          حفظ
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </div>
