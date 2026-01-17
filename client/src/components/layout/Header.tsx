@@ -145,12 +145,7 @@ export default function Header() {
               English
             </button>
 
-            <Link href="/nafath-login">
-              <button className="hidden lg:flex items-center gap-2 text-sm font-medium text-white bg-[#006C35] hover:bg-[#005a2b] px-4 py-2 rounded-md transition-colors">
-                <User className="w-4 h-4" />
-                تسجيل الدخول
-              </button>
-            </Link>
+
             
             <div className="w-[1px] h-8 bg-gray-200 mx-2 hidden lg:block"></div>
 
