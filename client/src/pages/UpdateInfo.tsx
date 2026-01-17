@@ -177,16 +177,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   };
   const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [declarationChecked, setDeclarationChecked] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentDateTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // Calculate max date for 18 years old
   const maxDate = new Date();
@@ -832,21 +824,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <span className="text-gray-500 ml-6">الحالة</span>
                   <span className="font-bold text-gray-800">مسودة</span>
                 </div>
-                <div>
-                  <span className="text-gray-500 ml-6">تاريخ الطلب</span>
-                  <span className="font-bold text-gray-800" dir="ltr">
-                    {currentDateTime.toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                    }).replace(/\//g, '-')} {currentDateTime.toLocaleTimeString('en-US', {
-                      hour12: false,
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit'
-                    })}
-                  </span>
-                </div>
+                <DateTimeDisplay />
               </div>
             </div>
 
@@ -974,7 +952,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start" onOpenAutoFocus={(e) => e.preventDefault()}>
+                        <PopoverContent className="w-auto p-0" align="start">
                           <div onPointerDown={(e) => e.stopPropagation()}>
                           <Calendar
                             mode="single"
@@ -2270,3 +2248,32 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 };
 
 export default UpdateInfo;
+
+function DateTimeDisplay() {
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div>
+      <span className="text-gray-500 ml-6">تاريخ الطلب</span>
+      <span className="font-bold text-gray-800" dir="ltr">
+        {currentDateTime.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }).replace(/\//g, '-')} {currentDateTime.toLocaleTimeString('en-US', {
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        })}
+      </span>
+    </div>
+  );
+}
