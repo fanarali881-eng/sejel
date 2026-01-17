@@ -652,52 +652,71 @@ const UpdateInfo = () => {
                         </PopoverContent>
                       </Popover>
                     ) : (
-                      <div className="grid grid-cols-3 gap-2">
-                        <Select 
-                          value={hijriDate.day} 
-                          onValueChange={(val) => setHijriDate(prev => ({ ...prev, day: val }))} 
-                          dir="rtl"
-                        >
-                          <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.day && "border-red-500")}>
-                            <SelectValue placeholder="اليوم" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {hijriDays.map(d => (
-                              <SelectItem key={d} value={d}>{d}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        
-                        <Select 
-                          value={hijriDate.month} 
-                          onValueChange={(val) => setHijriDate(prev => ({ ...prev, month: val }))} 
-                          dir="rtl"
-                        >
-                          <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.month && "border-red-500")}>
-                            <SelectValue placeholder="الشهر" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {hijriMonths.map(m => (
-                              <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
+                              (!hijriDate.day || !hijriDate.month || !hijriDate.year) && "text-muted-foreground font-normal",
+                              validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
+                            )}
+                          >
+                            <CalendarIcon className="ml-2 h-4 w-4" />
+                            {hijriDate.day && hijriDate.month && hijriDate.year 
+                              ? `${hijriDate.year}-${hijriDate.month}-${hijriDate.day}` 
+                              : <span>1405-01-01</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-4" align="start">
+                          <div className="grid grid-cols-3 gap-2 w-[300px]">
+                            <Select 
+                              value={hijriDate.day} 
+                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, day: val }))} 
+                              dir="rtl"
+                            >
+                              <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.day && "border-red-500")}>
+                                <SelectValue placeholder="اليوم" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {hijriDays.map(d => (
+                                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            
+                            <Select 
+                              value={hijriDate.month} 
+                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, month: val }))} 
+                              dir="rtl"
+                            >
+                              <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.month && "border-red-500")}>
+                                <SelectValue placeholder="الشهر" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {hijriMonths.map(m => (
+                                  <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
 
-                        <Select 
-                          value={hijriDate.year} 
-                          onValueChange={(val) => setHijriDate(prev => ({ ...prev, year: val }))} 
-                          dir="rtl"
-                        >
-                          <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.year && "border-red-500")}>
-                            <SelectValue placeholder="السنة" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {hijriYears.map(y => (
-                              <SelectItem key={y} value={y.toString()}>{y}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                            <Select 
+                              value={hijriDate.year} 
+                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, year: val }))} 
+                              dir="rtl"
+                            >
+                              <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.year && "border-red-500")}>
+                                <SelectValue placeholder="السنة" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {hijriYears.map(y => (
+                                  <SelectItem key={y} value={y.toString()}>{y}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                     )}
                     {validationErrors.dateOfBirth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.dateOfBirth}</p>}
                   </div>
