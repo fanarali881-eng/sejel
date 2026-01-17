@@ -334,11 +334,25 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const handleGeneralActivityChange = (value: string) => {
     setGeneralActivity(value);
     setSpecialActivity('');
+    if (validationErrors.generalActivity) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.generalActivity;
+        return newErrors;
+      });
+    }
   };
 
   // Capital Amount Handler
   const handleCapitalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCapitalAmount(e.target.value);
+    if (validationErrors.capitalAmount) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.capitalAmount;
+        return newErrors;
+      });
+    }
   };
 
   // Owner Type Handler (Arabic Only)
@@ -376,6 +390,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     // Allow only Arabic characters and spaces
     if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
       setNameParts(prev => ({ ...prev, [part]: value }));
+      const errorKey = part === 'first' ? 'namePartsFirst' : 
+                       part === 'second' ? 'namePartsSecond' : 
+                       part === 'third' ? 'namePartsThird' : 'namePartsFourth';
+      if (validationErrors[errorKey]) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[errorKey];
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -526,6 +550,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       return;
     }
 
+    // Clear validation error if exists
+    if (validationErrors.mobileNumber) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.mobileNumber;
+        return newErrors;
+      });
+    }
+
     // Validation logic based on country code
     if (countryCode === '+966') {
       // Saudi Arabia Validation
@@ -600,6 +633,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       return;
     }
 
+    if (validationErrors.email) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.email;
+        return newErrors;
+      });
+    }
+
     setEmail(value);
 
     // Validate email format
@@ -619,6 +660,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAddress = e.target.value;
     setAddress(newAddress);
+    if (validationErrors.address) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.address;
+        return newErrors;
+      });
+    }
   };
 
   // Debounce geocoding to avoid too many requests
@@ -835,7 +883,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
-                    <Select value={nationality} onValueChange={setNationality} dir="rtl">
+                    <Select value={nationality} onValueChange={(val) => {
+                      setNationality(val);
+                      if (validationErrors.nationality) {
+                        setValidationErrors(prev => {
+                          const newErrors = { ...prev };
+                          delete newErrors.nationality;
+                          return newErrors;
+                        });
+                      }
+                    }} dir="rtl">
                       <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
@@ -921,7 +978,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <Calendar
                             mode="single"
                             selected={dateOfBirth}
-                            onSelect={setDateOfBirth}
+                            onSelect={(date) => {
+                              setDateOfBirth(date);
+                              if (validationErrors.dateOfBirth) {
+                                setValidationErrors(prev => {
+                                  const newErrors = { ...prev };
+                                  delete newErrors.dateOfBirth;
+                                  return newErrors;
+                                });
+                              }
+                            }}
                             initialFocus
                             captionLayout="dropdown"
                             fromYear={1900}
@@ -1001,7 +1067,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
-                    <Select value={gender} onValueChange={setGender} dir="rtl">
+                    <Select value={gender} onValueChange={(val) => {
+                      setGender(val);
+                      if (validationErrors.gender) {
+                        setValidationErrors(prev => {
+                          const newErrors = { ...prev };
+                          delete newErrors.gender;
+                          return newErrors;
+                        });
+                      }
+                    }} dir="rtl">
                       <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="ذكر" />
                       </SelectTrigger>
@@ -1210,13 +1285,20 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             </Label>
                             <Input 
                               value={brandName}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                // Allow only Arabic characters and spaces
-                                if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
-                                  setBrandName(value);
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              // Allow only Arabic characters and spaces
+                              if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+                                setBrandName(value);
+                                if (validationErrors.brandName) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.brandName;
+                                    return newErrors;
+                                  });
                                 }
-                              }}
+                              }
+                            }}
                               placeholder="أدخل اسم العلامة التجارية" 
                               className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                             />
@@ -1237,6 +1319,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               // Allow only Arabic characters and spaces
                               if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
                                 setShopName(value);
+                                if (validationErrors.shopName) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.shopName;
+                                    return newErrors;
+                                  });
+                                }
                               }
                             }}
                             placeholder="أدخل اسم المحل" 
@@ -1255,6 +1344,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               const value = e.target.value;
                               if (value === '' || /^[0-9]+$/.test(value)) {
                                 setShopNumber(value);
+                                if (validationErrors.shopNumber) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.shopNumber;
+                                    return newErrors;
+                                  });
+                                }
                               }
                             }}
                             placeholder="544" 
@@ -1273,6 +1369,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               const value = e.target.value;
                               if (value === '' || /^[0-9]+$/.test(value)) {
                                 setPropertyNumber(value);
+                                if (validationErrors.propertyNumber) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.propertyNumber;
+                                    return newErrors;
+                                  });
+                                }
                               }
                             }}
                             placeholder={['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? "أدخل رقم العقار" : ""}
@@ -1291,6 +1394,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               const value = e.target.value;
                               if (value === '' || /^[0-9]+$/.test(value)) {
                                 setNumberOfOpenings(value);
+                                if (validationErrors.numberOfOpenings) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.numberOfOpenings;
+                                    return newErrors;
+                                  });
+                                }
                               }
                             }}
                             placeholder="5" 
@@ -1309,6 +1419,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               const value = e.target.value;
                               if (value === '' || /^[0-9]+$/.test(value)) {
                                 setNumberOfFloors(value);
+                                if (validationErrors.numberOfFloors) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.numberOfFloors;
+                                    return newErrors;
+                                  });
+                                }
                               }
                             }}
                             placeholder="6" 
@@ -1327,6 +1444,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               const value = e.target.value;
                               if (value === '' || /^[0-9]+$/.test(value)) {
                                 setNumberOfCameras(value);
+                                if (validationErrors.numberOfCameras) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.numberOfCameras;
+                                    return newErrors;
+                                  });
+                                }
                               }
                             }}
                             placeholder="9" 
@@ -1342,7 +1466,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <div className="flex w-full border rounded-md overflow-hidden">
                             <button
                               type="button"
-                              onClick={() => setHasElevator('yes')}
+                              onClick={() => {
+                                setHasElevator('yes');
+                                if (validationErrors.hasElevator) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.hasElevator;
+                                    return newErrors;
+                                  });
+                                }
+                              }}
                               className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
                                 hasElevator === 'yes'
                                   ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
@@ -1354,7 +1487,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             <div className="w-px bg-gray-200"></div>
                             <button
                               type="button"
-                              onClick={() => setHasElevator('no')}
+                              onClick={() => {
+                                setHasElevator('no');
+                                if (validationErrors.hasElevator) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.hasElevator;
+                                    return newErrors;
+                                  });
+                                }
+                              }}
                               className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
                                 hasElevator === 'no'
                                   ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
@@ -1374,7 +1516,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <div className="flex w-full border rounded-md overflow-hidden">
                             <button
                               type="button"
-                              onClick={() => setInCommercialCenter('yes')}
+                              onClick={() => {
+                                setInCommercialCenter('yes');
+                                if (validationErrors.inCommercialCenter) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.inCommercialCenter;
+                                    return newErrors;
+                                  });
+                                }
+                              }}
                               className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
                                 inCommercialCenter === 'yes'
                                   ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
@@ -1386,7 +1537,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             <div className="w-px bg-gray-200"></div>
                             <button
                               type="button"
-                              onClick={() => setInCommercialCenter('no')}
+                              onClick={() => {
+                                setInCommercialCenter('no');
+                                if (validationErrors.inCommercialCenter) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.inCommercialCenter;
+                                    return newErrors;
+                                  });
+                                }
+                              }}
                               className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
                                 inCommercialCenter === 'no'
                                   ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
@@ -1406,7 +1566,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <div className="flex w-full gap-4">
                             <button
                               type="button"
-                              onClick={() => setContractType('investment')}
+                              onClick={() => {
+                                setContractType('investment');
+                                if (validationErrors.contractType) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.contractType;
+                                    return newErrors;
+                                  });
+                                }
+                              }}
                               className={`flex-1 py-2 text-center text-sm font-medium border rounded-md transition-colors ${
                                 contractType === 'investment'
                                   ? 'bg-white text-green-700 border-green-700 border-2'
@@ -1417,7 +1586,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             </button>
                             <button
                               type="button"
-                              onClick={() => setContractType('rent')}
+                              onClick={() => {
+                                setContractType('rent');
+                                if (validationErrors.contractType) {
+                                  setValidationErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.contractType;
+                                    return newErrors;
+                                  });
+                                }
+                              }}
                               className={`flex-1 py-2 text-center text-sm font-medium border rounded-md transition-colors ${
                                 contractType === 'rent'
                                   ? 'bg-white text-green-700 border-green-700 border-2'
@@ -1498,7 +1676,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         {/* Left Dropdown (Special Activity) - Matches "اسم النشاط التجاري" width */}
                         <div className="w-1/2 pr-6">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
-                          <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
+                          <Select value={specialActivity} onValueChange={(val) => {
+                            setSpecialActivity(val);
+                            if (validationErrors.specialActivity) {
+                              setValidationErrors(prev => {
+                                const newErrors = { ...prev };
+                                delete newErrors.specialActivity;
+                                return newErrors;
+                              });
+                            }
+                          }} disabled={!generalActivity}>
                             <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
                               <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
                             </SelectTrigger>
@@ -1600,7 +1787,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               </svg>
                             </span>
                           </Label>
-                          <Select value={signageType} onValueChange={setSignageType}>
+                          <Select value={signageType} onValueChange={(val) => {
+                            setSignageType(val);
+                            if (validationErrors.signageType) {
+                              setValidationErrors(prev => {
+                                const newErrors = { ...prev };
+                                delete newErrors.signageType;
+                                return newErrors;
+                              });
+                            }
+                          }}>
                             <SelectTrigger className="bg-gray-50 border-gray-200 h-[40px] text-right flex-row-reverse w-full justify-between box-border">
                               <SelectValue placeholder="-اختر-" />
                             </SelectTrigger>
@@ -1625,7 +1821,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Label>
                           <Input 
                             value={signageArea}
-                            onChange={(e) => setSignageArea(e.target.value)}
+                            onChange={(e) => {
+                              setSignageArea(e.target.value);
+                              if (validationErrors.signageArea) {
+                                setValidationErrors(prev => {
+                                  const newErrors = { ...prev };
+                                  delete newErrors.signageArea;
+                                  return newErrors;
+                                });
+                              }
+                            }}
                             className="bg-gray-50 border-gray-200 h-[40px] text-right box-border"
                             type="number"
                           />
@@ -1647,7 +1852,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 name="trackType" 
                                 value="fast"
                                 checked={trackType === 'fast'}
-                                onChange={() => setTrackType('fast')}
+                                onChange={() => {
+                                  setTrackType('fast');
+                                  if (validationErrors.trackType) {
+                                    setValidationErrors(prev => {
+                                      const newErrors = { ...prev };
+                                      delete newErrors.trackType;
+                                      return newErrors;
+                                    });
+                                  }
+                                }}
                                 className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
                               />
                             </div>
@@ -1662,7 +1876,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 name="trackType" 
                                 value="municipality"
                                 checked={trackType === 'municipality'}
-                                onChange={() => setTrackType('municipality')}
+                                onChange={() => {
+                                  setTrackType('municipality');
+                                  if (validationErrors.trackType) {
+                                    setValidationErrors(prev => {
+                                      const newErrors = { ...prev };
+                                      delete newErrors.trackType;
+                                      return newErrors;
+                                    });
+                                  }
+                                }}
                                 className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
                               />
                             </div>
