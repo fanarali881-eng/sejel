@@ -684,7 +684,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   // Define dynamic section titles
   const sectionTitles = {
     step1: isCommercialLicenseService ? 'معلومات المالك' : 'بيانات مالك المؤسسة',
-    step2: 'عنوان وبيانات اتصال مالك المؤسسة',
+    step2: isCommercialLicenseService ? 'عنوان وبيانات اتصال المالك' : 'عنوان وبيانات اتصال مالك المؤسسة',
     step3: isCommercialLicenseService ? 'بيانات المحل' : 'تحديد الأنشطة التجارية ورأس المال',
     step4: isCommercialLicenseService ? 'بيانات اللوحات' : 'بيانات الاسم التجاري',
     step5: 'الإقرار'
