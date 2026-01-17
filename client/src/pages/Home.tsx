@@ -512,11 +512,13 @@ export default function Home() {
                 </button>
               </div>
               
-              {activeTab === "steps" && <ServiceSteps />}
-              
-              {activeTab === "requirements" && renderRequirements()}
+              <div className="min-h-[400px]">
+                {activeTab === "steps" && <ServiceSteps />}
+                
+                {activeTab === "requirements" && renderRequirements()}
 
-              {activeTab === "documents" && renderDocuments()}
+                {activeTab === "documents" && renderDocuments()}
+              </div>
             </div>
             
             {/* Left Column: Sidebar Info */}
