@@ -771,11 +771,10 @@ const UpdateInfo = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="col-span-2 flex justify-end mt-4">
+                  <div className="col-span-2 flex justify-end mt-8">
                     <Button 
-                      variant="outline" 
                       size="sm" 
-                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
                       onClick={() => console.log('Saving owner data...')}
                     >
                       حفظ
@@ -900,12 +899,11 @@ const UpdateInfo = () => {
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end mt-4">
+                  <div className="flex justify-end mt-8">
                     <Button 
-                      variant="outline" 
                       size="sm" 
-                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
-                      onClick={() => console.log('Saving contact info...')}
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
+                      onClick={() => console.log('Saving contact data...')}
                     >
                       حفظ
                     </Button>
@@ -1019,11 +1017,10 @@ const UpdateInfo = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-end mt-4">
+                  <div className="flex justify-end mt-8">
                     <Button 
-                      variant="outline" 
                       size="sm" 
-                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
                       onClick={() => console.log('Saving activities data...')}
                     >
                       حفظ
@@ -1263,11 +1260,10 @@ const UpdateInfo = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex justify-end mt-4">
+                  <div className="flex justify-end mt-8">
                     <Button 
-                      variant="outline" 
                       size="sm" 
-                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
                       onClick={() => console.log('Saving commercial name data...')}
                     >
                       حفظ
