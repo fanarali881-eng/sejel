@@ -11,8 +11,8 @@ export default function FeedbackComponent() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center gap-4 w-full">
-      <div className="flex items-center gap-6 w-full md:w-auto">
+    <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-3 w-full">
         <span className="text-base font-bold text-gray-800">هل أعجبك محتوى الصفحة ؟</span>
         
         {isSubmitted ? (
@@ -55,7 +55,7 @@ export default function FeedbackComponent() {
         )}
       </div>
       
-      <div className="text-sm text-gray-600 font-medium flex items-center gap-1 w-full md:w-auto justify-end">
+      <div className="text-sm text-gray-600 font-medium flex items-center gap-1 w-full justify-start">
         <span className="font-bold text-[#006C35]">3</span>
         من الزوّار للموقع أعجبهم محتوى هذه الصفحة
       </div>
