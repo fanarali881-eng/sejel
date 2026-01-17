@@ -485,7 +485,15 @@ const UpdateInfo = () => {
         </div>
 
         {/* Stepper */}
-        <SBCStepper currentStep={4} />
+        <SBCStepper 
+          steps={[
+            { id: 1, label: 'بيانات مالك المؤسسة', status: 'completed' },
+            { id: 2, label: 'عنوان وبيانات اتصال مالك المؤسسة', status: 'completed' },
+            { id: 3, label: 'تحديد الأنشطة التجارية ورأس المال', status: 'completed' },
+            { id: 4, label: serviceName === 'تسجيل علامة تجارية' ? 'بيانات العلامة التجارية' : 'بيانات الاسم التجاري', status: 'current' },
+            { id: 5, label: 'ملخص الطلب', status: 'upcoming' },
+          ]} 
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
           {/* Right Column - Form */}
