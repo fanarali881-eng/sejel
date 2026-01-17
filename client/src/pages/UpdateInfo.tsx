@@ -68,6 +68,10 @@ const UpdateInfo = () => {
   // Commercial Name State
   const [nameType, setNameType] = useState('triple');
   const [nameParts, setNameParts] = useState({ first: '', second: '', third: '', fourth: '' });
+  
+  // Trademark Name State
+  const [trademarkArabicName, setTrademarkArabicName] = useState('');
+  const [trademarkEnglishName, setTrademarkEnglishName] = useState('');
   const [addManagers, setAddManagers] = useState(false);
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
   const [crNumber, setCrNumber] = useState('');
@@ -300,6 +304,37 @@ const UpdateInfo = () => {
         ...prev,
         crNumber: 'يجب أن يتكون رقم السجل التجاري من 10 أرقام'
       }));
+    }
+  };
+
+  // Trademark Name Handlers
+  const handleTrademarkArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setTrademarkArabicName(value);
+      if (validationErrors.trademarkArabicName) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.trademarkArabicName;
+          return newErrors;
+        });
+      }
+    }
+  };
+
+  const handleTrademarkEnglishNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only English characters and spaces
+    if (value === '' || /^[a-zA-Z\s]+$/.test(value)) {
+      setTrademarkEnglishName(value);
+      if (validationErrors.trademarkEnglishName) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.trademarkEnglishName;
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -1236,73 +1271,102 @@ const UpdateInfo = () => {
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                    {/* 1. Name Type (Rightmost) */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
-                      <Select value={nameType} onValueChange={setNameType}>
-                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.nameType ? 'border-red-500 focus:ring-red-500' : ''}`}>
-                          <SelectValue placeholder="اختر" />
-                        </SelectTrigger>
-                        {validationErrors.nameType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nameType}</p>}
-                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                          <SelectItem value="triple" className="text-right justify-start cursor-pointer pr-8">إسم ثلاثي</SelectItem>
-                          <SelectItem value="quadruple" className="text-right justify-start cursor-pointer pr-8">إسم رباعي</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Dynamic Name Fields */}
-                    {/* First Name */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الأول</Label>
-                      <Input 
-                        value={nameParts.first}
-                        onChange={(e) => handleNamePartChange('first', e.target.value)}
-                        placeholder="الاسم الأول" 
-                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFirst ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.namePartsFirst && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFirst}</p>}
-                    </div>
-
-                    {/* Second Name */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثاني</Label>
-                      <Input 
-                        value={nameParts.second}
-                        onChange={(e) => handleNamePartChange('second', e.target.value)}
-                        placeholder="الاسم الثاني" 
-                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsSecond ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.namePartsSecond && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsSecond}</p>}
-                    </div>
-
-                    {/* Third Name */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثالث</Label>
-                      <Input 
-                        value={nameParts.third}
-                        onChange={(e) => handleNamePartChange('third', e.target.value)}
-                        placeholder="الاسم الثالث" 
-                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsThird ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.namePartsThird && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsThird}</p>}
-                    </div>
-
-                    {/* Fourth Name (Conditional) */}
-                    {nameType === 'quadruple' && (
+                  {serviceName === 'تسجيل علامة تجارية' ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                      {/* Arabic Trademark Name (Right) */}
                       <div>
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الرابع</Label>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">اسم العلامة التجارية بالعربي</Label>
                         <Input 
-                          value={nameParts.fourth}
-                          onChange={(e) => handleNamePartChange('fourth', e.target.value)}
-                          placeholder="الاسم الرابع" 
-                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFourth ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          value={trademarkArabicName}
+                          onChange={handleTrademarkArabicNameChange}
+                          placeholder="اسم العلامة التجارية بالعربي" 
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.trademarkArabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
-                        {validationErrors.namePartsFourth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFourth}</p>}
+                        {validationErrors.trademarkArabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.trademarkArabicName}</p>}
                       </div>
-                    )}
-                  </div>
+
+                      {/* English Trademark Name (Left) */}
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">اسم العلامة التجارية بالانجليزي</Label>
+                        <Input 
+                          value={trademarkEnglishName}
+                          onChange={handleTrademarkEnglishNameChange}
+                          placeholder="English Trademark Name" 
+                          className={`bg-gray-50 border-gray-200 h-9 text-left placeholder:text-gray-400 ${validationErrors.trademarkEnglishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          dir="ltr"
+                        />
+                        {validationErrors.trademarkEnglishName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.trademarkEnglishName}</p>}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                      {/* 1. Name Type (Rightmost) */}
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
+                        <Select value={nameType} onValueChange={setNameType}>
+                          <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.nameType ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                            <SelectValue placeholder="اختر" />
+                          </SelectTrigger>
+                          {validationErrors.nameType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nameType}</p>}
+                          <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                            <SelectItem value="triple" className="text-right justify-start cursor-pointer pr-8">إسم ثلاثي</SelectItem>
+                            <SelectItem value="quadruple" className="text-right justify-start cursor-pointer pr-8">إسم رباعي</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Dynamic Name Fields */}
+                      {/* First Name */}
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الأول</Label>
+                        <Input 
+                          value={nameParts.first}
+                          onChange={(e) => handleNamePartChange('first', e.target.value)}
+                          placeholder="الاسم الأول" 
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFirst ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        />
+                        {validationErrors.namePartsFirst && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFirst}</p>}
+                      </div>
+
+                      {/* Second Name */}
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثاني</Label>
+                        <Input 
+                          value={nameParts.second}
+                          onChange={(e) => handleNamePartChange('second', e.target.value)}
+                          placeholder="الاسم الثاني" 
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsSecond ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        />
+                        {validationErrors.namePartsSecond && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsSecond}</p>}
+                      </div>
+
+                      {/* Third Name */}
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثالث</Label>
+                        <Input 
+                          value={nameParts.third}
+                          onChange={(e) => handleNamePartChange('third', e.target.value)}
+                          placeholder="الاسم الثالث" 
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsThird ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        />
+                        {validationErrors.namePartsThird && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsThird}</p>}
+                      </div>
+
+                      {/* Fourth Name (Conditional) */}
+                      {nameType === 'quadruple' && (
+                        <div>
+                          <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الرابع</Label>
+                          <Input 
+                            value={nameParts.fourth}
+                            onChange={(e) => handleNamePartChange('fourth', e.target.value)}
+                            placeholder="الاسم الرابع" 
+                            className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFourth ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          />
+                          {validationErrors.namePartsFourth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFourth}</p>}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Formed Name Bar */}
                   <div className="bg-blue-50 rounded-md p-3 flex items-center justify-between text-[#374151]">
