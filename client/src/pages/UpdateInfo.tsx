@@ -59,10 +59,34 @@ const UpdateInfo = () => {
   const [addManagers, setAddManagers] = useState(false);
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
+  const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
 
   // Calculate max date for 18 years old
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() - 18);
+
+  // Hijri Data
+  const hijriMonths = [
+    { value: '1', label: 'محرم' },
+    { value: '2', label: 'صفر' },
+    { value: '3', label: 'ربيع الأول' },
+    { value: '4', label: 'ربيع الآخر' },
+    { value: '5', label: 'جمادى الأولى' },
+    { value: '6', label: 'جمادى الآخرة' },
+    { value: '7', label: 'رجب' },
+    { value: '8', label: 'شعبان' },
+    { value: '9', label: 'رمضان' },
+    { value: '10', label: 'شوال' },
+    { value: '11', label: 'ذو القعدة' },
+    { value: '12', label: 'ذو الحجة' },
+  ];
+
+  const currentHijriYear = 1446;
+  const minHijriAge = 18;
+  const maxHijriYear = currentHijriYear - minHijriAge;
+  const hijriYears = Array.from({ length: 100 }, (_, i) => maxHijriYear - i);
+  const hijriDays = Array.from({ length: 30 }, (_, i) => (i + 1).toString());
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -158,7 +182,15 @@ const UpdateInfo = () => {
     if (!nationality) errors.nationality = 'مطلوب';
     if (!ownerType) errors.ownerType = 'مطلوب';
     if (!nationalId) errors.nationalId = 'مطلوب';
-    if (!dateOfBirth) errors.dateOfBirth = 'مطلوب';
+    
+    if (calendarType === 'gregorian') {
+      if (!dateOfBirth) errors.dateOfBirth = 'مطلوب';
+    } else {
+      if (!hijriDate.day || !hijriDate.month || !hijriDate.year) {
+        errors.dateOfBirth = 'مطلوب';
+      }
+    }
+
     if (!gender) errors.gender = 'مطلوب';
 
     // Contact Info
@@ -570,33 +602,104 @@ const UpdateInfo = () => {
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
-                            !dateOfBirth && "text-muted-foreground font-normal",
-                            validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
-                          )}
+                    <div className="flex gap-2 mb-2">
+                      <Button
+                        type="button"
+                        variant={calendarType === 'gregorian' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setCalendarType('gregorian')}
+                        className="flex-1 text-xs"
+                      >
+                        ميلادي
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={calendarType === 'hijri' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setCalendarType('hijri')}
+                        className="flex-1 text-xs"
+                      >
+                        هجري
+                      </Button>
+                    </div>
+
+                    {calendarType === 'gregorian' ? (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
+                              !dateOfBirth && "text-muted-foreground font-normal",
+                              validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
+                            )}
+                          >
+                            <CalendarIcon className="ml-2 h-4 w-4" />
+                            {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={dateOfBirth}
+                            onSelect={setDateOfBirth}
+                            initialFocus
+                            captionLayout="dropdown"
+                            fromYear={1900}
+                            toYear={maxDate.getFullYear()}
+                            disabled={(date) => date > maxDate}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    ) : (
+                      <div className="grid grid-cols-3 gap-2">
+                        <Select 
+                          value={hijriDate.day} 
+                          onValueChange={(val) => setHijriDate(prev => ({ ...prev, day: val }))} 
+                          dir="rtl"
                         >
-                          <CalendarIcon className="ml-2 h-4 w-4" />
-                          {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={dateOfBirth}
-                          onSelect={setDateOfBirth}
-                          initialFocus
-                          captionLayout="dropdown"
-                          fromYear={1900}
-                          toYear={maxDate.getFullYear()}
-                          disabled={(date) => date > maxDate}
-                        />
-                      </PopoverContent>
-                    </Popover>
+                          <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.day && "border-red-500")}>
+                            <SelectValue placeholder="اليوم" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {hijriDays.map(d => (
+                              <SelectItem key={d} value={d}>{d}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        
+                        <Select 
+                          value={hijriDate.month} 
+                          onValueChange={(val) => setHijriDate(prev => ({ ...prev, month: val }))} 
+                          dir="rtl"
+                        >
+                          <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.month && "border-red-500")}>
+                            <SelectValue placeholder="الشهر" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {hijriMonths.map(m => (
+                              <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <Select 
+                          value={hijriDate.year} 
+                          onValueChange={(val) => setHijriDate(prev => ({ ...prev, year: val }))} 
+                          dir="rtl"
+                        >
+                          <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.year && "border-red-500")}>
+                            <SelectValue placeholder="السنة" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {hijriYears.map(y => (
+                              <SelectItem key={y} value={y.toString()}>{y}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                    {validationErrors.dateOfBirth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.dateOfBirth}</p>}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
