@@ -74,6 +74,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [numberOfCameras, setNumberOfCameras] = useState('');
   const [hasElevator, setHasElevator] = useState<string>('no');
   const [inCommercialCenter, setInCommercialCenter] = useState<string>('no');
+  const [contractType, setContractType] = useState<string>('rent');
   const [ownerType, setOwnerType] = useState('');
   
   // Commercial Name State
@@ -1297,6 +1298,37 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }`}
                             >
                               لا
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Contract Type */}
+                        <div className="col-span-2">
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            نوع العقد
+                          </Label>
+                          <div className="flex w-full gap-4">
+                            <button
+                              type="button"
+                              onClick={() => setContractType('investment')}
+                              className={`flex-1 py-2 text-center text-sm font-medium border rounded-md transition-colors ${
+                                contractType === 'investment'
+                                  ? 'bg-white text-green-700 border-green-700 border-2'
+                                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                              }`}
+                            >
+                              عقد استثمار
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setContractType('rent')}
+                              className={`flex-1 py-2 text-center text-sm font-medium border rounded-md transition-colors ${
+                                contractType === 'rent'
+                                  ? 'bg-white text-green-700 border-green-700 border-2'
+                                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                              }`}
+                            >
+                              عقد الإيجار
                             </button>
                           </div>
                         </div>
