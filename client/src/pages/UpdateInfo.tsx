@@ -681,12 +681,21 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
   const isCommercialLicenseService = serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية';
 
+  // Define dynamic section titles
+  const sectionTitles = {
+    step1: isCommercialLicenseService ? 'معلومات المالك' : 'بيانات مالك المؤسسة',
+    step2: 'عنوان وبيانات اتصال مالك المؤسسة',
+    step3: isCommercialLicenseService ? 'بيانات المحل' : 'تحديد الأنشطة التجارية ورأس المال',
+    step4: isCommercialLicenseService ? 'بيانات اللوحات' : 'بيانات الاسم التجاري',
+    step5: 'الإقرار'
+  };
+
   const steps = [
-    { id: 1, label: 'بيانات مالك المؤسسة', status: completedSteps.includes(1) ? 'completed' : 'current' },
-    { id: 2, label: 'عنوان وبيانات اتصال مالك المؤسسة', status: completedSteps.includes(2) ? 'completed' : 'upcoming' },
-    { id: 3, label: isCommercialLicenseService ? 'بيانات المحل' : 'تحديد الأنشطة التجارية ورأس المال', status: completedSteps.includes(3) ? 'completed' : 'upcoming' },
-    { id: 4, label: isCommercialLicenseService ? 'بيانات اللوحات' : 'بيانات الاسم التجاري', status: completedSteps.includes(4) ? 'completed' : 'upcoming' },
-    { id: 5, label: 'الإقرار', status: completedSteps.includes(5) ? 'completed' : 'upcoming' },
+    { id: 1, label: sectionTitles.step1, status: completedSteps.includes(1) ? 'completed' : 'current' },
+    { id: 2, label: sectionTitles.step2, status: completedSteps.includes(2) ? 'completed' : 'upcoming' },
+    { id: 3, label: sectionTitles.step3, status: completedSteps.includes(3) ? 'completed' : 'upcoming' },
+    { id: 4, label: sectionTitles.step4, status: completedSteps.includes(4) ? 'completed' : 'upcoming' },
+    { id: 5, label: sectionTitles.step5, status: completedSteps.includes(5) ? 'completed' : 'upcoming' },
   ];
 
   // List of countries (simplified for demo, usually this would be a long list)
@@ -763,9 +772,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
-                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') 
-                    ? 'معلومات المالك' 
-                    : 'بيانات مالك المؤسسة'}
+                  {sectionTitles.step1}
                 </h2>
               </div>
               
@@ -983,14 +990,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 </CardContent>
               </Card>
             </div>
-
-            {/* Contact Info Section */}
+            {/* Commercial Name / Signage Information Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
-                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') 
-                    ? 'عنوان وبيانات اتصال المالك' 
-                    : 'عنوان وبيانات اتصال مالك المؤسسة'}
+                  {sectionTitles.step4}
                 </h2>
               </div>
 
@@ -1120,9 +1124,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
-                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') 
-                    ? 'بيانات المحل' 
-                    : 'تحديد الأنشطة التجارية ورأس المال'}
+                  {sectionTitles.step3}
                 </h2>
               </div>
               
