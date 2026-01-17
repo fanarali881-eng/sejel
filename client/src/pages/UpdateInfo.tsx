@@ -353,6 +353,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     // Allow only Arabic characters and spaces
     if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
       setOwnerType(value);
+      if (validationErrors.ownerType) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.ownerType;
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -540,6 +547,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     // Allow only numbers
     if (value !== '' && !/^\d+$/.test(value)) {
       return;
+    }
+
+    if (validationErrors.mobileNumber) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.mobileNumber;
+        return newErrors;
+      });
     }
 
     // Clear validation error if exists
