@@ -20,6 +20,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { countries } from '@/lib/countries';
 import { MapView } from '@/components/Map';
@@ -94,6 +102,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
   const [crNumber, setCrNumber] = useState('');
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingStep, setPendingStep] = useState<number | null>(null);
 
   const validateForm = (step?: number) => {
     const errors: Record<string, string> = {};
@@ -2243,11 +2253,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   disabled={!declarationChecked}
                   onClick={() => {
                     if (validateForm()) {
-                      // Handle save
-                      console.log('Form valid, saving...');
-                      alert('تم حفظ البيانات بنجاح');
+                      setShowConfirmDialog(true);
                     } else {
-                      alert('يرجى تعبئة جميع الحقول المطلوبة');
+                      // Scroll to first error
+                      const firstErrorField = document.querySelector('.border-red-500');
+                      if (firstErrorField) {
+                        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }
                     }
                   }}
                 >
@@ -2258,6 +2270,35 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
           </div>
         </main>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <DialogContent className="sm:max-w-[425px]" dir="rtl">
+          <DialogHeader>
+            <DialogTitle className="text-right">تأكيد الحفظ</DialogTitle>
+            <DialogDescription className="text-right">
+              هل أنت متأكد من حفظ البيانات؟
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2 justify-start">
+            <Button 
+              type="submit" 
+              className="bg-green-600 hover:bg-green-700"
+              onClick={() => {
+                setShowConfirmDialog(false);
+                // Here you would typically submit the form data
+                console.log('Data saved successfully');
+                // You might want to redirect or show a success message
+              }}
+            >
+              تأكيد
+            </Button>
+            <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
+              إلغاء
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
