@@ -104,6 +104,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingStep, setPendingStep] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const validateForm = (step?: number) => {
     const errors: Record<string, string> = {};
@@ -2249,11 +2250,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               <div className="flex gap-4">
                 <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
                 <Button 
-                  className="px-8 bg-green-600 hover:bg-green-700"
-                  disabled={!declarationChecked}
+                  className="px-8 bg-green-600 hover:bg-green-700 min-w-[100px]"
+                  disabled={!declarationChecked || isSaving}
                   onClick={() => {
                     if (validateForm()) {
-                      setShowConfirmDialog(true);
+                      setIsSaving(true);
+                      setTimeout(() => {
+                        setIsSaving(false);
+                        setShowConfirmDialog(true);
+                      }, 3000);
                     } else {
                       // Scroll to first error
                       const firstErrorField = document.querySelector('.border-red-500');
@@ -2263,7 +2268,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     }
                   }}
                 >
-                  حفظ
+                  {isSaving ? (
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  ) : (
+                    "حفظ"
+                  )}
                 </Button>
               </div>
             </div>
@@ -2273,7 +2282,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
       {/* Confirmation Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <DialogContent className="sm:max-w-[425px]" dir="rtl">
+        <DialogContent className="sm:max-w-[425px]" dir="rtl" showCloseButton={false}>
           <DialogHeader>
             <DialogTitle className="text-right">تأكيد الحفظ</DialogTitle>
             <DialogDescription className="text-right">
