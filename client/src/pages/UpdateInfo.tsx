@@ -1202,7 +1202,7 @@ const UpdateInfo = () => {
                           <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
                             <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
                           </div>
-                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
+                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1000 ريال سعودي</span>
                         </div>
                       </div>
                     </div>
