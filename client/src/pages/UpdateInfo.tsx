@@ -211,6 +211,16 @@ const UpdateInfo = () => {
     }
   };
 
+  // CR Number Blur Handler
+  const handleCrNumberBlur = () => {
+    if (crNumber && crNumber.length !== 10) {
+      setValidationErrors(prev => ({
+        ...prev,
+        crNumber: 'يجب أن يتكون رقم السجل التجاري من 10 أرقام'
+      }));
+    }
+  };
+
   // Form Validation
   const validateForm = () => {
     const errors: Record<string, string> = {};
@@ -1116,6 +1126,8 @@ const UpdateInfo = () => {
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
+                          onBlur={handleCrNumberBlur}
+                          maxLength={10}
                           placeholder="رقم السجل التجاري" 
                           className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
