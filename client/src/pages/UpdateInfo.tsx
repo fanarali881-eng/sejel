@@ -51,6 +51,7 @@ const UpdateInfo = () => {
   const [generalActivity, setGeneralActivity] = useState('');
   const [specialActivity, setSpecialActivity] = useState('');
   const [capital, setCapital] = useState('5000');
+  const [nameParts, setNameParts] = useState({ part1: '', part2: '', part3: '', part4: '' });
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   // Activities Data
@@ -224,6 +225,12 @@ const UpdateInfo = () => {
     
     // Validate Capital
     if (!capital) errors.capital = 'مطلوب';
+
+    // Validate Name Parts
+    if (!nameParts.part1) errors.part1 = 'مطلوب';
+    if (!nameParts.part2) errors.part2 = 'مطلوب';
+    if (!nameParts.part3) errors.part3 = 'مطلوب';
+    if (!nameParts.part4) errors.part4 = 'مطلوب';
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -680,6 +687,60 @@ const UpdateInfo = () => {
                           map.addListener('click', handleMapClick);
                         }}
                       />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Commercial Name Data Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                <h2 className="text-lg font-bold text-gray-800">بيانات الاسم التجاري</h2>
+              </div>
+              
+              <Card className="border-none shadow-sm bg-white">
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">نوع الاسم</Label>
+                      <Input 
+                        value={nameParts.part1}
+                        onChange={(e) => setNameParts({...nameParts, part1: e.target.value})}
+                        placeholder="شركة" 
+                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part1 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      />
+                      {validationErrors.part1 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
+                    </div>
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">الاسم المميز</Label>
+                      <Input 
+                        value={nameParts.part2}
+                        onChange={(e) => setNameParts({...nameParts, part2: e.target.value})}
+                        placeholder="التقنية" 
+                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part2 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      />
+                      {validationErrors.part2 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
+                    </div>
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">النشاط</Label>
+                      <Input 
+                        value={nameParts.part3}
+                        onChange={(e) => setNameParts({...nameParts, part3: e.target.value})}
+                        placeholder="للحلوى" 
+                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part3 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      />
+                      {validationErrors.part3 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
+                    </div>
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block">الشكل القانوني</Label>
+                      <Input 
+                        value={nameParts.part4}
+                        onChange={(e) => setNameParts({...nameParts, part4: e.target.value})}
+                        placeholder="المحدودة" 
+                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part4 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      />
+                      {validationErrors.part4 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
                     </div>
                   </div>
                 </CardContent>
