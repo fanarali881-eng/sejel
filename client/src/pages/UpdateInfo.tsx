@@ -1,64 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useRoute } from 'wouter';
+import React, { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'wouter';
+import SBCSidebar from '@/components/SBCSidebar';
+import SBCStepper from '@/components/SBCStepper';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowRight, Check, ChevronLeft, Calendar as CalendarIcon, Upload, Trash2, Plus } from 'lucide-react';
-import { format } from 'date-fns';
-import { arSA } from 'date-fns/locale';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { cn } from '@/lib/utils';
-import SBCStepper from '@/components/SBCStepper';
+import { Card, CardContent } from '@/components/ui/card';
+import { MapPin, ArrowRight, X, CalendarIcon } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { countries } from '@/lib/countries';
+import { MapView } from '@/components/Map';
 
 const UpdateInfo = () => {
-  const [location, setLocation] = useLocation();
-  const [match, params] = useRoute('/service/:id');
-  const serviceId = params?.id;
+  const [location] = useLocation();
+  
+  // Extract service name from query params or default to a generic title
+  const searchParams = new URLSearchParams(window.location.search);
+  const serviceName = searchParams.get('service') || 'تحديث بيانات الخدمة';
+  
+  const [requestId] = useState(() => {
+    const idFromUrl = searchParams.get('id');
+    if (idFromUrl) return idFromUrl;
 
-  // Mock service data - in a real app this would come from an API or context
-  const getServiceName = (id: string) => {
-    const services: Record<string, string> = {
-      '1': 'إصدار سجل تجاري',
-      '2': 'تجديد سجل تجاري',
-      '3': 'تعديل سجل تجاري',
-      '4': 'حجز اسم تجاري',
-      '5': 'إصدار رخصة فورية',
-      '6': 'شطب سجل تجاري',
-      '7': 'نقل ملكية سجل تجاري',
-      '8': 'تحويل مؤسسة إلى شركة',
-      '9': 'إصدار شهادة انتساب',
-      '10': 'تجديد اشتراك الغرفة التجارية',
-      '11': 'تصديق الوثائق',
-      '12': 'الاستفسار عن المخالفات التجارية',
-      '13': 'الاعتراض على المخالفات',
-      '14': 'إصدار ترخيص صناعي',
-      '15': 'تجديد ترخيص صناعي',
-      '16': 'تعديل ترخيص صناعي',
-      '17': 'الإعفاء الجمركي',
-      '18': 'فسح المواد الكيميائية',
-      '19': 'تسجيل علامة تجارية',
-      '20': 'نشر العلامات التجارية',
-      '21': 'تجديد علامة تجارية',
-      '22': 'نقل ملكية علامة تجارية',
-      '23': 'رهن علامة تجارية',
-      '24': 'ترخيص استخدام علامة تجارية',
-      '25': 'تعديل بيانات علامة تجارية',
-      '26': 'شطب علامة تجارية',
-      '27': 'الاستعلام عن العلامات التجارية',
-      '28': 'إصدار شهادة إيداع قوائم مالية',
-      '29': 'مستخرج سجل تجاري / الإفادة التجارية',
-    };
-    return services[id] || 'تحديث البيانات';
-  };
-
-  const serviceName = serviceId ? getServiceName(serviceId) : 'تحديث البيانات';
-
-  // Generate random request number
-  const [requestNumber] = useState(() => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let result = '';
     for (let i = 0; i < 3; i++) {
@@ -96,7 +72,6 @@ const UpdateInfo = () => {
   // Trademark Name State
   const [trademarkArabicName, setTrademarkArabicName] = useState('');
   const [trademarkEnglishName, setTrademarkEnglishName] = useState('');
-  const [trademarkImage, setTrademarkImage] = useState<File | null>(null);
   const [addManagers, setAddManagers] = useState(false);
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
   const [crNumber, setCrNumber] = useState('');
@@ -148,78 +123,76 @@ const UpdateInfo = () => {
       { value: "e_commerce", label: "التجارة الإلكترونية" },
     ],
     contracting: [
-      { value: "building_construction", label: "تشييد المباني" },
-      { value: "finishing", label: "أعمال التشطيبات" },
-      { value: "electrical_works", label: "الأعمال الكهربائية" },
-      { value: "plumbing", label: "أعمال السباكة" },
+      { value: "building", label: "تشييد المباني" },
       { value: "roads", label: "إنشاء الطرق" },
+      { value: "electrical", label: "الأعمال الكهربائية" },
+      { value: "plumbing", label: "أعمال السباكة" },
     ],
     services: [
-      { value: "cleaning", label: "خدمات التنظيف" },
-      { value: "maintenance", label: "خدمات الصيانة" },
-      { value: "logistics", label: "الخدمات اللوجستية" },
-      { value: "consulting", label: "الاستشارات الإدارية" },
-      { value: "marketing", label: "التسويق والدعاية" },
+      { value: "marketing", label: "التسويق" },
+      { value: "consulting", label: "الاستشارات" },
+      { value: "maintenance", label: "الصيانة" },
+      { value: "cleaning", label: "النظافة" },
+      { value: "it", label: "تقنية المعلومات" },
     ],
     industry: [
-      { value: "food_industry", label: "الصناعات الغذائية" },
-      { value: "textile", label: "صناعة المنسوجات" },
+      { value: "food", label: "الصناعات الغذائية" },
       { value: "chemical", label: "الصناعات الكيميائية" },
       { value: "metal", label: "الصناعات المعدنية" },
-      { value: "plastic", label: "صناعة البلاستيك" },
+      { value: "textile", label: "صناعة المنسوجات" },
     ],
     agriculture: [
-      { value: "farming", label: "زراعة المحاصيل" },
+      { value: "crops", label: "زراعة المحاصيل" },
       { value: "livestock", label: "تربية المواشي" },
-      { value: "fishing", label: "صيد الأسماك" },
+      { value: "fishery", label: "صيد الأسماك" },
       { value: "greenhouses", label: "البيوت المحمية" },
     ],
     education: [
-      { value: "schools", label: "المدارس الأهلية" },
+      { value: "schools", label: "المدارس الأهلية والعالمية" },
       { value: "training_centers", label: "مراكز التدريب" },
-      { value: "universities", label: "الجامعات والكليات" },
+      { value: "universities", label: "الجامعات والكليات الأهلية" },
       { value: "kindergartens", label: "رياض الأطفال" },
-      { value: "educational_consulting", label: "الاستشارات التعليمية" },
+      { value: "e_learning", label: "التعليم الإلكتروني" },
     ],
     health: [
       { value: "hospitals", label: "المستشفيات" },
-      { value: "clinics", label: "المجمعات الطبية" },
+      { value: "clinics", label: "المجمعات الطبية والعيادات" },
       { value: "pharmacies", label: "الصيدليات" },
-      { value: "laboratories", label: "المختبرات الطبية" },
-      { value: "medical_equipment", label: "المعدات الطبية" },
+      { value: "labs", label: "المختبرات الطبية" },
+      { value: "home_care", label: "الرعاية الصحية المنزلية" },
     ],
     technology: [
-      { value: "software_development", label: "تطوير البرمجيات" },
-      { value: "it_consulting", label: "استشارات تقنية المعلومات" },
+      { value: "software_dev", label: "تطوير البرمجيات" },
       { value: "cybersecurity", label: "الأمن السيبراني" },
-      { value: "data_analysis", label: "تحليل البيانات" },
-      { value: "cloud_services", label: "الخدمات السحابية" },
+      { value: "cloud_services", label: "خدمات الحوسبة السحابية" },
+      { value: "ai", label: "الذكاء الاصطناعي" },
+      { value: "tech_support", label: "الدعم الفني والتقني" },
     ],
     tourism: [
       { value: "hotels", label: "الفنادق والشقق المفروشة" },
       { value: "travel_agencies", label: "وكالات السفر والسياحة" },
-      { value: "event_management", label: "تنظيم الفعاليات والمؤتمرات" },
       { value: "tour_guides", label: "الإرشاد السياحي" },
-      { value: "entertainment_centers", label: "المراكز الترفيهية" },
+      { value: "resorts", label: "المنتجعات السياحية" },
+      { value: "event_management", label: "تنظيم الفعاليات والمؤتمرات" },
     ],
     transport: [
       { value: "land_transport", label: "النقل البري للبضائع" },
       { value: "passenger_transport", label: "نقل الركاب" },
+      { value: "logistics", label: "الخدمات اللوجستية والتخزين" },
       { value: "car_rental", label: "تأجير السيارات" },
       { value: "delivery_services", label: "خدمات التوصيل" },
-      { value: "warehousing", label: "التخزين والمستودعات" },
     ],
     real_estate: [
       { value: "property_management", label: "إدارة الأملاك" },
-      { value: "real_estate_development", label: "التطوير العقاري" },
+      { value: "real_estate_dev", label: "التطوير العقاري" },
       { value: "brokerage", label: "الوساطة العقارية" },
       { value: "valuation", label: "التقييم العقاري" },
     ],
     finance: [
-      { value: "financial_consulting", label: "الاستشارات المالية" },
-      { value: "insurance_brokerage", label: "الوساطة في التأمين" },
+      { value: "insurance", label: "خدمات التأمين" },
       { value: "fintech", label: "التقنية المالية" },
-      { value: "accounting", label: "المحاسبة والمراجعة" },
+      { value: "exchange", label: "الصرافة وتحويل الأموال" },
+      { value: "investment", label: "الاستثمار وإدارة الأصول" },
     ],
     media: [
       { value: "advertising", label: "الدعاية والإعلان" },
@@ -228,95 +201,99 @@ const UpdateInfo = () => {
       { value: "digital_marketing", label: "التسويق الرقمي" },
     ],
     entertainment: [
-      { value: "theme_parks", label: "مدن الملاهي" },
+      { value: "entertainment_centers", label: "مراكز الترفيه" },
       { value: "cinemas", label: "دور السينما" },
       { value: "sports_clubs", label: "الأندية الرياضية" },
-      { value: "gaming_centers", label: "مراكز الألعاب الإلكترونية" },
+      { value: "electronic_games", label: "الألعاب الإلكترونية" },
     ],
     energy: [
       { value: "renewable_energy", label: "الطاقة المتجددة" },
       { value: "oil_gas_services", label: "خدمات النفط والغاز" },
       { value: "electricity", label: "توليد ونقل الكهرباء" },
-      { value: "mining", label: "التعدين" },
+      { value: "water_desalination", label: "تحلية المياه" },
     ],
     consulting: [
-      { value: "legal_consulting", label: "الاستشارات القانونية" },
+      { value: "management_consulting", label: "الاستشارات الإدارية" },
+      { value: "legal_services", label: "الخدمات القانونية" },
       { value: "engineering_consulting", label: "الاستشارات الهندسية" },
       { value: "hr_consulting", label: "استشارات الموارد البشرية" },
-      { value: "safety_consulting", label: "استشارات السلامة" },
     ],
     security: [
       { value: "security_guards", label: "الحراسات الأمنية" },
+      { value: "safety_equipment", label: "معدات السلامة والإطفاء" },
       { value: "security_systems", label: "الأنظمة الأمنية" },
-      { value: "cyber_security_services", label: "خدمات الأمن السيبراني" },
     ],
     environment: [
-      { value: "waste_management", label: "إدارة النفايات" },
-      { value: "recycling", label: "إعادة التدوير" },
+      { value: "waste_management", label: "إدارة وتدوير النفايات" },
       { value: "environmental_consulting", label: "الاستشارات البيئية" },
       { value: "landscaping", label: "تنسيق الحدائق" },
-    ],
+    ]
   };
 
-  // Validation Handlers
-  const handleNationalIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Reset special activity when general activity changes
+  const handleGeneralActivityChange = (value: string) => {
+    setGeneralActivity(value);
+    setSpecialActivity('');
+  };
+
+  // Capital Amount Handler
+  const handleCapitalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCapitalAmount(e.target.value);
+  };
+
+  // Owner Type Handler (Arabic Only)
+  const handleOwnerTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^\d*$/.test(value) && value.length <= 10) {
-      setNationalId(value);
-      if (value.length === 10) {
-        setNationalIdError('');
-      }
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setOwnerType(value);
     }
   };
 
-  const handleNationalIdBlur = () => {
-    if (nationalId.length !== 10) {
-      setNationalIdError('رقم الهوية يجب أن يتكون من 10 أرقام');
+  const handleCapitalBlur = () => {
+    if (!capitalAmount) return;
+    
+    let value = parseInt(capitalAmount, 10);
+    
+    if (isNaN(value)) {
+      setCapitalAmount('');
+      return;
+    }
+
+    // Enforce minimum of 1000
+    if (value < 1000) {
+      value = 1000;
     } else {
-      setNationalIdError('');
+      // Round to nearest 1000
+      value = Math.round(value / 1000) * 1000;
     }
-  };
 
-  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (/^\d*$/.test(value) && value.length <= 9) {
-      setMobileNumber(value);
-      if (value.length === 9) {
-        setMobileNumberError('');
-      }
-    }
+    setCapitalAmount(value.toString());
   };
-
-  const handleMobileBlur = () => {
-    if (mobileNumber.length !== 9) {
-      setMobileNumberError('رقم الجوال يجب أن يتكون من 9 أرقام');
-    } else {
-      setMobileNumberError('');
-    }
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    if (emailError) setEmailError('');
-  };
-
-  const handleEmailBlur = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setEmailError('البريد الإلكتروني غير صحيح');
-    } else {
-      setEmailError('');
-    }
-  };
-
+  
+  // Name Parts Handler (Arabic Only)
   const handleNamePartChange = (part: keyof typeof nameParts, value: string) => {
-    setNameParts(prev => ({ ...prev, [part]: value }));
-    if (validationErrors[`nameParts${part.charAt(0).toUpperCase() + part.slice(1)}`]) {
-      setValidationErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[`nameParts${part.charAt(0).toUpperCase() + part.slice(1)}`];
-        return newErrors;
-      });
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setNameParts(prev => ({ ...prev, [part]: value }));
+    }
+  };
+
+  // CR Number Handler (English Numbers Only, Max 10 digits)
+  const handleCrNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only English numbers and max 10 digits
+    if (value === '' || (/^\d+$/.test(value) && value.length <= 10)) {
+      setCrNumber(value);
+      
+      // Clear error if exists
+      if (validationErrors.crNumber) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.crNumber;
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -364,222 +341,620 @@ const UpdateInfo = () => {
   // Form Validation
   const validateForm = () => {
     const errors: Record<string, string> = {};
+    let isValid = true;
+
+    // CR Number Validation for specific services
+    const servicesRequiringCR = [
+      'تجديد سجل تجاري',
+      'تعديل سجل تجاري',
+      'مستخرج سجل تجاري / الإفادة التجارية'
+    ];
     
+    if (servicesRequiringCR.includes(serviceName)) {
+      if (!crNumber) {
+        errors.crNumber = 'مطلوب';
+      } else if (crNumber.length !== 10) {
+        errors.crNumber = 'يجب أن يتكون رقم السجل التجاري من 10 أرقام';
+      }
+    }
+
+    // Owner Data
+    if (!arabicName) errors.arabicName = 'مطلوب';
+    if (!englishName) errors.englishName = 'مطلوب';
+    if (!nationality) errors.nationality = 'مطلوب';
+    if (!ownerType) errors.ownerType = 'مطلوب';
+    if (!nationalId) errors.nationalId = 'مطلوب';
+    
+    if (calendarType === 'gregorian') {
+      if (!dateOfBirth) errors.dateOfBirth = 'مطلوب';
+    } else {
+      if (!hijriDate.day || !hijriDate.month || !hijriDate.year) {
+        errors.dateOfBirth = 'مطلوب';
+      }
+    }
+
+    if (!gender) errors.gender = 'مطلوب';
+
+    // Contact Info
+    if (!mobileNumber) errors.mobileNumber = 'مطلوب';
+    if (!email) errors.email = 'مطلوب';
+    if (!address) errors.address = 'مطلوب';
+
+    // Commercial Activities
     if (!generalActivity) errors.generalActivity = 'مطلوب';
     if (!specialActivity) errors.specialActivity = 'مطلوب';
     if (!capitalAmount) errors.capitalAmount = 'مطلوب';
-    if (!ownerType) errors.ownerType = 'مطلوب';
-    
-    // Validate CR Number if visible
-    if ((serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية') && (!crNumber || crNumber.length !== 10)) {
-      errors.crNumber = 'يجب إدخال رقم السجل التجاري (10 أرقام)';
-    }
 
-    if (serviceName === 'تسجيل علامة تجارية') {
-      if (!trademarkArabicName) errors.trademarkArabicName = 'مطلوب';
-      if (!trademarkEnglishName) errors.trademarkEnglishName = 'مطلوب';
+    // Commercial Name
+    if (!nameType) errors.nameType = 'مطلوب';
+    if (!nameParts.first) errors.namePartsFirst = 'مطلوب';
+    if (!nameParts.second) errors.namePartsSecond = 'مطلوب';
+    if (!nameParts.third) errors.namePartsThird = 'مطلوب';
+    if (nameType === 'quadruple' && !nameParts.fourth) errors.namePartsFourth = 'مطلوب';
+
+    if (Object.keys(errors).length > 0) {
+      isValid = false;
+      setValidationErrors(errors);
+      
+      // Scroll to top or first error
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      if (!nameType) errors.nameType = 'مطلوب';
-      if (!nameParts.first) errors.namePartsFirst = 'مطلوب';
-      if (!nameParts.second) errors.namePartsSecond = 'مطلوب';
-      if (!nameParts.third) errors.namePartsThird = 'مطلوب';
-      if (nameType === 'quadruple' && !nameParts.fourth) errors.namePartsFourth = 'مطلوب';
+      setValidationErrors({});
     }
 
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
+    return isValid;
   };
 
-  const handleSave = () => {
-    if (validateForm()) {
-      // Proceed with save
-      console.log('Form valid, saving...');
-      // Mark current step as completed
-      setCompletedSteps(prev => [...prev, 4]);
-      // Navigate to next page or show success
-      setLocation('/service-summary');
+  // Map refs
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
+
+  // Validation handlers
+  const handleArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setArabicName(value);
+    }
+  };
+
+  const handleEnglishNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only English characters and spaces
+    if (value === '' || /^[a-zA-Z\s]+$/.test(value)) {
+      setEnglishName(value);
+    }
+  };
+
+  const handleNationalIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Allow only numbers
+    if (value !== '' && !/^\d+$/.test(value)) {
+      return;
+    }
+
+    // Max length 10
+    if (value.length > 10) {
+      return;
+    }
+
+    // Check starting digit (must be 1 or 2) if not empty
+    if (value.length > 0 && !['1', '2'].includes(value[0])) {
+      return;
+    }
+
+    setNationalId(value);
+
+    // Validate length for error message
+    if (value.length > 0 && value.length < 10) {
+      setNationalIdError('يجب أن يتكون رقم الهوية من 10 أرقام');
     } else {
-      console.log('Form invalid', validationErrors);
+      setNationalIdError('');
     }
   };
 
-  // Generate Approved Commercial Name
-  const getApprovedName = () => {
-    if (serviceName === 'تسجيل علامة تجارية') {
-      return `${trademarkArabicName || '---'} ${trademarkEnglishName || '---'}`;
+  const handleSaveStep = (stepId: number) => {
+    setCompletedSteps(prev => {
+      const newSteps = [...prev];
+      if (!newSteps.includes(stepId)) {
+        newSteps.push(stepId);
+      }
+      // Special handling for the last step (step 4) to also complete step 5
+      if (stepId === 4 && !newSteps.includes(5)) {
+        newSteps.push(5);
+      }
+      return newSteps;
+    });
+  };
+
+  const handleMobileNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    // Allow only numbers
+    if (value !== '' && !/^\d+$/.test(value)) {
+      return;
     }
 
-    const parts = [nameParts.first, nameParts.second, nameParts.third];
-    if (nameType === 'quadruple') parts.push(nameParts.fourth);
-    
-    const fullName = parts.filter(p => p).join(' ');
-    
-    let suffix = 'للتجارة';
-    if (generalActivity === 'contracting') suffix = 'للمقاولات';
-    else if (generalActivity === 'services') suffix = 'للخدمات العامة';
-    else if (generalActivity === 'industry') suffix = 'للصناعة';
-    else if (generalActivity === 'agriculture') suffix = 'للزراعة';
-    else if (generalActivity === 'education') suffix = 'للتعليم والتدريب';
-    else if (generalActivity === 'health') suffix = 'للصحة والأنشطة الطبية';
-    else if (generalActivity === 'technology') suffix = 'لتقنية المعلومات';
-    else if (generalActivity === 'tourism') suffix = 'للسياحة والسفر';
-    else if (generalActivity === 'transport') suffix = 'للنقل والخدمات اللوجستية';
-    else if (generalActivity === 'real_estate') suffix = 'للعقارات';
-    else if (generalActivity === 'finance') suffix = 'للخدمات المالية';
-    else if (generalActivity === 'media') suffix = 'للإعلام والنشر';
-    else if (generalActivity === 'entertainment') suffix = 'للترفيه';
-    else if (generalActivity === 'energy') suffix = 'للطاقة';
-    else if (generalActivity === 'consulting') suffix = 'للاستشارات';
-    else if (generalActivity === 'security') suffix = 'للخدمات الأمنية';
-    else if (generalActivity === 'environment') suffix = 'للخدمات البيئية';
-    
-    return fullName ? `مؤسسة ${fullName} ${suffix}` : 'مؤسسة ........................................';
+    // Validation logic based on country code
+    if (countryCode === '+966') {
+      // Saudi Arabia Validation
+      if (value.length > 10) return; // Max length 10 for SA
+
+      setMobileNumber(value);
+
+      if (value.length > 0) {
+        if (value.length < 10) {
+          setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+        } else {
+          const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
+          const prefix = value.substring(0, 3);
+          if (!validPrefixes.includes(prefix)) {
+            setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+          } else {
+            setMobileNumberError('');
+          }
+        }
+      } else {
+        setMobileNumberError('');
+      }
+    } else {
+      // International Validation (Generic)
+      if (value.length > 15) return; // Max length 15 for international
+
+      setMobileNumber(value);
+
+      if (value.length > 0) {
+        if (value.length < 7) {
+          setMobileNumberError('يجب أن يتكون رقم الجوال من 7 أرقام على الأقل');
+        } else {
+          setMobileNumberError('');
+        }
+      } else {
+        setMobileNumberError('');
+      }
+    }
   };
+
+  // Re-validate when country code changes
+  useEffect(() => {
+    // Trigger validation logic with current mobile number and new country code
+    // We can reuse the logic by calling a validation function, but for simplicity we'll just clear error if switching to non-SA
+    if (countryCode !== '+966') {
+       if (mobileNumber.length >= 7 && mobileNumber.length <= 15) {
+         setMobileNumberError('');
+       }
+    } else {
+       // Re-apply SA validation if switching back to SA
+       if (mobileNumber.length > 0) {
+          if (mobileNumber.length !== 10) {
+             setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+          } else {
+             const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
+             const prefix = mobileNumber.substring(0, 3);
+             if (!validPrefixes.includes(prefix)) {
+                setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+             } else {
+                setMobileNumberError('');
+             }
+          }
+       }
+    }
+  }, [countryCode]);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Allow only English characters, numbers, and standard email symbols
+    if (value !== '' && !/^[a-zA-Z0-9@._-]+$/.test(value)) {
+      return;
+    }
+
+    setEmail(value);
+
+    // Validate email format
+    if (value.length > 0) {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (!emailRegex.test(value)) {
+        setEmailError('البريد الإلكتروني غير صحيح');
+      } else {
+        setEmailError('');
+      }
+    } else {
+      setEmailError('');
+    }
+  };
+
+  // Handle address change and geocoding
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newAddress = e.target.value;
+    setAddress(newAddress);
+  };
+
+  // Debounce geocoding to avoid too many requests
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (address && mapRef.current && window.google) {
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ address: address }, (results, status) => {
+          if (status === 'OK' && results && results[0]) {
+            const location = results[0].geometry.location;
+            
+            // Update map center
+            mapRef.current?.setCenter(location);
+            mapRef.current?.setZoom(15);
+
+            // Remove existing marker if any
+            if (markerRef.current) {
+              markerRef.current.map = null;
+            }
+
+            // Add new marker
+            markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+              map: mapRef.current,
+              position: location,
+              title: address,
+              gmpDraggable: true, // Enable dragging
+            });
+
+            // Add drag end listener
+            markerRef.current.addListener('dragend', async (event: any) => {
+              const newLat = event.latLng.lat();
+              const newLng = event.latLng.lng();
+              
+              // Reverse geocoding
+              const geocoder = new window.google.maps.Geocoder();
+              const response = await geocoder.geocode({ location: { lat: newLat, lng: newLng } });
+              
+              if (response.results && response.results[0]) {
+                setAddress(response.results[0].formatted_address);
+              }
+            });
+          }
+        });
+      }
+    }, 1000); // Wait 1 second after typing stops
+
+    return () => clearTimeout(timer);
+  }, [address]);
+
+  // Handle map click
+  const handleMapClick = async (event: google.maps.MapMouseEvent) => {
+    if (event.latLng && mapRef.current && window.google) {
+      const newLat = event.latLng.lat();
+      const newLng = event.latLng.lng();
+      const location = { lat: newLat, lng: newLng };
+
+      // Remove existing marker if any
+      if (markerRef.current) {
+        markerRef.current.map = null;
+      }
+
+      // Add new marker
+      markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+        map: mapRef.current,
+        position: location,
+        gmpDraggable: true, // Enable dragging
+      });
+
+      // Add drag end listener to the new marker
+      markerRef.current.addListener('dragend', async (dragEvent: any) => {
+        const dragLat = dragEvent.latLng.lat();
+        const dragLng = dragEvent.latLng.lng();
+        
+        // Reverse geocoding
+        const geocoder = new window.google.maps.Geocoder();
+        const response = await geocoder.geocode({ location: { lat: dragLat, lng: dragLng } });
+        
+        if (response.results && response.results[0]) {
+          setAddress(response.results[0].formatted_address);
+        }
+      });
+
+      // Reverse geocoding for the clicked location
+      const geocoder = new window.google.maps.Geocoder();
+      const response = await geocoder.geocode({ location: location });
+      
+      if (response.results && response.results[0]) {
+        setAddress(response.results[0].formatted_address);
+      }
+    }
+  };
+
+  const steps = [
+    { id: 1, label: 'بيانات مالك المؤسسة', status: completedSteps.includes(1) ? 'completed' : 'current' },
+    { id: 2, label: 'عنوان وبيانات اتصال مالك المؤسسة', status: completedSteps.includes(2) ? 'completed' : 'upcoming' },
+    { id: 3, label: 'تحديد الأنشطة التجارية ورأس المال', status: completedSteps.includes(3) ? 'completed' : 'upcoming' },
+    { id: 4, label: 'بيانات الاسم التجاري', status: completedSteps.includes(4) ? 'completed' : 'upcoming' },
+    { id: 5, label: 'ملخص الطلب', status: completedSteps.includes(5) ? 'completed' : 'upcoming' },
+  ];
+
+  // List of countries (simplified for demo, usually this would be a long list)
+  const nationalityCountries = [
+    { value: "saudi", label: "المملكة العربية السعودية" },
+    { value: "uae", label: "الإمارات العربية المتحدة" },
+    { value: "kuwait", label: "الكويت" },
+    { value: "bahrain", label: "البحرين" },
+    { value: "oman", label: "عمان" },
+    { value: "qatar", label: "قطر" },
+    { value: "egypt", label: "مصر" },
+    { value: "jordan", label: "الأردن" },
+    { value: "other", label: "أخرى" }
+  ];
+
+  // Helper to get selected country details
+  const selectedCountry = countries.find(c => c.dial_code === countryCode);
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans" dir="rtl">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src="/images/logo.svg" alt="SBC Logo" className="h-10" />
-            <div className="hidden md:block h-6 w-px bg-gray-200"></div>
-            <h1 className="hidden md:block text-lg font-bold text-gray-800">المركز السعودي للأعمال</h1>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col items-end">
-              <span className="text-sm font-bold text-gray-800">محمد عبدالله</span>
-              <span className="text-xs text-gray-500">مؤسسة محمد للتجارة</span>
-            </div>
-            <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-700 font-bold border border-green-100">
-              م
-            </div>
-          </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans" dir="rtl">
+      {/* Top Navigation Bar (Simplified for this page) */}
+      <header className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center">
+        <div className="flex items-center gap-8">
+          <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-12" />
+          <a href="#" onClick={(e) => e.preventDefault()} className="text-sm text-gray-600 hover:text-green-600 font-medium">الرئيسية</a>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-          <span className="hover:text-green-600 cursor-pointer">الرئيسية</span>
-          <ChevronLeft className="h-4 w-4" />
-          <span className="hover:text-green-600 cursor-pointer">الخدمات الإلكترونية</span>
-          <ChevronLeft className="h-4 w-4" />
-          <span className="text-gray-800 font-bold">{serviceName}</span>
-        </div>
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <SBCSidebar serviceName={serviceName} />
 
-        {/* Page Title & Request Info */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">{serviceName}</h1>
-          <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
-            <span className="text-sm text-gray-500">رقم الطلب:</span>
-            <span className="text-sm font-mono font-bold text-gray-900">{requestNumber}</span>
-            <div className="h-4 w-px bg-gray-200 mx-2"></div>
-            <span className="text-sm text-gray-500">التاريخ:</span>
-            <span className="text-sm font-mono font-bold text-gray-900" dir="ltr">
-              {format(currentDateTime, 'dd-MM-yyyy HH:mm:ss')}
-            </span>
-          </div>
-        </div>
+        {/* Main Content Area */}
+        <main className="flex-1 p-8">
+          <div className="max-w-5xl mx-auto">
+            {/* Page Title */}
+            <h1 className="text-2xl font-bold text-gray-800 mb-8 text-right">{serviceName}</h1>
 
-        {/* Stepper */}
-        <SBCStepper 
-          steps={[
-            { id: 1, label: 'بيانات مالك المؤسسة', status: 'completed' },
-            { id: 2, label: 'عنوان وبيانات اتصال مالك المؤسسة', status: 'completed' },
-            { id: 3, label: 'تحديد الأنشطة التجارية ورأس المال', status: 'completed' },
-            { id: 4, label: serviceName === 'تسجيل علامة تجارية' ? 'بيانات العلامة التجارية' : 'بيانات الاسم التجاري', status: 'current' },
-            { id: 5, label: 'ملخص الطلب', status: 'upcoming' },
-          ]} 
-        />
+            {/* Stepper */}
+            <div className="mb-8">
+              <SBCStepper steps={steps} />
+            </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
-          {/* Right Column - Form */}
-          <div className="lg:col-span-8 space-y-6">
-            
-            {/* Owner Info Section */}
+            {/* Request Info Bar */}
+            <div className="bg-blue-50 rounded-lg p-4 mb-8 flex justify-between items-center text-sm">
+              <div className="flex gap-16">
+                <div>
+                  <span className="text-gray-500 ml-6">رقم الطلب</span>
+                  <span className="font-bold text-gray-800">{requestId}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500 ml-6">الحالة</span>
+                  <span className="font-bold text-gray-800">مسودة</span>
+                </div>
+                <div>
+                  <span className="text-gray-500 ml-6">تاريخ الطلب</span>
+                  <span className="font-bold text-gray-800" dir="ltr">
+                    {currentDateTime.toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    }).replace(/\//g, '-')} {currentDateTime.toLocaleTimeString('en-US', {
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Owner Data Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">بيانات مالك المؤسسة</h2>
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Arabic Name */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم بالعربي</Label>
-                      <Input 
-                        value="محمد عبدالله أحمد" 
-                        readOnly 
-                        className="bg-gray-50 border-gray-200 h-10 text-right text-gray-500"
-                      />
-                    </div>
-
-                    {/* English Name */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم بالإنجليزي</Label>
-                      <Input 
-                        value="Mohammed Abdullah Ahmed" 
-                        readOnly 
-                        className="bg-gray-50 border-gray-200 h-10 text-left text-gray-500"
-                        dir="ltr"
-                      />
-                    </div>
-
-                    {/* Nationality */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الجنسية</Label>
-                      <Select defaultValue="saudi" disabled>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between text-gray-500">
-                          <SelectValue placeholder="اختر الجنسية" />
-                        </SelectTrigger>
-                        <SelectContent align="end">
-                          <SelectItem value="saudi">المملكة العربية السعودية</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Owner Type */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">نوع المالك</Label>
-                      <Input 
-                        value="سعودي" 
-                        readOnly 
-                        className="bg-gray-50 border-gray-200 h-10 text-right text-gray-500"
-                      />
-                    </div>
-
-                    {/* National ID */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم الهوية الوطنية</Label>
-                      <Input 
-                        value="1012345678" 
-                        readOnly 
-                        className="bg-gray-50 border-gray-200 h-10 text-right text-gray-500 font-mono"
-                        dir="ltr"
-                      />
-                    </div>
-
-                    {/* Date of Birth */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">تاريخ الميلاد</Label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 flex gap-1">
-                          <span className="px-2 py-0.5 bg-green-600 text-white text-[10px] rounded">ميلادي</span>
-                          <span className="px-2 py-0.5 bg-gray-200 text-gray-600 text-[10px] rounded">هجري</span>
-                        </div>
-                        <Input 
-                          value="1985-10-25" 
-                          readOnly 
-                          className="bg-gray-50 border-gray-200 h-10 text-right text-gray-500 font-mono pl-24"
-                          dir="ltr"
-                        />
-                        <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
+                    <Input 
+                      value={arabicName}
+                      onChange={handleArabicNameChange}
+                      placeholder="محمد عبدالله أحمد" 
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    />
+                    {validationErrors.arabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.arabicName}</p>}
+                  </div>
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
+                    <Input 
+                      value={englishName}
+                      onChange={handleEnglishNameChange}
+                      placeholder="Mohammed Abdullah Ahmed" 
+                      className={`font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400 ${validationErrors.englishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      dir="ltr" 
+                    />
+                    {validationErrors.englishName && <p className="text-xs text-red-500 mt-1 text-left">{validationErrors.englishName}</p>}
+                  </div>
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
+                    <Select value={nationality} onValueChange={setNationality} dir="rtl">
+                      <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                        <SelectValue placeholder="اختر الجنسية" />
+                      </SelectTrigger>
+                      {validationErrors.nationality && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nationality}</p>}
+                      <SelectContent>
+                        {nationalityCountries.map((country) => (
+                          <SelectItem key={country.value} value={country.value}>
+                            {country.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
+                    <Input 
+                      value={ownerType}
+                      onChange={handleOwnerTypeChange}
+                      placeholder="سعودي" 
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.ownerType ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    />
+                    {validationErrors.ownerType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.ownerType}</p>}
+                  </div>
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
+                    <Input 
+                      value={nationalId}
+                      onChange={handleNationalIdChange}
+                      placeholder="1012345678" 
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError || validationErrors.nationalId ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    />
+                    {(nationalIdError || validationErrors.nationalId) && (
+                      <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError || validationErrors.nationalId}</p>
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <Label className="text-gray-500 text-xs block">تاريخ الميلاد</Label>
+                      <div className="flex gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setCalendarType('gregorian')}
+                          className={cn(
+                            "text-[10px] px-2 py-0.5 rounded border transition-colors",
+                            calendarType === 'gregorian' 
+                              ? "bg-green-600 text-white border-green-600" 
+                              : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                          )}
+                        >
+                          ميلادي
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setCalendarType('hijri')}
+                          className={cn(
+                            "text-[10px] px-2 py-0.5 rounded border transition-colors",
+                            calendarType === 'hijri' 
+                              ? "bg-green-600 text-white border-green-600" 
+                              : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                          )}
+                        >
+                          هجري
+                        </button>
                       </div>
                     </div>
+
+                    {calendarType === 'gregorian' ? (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
+                              !dateOfBirth && "text-muted-foreground font-normal",
+                              validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
+                            )}
+                          >
+                            <CalendarIcon className="ml-2 h-4 w-4" />
+                            {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={dateOfBirth}
+                            onSelect={setDateOfBirth}
+                            initialFocus
+                            captionLayout="dropdown"
+                            fromYear={1900}
+                            toYear={maxDate.getFullYear()}
+                            disabled={(date) => date > maxDate}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    ) : (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
+                              (!hijriDate.day || !hijriDate.month || !hijriDate.year) && "text-muted-foreground font-normal",
+                              validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
+                            )}
+                          >
+                            <CalendarIcon className="ml-2 h-4 w-4" />
+                            {hijriDate.day && hijriDate.month && hijriDate.year 
+                              ? `${hijriDate.year}-${hijriDate.month}-${hijriDate.day}` 
+                              : <span>1405-01-01</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-4" align="start">
+                          <div className="grid grid-cols-3 gap-2 w-[300px]">
+                            <Select 
+                              value={hijriDate.day} 
+                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, day: val }))} 
+                              dir="rtl"
+                            >
+                              <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.day && "border-red-500")}>
+                                <SelectValue placeholder="اليوم" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {hijriDays.map(d => (
+                                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            
+                            <Select 
+                              value={hijriDate.month} 
+                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, month: val }))} 
+                              dir="rtl"
+                            >
+                              <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.month && "border-red-500")}>
+                                <SelectValue placeholder="الشهر" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {hijriMonths.map(m => (
+                                  <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+
+                            <Select 
+                              value={hijriDate.year} 
+                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, year: val }))} 
+                              dir="rtl"
+                            >
+                              <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.year && "border-red-500")}>
+                                <SelectValue placeholder="السنة" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {hijriYears.map(y => (
+                                  <SelectItem key={y} value={y.toString()}>{y}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                    {validationErrors.dateOfBirth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.dateOfBirth}</p>}
+                  </div>
+                  <div>
+                    <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
+                    <Select value={gender} onValueChange={setGender} dir="rtl">
+                      <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                        <SelectValue placeholder="ذكر" />
+                      </SelectTrigger>
+                      {validationErrors.gender && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.gender}</p>}
+                      <SelectContent>
+                        <SelectItem value="male">ذكر</SelectItem>
+                        <SelectItem value="female">أنثى</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="col-span-2 flex justify-end mt-8">
+                    <Button 
+                      size="sm" 
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
+                      onClick={() => handleSaveStep(1)}
+                    >
+                      حفظ
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -590,69 +965,130 @@ const UpdateInfo = () => {
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">عنوان وبيانات اتصال مالك المؤسسة</h2>
               </div>
-              
+
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Mobile Number */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم الجوال <span className="text-red-500">*</span></Label>
-                      <div className="flex gap-2" dir="ltr">
-                        <Select value={countryCode} onValueChange={setCountryCode}>
-                          <SelectTrigger className="w-[100px] bg-white border-gray-200 h-10">
-                            <SelectValue placeholder="Code" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="+966">+966 🇸🇦</SelectItem>
-                            <SelectItem value="+971">+971 🇦🇪</SelectItem>
-                            <SelectItem value="+965">+965 🇰🇼</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Input 
-                          value={mobileNumber}
-                          onChange={handleMobileChange}
-                          onBlur={handleMobileBlur}
-                          placeholder="5XXXXXXXX" 
-                          className={`bg-white border-gray-200 h-10 flex-1 font-mono ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        />
+                    {/* Right Side: Inputs (Swapped to be first in RTL grid) */}
+                    <div className="space-y-6">
+                      {/* Mobile Number */}
+                      <div>
+                        <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
+                        <div className="flex gap-2" dir="ltr">
+                          <Select value={countryCode} onValueChange={setCountryCode}>
+                            <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 px-3">
+                              <div className="flex items-center gap-2 w-full">
+                                {selectedCountry && (
+                                  <>
+                                    <img 
+                                      src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
+                                      srcSet={`https://flagcdn.com/w80/${selectedCountry.code.toLowerCase()}.png 2x`}
+                                      width="24"
+                                      height="16"
+                                      alt={selectedCountry.name}
+                                      className="rounded-sm object-cover"
+                                    />
+                                    <span className="text-sm font-medium text-gray-700">{selectedCountry.dial_code.replace('+', '')}</span>
+                                  </>
+                                )}
+                              </div>
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[200px]">
+                              {countries.map((country) => (
+                                <SelectItem key={country.code} value={country.dial_code}>
+                                  <span className="flex items-center gap-3">
+                                    <img 
+                                      src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                                      srcSet={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png 2x`}
+                                      width="24"
+                                      height="16"
+                                      alt={country.name}
+                                      className="rounded-sm object-cover"
+                                    />
+                                    <span className="text-sm text-gray-700">{country.name}</span>
+                                    <span className="text-xs text-gray-500 ml-auto">{country.dial_code}</span>
+                                  </span>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Input 
+                            value={mobileNumber}
+                            onChange={handleMobileNumberChange}
+                            placeholder={countryCode === '+966' ? "05xxxxxxxx" : ""} 
+                            className={`text-left ${mobileNumberError || validationErrors.mobileNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          />
+                        </div>
+                        {(mobileNumberError || validationErrors.mobileNumber) ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError || validationErrors.mobileNumber}</p>
+                        ) : (
+                          <p className="text-xs text-gray-400 mt-1 text-right">
+                            {countryCode === '+966' ? 'يجب أن يكون بصيغة 05xxxxxxxx' : ''}
+                          </p>
+                        )}
                       </div>
-                      {mobileNumberError && <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>}
-                    </div>
 
-                    {/* Email */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">البريد الإلكتروني <span className="text-red-500">*</span></Label>
-                      <Input 
-                        value={email}
-                        onChange={handleEmailChange}
-                        onBlur={handleEmailBlur}
-                        placeholder="example@domain.com" 
-                        className={`bg-white border-gray-200 h-10 text-left ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        dir="ltr"
-                      />
-                      {emailError && <p className="text-xs text-red-500 mt-1 text-right">{emailError}</p>}
-                    </div>
-
-                    {/* Address */}
-                    <div className="md:col-span-2">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">العنوان الوطني (تلقائي)</Label>
-                      <div className="relative">
+                      {/* Email */}
+                      <div>
+                        <Label className="text-gray-700 mb-2 block">البريد الإلكتروني</Label>
                         <Input 
-                          value="الرياض - حي الملز - شارع صلاح الدين الأيوبي - مبنى 1234" 
-                          readOnly 
-                          className="bg-gray-50 border-gray-200 h-10 text-right text-gray-500 pr-10"
+                          value={email}
+                          onChange={handleEmailChange}
+                          placeholder="someone@example.org" 
+                          className={`text-left ${emailError || validationErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          dir="ltr" 
                         />
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-green-100 rounded-full flex items-center justify-center">
-                          <Check className="h-3 w-3 text-green-600" />
+                        {(emailError || validationErrors.email) ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{emailError || validationErrors.email}</p>
+                        ) : (
+                          <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
+                        )}
+                      </div>
+
+                      {/* Address Input */}
+                      <div>
+                        <Label className="text-gray-700 mb-2 block">عنوان داخل المملكة</Label>
+                        <div className="relative">
+                          <Input 
+                            value={address}
+                            onChange={handleAddressChange}
+                            placeholder="ابحث عن العنوان..." 
+                            className={`pl-10 ${validationErrors.address ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          />
+                          {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
+                          <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                         </div>
                       </div>
                     </div>
+
+                    {/* Left Side: Map (Swapped to be second in RTL grid) */}
+                    <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
+                      <MapView 
+                        className="w-full h-full"
+                        initialCenter={{ lat: 24.7136, lng: 46.6753 }} // Riyadh
+                        initialZoom={11}
+                        onMapReady={(map) => {
+                          mapRef.current = map;
+                          // Add click listener to the map
+                          map.addListener('click', handleMapClick);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-8">
+                    <Button 
+                      size="sm" 
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
+                      onClick={() => handleSaveStep(2)}
+                    >
+                      حفظ
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Activities Section */}
+            {/* Commercial Activities Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">تحديد الأنشطة التجارية ورأس المال</h2>
@@ -660,47 +1096,65 @@ const UpdateInfo = () => {
               
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    {/* General Activity */}
-                    <div>
+                  {/* Styled Header Bar */}
+                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
+                    {/* Right Panel (Main Activities) */}
+                    <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
+                      الأنشطة الرئيسية
+                    </div>
+                    
+                    {/* Left Panel (Commercial Activity Name) */}
+                    <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
+                      اسم النشاط التجاري
+                    </div>
+
+                    {/* The Arrow Overlay - Centered */}
+                    <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
+                      <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
+                        <path d="M24 0L0 24L24 48" fill="white" />
+                        <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="flex w-full gap-0">
+                    {/* Right Dropdown (General Activity) - Matches "الأنشطة الرئيسية" width */}
+                    <div className="w-1/2 pl-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
-                      <Select value={generalActivity} onValueChange={(val) => {
-                        setGeneralActivity(val);
-                        setSpecialActivity(''); // Reset special activity when general changes
-                      }}>
-                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                      <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
+                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
                           <SelectValue placeholder="اختر النشاط العام" />
                         </SelectTrigger>
                         {validationErrors.generalActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.generalActivity}</p>}
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)] max-h-[300px]" dir="rtl">
                           <SelectItem value="trade" className="text-right justify-start cursor-pointer pr-8">التجارة</SelectItem>
                           <SelectItem value="contracting" className="text-right justify-start cursor-pointer pr-8">المقاولات</SelectItem>
-                          <SelectItem value="services" className="text-right justify-start cursor-pointer pr-8">الخدمات</SelectItem>
-                          <SelectItem value="industry" className="text-right justify-start cursor-pointer pr-8">الصناعة</SelectItem>
-                          <SelectItem value="agriculture" className="text-right justify-start cursor-pointer pr-8">الزراعة</SelectItem>
-                          <SelectItem value="education" className="text-right justify-start cursor-pointer pr-8">التعليم</SelectItem>
-                          <SelectItem value="health" className="text-right justify-start cursor-pointer pr-8">الصحة</SelectItem>
-                          <SelectItem value="technology" className="text-right justify-start cursor-pointer pr-8">التقنية</SelectItem>
-                          <SelectItem value="tourism" className="text-right justify-start cursor-pointer pr-8">السياحة</SelectItem>
-                          <SelectItem value="transport" className="text-right justify-start cursor-pointer pr-8">النقل</SelectItem>
-                          <SelectItem value="real_estate" className="text-right justify-start cursor-pointer pr-8">العقارات</SelectItem>
-                          <SelectItem value="finance" className="text-right justify-start cursor-pointer pr-8">المالية</SelectItem>
+                          <SelectItem value="services" className="text-right justify-start cursor-pointer pr-8">الخدمات العامة</SelectItem>
+                          <SelectItem value="industry" className="text-right justify-start cursor-pointer pr-8">الصناعة والتعدين</SelectItem>
+                          <SelectItem value="agriculture" className="text-right justify-start cursor-pointer pr-8">الزراعة والصيد</SelectItem>
+                          <SelectItem value="education" className="text-right justify-start cursor-pointer pr-8">التعليم والتدريب</SelectItem>
+                          <SelectItem value="health" className="text-right justify-start cursor-pointer pr-8">الصحة والأنشطة الطبية</SelectItem>
+                          <SelectItem value="technology" className="text-right justify-start cursor-pointer pr-8">تقنية المعلومات والاتصالات</SelectItem>
+                          <SelectItem value="tourism" className="text-right justify-start cursor-pointer pr-8">السياحة والضيافة</SelectItem>
+                          <SelectItem value="transport" className="text-right justify-start cursor-pointer pr-8">النقل والخدمات اللوجستية</SelectItem>
+                          <SelectItem value="real_estate" className="text-right justify-start cursor-pointer pr-8">الأنشطة العقارية</SelectItem>
+                          <SelectItem value="finance" className="text-right justify-start cursor-pointer pr-8">الأنشطة المالية والتأمين</SelectItem>
                           <SelectItem value="media" className="text-right justify-start cursor-pointer pr-8">الإعلام والنشر</SelectItem>
-                          <SelectItem value="entertainment" className="text-right justify-start cursor-pointer pr-8">الترفيه</SelectItem>
-                          <SelectItem value="energy" className="text-right justify-start cursor-pointer pr-8">الطاقة</SelectItem>
-                          <SelectItem value="consulting" className="text-right justify-start cursor-pointer pr-8">الاستشارات</SelectItem>
-                          <SelectItem value="security" className="text-right justify-start cursor-pointer pr-8">الأمن</SelectItem>
-                          <SelectItem value="environment" className="text-right justify-start cursor-pointer pr-8">البيئة</SelectItem>
+                          <SelectItem value="entertainment" className="text-right justify-start cursor-pointer pr-8">الترفيه والفنون</SelectItem>
+                          <SelectItem value="energy" className="text-right justify-start cursor-pointer pr-8">الطاقة والمرافق</SelectItem>
+                          <SelectItem value="consulting" className="text-right justify-start cursor-pointer pr-8">الخدمات الاستشارية والمهنية</SelectItem>
+                          <SelectItem value="security" className="text-right justify-start cursor-pointer pr-8">الخدمات الأمنية والسلامة</SelectItem>
+                          <SelectItem value="environment" className="text-right justify-start cursor-pointer pr-8">البيئة وإدارة النفايات</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
-                    {/* Special Activity */}
-                    <div>
+                    {/* Left Dropdown (Special Activity) - Matches "اسم النشاط التجاري" width */}
+                    <div className="w-1/2 pr-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
                       <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
-                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
-                          <SelectValue placeholder="اختر النشاط الخاص" />
+                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                          <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
                         </SelectTrigger>
                         {validationErrors.specialActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.specialActivity}</p>}
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -712,45 +1166,54 @@ const UpdateInfo = () => {
                         </SelectContent>
                       </Select>
                     </div>
-
-                    {/* Capital Amount */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
-                      <Input 
-                        type="number"
-                        value={capitalAmount}
-                        onChange={(e) => setCapitalAmount(e.target.value)}
-                        placeholder="1000" 
-                        className={`bg-gray-50 border-gray-200 h-10 text-right placeholder:text-gray-400 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
-                    </div>
-
-                    {/* Currency */}
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
-                      <Select defaultValue="sar" disabled>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between text-gray-500">
-                          <SelectValue placeholder="ريال سعودي" />
-                        </SelectTrigger>
-                        <SelectContent align="end">
-                          <SelectItem value="sar">ريال سعودي</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 flex items-start gap-3">
-                    <div className="mt-0.5 text-blue-600">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                  {/* Capital and Currency Section */}
+                  <div className="mt-8">
+                    <div className="flex w-full gap-0 mb-4">
+                      {/* Right: Currency */}
+                      <div className="w-1/2 pl-6">
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
+                        <Select defaultValue="sar">
+                          <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                            <SelectValue placeholder="اختر العملة" />
+                          </SelectTrigger>
+                          <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                            <SelectItem value="sar" className="text-right justify-start cursor-pointer pr-8">ريال سعودي</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Left: Capital Amount */}
+                      <div className="w-1/2 pr-6">
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
+                        <Input 
+                          value={capitalAmount}
+                          onChange={handleCapitalChange}
+                          onBlur={handleCapitalBlur}
+                          placeholder="1000"
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          type="number"
+                          step="1000"
+                        />
+                        {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
+                        <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
+                          <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                            <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                          </div>
+                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-xs text-blue-700 leading-relaxed">
-                      أقل قيمة لرأس المال: 1.00 ريال سعودي
-                    </p>
+                  </div>
+                  <div className="flex justify-end mt-8">
+                    <Button 
+                      size="sm" 
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
+                      onClick={() => handleSaveStep(3)}
+                    >
+                      حفظ
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -790,21 +1253,11 @@ const UpdateInfo = () => {
                   {/* CR Number Field - Conditionally Rendered */}
                   {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية') && (
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                      <div className="md:col-span-1">
+                      <div>
                         <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
                         <Input 
                           value={crNumber}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, '');
-                            if (val.length <= 10) setCrNumber(val);
-                            if (val.length === 10 && validationErrors.crNumber) {
-                              setValidationErrors(prev => {
-                                const newErrors = { ...prev };
-                                delete newErrors.crNumber;
-                                return newErrors;
-                              });
-                            }
-                          }}
+                          onChange={handleCrNumberChange}
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
                           placeholder="رقم السجل التجاري" 
@@ -915,230 +1368,186 @@ const UpdateInfo = () => {
                     </div>
                   )}
 
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 flex items-start gap-3 mb-6">
-                    <div className="mt-0.5 text-blue-600">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                  {/* Formed Name Bar */}
+                  <div className="bg-blue-50 rounded-md p-3 flex items-center justify-between text-[#374151]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                        <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                      </div>
+                      <span className="text-xs font-bold">الاسم التجاري المعتمد</span>
+                      <span className="text-sm font-bold mr-2">
+                        {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''} ${
+                          generalActivity === 'trade' ? 'للتجارة' :
+                          generalActivity === 'contracting' ? 'للمقاولات' :
+                          generalActivity === 'services' ? 'للخدمات العامة' :
+                          generalActivity === 'industry' ? 'للصناعة والتعدين' :
+                          generalActivity === 'agriculture' ? 'للزراعة والصيد' :
+                          generalActivity === 'education' ? 'للتعليم والتدريب' :
+                          generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
+                          generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
+                          generalActivity === 'tourism' ? 'للسياحة والضيافة' :
+                          generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
+                          generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
+                          generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
+                          generalActivity === 'media' ? 'للإعلام والنشر' :
+                          generalActivity === 'entertainment' ? 'للترفيه والفنون' :
+                          generalActivity === 'energy' ? 'للطاقة والمرافق' :
+                          generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
+                          generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
+                          generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : ''
+                        }`.trim()}
+                      </span>
                     </div>
-                    <p className="text-xs text-blue-700 leading-relaxed">
-                      <span className="font-bold ml-1">الاسم التجاري المعتمد</span>
-                      <span className="text-gray-900 font-bold">{getApprovedName()}</span>
-                    </p>
+                    
                   </div>
 
-                  {/* Managers Section or Trademark Image Upload */}
+                  {/* Managers Section */}
                   <div className="mt-6 border-t border-gray-100 pt-4">
-                    {serviceName === 'تسجيل علامة تجارية' ? (
-                      <div className="space-y-4">
-                        <Label className="text-sm font-bold text-gray-700 block text-right">
-                          صورة العلامة التجارية <span className="text-gray-400 font-normal text-xs">(اختياري)</span>
-                        </Label>
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer relative">
+                    <div className="flex items-center gap-4 mb-4">
+                      <Label className="text-sm font-bold text-gray-700">هل ترغب بإضافة مدراء؟</Label>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
                           <input 
-                            type="file" 
-                            accept="image/*"
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            onChange={(e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                setTrademarkImage(e.target.files[0]);
-                              }
-                            }}
+                            type="radio" 
+                            id="managers-yes" 
+                            name="managers" 
+                            checked={addManagers === true} 
+                            onChange={() => setAddManagers(true)}
+                            className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
                           />
-                          <div className="flex flex-col items-center justify-center gap-2">
-                            {trademarkImage ? (
-                              <>
-                                <div className="text-green-600 font-medium">{trademarkImage.name}</div>
-                                <div className="text-xs text-gray-500">انقر لتغيير الصورة</div>
-                              </>
-                            ) : (
-                              <>
-                                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
-                                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M17 8L12 3L7 8" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M12 3V15" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                                <div className="text-sm text-gray-600 font-medium">اضغط هنا لرفع الصورة</div>
-                                <div className="text-xs text-gray-400">PNG, JPG, GIF حتى 5 ميجابايت</div>
-                              </>
-                            )}
-                          </div>
+                          <label htmlFor="managers-yes" className="text-sm text-gray-700 cursor-pointer">نعم</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            id="managers-no" 
+                            name="managers" 
+                            checked={addManagers === false} 
+                            onChange={() => setAddManagers(false)}
+                            className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                          />
+                          <label htmlFor="managers-no" className="text-sm text-gray-700 cursor-pointer">لا</label>
                         </div>
                       </div>
-                    ) : (
-                      <>
-                        <div className="flex items-center gap-4 mb-4">
-                          <Label className="text-sm font-bold text-gray-700">هل ترغب بإضافة مدراء؟</Label>
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                              <input 
-                                type="radio" 
-                                id="managers-yes" 
-                                name="managers" 
-                                checked={addManagers === true} 
-                                onChange={() => setAddManagers(true)}
-                                className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
-                              />
-                              <label htmlFor="managers-yes" className="text-sm text-gray-700 cursor-pointer">نعم</label>
+                    </div>
+
+                    {addManagers && (
+                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        {managers.map((manager, index) => (
+                          <div key={manager.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+                            <div>
+                              <Label className="text-gray-500 text-xs mb-1 block text-right">نوع المدير {managers.length > 1 ? index + 1 : ''}</Label>
+                              <Select 
+                                value={manager.type} 
+                                onValueChange={(val) => {
+                                  const newManagers = [...managers];
+                                  newManagers[index].type = val;
+                                  setManagers(newManagers);
+                                }}
+                              >
+                                <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                                  <SelectValue placeholder="اختر" />
+                                </SelectTrigger>
+                                <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                                  <SelectItem value="saudi" className="text-right justify-start cursor-pointer pr-8">مواطن سعودي</SelectItem>
+                                  <SelectItem value="resident" className="text-right justify-start cursor-pointer pr-8">مقيم</SelectItem>
+                                  <SelectItem value="foreigner" className="text-right justify-start cursor-pointer pr-8">أجنبي</SelectItem>
+                                  <SelectItem value="gcc" className="text-right justify-start cursor-pointer pr-8">خليجي</SelectItem>
+                                  <SelectItem value="gcc_resident" className="text-right justify-start cursor-pointer pr-8">خليجي مقيم</SelectItem>
+                                </SelectContent>
+                              </Select>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <input 
-                                type="radio" 
-                                id="managers-no" 
-                                name="managers" 
-                                checked={addManagers === false} 
-                                onChange={() => setAddManagers(false)}
-                                className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
-                              />
-                              <label htmlFor="managers-no" className="text-sm text-gray-700 cursor-pointer">لا</label>
+                            
+                            <div>
+                              <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير {managers.length > 1 ? index + 1 : ''}</Label>
+                              <div className="flex gap-2 items-center">
+                                <Input 
+                                  value={manager.name}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
+                                      const newManagers = [...managers];
+                                      newManagers[index].name = val;
+                                      setManagers(newManagers);
+                                    }
+                                  }}
+                                  placeholder="الاسم الكامل" 
+                                  className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 flex-1"
+                                />
+                                <button 
+                                  onClick={() => {
+                                    const newManagers = managers.filter((_, i) => i !== index);
+                                    setManagers(newManagers);
+                                    if (newManagers.length === 0) {
+                                      setAddManagers(false);
+                                      setManagers([{ id: Date.now(), type: '', name: '' }]);
+                                    }
+                                  }}
+                                  className="w-9 h-9 rounded-md bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 transition-colors border border-red-100 flex-shrink-0"
+                                  title="حذف المدير"
+                                >
+                                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                  </svg>
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        ))}
 
-                        {addManagers && (
-                          <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                            {managers.map((manager, index) => (
-                              <div key={manager.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
-                                <div>
-                                  <Label className="text-gray-500 text-xs mb-1 block text-right">نوع المدير {managers.length > 1 ? index + 1 : ''}</Label>
-                                  <Select 
-                                    value={manager.type} 
-                                    onValueChange={(val) => {
-                                      const newManagers = [...managers];
-                                      newManagers[index].type = val;
-                                      setManagers(newManagers);
-                                    }}
-                                  >
-                                    <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
-                                      <SelectValue placeholder="اختر" />
-                                    </SelectTrigger>
-                                    <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                                      <SelectItem value="general_manager">مدير عام</SelectItem>
-                                      <SelectItem value="executive_manager">مدير تنفيذي</SelectItem>
-                                      <SelectItem value="financial_manager">مدير مالي</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div>
-                                  <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير {managers.length > 1 ? index + 1 : ''}</Label>
-                                  <Input 
-                                    value={manager.name}
-                                    onChange={(e) => {
-                                      const newManagers = [...managers];
-                                      newManagers[index].name = e.target.value;
-                                      setManagers(newManagers);
-                                    }}
-                                    placeholder="اسم المدير" 
-                                    className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
-                                  />
-                                </div>
-                                {managers.length > 1 && (
-                                  <button 
-                                    onClick={() => {
-                                      const newManagers = managers.filter(m => m.id !== manager.id);
-                                      setManagers(newManagers);
-                                    }}
-                                    className="absolute left-0 top-8 text-red-500 hover:text-red-700"
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </button>
-                                )}
-                              </div>
-                            ))}
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
+                        {/* Add Manager Button */}
+                        {managers.length < 5 && (
+                          <div className="flex justify-center mt-2">
+                            <button 
                               onClick={() => setManagers([...managers, { id: Date.now(), type: '', name: '' }])}
-                              className="mt-2 text-green-600 border-green-600 hover:bg-green-50"
+                              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors border border-gray-300"
+                              title="إضافة مدير آخر"
                             >
-                              <Plus className="h-4 w-4 ml-2" />
-                              إضافة مدير آخر
-                            </Button>
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                              </svg>
+                            </button>
                           </div>
                         )}
-                      </>
+                      </div>
                     )}
+                  </div>
+                  <div className="flex justify-end mt-8">
+                    <Button 
+                      size="sm" 
+                      className="bg-green-600 text-white hover:bg-green-700 px-6"
+                      onClick={() => handleSaveStep(4)}
+                    >
+                      حفظ
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between mt-8">
-              <Button 
-                variant="outline" 
-                className="h-12 px-8 border-gray-300 text-gray-600 hover:bg-gray-50 hover:text-gray-800"
-                onClick={() => setLocation('/service-selection')}
-              >
-                رجوع
-              </Button>
-              <Button 
-                className="h-12 px-8 bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/20"
-                onClick={handleSave}
-              >
-                حفظ
-              </Button>
+            <div className="flex justify-between pt-4">
+              <Button variant="outline" className="px-8">رجوع</Button>
+              <div className="flex gap-4">
+                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
+                <Button 
+                  className="px-8 bg-green-600 hover:bg-green-700"
+                  onClick={() => {
+                    if (validateForm()) {
+                      // Handle save
+                      console.log('Form valid, saving...');
+                    }
+                  }}
+                >
+                  حفظ
+                </Button>
+              </div>
             </div>
           </div>
-
-          {/* Left Column - Summary/Help */}
-          <div className="lg:col-span-4 space-y-6">
-            {/* Help Card */}
-            <Card className="border-none shadow-sm bg-white">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">تحتاج مساعدة؟</h3>
-                <p className="text-sm text-gray-500 mb-6 leading-relaxed">
-                  فريق الدعم لدينا جاهز لمساعدتك في أي وقت. يمكنك التواصل معنا عبر القنوات التالية.
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center text-green-600">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 16.92V19.92C22.0011 20.1986 21.9441 20.4742 21.8325 20.7294C21.7209 20.9846 21.5573 21.2137 21.3521 21.4019C21.1468 21.5901 20.9046 21.733 20.6411 21.8212C20.3776 21.9093 20.0987 21.9408 19.823 21.913C16.7661 21.5806 13.8271 20.5342 11.19 18.86C8.71897 17.3167 6.68326 15.281 5.13998 12.81C3.46577 10.1729 2.41938 7.23394 2.08698 4.17703C2.05918 3.90134 2.09068 3.62243 2.17886 3.35891C2.26704 3.09539 2.40993 2.85317 2.59814 2.64793C2.78635 2.44269 3.01545 2.27912 3.27065 2.16753C3.52585 2.05594 3.80144 1.99893 4.08002 2.00003H7.08002C7.56582 1.99612 8.03539 2.17316 8.40277 2.4988C8.77015 2.82444 8.99998 3.26632 9.05002 3.75003C9.14324 4.65654 9.36537 5.54672 9.71002 6.39003C9.84714 6.72288 9.87629 7.09146 9.79328 7.44186C9.71027 7.79226 9.51945 8.10638 9.24902 8.33803L7.97902 9.60803C9.40253 12.1115 11.4765 14.1855 13.98 15.609L15.25 14.339C15.4817 14.0686 15.7958 13.8778 16.1462 13.7948C16.4966 13.7118 16.8652 13.7409 17.198 13.878C18.0413 14.2227 18.9315 14.4448 19.838 14.538C20.3255 14.5886 20.7699 14.8217 21.0955 15.1936C21.4211 15.5655 21.5969 16.0398 21.59 16.53V16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <span>19900</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center text-green-600">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <span>support@sbc.gov.sa</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Tips */}
-            <Card className="border-none shadow-sm bg-blue-50">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-bold text-blue-800 mb-4">نصائح سريعة</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2 text-sm text-blue-700">
-                    <div className="mt-1.5 w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                    <span>تأكد من صحة رقم الجوال والبريد الإلكتروني لاستلام الإشعارات.</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm text-blue-700">
-                    <div className="mt-1.5 w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                    <span>يمكنك حفظ الطلب كمسودة والعودة إليه لاحقاً.</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm text-blue-700">
-                    <div className="mt-1.5 w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                    <span>راجع الأنشطة التجارية المختارة بعناية لتجنب رفض الطلب.</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };
