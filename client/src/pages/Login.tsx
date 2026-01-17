@@ -46,7 +46,7 @@ export default function Login() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4">
-        <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[700px] p-8 text-center">
+        <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[700px] p-8 pb-16 text-center">
           <h1 className="text-[30px] font-bold text-[#35363a] mb-[1.5rem]">تسجيل دخول</h1>
           
           <p className="text-[#3b3b3b] text-[18px] mb-[32px] font-normal leading-[32px]">
