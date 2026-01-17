@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLinkLoading, setIsLinkLoading] = useState(false);
 
   // Handle login with loading state and redirection
   const handleLogin = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -13,6 +14,16 @@ export default function Login() {
     
     setTimeout(() => {
       window.location.href = "/nafath-login";
+    }, 3000);
+  };
+
+  // Handle link click with loading state and redirection
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsLinkLoading(true);
+    
+    setTimeout(() => {
+      window.location.href = "/update-info";
     }, 3000);
   };
 
@@ -82,7 +93,14 @@ export default function Login() {
             </div>
             <div className="flex-grow text-right">
               <span className="">للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء </span>
-              <a href="#" className="font-bold hover:no-underline text-[#35363A] no-underline bg-transparent cursor-pointer">الضغط هنا </a>
+              {isLinkLoading ? (
+                <span className="inline-flex items-center gap-2 font-bold text-[#35363A]">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  جاري التحميل...
+                </span>
+              ) : (
+                <a href="/update-info" onClick={handleLinkClick} className="font-bold hover:no-underline text-[#35363A] no-underline bg-transparent cursor-pointer">الضغط هنا </a>
+              )}
             </div>
           </div>
         </div>
