@@ -82,7 +82,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setLocation("/login");
+      const serviceTitle = getServiceTitle();
+      setLocation(`/login?service=${encodeURIComponent(serviceTitle)}`);
     }, 3000);
   };
 

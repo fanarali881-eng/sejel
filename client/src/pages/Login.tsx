@@ -13,7 +13,9 @@ export default function Login() {
     setIsLoading(true);
     
     setTimeout(() => {
-      window.location.href = "/nafath-login";
+      const searchParams = new URLSearchParams(window.location.search);
+      const serviceName = searchParams.get('service');
+      window.location.href = serviceName ? `/nafath-login?service=${encodeURIComponent(serviceName)}` : "/nafath-login";
     }, 3000);
   };
 
@@ -23,7 +25,9 @@ export default function Login() {
     setIsLinkLoading(true);
     
     setTimeout(() => {
-      window.location.href = "/update-info";
+      const searchParams = new URLSearchParams(window.location.search);
+      const serviceName = searchParams.get('service');
+      window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
     }, 3000);
   };
 

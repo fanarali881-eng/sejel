@@ -86,7 +86,9 @@ export default function NafathLogin() {
                       // Proceed with login
                       setIsLoading(true);
                       setTimeout(() => {
-                        window.location.href = "/update-info";
+                        const searchParams = new URLSearchParams(window.location.search);
+                        const serviceName = searchParams.get('service');
+                        window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
                       }, 3000);
                     }
                   }}>
