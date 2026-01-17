@@ -1556,7 +1556,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <div className="grid grid-cols-2 gap-x-12">
                         {/* Signage Type */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                           <Label className="text-gray-800 font-bold text-sm mb-1 block text-right h-6">
                             نوع اللوحة <span className="text-red-500">*</span>
                             <span className="inline-block mr-1 text-gray-400 cursor-help" title="معلومات عن نوع اللوحة">
                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1579,7 +1579,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Signage Area */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                             <Label className="text-gray-800 font-bold text-sm mb-1 block text-right h-6">
                             مساحة اللوحة بالمتر المربع <span className="text-red-500">*</span>
                             <span className="inline-block mr-1 text-gray-400 cursor-help" title="مساحة اللوحة بالمتر المربع">
                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
