@@ -37,7 +37,11 @@ const SidebarItem = ({ icon, label, isActive, hasSubmenu, isOpen }: SidebarItemP
   );
 };
 
-export const SBCSidebar = () => {
+interface SBCSidebarProps {
+  serviceName?: string;
+}
+
+export const SBCSidebar = ({ serviceName = 'تحديث بيانات الخدمة' }: SBCSidebarProps) => {
   return (
     <div className="w-64 bg-white border-l border-gray-200 h-full min-h-screen p-4 hidden lg:block">
       <div className="mb-6">
@@ -53,11 +57,8 @@ export const SBCSidebar = () => {
           />
           
           <div className="pr-9 space-y-1 mb-4">
-            <div className="text-sm text-blue-600 font-medium py-1 cursor-pointer">قيد سجل تجاري</div>
-            <div className="text-sm text-gray-500 py-1 cursor-pointer hover:text-gray-700">حجز اسم تجاري</div>
+            <div className="text-sm text-blue-600 font-medium py-1 cursor-pointer">{serviceName}</div>
           </div>
-
-
         </div>
       </div>
     </div>

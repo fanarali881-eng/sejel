@@ -522,7 +522,7 @@ const UpdateInfo = () => {
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <SBCSidebar />
+        <SBCSidebar serviceName={serviceName} />
 
         {/* Main Content Area */}
         <main className="flex-1 p-8">
