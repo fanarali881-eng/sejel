@@ -1617,7 +1617,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
                               />
                             </div>
-                            <label htmlFor="fast-track" className="text-sm font-bold text-gray-700 cursor-pointer">مسار سريع (مكتب هندسي)</label>
+                            <label htmlFor="fast-track" className="text-sm text-gray-700 cursor-pointer">مسار سريع (مكتب هندسي)</label>
                           </div>
 
                           <div className="flex items-center gap-2">
@@ -1632,7 +1632,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
                               />
                             </div>
-                            <label htmlFor="municipality-track" className="text-sm font-bold text-gray-700 cursor-pointer">مسار البلدية</label>
+                            <label htmlFor="municipality-track" className="text-sm text-gray-700 cursor-pointer">مسار البلدية</label>
                           </div>
                         </div>
                       </div>
