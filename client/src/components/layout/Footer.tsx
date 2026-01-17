@@ -69,7 +69,7 @@ export default function Footer() {
             </div>
 
             <h3 className="font-bold text-lg mb-4">أدوات الاتاحة والوصول</h3>
-            <div className="flex justify-end gap-2 mb-8">
+            <div className="flex justify-start gap-2 mb-8">
               <button className="w-10 h-10 bg-[#2d7a58] rounded flex items-center justify-center hover:bg-[#3d8a68]" title="High Contrast">
                 <Eye className="w-5 h-5" />
               </button>
