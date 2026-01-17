@@ -1125,13 +1125,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     // Shop Information Form
                     <div className="space-y-6">
                       {/* Trademark Question */}
-                      <div className="grid grid-cols-2 gap-x-12 items-center">
+                      <div className="grid grid-cols-2 gap-x-12">
                         <div className="col-span-2 md:col-span-1">
-                          <Label className="text-gray-800 font-bold mb-4 block text-right">
+                          <Label className="text-gray-800 font-bold mb-2 block text-right">
                             هل يوجد لديك علامة تجارية ؟ <span className="text-red-500">*</span>
                           </Label>
-                        </div>
-                        <div className="col-span-2 md:col-span-1">
                           <div className="flex w-full border rounded-md overflow-hidden">
                             <button
                               type="button"
