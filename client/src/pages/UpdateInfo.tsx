@@ -523,7 +523,7 @@ const UpdateInfo = () => {
                   <span className="font-bold text-gray-800">{requestId}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500 ml-6">حالة الطلب</span>
+                  <span className="text-gray-500 ml-6">الحالة</span>
                   <span className="font-bold text-gray-800">مسودة</span>
                 </div>
                 <div>
