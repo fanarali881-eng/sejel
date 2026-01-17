@@ -80,6 +80,7 @@ const UpdateInfo = () => {
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [declarationChecked, setDeclarationChecked] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -1534,6 +1535,98 @@ const UpdateInfo = () => {
               </Card>
             </div>
 
+            {/* Summary Section (Step 5) */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                <h2 className="text-lg font-bold text-gray-800">ملخص الطلب</h2>
+              </div>
+              
+              <Card className="border-none shadow-sm bg-white">
+                <CardContent className="p-6">
+                  <div className="bg-gray-50 rounded-lg p-6 border border-gray-100 mb-6">
+                    <h3 className="font-bold text-gray-800 mb-4 text-lg">مراجعة البيانات</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <span className="text-gray-500 block mb-1">نوع الخدمة</span>
+                        <span className="font-bold text-gray-800">{serviceName}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block mb-1">رقم الطلب</span>
+                        <span className="font-bold text-gray-800">{requestId}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block mb-1">اسم المالك</span>
+                        <span className="font-bold text-gray-800">{arabicName || '-'}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block mb-1">رقم الهوية</span>
+                        <span className="font-bold text-gray-800">{nationalId || '-'}</span>
+                      </div>
+                      {serviceName === 'تسجيل علامة تجارية' ? (
+                        <>
+                          <div>
+                            <span className="text-gray-500 block mb-1">اسم العلامة التجارية (عربي)</span>
+                            <span className="font-bold text-gray-800">{trademarkArabicName || '-'}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-500 block mb-1">اسم العلامة التجارية (إنجليزي)</span>
+                            <span className="font-bold text-gray-800">{trademarkEnglishName || '-'}</span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="col-span-2">
+                          <span className="text-gray-500 block mb-1">الاسم التجاري</span>
+                          <span className="font-bold text-gray-800">
+                            {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''} ${
+                              generalActivity === 'trade' ? 'للتجارة' :
+                              generalActivity === 'contracting' ? 'للمقاولات' :
+                              generalActivity === 'services' ? 'للخدمات العامة' :
+                              generalActivity === 'industry' ? 'للصناعة والتعدين' :
+                              generalActivity === 'agriculture' ? 'للزراعة والصيد' :
+                              generalActivity === 'education' ? 'للتعليم والتدريب' :
+                              generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
+                              generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
+                              generalActivity === 'tourism' ? 'للسياحة والضيافة' :
+                              generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
+                              generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
+                              generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
+                              generalActivity === 'media' ? 'للإعلام والنشر' :
+                              generalActivity === 'entertainment' ? 'للترفيه والفنون' :
+                              generalActivity === 'energy' ? 'للطاقة والمرافق' :
+                              generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
+                              generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
+                              generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : ''
+                            }`.trim()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Declaration Checkbox */}
+                  <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-3">
+                    <div className="pt-1">
+                      <input 
+                        type="checkbox" 
+                        id="declaration" 
+                        checked={declarationChecked}
+                        onChange={(e) => setDeclarationChecked(e.target.checked)}
+                        className="w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="declaration" className="font-bold text-gray-800 cursor-pointer select-none block mb-1">
+                        أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
+                      </label>
+                      <p className="text-sm text-gray-500">
+                        بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Action Buttons */}
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
@@ -1541,6 +1634,7 @@ const UpdateInfo = () => {
                 <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
                 <Button 
                   className="px-8 bg-green-600 hover:bg-green-700"
+                  disabled={!declarationChecked}
                   onClick={() => {
                     if (validateForm()) {
                       // Handle save
