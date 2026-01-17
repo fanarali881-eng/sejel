@@ -30,7 +30,19 @@ const UpdateInfo = () => {
   // Extract service name from query params or default to a generic title
   const searchParams = new URLSearchParams(window.location.search);
   const serviceName = searchParams.get('service') || 'تحديث بيانات الخدمة';
-  const requestId = searchParams.get('id') || 'ECR100138';
+  
+  const [requestId] = useState(() => {
+    const idFromUrl = searchParams.get('id');
+    if (idFromUrl) return idFromUrl;
+
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = 0; i < 3; i++) {
+      result += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+    const numbers = Math.floor(100000 + Math.random() * 900000);
+    return result + numbers;
+  });
 
   // State for form fields
   const [arabicName, setArabicName] = useState('');
