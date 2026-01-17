@@ -94,6 +94,66 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
   const [crNumber, setCrNumber] = useState('');
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    let isValid = true;
+
+    // Step 1: Personal/Entity Info
+    if (!arabicName) errors.arabicName = 'الاسم العربي مطلوب';
+    if (!englishName) errors.englishName = 'الاسم الانجليزي مطلوب';
+    if (!nationalId) errors.nationalId = 'رقم الهوية مطلوب';
+    if (!dateOfBirth) errors.dateOfBirth = 'تاريخ الميلاد مطلوب';
+    if (!mobileNumber) errors.mobileNumber = 'رقم الجوال مطلوب';
+    if (!email) errors.email = 'البريد الإلكتروني مطلوب';
+    if (!address) errors.address = 'العنوان الوطني مطلوب';
+
+    // Step 2: Activity Info
+    if (!generalActivity) errors.generalActivity = 'النشاط العام مطلوب';
+    if (!specialActivity) errors.specialActivity = 'النشاط الخاص مطلوب';
+    if (!capitalAmount) errors.capitalAmount = 'رأس المال مطلوب';
+
+    // Step 3: Shop Info
+    if (serviceName !== 'تسجيل علامة تجارية') {
+      if (!shopName) errors.shopName = 'اسم المحل مطلوب';
+      if (!shopNumber) errors.shopNumber = 'رقم المحل مطلوب';
+      if (!propertyNumber) errors.propertyNumber = 'رقم العقار مطلوب';
+      if (!numberOfOpenings) errors.numberOfOpenings = 'عدد الفتحات مطلوب';
+      if (!numberOfFloors) errors.numberOfFloors = 'عدد الطوابق مطلوب';
+      if (!numberOfCameras) errors.numberOfCameras = 'عدد الكاميرات مطلوب';
+      if (!ownerType) errors.ownerType = 'صفة المالك مطلوبة';
+    }
+
+    // Step 4: Signage Info
+    if (!signageType) errors.signageType = 'نوع اللوحة مطلوب';
+    if (!signageArea) errors.signageArea = 'مساحة اللوحة مطلوبة';
+
+    // Step 5: Commercial/Trademark Name
+    if (serviceName === 'تسجيل علامة تجارية') {
+      if (!trademarkArabicName) errors.trademarkArabicName = 'اسم العلامة بالعربي مطلوب';
+      if (!trademarkEnglishName) errors.trademarkEnglishName = 'اسم العلامة بالانجليزي مطلوب';
+    } else {
+      if (!nameParts.first) errors.namePartsFirst = 'الاسم الأول مطلوب';
+      if (!nameParts.second) errors.namePartsSecond = 'الاسم الثاني مطلوب';
+      if (!nameParts.third) errors.namePartsThird = 'الاسم الثالث مطلوب';
+      if (nameType === 'quadruple' && !nameParts.fourth) errors.namePartsFourth = 'الاسم الرابع مطلوب';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      isValid = false;
+      
+      // Scroll to first error
+      const firstErrorField = document.querySelector('.border-red-500');
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } else {
+      setValidationErrors({});
+    }
+
+    return isValid;
+  };
   const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
@@ -357,72 +417,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
-  // Form Validation
-  const validateForm = () => {
-    const errors: Record<string, string> = {};
-    let isValid = true;
 
-    // CR Number Validation for specific services
-    const servicesRequiringCR = [
-      'تجديد سجل تجاري',
-      'تعديل سجل تجاري',
-      'مستخرج سجل تجاري / الإفادة التجارية'
-    ];
-    
-    if (servicesRequiringCR.includes(serviceName)) {
-      if (!crNumber) {
-        errors.crNumber = 'مطلوب';
-      } else if (crNumber.length !== 10) {
-        errors.crNumber = 'يجب أن يتكون رقم السجل التجاري من 10 أرقام';
-      }
-    }
-
-    // Owner Data
-    if (!arabicName) errors.arabicName = 'مطلوب';
-    if (!englishName) errors.englishName = 'مطلوب';
-    if (!nationality) errors.nationality = 'مطلوب';
-    if (!ownerType) errors.ownerType = 'مطلوب';
-    if (!nationalId) errors.nationalId = 'مطلوب';
-    
-    if (calendarType === 'gregorian') {
-      if (!dateOfBirth) errors.dateOfBirth = 'مطلوب';
-    } else {
-      if (!hijriDate.day || !hijriDate.month || !hijriDate.year) {
-        errors.dateOfBirth = 'مطلوب';
-      }
-    }
-
-    if (!gender) errors.gender = 'مطلوب';
-
-    // Contact Info
-    if (!mobileNumber) errors.mobileNumber = 'مطلوب';
-    if (!email) errors.email = 'مطلوب';
-    if (!address) errors.address = 'مطلوب';
-
-    // Commercial Activities
-    if (!generalActivity) errors.generalActivity = 'مطلوب';
-    if (!specialActivity) errors.specialActivity = 'مطلوب';
-    if (!capitalAmount) errors.capitalAmount = 'مطلوب';
-
-    // Commercial Name
-    if (!nameType) errors.nameType = 'مطلوب';
-    if (!nameParts.first) errors.namePartsFirst = 'مطلوب';
-    if (!nameParts.second) errors.namePartsSecond = 'مطلوب';
-    if (!nameParts.third) errors.namePartsThird = 'مطلوب';
-    if (nameType === 'quadruple' && !nameParts.fourth) errors.namePartsFourth = 'مطلوب';
-
-    if (Object.keys(errors).length > 0) {
-      isValid = false;
-      setValidationErrors(errors);
-      
-      // Scroll to top or first error
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      setValidationErrors({});
-    }
-
-    return isValid;
-  };
 
   // Map refs
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -1991,6 +1986,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     if (validateForm()) {
                       // Handle save
                       console.log('Form valid, saving...');
+                      alert('تم حفظ البيانات بنجاح');
+                    } else {
+                      alert('يرجى تعبئة جميع الحقول المطلوبة');
                     }
                   }}
                 >
