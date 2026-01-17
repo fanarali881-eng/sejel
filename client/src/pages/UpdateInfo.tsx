@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
+import { motion, AnimatePresence } from 'framer-motion';
 import SBCSidebar from '@/components/SBCSidebar';
 import SBCStepper from '@/components/SBCStepper';
 import { Button } from '@/components/ui/button';
@@ -105,6 +106,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingStep, setPendingStep] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [collapsedSteps, setCollapsedSteps] = useState<number[]>([]);
 
   const validateForm = (step?: number) => {
     const errors: Record<string, string> = {};
@@ -793,11 +795,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   };
 
   const steps = [
-    { id: 1, label: sectionTitles.step1, status: completedSteps.includes(1) ? 'completed' : 'current' },
-    { id: 2, label: sectionTitles.step2, status: completedSteps.includes(2) ? 'completed' : 'upcoming' },
-    { id: 3, label: sectionTitles.step3, status: completedSteps.includes(3) ? 'completed' : 'upcoming' },
-    { id: 4, label: sectionTitles.step4, status: completedSteps.includes(4) ? 'completed' : 'upcoming' },
-    { id: 5, label: sectionTitles.step5, status: completedSteps.includes(5) ? 'completed' : 'upcoming' },
+    { id: 1, label: sectionTitles.step1, status: (completedSteps.includes(1) ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
+    { id: 2, label: sectionTitles.step2, status: (completedSteps.includes(2) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
+    { id: 3, label: sectionTitles.step3, status: (completedSteps.includes(3) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
+    { id: 4, label: sectionTitles.step4, status: (completedSteps.includes(4) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
+    { id: 5, label: sectionTitles.step5, status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
   ];
 
   // List of countries (simplified for demo, usually this would be a long list)
@@ -857,7 +859,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </div>
 
             {/* Owner Data Section */}
-            <div className="mb-8">
+            <AnimatePresence>
+            {!collapsedSteps.includes(1) && (
+            <motion.div 
+              className="mb-8"
+              initial={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
                   {sectionTitles.step1}
@@ -1102,6 +1111,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           setIsSaving(true);
                           setTimeout(() => {
                             setIsSaving(false);
+                            setPendingStep(1);
                             setShowConfirmDialog(true);
                           }, 3000);
                         } else {
@@ -1121,9 +1131,19 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
+            )}
+            </AnimatePresence>
+
             {/* Contact Info Section */}
-            <div className="mb-8">
+            <AnimatePresence>
+            {!collapsedSteps.includes(2) && (
+            <motion.div 
+              className="mb-8"
+              initial={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
                   {sectionTitles.step2}
@@ -1249,6 +1269,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           setIsSaving(true);
                           setTimeout(() => {
                             setIsSaving(false);
+                            setPendingStep(2);
                             setShowConfirmDialog(true);
                           }, 3000);
                         } else {
@@ -1268,10 +1289,19 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
+            )}
+            </AnimatePresence>
 
             {/* Commercial Activities / Shop Information Section */}
-            <div className="mb-8">
+            <AnimatePresence>
+            {!collapsedSteps.includes(3) && (
+            <motion.div 
+              className="mb-8"
+              initial={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
                   {sectionTitles.step3}
@@ -1811,10 +1841,19 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   )}
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
+            )}
+            </AnimatePresence>
 
             {/* Commercial Name Data Section / Signage Information */}
-            <div className="mb-8">
+            <AnimatePresence>
+            {!collapsedSteps.includes(4) && (
+            <motion.div 
+              className="mb-8"
+              initial={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
                   {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') 
@@ -2263,6 +2302,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           setIsSaving(true);
                           setTimeout(() => {
                             setIsSaving(false);
+                            setPendingStep(4);
                             setShowConfirmDialog(true);
                           }, 3000);
                         } else {
@@ -2282,7 +2322,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
+            )}
+            </AnimatePresence>
 
             {/* Declaration Section (Step 5) */}
             <div className="mb-8">
@@ -2329,6 +2371,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       setIsSaving(true);
                       setTimeout(() => {
                         setIsSaving(false);
+                        setPendingStep(5);
                         setShowConfirmDialog(true);
                       }, 3000);
                     } else {
@@ -2367,9 +2410,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               className="bg-green-600 hover:bg-green-700"
               onClick={() => {
                 setShowConfirmDialog(false);
-                // Here you would typically submit the form data
-                console.log('Data saved successfully');
-                // You might want to redirect or show a success message
+                if (pendingStep) {
+                  setCollapsedSteps(prev => [...prev, pendingStep]);
+                  setCompletedSteps(prev => [...prev, pendingStep]);
+                  setPendingStep(null);
+                }
               }}
             >
               تأكيد
