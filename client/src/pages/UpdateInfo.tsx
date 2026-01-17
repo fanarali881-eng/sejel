@@ -601,7 +601,7 @@ const UpdateInfo = () => {
                     )}
                   </div>
                   <div>
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-3 mb-1">
                       <Label className="text-gray-500 text-xs block">تاريخ الميلاد</Label>
                       <div className="flex gap-1">
                         <button
