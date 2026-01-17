@@ -1537,6 +1537,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           />
                         </div>
                       </div>
+                      
+                      <div className="flex justify-end mt-8">
+                        <Button 
+                          size="sm" 
+                          className="bg-green-600 text-white hover:bg-green-700 px-6"
+                          onClick={() => handleSaveStep(4)}
+                        >
+                          حفظ
+                        </Button>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -1585,7 +1595,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     </div>
                   )}
 
-                  {serviceName === 'تسجيل علامة تجارية' ? (
+                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') ? null : (
+                    <>
+                    {serviceName === 'تسجيل علامة تجارية' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                       {/* Arabic Trademark Name (Right) */}
                       <div>
@@ -1718,7 +1730,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     </div>
                     
                   </div>
-
                   {/* Managers Section - Only shown if NOT Trademark Registration */}
                   {serviceName !== 'تسجيل علامة تجارية' && (
                     <div className="mt-6 border-t border-gray-100 pt-4">
@@ -1728,29 +1739,27 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <div className="flex items-center gap-2">
                             <input 
                               type="radio" 
-                              id="managers-yes" 
+                              id="addManagersYes" 
                               name="addManagers" 
-                              checked={addManagers} 
-                              onChange={() => setAddManagers(true)}
-                              className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                              className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
                             />
-                            <label htmlFor="managers-yes" className="text-sm text-gray-600 cursor-pointer">نعم</label>
+                            <label htmlFor="addManagersYes" className="text-sm text-gray-700">نعم</label>
                           </div>
                           <div className="flex items-center gap-2">
                             <input 
                               type="radio" 
-                              id="managers-no" 
+                              id="addManagersNo" 
                               name="addManagers" 
-                              checked={!addManagers} 
-                              onChange={() => setAddManagers(false)}
-                              className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                              className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                              defaultChecked
                             />
-                            <label htmlFor="managers-no" className="text-sm text-gray-600 cursor-pointer">لا</label>
+                            <label htmlFor="addManagersNo" className="text-sm text-gray-700">لا</label>
                           </div>
                         </div>
                       </div>
                     </div>
                   )}
+                  </>)}
 
                   {addManagers && serviceName !== 'تسجيل علامة تجارية' && (
                       <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
