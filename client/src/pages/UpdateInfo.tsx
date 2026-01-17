@@ -990,11 +990,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 </CardContent>
               </Card>
             </div>
-            {/* Commercial Name / Signage Information Section */}
+            {/* Contact Info Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
-                  {sectionTitles.step4}
+                  {sectionTitles.step2}
                 </h2>
               </div>
 
