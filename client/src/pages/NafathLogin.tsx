@@ -24,15 +24,15 @@ export default function NafathLogin() {
       {/* Header */}
       <header className="bg-white py-0 shadow-md fixed top-0 left-0 right-0 z-50 h-[110px] flex items-center">
         <div className="w-full px-4 flex justify-between items-center h-full">
-          <div className="flex items-center gap-6 h-full">
-            {/* Logos */}
-            <img src="/images/nafath-logo.png?v=3" alt="Nafath Logo" className="h-12 object-contain" />
-            <img src="/images/vision2030-new-logo.png" alt="Vision 2030 Logo" className="h-20 object-contain opacity-80" />
-          </div>
           <button className="flex items-center gap-2 text-[#555] hover:text-[#333] transition-colors font-medium text-sm flex-row-reverse">
             <Globe className="w-5 h-5" />
             <span>English</span>
           </button>
+          <div className="flex items-center gap-4 h-full">
+            {/* Logos */}
+            <img src="/images/vision2030-new-logo.png" alt="Vision 2030 Logo" className="h-14 object-contain opacity-80" />
+            <img src="/images/nafath-logo.png?v=3" alt="Nafath Logo" className="h-8 object-contain" />
+          </div>
         </div>
       </header>
 
