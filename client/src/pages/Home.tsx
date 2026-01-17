@@ -531,17 +531,19 @@ export default function Home() {
           {/* Feedback Section - Full Width at Bottom */}
           <div className="mt-12 pt-8 border-t border-gray-200">
             {/* Comments Section */}
-            <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-6 mb-6">
-              <div className="flex justify-between items-start mb-2">
+            <div className="bg-[#fcfcfc] border border-gray-100 rounded-lg p-4 mb-6">
+              <div className="flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 bg-[#e6f4ea] rounded-full flex items-center justify-center text-[#006C35]">
                     <MessageSquare className="w-5 h-5" />
                   </div>
                   <div className="h-8 w-[1px] bg-gray-200"></div>
-                  <h3 className="font-bold text-gray-700 text-base">
-                    التعليقات والاقتراحات
-                  </h3>
-                  <p className="text-sm text-gray-500 mr-2">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
+                  <div className="flex flex-col">
+                    <h3 className="font-bold text-gray-700 text-base">
+                      التعليقات والاقتراحات
+                    </h3>
+                    <p className="text-sm text-gray-500">لأي استفسارات أو ملاحظات، يرجى ملء المعلومات المطلوبة.</p>
+                  </div>
                 </div>
                 
                 <div>
