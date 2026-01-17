@@ -95,8 +95,8 @@ export default function HomeNew() {
                       service.icon
                     )}
                   </div>
-                  <div>
-                    <h3 className="font-bold text-gray-800 group-hover:text-[#006C35] transition-colors">{service.name}</h3>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-bold text-gray-800 group-hover:text-[#006C35] transition-colors whitespace-nowrap truncate">{service.name}</h3>
                     <p className="text-sm text-gray-500">{service.desc}</p>
                   </div>
                 </div>
