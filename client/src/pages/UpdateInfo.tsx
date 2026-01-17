@@ -70,6 +70,7 @@ const UpdateInfo = () => {
   const [nameParts, setNameParts] = useState({ first: '', second: '', third: '', fourth: '' });
   const [addManagers, setAddManagers] = useState(false);
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
+  const [crNumber, setCrNumber] = useState('');
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
@@ -192,10 +193,30 @@ const UpdateInfo = () => {
     }
   };
 
+  // CR Number Handler (English Numbers Only)
+  const handleCrNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only English numbers
+    if (value === '' || /^\d+$/.test(value)) {
+      setCrNumber(value);
+    }
+  };
+
   // Form Validation
   const validateForm = () => {
     const errors: Record<string, string> = {};
     let isValid = true;
+
+    // CR Number Validation for specific services
+    const servicesRequiringCR = [
+      'تجديد سجل تجاري',
+      'تعديل سجل تجاري',
+      'مستخرج سجل تجاري / الإفادة التجارية'
+    ];
+    
+    if (servicesRequiringCR.includes(serviceName) && !crNumber) {
+      errors.crNumber = 'مطلوب';
+    }
 
     // Owner Data
     if (!arabicName) errors.arabicName = 'مطلوب';
@@ -1073,6 +1094,21 @@ const UpdateInfo = () => {
                       </svg>
                     </div>
                   </div>
+
+                  {/* CR Number Field - Conditionally Rendered */}
+                  {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية') && (
+                    <div className="mb-6">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
+                      <Input 
+                        value={crNumber}
+                        onChange={handleCrNumberChange}
+                        placeholder="رقم السجل التجاري" 
+                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        dir="ltr"
+                      />
+                      {validationErrors.crNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.crNumber}</p>}
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                     {/* 1. Name Type (Rightmost) */}
