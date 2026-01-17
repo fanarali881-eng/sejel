@@ -1541,8 +1541,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       
                       {/* Track Information Section */}
                       <div className="mt-8 mb-6">
-                        <div className="flex items-center justify-end mb-4 gap-2 border-r-4 border-green-600 pr-3">
-                          <h3 className="text-xl font-bold text-gray-800">بيانات المسار</h3>
+                        <div className="flex items-center justify-start mb-4 gap-2 border-r-4 border-green-600 pr-3">
+                          <h3 className="text-lg font-bold text-gray-800">بيانات المسار</h3>
                         </div>
                         
                         <div className="flex items-center gap-8 mt-4" dir="rtl">
