@@ -1126,7 +1126,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <div className="space-y-6">
                       {/* Trademark Question */}
                       <div className="grid grid-cols-2 gap-x-12">
-                        <div className="col-span-2 md:col-span-1">
+                        <div className="col-span-2">
                           <Label className="text-gray-800 font-bold mb-2 block text-right">
                             هل يوجد لديك علامة تجارية ؟ <span className="text-red-500">*</span>
                           </Label>
