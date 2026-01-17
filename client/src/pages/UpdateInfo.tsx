@@ -450,6 +450,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     // Allow only Arabic characters and spaces
     if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
       setArabicName(value);
+      if (validationErrors.arabicName) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.arabicName;
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -458,6 +465,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     // Allow only English characters and spaces
     if (value === '' || /^[a-zA-Z\s]+$/.test(value)) {
       setEnglishName(value);
+      if (validationErrors.englishName) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.englishName;
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -467,6 +481,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     // Allow only numbers
     if (value !== '' && !/^\d+$/.test(value)) {
       return;
+    }
+    
+    if (validationErrors.nationalId) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.nationalId;
+        return newErrors;
+      });
     }
 
     // Max length 10
