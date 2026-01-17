@@ -45,7 +45,7 @@ export default function HomeNew() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-sans" dir="rtl">
-      <Header />
+      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       
       <main className="flex-1 container py-8">
         {/* Welcome Section */}

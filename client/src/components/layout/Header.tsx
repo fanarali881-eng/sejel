@@ -3,7 +3,12 @@ import { Link } from "wouter";
 import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-export default function Header() {
+interface HeaderProps {
+  searchQuery?: string;
+  setSearchQuery?: (query: string) => void;
+}
+
+export default function Header({ searchQuery, setSearchQuery }: HeaderProps) {
   const [currentDate, setCurrentDate] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -175,6 +180,8 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="بحث..."
+                value={searchQuery || ''}
+                onChange={(e) => setSearchQuery && setSearchQuery(e.target.value)}
                 className="w-full h-8 pr-8 pl-3 text-xs text-gray-800 bg-white/90 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50"
               />
               <Search className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
