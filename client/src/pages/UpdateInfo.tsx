@@ -606,7 +606,7 @@ const UpdateInfo = () => {
                                 });
                               }
                             }}
-                            placeholder="5xxxxxxxx" 
+                            placeholder="05xxxxxxxx" 
                             className={`text-left ${mobileNumberError || validationErrors.mobileNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
                         </div>
