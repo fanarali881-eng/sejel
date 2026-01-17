@@ -122,11 +122,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!numberOfFloors) errors.numberOfFloors = 'عدد الطوابق مطلوب';
       if (!numberOfCameras) errors.numberOfCameras = 'عدد الكاميرات مطلوب';
       if (!ownerType) errors.ownerType = 'صفة المالك مطلوبة';
+      if (!hasElevator) errors.hasElevator = 'هل يوجد مصعد مطلوب';
+      if (!inCommercialCenter) errors.inCommercialCenter = 'هل المحل داخل مجمع تجاري مطلوب';
+      if (!contractType) errors.contractType = 'نوع العقد مطلوب';
     }
 
     // Step 4: Signage Info
     if (!signageType) errors.signageType = 'نوع اللوحة مطلوب';
     if (!signageArea) errors.signageArea = 'مساحة اللوحة مطلوبة';
+    if (!trackType) errors.trackType = 'نوع المسار مطلوب';
 
     // Step 5: Commercial/Trademark Name
     if (serviceName === 'تسجيل علامة تجارية') {
