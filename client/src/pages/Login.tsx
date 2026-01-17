@@ -63,12 +63,12 @@ export default function Login() {
           
           <a href="/nafath-login" className="w-full" onClick={handleLogin}>
             <Button 
-              className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[60px] border-[3px] border-[#716da5] flex items-center justify-center gap-2 relative"
+              className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[50px] border-[3px] border-[#716da5] flex items-center justify-center gap-2 relative"
               disabled={isLoading}
             >
               {isLoading ? (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Loader2 style={{ width: '52px', height: '52px' }} className="animate-spin" strokeWidth={2} />
+                  <Loader2 style={{ width: '42px', height: '42px' }} className="animate-spin" strokeWidth={2} />
                 </div>
               ) : (
                 "الدخول بواسطة النفاذ الوطني الموحد"
@@ -76,7 +76,7 @@ export default function Login() {
             </Button>
           </a>
           
-          <div className="w-full flex items-center gap-2 text-[14px] text-[#212529] bg-[#f4f7fe] mt-[15px] h-[60px] px-[1.25rem] border border-[#E1E1E8] rounded-[7px]">
+          <div className="w-full flex items-center gap-2 text-[14px] text-[#212529] bg-[#f4f7fe] mt-[15px] h-[50px] px-[1.25rem] border border-[#E1E1E8] rounded-[7px]">
             <div className="flex-shrink-0">
               <img src="/images/info-icon.png" alt="info" className="w-6 h-6" />
             </div>
