@@ -974,7 +974,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
+                        <PopoverContent className="w-auto p-0" align="start" onOpenAutoFocus={(e) => e.preventDefault()}>
+                          <div onPointerDown={(e) => e.stopPropagation()}>
                           <Calendar
                             mode="single"
                             selected={dateOfBirth}
@@ -992,8 +993,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             captionLayout="dropdown"
                             fromYear={1900}
                             toYear={maxDate.getFullYear()}
-                            disabled={(date) => date > maxDate}
                           />
+                          </div>
                         </PopoverContent>
                       </Popover>
                     ) : (
