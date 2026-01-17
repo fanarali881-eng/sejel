@@ -1097,16 +1097,20 @@ const UpdateInfo = () => {
 
                   {/* CR Number Field - Conditionally Rendered */}
                   {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية') && (
-                    <div className="mb-6">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
-                      <Input 
-                        value={crNumber}
-                        onChange={handleCrNumberChange}
-                        placeholder="رقم السجل التجاري" 
-                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        dir="ltr"
-                      />
-                      {validationErrors.crNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.crNumber}</p>}
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
+                        <Input 
+                          value={crNumber}
+                          onChange={handleCrNumberChange}
+                          placeholder="رقم السجل التجاري" 
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          dir="ltr"
+                        />
+                        {validationErrors.crNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.crNumber}</p>}
+                      </div>
+                      {/* Empty columns to align with the grid below */}
+                      <div className="hidden md:block md:col-span-4"></div>
                     </div>
                   )}
 
