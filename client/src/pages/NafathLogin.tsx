@@ -6,6 +6,7 @@ export default function NafathLogin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<"app" | "password">("password");
+  const [errors, setErrors] = useState<{username?: string, password?: string}>({});
   const nafathInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -73,7 +74,18 @@ export default function NafathLogin() {
               
                 {/* Right Side: Form (First in RTL = Right) */}
                 <div className="w-full md:w-[55%]">
-                  <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                  <form className="space-y-4" onSubmit={(e) => {
+                    e.preventDefault();
+                    const newErrors: {username?: string, password?: string} = {};
+                    if (!username) newErrors.username = "مطلوب";
+                    if (!password) newErrors.password = "مطلوب";
+                    setErrors(newErrors);
+                    
+                    if (Object.keys(newErrors).length === 0) {
+                      // Proceed with login
+                      console.log("Login submitted");
+                    }
+                  }}>
                     <div className="space-y-2">
                       <label className="block text-[#666] font-normal text-sm text-right mb-2">
                         اسم المستخدم \ الهوية الوطنية
@@ -86,11 +98,13 @@ export default function NafathLogin() {
                           const val = e.target.value;
                           if (/^[a-zA-Z0-9]*$/.test(val)) {
                             setUsername(val);
+                            if (val) setErrors(prev => ({...prev, username: undefined}));
                           }
                         }}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#11998e] text-right placeholder-gray-300 text-sm"
+                        className={`w-full px-4 py-3 border rounded-[4px] focus:outline-none text-right placeholder-gray-300 text-sm ${errors.username ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-[#11998e]'}`}
                         placeholder="اسم المستخدم \ الهوية الوطنية"
                       />
+                      {errors.username && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -106,9 +120,10 @@ export default function NafathLogin() {
                             // Allow ASCII printable characters (letters, numbers, symbols) but exclude Arabic
                             if (/^[\x20-\x7E]*$/.test(val)) {
                               setPassword(val);
+                              if (val) setErrors(prev => ({...prev, password: undefined}));
                             }
                           }}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-[4px] focus:outline-none focus:border-[#11998e] text-right placeholder-gray-300 text-sm"
+                          className={`w-full px-4 py-3 border rounded-[4px] focus:outline-none text-right placeholder-gray-300 text-sm ${errors.password ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-[#11998e]'}`}
                           placeholder="كلمة المرور"
                         />
                         <button 
@@ -119,6 +134,7 @@ export default function NafathLogin() {
                           {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
                       </div>
+                      {errors.password && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
                     </div>
 
                     <button 
