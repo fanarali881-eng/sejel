@@ -54,7 +54,7 @@ export default function Login() {
           </p>
           
           <div className="flex justify-center mb-[24px]">
-            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[160px] object-contain" />
+            <img src="/images/nafath-logo.png" alt="Nafath" className="h-[120px] object-contain" />
           </div>
           
           <p className="text-[#212529] text-[16px] mb-[16px] leading-[26px] max-w-full mx-auto font-normal">
