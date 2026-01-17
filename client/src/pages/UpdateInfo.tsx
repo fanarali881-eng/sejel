@@ -515,7 +515,7 @@ const UpdateInfo = () => {
       <header className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center">
         <div className="flex items-center gap-8">
           <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-12" />
-          <a href="/" className="text-sm text-gray-600 hover:text-green-600 font-medium">الرئيسية</a>
+          <a href="#" onClick={(e) => e.preventDefault()} className="text-sm text-gray-600 hover:text-green-600 font-medium">الرئيسية</a>
         </div>
       </header>
 
