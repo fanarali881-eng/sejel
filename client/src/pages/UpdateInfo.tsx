@@ -71,7 +71,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [propertyNumber, setPropertyNumber] = useState('');
   const [numberOfOpenings, setNumberOfOpenings] = useState('');
   const [numberOfFloors, setNumberOfFloors] = useState('');
-  const [numberOfCameras, setNumberOfCameras] = useState(''); const [ownerType, setOwnerType] = useState('');
+  const [numberOfCameras, setNumberOfCameras] = useState('');
+  const [hasElevator, setHasElevator] = useState<string>('no');
+  const [inCommercialCenter, setInCommercialCenter] = useState<string>('no');
+  const [ownerType, setOwnerType] = useState('');
   
   // Commercial Name State
   const [nameType, setNameType] = useState('triple');
@@ -1232,6 +1235,70 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             placeholder="9" 
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
+                        </div>
+
+                        {/* Has Elevator */}
+                        <div className="col-span-2 md:col-span-1">
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            هل يوجد مصعد في المحل؟ <span className="text-red-500">*</span>
+                          </Label>
+                          <div className="flex w-full border rounded-md overflow-hidden">
+                            <button
+                              type="button"
+                              onClick={() => setHasElevator('yes')}
+                              className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
+                                hasElevator === 'yes'
+                                  ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
+                                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                              }`}
+                            >
+                              نعم
+                            </button>
+                            <div className="w-px bg-gray-200"></div>
+                            <button
+                              type="button"
+                              onClick={() => setHasElevator('no')}
+                              className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
+                                hasElevator === 'no'
+                                  ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
+                                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                              }`}
+                            >
+                              لا
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* In Commercial Center */}
+                        <div className="col-span-2 md:col-span-1">
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            هل يقع المحل في مركز تجاري؟ <span className="text-red-500">*</span>
+                          </Label>
+                          <div className="flex w-full border rounded-md overflow-hidden">
+                            <button
+                              type="button"
+                              onClick={() => setInCommercialCenter('yes')}
+                              className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
+                                inCommercialCenter === 'yes'
+                                  ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
+                                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                              }`}
+                            >
+                              نعم
+                            </button>
+                            <div className="w-px bg-gray-200"></div>
+                            <button
+                              type="button"
+                              onClick={() => setInCommercialCenter('no')}
+                              className={`flex-1 py-2 text-center text-sm font-medium transition-colors ${
+                                inCommercialCenter === 'no'
+                                  ? 'bg-green-50 text-green-700 border-b-2 border-green-600'
+                                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                              }`}
+                            >
+                              لا
+                            </button>
+                          </div>
                         </div>
                       </div>
                       <div className="flex justify-end mt-8">
