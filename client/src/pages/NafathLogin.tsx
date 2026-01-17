@@ -97,7 +97,8 @@ export default function NafathLogin() {
                           'تجديد سجل تجاري',
                           'تعديل سجل تجاري',
                           'تجديد رخصة تجارية',
-                          'تجديد الرخصة التجارية'
+                          'تجديد الرخصة التجارية',
+                          'مستخرج سجل تجاري / الإفادة التجارية'
                         ];
                         
                         if (serviceName && servicesRequiringUpdate.includes(serviceName)) {
