@@ -1567,7 +1567,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             </span>
                           </Label>
                           <Select value={signageType} onValueChange={setSignageType}>
-                            <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between">
+                            <SelectTrigger className="bg-gray-50 border-gray-200 h-[40px] text-right flex-row-reverse w-full justify-between box-border">
                               <SelectValue placeholder="-اختر-" />
                             </SelectTrigger>
                             <SelectContent align="end" dir="rtl">
@@ -1592,9 +1592,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <Input 
                             value={signageArea}
                             onChange={(e) => setSignageArea(e.target.value)}
-                            className="bg-gray-50 border-gray-200 h-10 text-right"
+                            className="bg-gray-50 border-gray-200 h-[40px] text-right box-border"
                             type="number"
-                            style={{ height: '40px' }} // Explicit height to match SelectTrigger
                           />
                         </div>
                       </div>
