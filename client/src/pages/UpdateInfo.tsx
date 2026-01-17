@@ -1680,7 +1680,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     </div>
                   )}
 
-                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') ? null : (
+                  {['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? null : (
                     <>
                     {serviceName === 'تسجيل علامة تجارية' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -1816,7 +1816,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     
                   </div>
                   {/* Managers Section - Only shown if NOT Trademark Registration */}
-                  {serviceName !== 'تسجيل علامة تجارية' && (
+                  {!['تسجيل علامة تجارية', 'إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) && (
                     <div className="mt-6 border-t border-gray-100 pt-4">
                       <div className="flex items-center justify-start gap-4 mb-6">
                         <Label className="text-gray-700 font-bold">هل ترغب بإضافة مدراء؟</Label>
@@ -1849,7 +1849,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   )}
                   </>)}
 
-                  {addManagers && serviceName !== 'تسجيل علامة تجارية' && (
+                  {addManagers && !['تسجيل علامة تجارية', 'إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) && (
                       <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                         {managers.map((manager, index) => (
                           <div key={manager.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
