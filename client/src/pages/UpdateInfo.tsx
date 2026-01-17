@@ -128,15 +128,17 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!address) errors.address = 'العنوان الوطني مطلوب';
     }
 
-    // Step 3: Activity Info
-    if (!step || step === 3) {
+    const isLicenseService = ['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName);
+
+    // Step 3: Activity Info (Only for non-license services)
+    if ((!step || step === 3) && !isLicenseService) {
       if (!generalActivity) errors.generalActivity = 'النشاط العام مطلوب';
       if (!specialActivity) errors.specialActivity = 'النشاط الخاص مطلوب';
       if (!capitalAmount) errors.capitalAmount = 'رأس المال مطلوب';
     }
 
-    // Step 4: Shop Info
-    if (!step || step === 4) {
+    // Step 4: Shop Info (Only for license services)
+    if ((!step || step === 4) && isLicenseService) {
       if (serviceName !== 'تسجيل علامة تجارية') {
         if (!shopName) errors.shopName = 'اسم المحل مطلوب';
         if (!shopNumber) errors.shopNumber = 'رقم المحل مطلوب';
@@ -151,15 +153,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       }
     }
 
-    // Step 5: Signage Info
-    if (!step || step === 5) {
+    // Step 5: Signage Info (Only for license services)
+    if ((!step || step === 5) && isLicenseService) {
       if (!signageType) errors.signageType = 'نوع اللوحة مطلوب';
       if (!signageArea) errors.signageArea = 'مساحة اللوحة مطلوبة';
       if (!trackType) errors.trackType = 'نوع المسار مطلوب';
     }
 
-    // Step 6: Commercial/Trademark Name
-    if (!step || step === 6) {
+    // Step 6: Commercial/Trademark Name (Only for non-license services)
+    if ((!step || step === 6) && !isLicenseService) {
       if (serviceName === 'تسجيل علامة تجارية') {
         if (!trademarkArabicName) errors.trademarkArabicName = 'اسم العلامة بالعربي مطلوب';
         if (!trademarkEnglishName) errors.trademarkEnglishName = 'اسم العلامة بالانجليزي مطلوب';
