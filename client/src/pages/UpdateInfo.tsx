@@ -141,6 +141,88 @@ const UpdateInfo = () => {
       { value: "crops", label: "زراعة المحاصيل" },
       { value: "livestock", label: "تربية المواشي" },
       { value: "fishery", label: "صيد الأسماك" },
+      { value: "greenhouses", label: "البيوت المحمية" },
+    ],
+    education: [
+      { value: "schools", label: "المدارس الأهلية والعالمية" },
+      { value: "training_centers", label: "مراكز التدريب" },
+      { value: "universities", label: "الجامعات والكليات الأهلية" },
+      { value: "kindergartens", label: "رياض الأطفال" },
+      { value: "e_learning", label: "التعليم الإلكتروني" },
+    ],
+    health: [
+      { value: "hospitals", label: "المستشفيات" },
+      { value: "clinics", label: "المجمعات الطبية والعيادات" },
+      { value: "pharmacies", label: "الصيدليات" },
+      { value: "labs", label: "المختبرات الطبية" },
+      { value: "home_care", label: "الرعاية الصحية المنزلية" },
+    ],
+    technology: [
+      { value: "software_dev", label: "تطوير البرمجيات" },
+      { value: "cybersecurity", label: "الأمن السيبراني" },
+      { value: "cloud_services", label: "خدمات الحوسبة السحابية" },
+      { value: "ai", label: "الذكاء الاصطناعي" },
+      { value: "tech_support", label: "الدعم الفني والتقني" },
+    ],
+    tourism: [
+      { value: "hotels", label: "الفنادق والشقق المفروشة" },
+      { value: "travel_agencies", label: "وكالات السفر والسياحة" },
+      { value: "tour_guides", label: "الإرشاد السياحي" },
+      { value: "resorts", label: "المنتجعات السياحية" },
+      { value: "event_management", label: "تنظيم الفعاليات والمؤتمرات" },
+    ],
+    transport: [
+      { value: "land_transport", label: "النقل البري للبضائع" },
+      { value: "passenger_transport", label: "نقل الركاب" },
+      { value: "logistics", label: "الخدمات اللوجستية والتخزين" },
+      { value: "car_rental", label: "تأجير السيارات" },
+      { value: "delivery_services", label: "خدمات التوصيل" },
+    ],
+    real_estate: [
+      { value: "property_management", label: "إدارة الأملاك" },
+      { value: "real_estate_dev", label: "التطوير العقاري" },
+      { value: "brokerage", label: "الوساطة العقارية" },
+      { value: "valuation", label: "التقييم العقاري" },
+    ],
+    finance: [
+      { value: "insurance", label: "خدمات التأمين" },
+      { value: "fintech", label: "التقنية المالية" },
+      { value: "exchange", label: "الصرافة وتحويل الأموال" },
+      { value: "investment", label: "الاستثمار وإدارة الأصول" },
+    ],
+    media: [
+      { value: "advertising", label: "الدعاية والإعلان" },
+      { value: "publishing", label: "النشر والتوزيع" },
+      { value: "production", label: "الإنتاج الفني والمرئي" },
+      { value: "digital_marketing", label: "التسويق الرقمي" },
+    ],
+    entertainment: [
+      { value: "entertainment_centers", label: "مراكز الترفيه" },
+      { value: "cinemas", label: "دور السينما" },
+      { value: "sports_clubs", label: "الأندية الرياضية" },
+      { value: "electronic_games", label: "الألعاب الإلكترونية" },
+    ],
+    energy: [
+      { value: "renewable_energy", label: "الطاقة المتجددة" },
+      { value: "oil_gas_services", label: "خدمات النفط والغاز" },
+      { value: "electricity", label: "توليد ونقل الكهرباء" },
+      { value: "water_desalination", label: "تحلية المياه" },
+    ],
+    consulting: [
+      { value: "management_consulting", label: "الاستشارات الإدارية" },
+      { value: "legal_services", label: "الخدمات القانونية" },
+      { value: "engineering_consulting", label: "الاستشارات الهندسية" },
+      { value: "hr_consulting", label: "استشارات الموارد البشرية" },
+    ],
+    security: [
+      { value: "security_guards", label: "الحراسات الأمنية" },
+      { value: "safety_equipment", label: "معدات السلامة والإطفاء" },
+      { value: "security_systems", label: "الأنظمة الأمنية" },
+    ],
+    environment: [
+      { value: "waste_management", label: "إدارة وتدوير النفايات" },
+      { value: "environmental_consulting", label: "الاستشارات البيئية" },
+      { value: "landscaping", label: "تنسيق الحدائق" },
     ]
   };
 
