@@ -96,7 +96,8 @@ export default function NafathLogin() {
                         const servicesRequiringUpdate = [
                           'تجديد سجل تجاري',
                           'تعديل سجل تجاري',
-                          'تجديد رخصة تجارية'
+                          'تجديد رخصة تجارية',
+                          'تجديد الرخصة التجارية'
                         ];
                         
                         if (serviceName && servicesRequiringUpdate.includes(serviceName)) {
