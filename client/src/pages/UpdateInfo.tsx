@@ -1175,8 +1175,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Label>
                           <Input 
                             value={shopName}
-                            onChange={(e) => setShopName(e.target.value)}
-                            placeholder="شركة هلا العربية" 
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              // Allow only Arabic characters and spaces
+                              if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+                                setShopName(value);
+                              }
+                            }}
+                            placeholder="أدخل اسم المحل" 
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
                         </div>
