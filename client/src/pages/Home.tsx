@@ -548,7 +548,7 @@ export default function Home() {
                 
                 <div>
                   <CommentModal trigger={
-                    <Button className="bg-[#198754] hover:bg-[#157347] text-white px-6 h-10 text-sm font-bold rounded">اضافة تعليق</Button>
+                    <Button className="bg-[#198754] hover:bg-[#157347] text-white px-4 h-9 text-xs font-bold rounded">اضافة تعليق</Button>
                   } />
                 </div>
               </div>
