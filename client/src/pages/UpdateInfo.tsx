@@ -981,7 +981,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
-                          <div onPointerDown={(e) => e.stopPropagation()}>
                           <Calendar
                             mode="single"
                             selected={dateOfBirth}
@@ -1000,7 +999,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             fromYear={1900}
                             toYear={maxDate.getFullYear()}
                           />
-                          </div>
                         </PopoverContent>
                       </Popover>
                     ) : (
