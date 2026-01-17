@@ -35,7 +35,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -51,7 +51,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -64,16 +64,16 @@ export default function Home() {
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
             <div className="flex flex-col gap-1">
-              <span className="text-base font-bold leading-relaxed">الاشتراطات والموافقات الحكومية</span>
-              <span className="text-base font-medium leading-relaxed">تختلف قائمة الاشتراطات والموافقات الحكومية المطلوبة بحسب نوع النشاط ويمكن الاطلاع عليها من خلال خدمة الاستعلام عن اشتراطات الأنشطة البلدية من خلال الرابط.</span>
+              <span className="text-sm md:text-base font-bold leading-relaxed">الاشتراطات والموافقات الحكومية</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">تختلف قائمة الاشتراطات والموافقات الحكومية المطلوبة بحسب نوع النشاط ويمكن الاطلاع عليها من خلال خدمة الاستعلام عن اشتراطات الأنشطة البلدية من خلال الرابط.</span>
             </div>
           </div>
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
             <div className="flex flex-col gap-1">
-              <span className="text-base font-bold leading-relaxed">ملاحظات/تنبيهات</span>
-              <span className="text-base font-medium leading-relaxed">يرجى الالتزام بتجديد الرخصة قبل انتهاءها أو إلغاءها في حالة عدم الرغبة في تجديدها وذلك لتجنب رسوم غرامة المشترطة على التأخير في التجديد.</span>
-              <span className="text-base font-medium leading-relaxed">يمكن الاطلاع على حاسبة الرسوم المعلوماتية من خلال الرابط.</span>
+              <span className="text-sm md:text-base font-bold leading-relaxed">ملاحظات/تنبيهات</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">يرجى الالتزام بتجديد الرخصة قبل انتهاءها أو إلغاءها في حالة عدم الرغبة في تجديدها وذلك لتجنب رسوم غرامة المشترطة على التأخير في التجديد.</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">يمكن الاطلاع على حاسبة الرسوم المعلوماتية من خلال الرابط.</span>
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@ export default function Home() {
         <div className="py-4 space-y-4">
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">رخصة تجارية سارية تنتهي خلال 3 أشهر أو رخصة منتهية لمدة أقصاها سنة واحدة.</span>
+            <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">رخصة تجارية سارية تنتهي خلال 3 أشهر أو رخصة منتهية لمدة أقصاها سنة واحدة.</span>
           </div>
         </div>
       );
@@ -108,7 +108,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -130,7 +130,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -155,7 +155,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -172,7 +172,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -191,7 +191,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -210,7 +210,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -227,7 +227,7 @@ export default function Home() {
           ].map((req, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{req}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
             </div>
           ))}
         </div>
@@ -238,16 +238,16 @@ export default function Home() {
       <div className="py-4 space-y-4">
         <div className="flex items-center gap-2 text-gray-800">
           <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
-          <span className="text-base font-medium">ألا يقل العمر عن 18 سنة.</span>
+          <span className="text-xs md:text-base font-medium">ألا يقل العمر عن 18 سنة.</span>
         </div>
         <div className="flex items-center gap-2 text-gray-800">
           <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
-          <span className="text-base font-medium">ألا يكون موظفًا حكوميًا.</span>
+          <span className="text-xs md:text-base font-medium">ألا يكون موظفًا حكوميًا.</span>
         </div>
         {serviceId !== 'renew-cr' && (
           <div className="flex items-center gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800" strokeWidth={1.5} />
-            <span className="text-base font-medium">ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية.</span>
+            <span className="text-xs md:text-base font-medium">ألا يكون المالك ممتلكًا سجلًا تجاريًا نشطًا لمؤسسة فردية.</span>
           </div>
         )}
       </div>
@@ -267,7 +267,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -279,7 +279,7 @@ export default function Home() {
         <div className="py-4 space-y-4">
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">حسب نوع الإفادة</span>
+            <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">حسب نوع الإفادة</span>
           </div>
         </div>
       );
@@ -297,7 +297,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -314,7 +314,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -338,7 +338,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -362,7 +362,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -377,7 +377,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -394,7 +394,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -409,7 +409,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -421,12 +421,12 @@ export default function Home() {
         <div className="py-4 space-y-4">
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-            <span className="text-base font-medium leading-relaxed">عدم وجود غرامات غير مسددة على المستفيد لقطاع الأحوال المدنية.</span>
+            <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">عدم وجود غرامات غير مسددة على المستفيد لقطاع الأحوال المدنية.</span>
           </div>
           <div className="flex items-start gap-2 text-gray-800">
             <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
             <div className="flex flex-col gap-1">
-              <span className="text-base font-medium leading-relaxed">صورة شخصية حديثة مطابقة لاشتراطات الأحوال المدنية، وفقًا للمعايير التالية:</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">صورة شخصية حديثة مطابقة لاشتراطات الأحوال المدنية، وفقًا للمعايير التالية:</span>
               <ul className="list-disc list-inside mr-4 space-y-1 text-gray-700">
                 <li>الصيغة: JPEG 2000</li>
                 <li>الحجم: لا يتجاوز 1MB</li>
@@ -449,7 +449,7 @@ export default function Home() {
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-base font-medium leading-relaxed">{doc}</span>
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
         </div>
@@ -460,19 +460,19 @@ export default function Home() {
       <div className="py-4 space-y-4">
         <div className="flex items-start gap-2 text-gray-800">
           <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-          <span className="text-base font-medium leading-relaxed">إرفاق موافقة الجهة المرخصة في حال كان النشاط الممارس من الأنشطة التي تتطلب ترخيصًا قبل الإصدار.</span>
+          <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">إرفاق موافقة الجهة المرخصة في حال كان النشاط الممارس من الأنشطة التي تتطلب ترخيصًا قبل الإصدار.</span>
         </div>
         <div className="flex items-start gap-2 text-gray-800">
           <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-          <span className="text-base font-medium leading-relaxed">تحديد ممارسة التجارة الإلكترونية في حال كان مقدم الطلب ممارسًا لها.</span>
+          <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">تحديد ممارسة التجارة الإلكترونية في حال كان مقدم الطلب ممارسًا لها.</span>
         </div>
         <div className="flex items-start gap-2 text-gray-800">
           <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-          <span className="text-base font-medium leading-relaxed">في حال كان طالب القيد جمعية تعاونية أو خيرية يتطلب تقديم المستندات التالية من وزارة الموارد البشرية والتنمية الاجتماعية أو المركز الوطني لتنمية القطاع غير الربحي: - إرفاق صورة من شهادة التسجيل - إرفاق نسخة من الخطاب الذي يتضمن الموافقة على مجلس إدارة المؤسسة مع نسخة من نظام المؤسسة. - إرفاق نسخة من نظام الجمعية التعاونية. - إرفاق تفويض من مجلس المؤسسة لشخص سعودي لاستكمال إجراءات القيد في السجل التجاري.</span>
+          <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">في حال كان طالب القيد جمعية تعاونية أو خيرية يتطلب تقديم المستندات التالية من وزارة الموارد البشرية والتنمية الاجتماعية أو المركز الوطني لتنمية القطاع غير الربحي: - إرفاق صورة من شهادة التسجيل - إرفاق نسخة من الخطاب الذي يتضمن الموافقة على مجلس إدارة المؤسسة مع نسخة من نظام المؤسسة. - إرفاق نسخة من نظام الجمعية التعاونية. - إرفاق تفويض من مجلس المؤسسة لشخص سعودي لاستكمال إجراءات القيد في السجل التجاري.</span>
         </div>
         <div className="flex items-start gap-2 text-gray-800">
           <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
-          <span className="text-base font-medium leading-relaxed">التحقق من الآتي في حال كان طالب القيد مؤسسة وقفية: - إرفاق صك الوقفية من محكمة الأحوال الشخصية. - إرفاق وكالة شرعية من الواقف أو ناظر الوقف أو مجلس النظارة لاستخراج سجل تجاري بصك الوقفية.</span>
+          <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">التحقق من الآتي في حال كان طالب القيد مؤسسة وقفية: - إرفاق صك الوقفية من محكمة الأحوال الشخصية. - إرفاق وكالة شرعية من الواقف أو ناظر الوقف أو مجلس النظارة لاستخراج سجل تجاري بصك الوقفية.</span>
         </div>
       </div>
     );
@@ -494,19 +494,19 @@ export default function Home() {
               <div className="flex border-b border-gray-200 mb-6">
                 <button 
                   onClick={() => setActiveTab("steps")}
-                  className={`px-4 py-2 text-sm font-bold transition-colors ${activeTab === "steps" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
+                  className={`px-3 py-2 text-xs md:text-sm font-bold transition-colors ${activeTab === "steps" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
                 >
                   الخطوات
                 </button>
                 <button 
                   onClick={() => setActiveTab("requirements")}
-                  className={`px-4 py-2 text-sm font-bold transition-colors ${activeTab === "requirements" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
+                  className={`px-3 py-2 text-xs md:text-sm font-bold transition-colors ${activeTab === "requirements" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
                 >
                   المتطلبات
                 </button>
                 <button 
                   onClick={() => setActiveTab("documents")}
-                  className={`px-4 py-2 text-sm font-bold transition-colors ${activeTab === "documents" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
+                  className={`px-3 py-2 text-xs md:text-sm font-bold transition-colors ${activeTab === "documents" ? "text-[#006C35] border-b-2 border-[#006C35]" : "text-gray-500 hover:text-[#006C35]"}`}
                 >
                   المستندات المطلوبة
                 </button>

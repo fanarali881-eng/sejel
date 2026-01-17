@@ -501,7 +501,7 @@ export default function ServiceSteps() {
 
       <ul className="space-y-3 list-none p-0 m-0">
         {steps.map((step, index) => (
-          <li key={index} className="flex items-start gap-2 text-sm leading-relaxed text-black">
+          <li key={index} className="flex items-start gap-2 text-xs md:text-sm leading-relaxed text-black">
             <span className="text-[#006C35] mt-1">•</span>
             <span>
               <strong className="text-black font-bold ml-1">{step.title}</strong>

@@ -96,7 +96,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
           <div className="flex flex-col items-start text-right flex-1 md:pl-12 w-full">
             
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl font-bold text-[#004d30] mb-3">
+            <h1 className="text-xl md:text-4xl font-bold text-[#004d30] mb-3">
               {getServiceTitle()}
             </h1>
 
@@ -111,7 +111,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
             </div>
 
             {/* Description */}
-            <p className="text-gray-800 mb-2 max-w-3xl leading-relaxed text-base font-medium">
+            <p className="text-gray-800 mb-2 max-w-3xl leading-relaxed text-sm md:text-base font-medium">
               {getServiceDescription()}
             </p>
 
@@ -123,14 +123,14 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center justify-start gap-3 w-full">
-              <button className="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded flex items-center gap-2 hover:bg-gray-50 transition-colors font-bold text-sm">
+              <button className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded flex items-center gap-2 hover:bg-gray-50 transition-colors font-bold text-xs md:text-sm">
                 <span>تفضيل الصفحة</span>
                 <Heart className="w-4 h-4" />
               </button>
               <button 
                 onClick={handleStartService}
                 disabled={isLoading}
-                className="bg-[#006c35] text-white px-8 py-2 rounded font-bold hover:bg-[#005c2d] transition-colors text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed min-w-[120px] justify-center"
+                className="bg-[#006c35] text-white px-6 py-2 rounded font-bold hover:bg-[#005c2d] transition-colors text-xs md:text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed min-w-[100px] justify-center"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
