@@ -487,11 +487,10 @@ const UpdateInfo = () => {
 
   const steps = [
     { id: 1, label: 'بيانات مالك المؤسسة', status: 'current' as const },
-    { id: 2, label: 'بيانات الاسم التجاري و الأنشطة', status: 'upcoming' as const },
-    { id: 3, label: 'بيانات الوقف', status: 'upcoming' as const },
-    { id: 4, label: 'عنوان وبيانات اتصال المؤسسة', status: 'upcoming' as const },
-    { id: 5, label: 'بيانات المديرين', status: 'upcoming' as const },
-    { id: 6, label: 'ملخص الطلب', status: 'upcoming' as const },
+    { id: 2, label: 'عنوان وبيانات اتصال مالك المؤسسة', status: 'upcoming' as const },
+    { id: 3, label: 'تحديد الأنشطة التجارية ورأس المال', status: 'upcoming' as const },
+    { id: 4, label: 'بيانات الاسم التجاري', status: 'upcoming' as const },
+    { id: 5, label: 'ملخص الطلب', status: 'upcoming' as const },
   ];
 
   // List of countries (simplified for demo, usually this would be a long list)
