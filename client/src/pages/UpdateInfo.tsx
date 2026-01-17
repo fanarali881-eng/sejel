@@ -1194,7 +1194,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Label>
                           <Input 
                             value={shopNumber}
-                            onChange={(e) => setShopNumber(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === '' || /^[0-9]+$/.test(value)) {
+                                setShopNumber(value);
+                              }
+                            }}
                             placeholder="544" 
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
@@ -1207,7 +1212,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Label>
                           <Input 
                             value={propertyNumber}
-                            onChange={(e) => setPropertyNumber(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === '' || /^[0-9]+$/.test(value)) {
+                                setPropertyNumber(value);
+                              }
+                            }}
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
                         </div>
@@ -1219,7 +1229,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Label>
                           <Input 
                             value={numberOfOpenings}
-                            onChange={(e) => setNumberOfOpenings(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === '' || /^[0-9]+$/.test(value)) {
+                                setNumberOfOpenings(value);
+                              }
+                            }}
                             placeholder="5" 
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
@@ -1232,7 +1247,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Label>
                           <Input 
                             value={numberOfFloors}
-                            onChange={(e) => setNumberOfFloors(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === '' || /^[0-9]+$/.test(value)) {
+                                setNumberOfFloors(value);
+                              }
+                            }}
                             placeholder="6" 
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
@@ -1245,7 +1265,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Label>
                           <Input 
                             value={numberOfCameras}
-                            onChange={(e) => setNumberOfCameras(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === '' || /^[0-9]+$/.test(value)) {
+                                setNumberOfCameras(value);
+                              }
+                            }}
                             placeholder="9" 
                             className="text-right font-normal text-gray-600 placeholder:text-gray-400"
                           />
