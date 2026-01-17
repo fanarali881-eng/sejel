@@ -762,7 +762,7 @@ const UpdateInfo = () => {
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
                     <Select value={gender} onValueChange={setGender} dir="rtl">
                       <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
-                        <SelectValue placeholder="اختر الجنس" />
+                        <SelectValue placeholder="ذكر" />
                       </SelectTrigger>
                       {validationErrors.gender && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.gender}</p>}
                       <SelectContent>
@@ -770,6 +770,16 @@ const UpdateInfo = () => {
                         <SelectItem value="female">أنثى</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+                  <div className="col-span-2 flex justify-end mt-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
+                      onClick={() => console.log('Saving owner data...')}
+                    >
+                      حفظ
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -890,6 +900,16 @@ const UpdateInfo = () => {
                       />
                     </div>
                   </div>
+                  <div className="flex justify-end mt-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
+                      onClick={() => console.log('Saving contact info...')}
+                    >
+                      حفظ
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -988,10 +1008,8 @@ const UpdateInfo = () => {
                           className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           type="number"
                           step="1000"
-                          min="1000"
                         />
                         {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
-                        {/* Info Alert Bar - Moved here to be under Capital input only */}
                         <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
                           <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
                             <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
@@ -1000,6 +1018,16 @@ const UpdateInfo = () => {
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
+                      onClick={() => console.log('Saving activities data...')}
+                    >
+                      حفظ
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -1234,6 +1262,16 @@ const UpdateInfo = () => {
                         )}
                       </div>
                     )}
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-green-600 border-green-600 hover:bg-green-50 px-6"
+                      onClick={() => console.log('Saving commercial name data...')}
+                    >
+                      حفظ
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
