@@ -1187,7 +1187,9 @@ const UpdateInfo = () => {
             {/* Commercial Name Data Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
-                <h2 className="text-lg font-bold text-gray-800">بيانات الاسم التجاري</h2>
+                <h2 className="text-lg font-bold text-gray-800">
+                  {serviceName === 'تسجيل علامة تجارية' ? 'بيانات العلامة التجارية' : 'بيانات الاسم التجاري'}
+                </h2>
               </div>
               
               <Card className="border-none shadow-sm bg-white">
