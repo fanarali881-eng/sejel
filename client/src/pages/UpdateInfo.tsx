@@ -517,17 +517,17 @@ const UpdateInfo = () => {
 
             {/* Request Info Bar */}
             <div className="bg-blue-50 rounded-lg p-4 mb-8 flex justify-between items-center text-sm">
-              <div className="flex gap-8">
+              <div className="flex gap-16">
                 <div>
-                  <span className="text-gray-500 ml-2">رقم الطلب</span>
+                  <span className="text-gray-500 ml-6">رقم الطلب</span>
                   <span className="font-bold text-gray-800">{requestId}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500 ml-2">حالة الطلب</span>
+                  <span className="text-gray-500 ml-6">حالة الطلب</span>
                   <span className="font-bold text-gray-800">مسودة</span>
                 </div>
                 <div>
-                  <span className="text-gray-500 ml-2">تاريخ الطلب</span>
+                  <span className="text-gray-500 ml-6">تاريخ الطلب</span>
                   <span className="font-bold text-gray-800">2025-04-24</span>
                 </div>
               </div>
