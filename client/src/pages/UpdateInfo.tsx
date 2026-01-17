@@ -58,6 +58,7 @@ const UpdateInfo = () => {
   const [nameParts, setNameParts] = useState({ first: '', second: '', third: '', fourth: '' });
   const [addManagers, setAddManagers] = useState(false);
   const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -140,6 +141,50 @@ const UpdateInfo = () => {
     if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
       setNameParts(prev => ({ ...prev, [part]: value }));
     }
+  };
+
+  // Form Validation
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    let isValid = true;
+
+    // Owner Data
+    if (!arabicName) errors.arabicName = 'مطلوب';
+    if (!englishName) errors.englishName = 'مطلوب';
+    if (!nationality) errors.nationality = 'مطلوب';
+    if (!ownerType) errors.ownerType = 'مطلوب';
+    if (!nationalId) errors.nationalId = 'مطلوب';
+    if (!dateOfBirth) errors.dateOfBirth = 'مطلوب';
+    if (!gender) errors.gender = 'مطلوب';
+
+    // Contact Info
+    if (!mobileNumber) errors.mobileNumber = 'مطلوب';
+    if (!email) errors.email = 'مطلوب';
+    if (!address) errors.address = 'مطلوب';
+
+    // Commercial Activities
+    if (!generalActivity) errors.generalActivity = 'مطلوب';
+    if (!specialActivity) errors.specialActivity = 'مطلوب';
+    if (!capitalAmount) errors.capitalAmount = 'مطلوب';
+
+    // Commercial Name
+    if (!nameType) errors.nameType = 'مطلوب';
+    if (!nameParts.first) errors.namePartsFirst = 'مطلوب';
+    if (!nameParts.second) errors.namePartsSecond = 'مطلوب';
+    if (!nameParts.third) errors.namePartsThird = 'مطلوب';
+    if (nameType === 'quadruple' && !nameParts.fourth) errors.namePartsFourth = 'مطلوب';
+
+    if (Object.keys(errors).length > 0) {
+      isValid = false;
+      setValidationErrors(errors);
+      
+      // Scroll to top or first error
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setValidationErrors({});
+    }
+
+    return isValid;
   };
 
   // Map refs
@@ -466,8 +511,9 @@ const UpdateInfo = () => {
                       value={arabicName}
                       onChange={handleArabicNameChange}
                       placeholder="محمد عبدالله أحمد" 
-                      className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" 
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
+                    {validationErrors.arabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.arabicName}</p>}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
@@ -475,16 +521,18 @@ const UpdateInfo = () => {
                       value={englishName}
                       onChange={handleEnglishNameChange}
                       placeholder="Mohammed Abdullah Ahmed" 
-                      className="font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400" 
+                      className={`font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400 ${validationErrors.englishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                       dir="ltr" 
                     />
+                    {validationErrors.englishName && <p className="text-xs text-red-500 mt-1 text-left">{validationErrors.englishName}</p>}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
                     <Select value={nationality} onValueChange={setNationality} dir="rtl">
-                      <SelectTrigger className="font-bold text-gray-800 w-full text-right">
+                      <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
+                      {validationErrors.nationality && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nationality}</p>}
                       <SelectContent>
                         {nationalityCountries.map((country) => (
                           <SelectItem key={country.value} value={country.value}>
@@ -500,8 +548,9 @@ const UpdateInfo = () => {
                       value={ownerType}
                       onChange={handleOwnerTypeChange}
                       placeholder="سعودي" 
-                      className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" 
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.ownerType ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
+                    {validationErrors.ownerType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.ownerType}</p>}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
@@ -509,10 +558,10 @@ const UpdateInfo = () => {
                       value={nationalId}
                       onChange={handleNationalIdChange}
                       placeholder="1012345678" 
-                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError || validationErrors.nationalId ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
-                    {nationalIdError && (
-                      <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError}</p>
+                    {(nationalIdError || validationErrors.nationalId) && (
+                      <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError || validationErrors.nationalId}</p>
                     )}
                   </div>
                   <div>
@@ -523,7 +572,8 @@ const UpdateInfo = () => {
                           variant={"outline"}
                           className={cn(
                             "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
-                            !dateOfBirth && "text-muted-foreground font-normal"
+                            !dateOfBirth && "text-muted-foreground font-normal",
+                            validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
                           )}
                         >
                           <CalendarIcon className="ml-2 h-4 w-4" />
@@ -546,9 +596,10 @@ const UpdateInfo = () => {
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
                     <Select value={gender} onValueChange={setGender} dir="rtl">
-                      <SelectTrigger className="font-bold text-gray-800 w-full text-right">
+                      <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنس" />
                       </SelectTrigger>
+                      {validationErrors.gender && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.gender}</p>}
                       <SelectContent>
                         <SelectItem value="male">ذكر</SelectItem>
                         <SelectItem value="female">أنثى</SelectItem>
@@ -614,15 +665,15 @@ const UpdateInfo = () => {
                           <Input 
                             value={mobileNumber}
                             onChange={handleMobileNumberChange}
-                            placeholder={countryCode === '+966' ? "5xxxxxxxx" : "xxxxxxxx"} 
-                            className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            placeholder={countryCode === '+966' ? "05xxxxxxxx" : ""} 
+                            className={`text-left ${mobileNumberError || validationErrors.mobileNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
                         </div>
-                        {mobileNumberError ? (
-                          <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>
+                        {(mobileNumberError || validationErrors.mobileNumber) ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError || validationErrors.mobileNumber}</p>
                         ) : (
                           <p className="text-xs text-gray-400 mt-1 text-right">
-                            {countryCode === '+966' ? 'يجب أن يكون بصيغة 05xxxxxxxx' : 'أدخل رقم الجوال بدون الرمز الدولي'}
+                            {countryCode === '+966' ? 'يجب أن يكون بصيغة 05xxxxxxxx' : ''}
                           </p>
                         )}
                       </div>
@@ -634,11 +685,11 @@ const UpdateInfo = () => {
                           value={email}
                           onChange={handleEmailChange}
                           placeholder="someone@example.org" 
-                          className={`text-left ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`text-left ${emailError || validationErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr" 
                         />
-                        {emailError ? (
-                          <p className="text-xs text-red-500 mt-1 text-right">{emailError}</p>
+                        {(emailError || validationErrors.email) ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{emailError || validationErrors.email}</p>
                         ) : (
                           <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
                         )}
@@ -652,8 +703,9 @@ const UpdateInfo = () => {
                             value={address}
                             onChange={handleAddressChange}
                             placeholder="ابحث عن العنوان..." 
-                            className="pl-10"
+                            className={`pl-10 ${validationErrors.address ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
+                          {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
                           <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                         </div>
                       </div>
@@ -711,9 +763,10 @@ const UpdateInfo = () => {
                     <div className="w-1/2 pl-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
                       <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
                           <SelectValue placeholder="اختر النشاط العام" />
                         </SelectTrigger>
+                        {validationErrors.generalActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.generalActivity}</p>}
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
                           <SelectItem value="trade" className="text-right justify-start cursor-pointer pr-8">التجارة</SelectItem>
                           <SelectItem value="contracting" className="text-right justify-start cursor-pointer pr-8">المقاولات</SelectItem>
@@ -728,9 +781,10 @@ const UpdateInfo = () => {
                     <div className="w-1/2 pr-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
                       <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
                           <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
                         </SelectTrigger>
+                        {validationErrors.specialActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.specialActivity}</p>}
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
                           {generalActivity && activitiesData[generalActivity]?.map((activity) => (
                             <SelectItem key={activity.value} value={activity.value} className="text-right justify-start cursor-pointer pr-8">
@@ -766,11 +820,12 @@ const UpdateInfo = () => {
                           onChange={handleCapitalChange}
                           onBlur={handleCapitalBlur}
                           placeholder="1000"
-                          className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300"
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           type="number"
                           step="1000"
                           min="1000"
                         />
+                        {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
                         {/* Info Alert Bar - Moved here to be under Capital input only */}
                         <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
                           <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
@@ -819,9 +874,10 @@ const UpdateInfo = () => {
                     <div>
                       <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
                       <Select value={nameType} onValueChange={setNameType}>
-                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.nameType ? 'border-red-500 focus:ring-red-500' : ''}`}>
                           <SelectValue placeholder="اختر" />
                         </SelectTrigger>
+                        {validationErrors.nameType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nameType}</p>}
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
                           <SelectItem value="triple" className="text-right justify-start cursor-pointer pr-8">إسم ثلاثي</SelectItem>
                           <SelectItem value="quadruple" className="text-right justify-start cursor-pointer pr-8">إسم رباعي</SelectItem>
@@ -837,8 +893,9 @@ const UpdateInfo = () => {
                         value={nameParts.first}
                         onChange={(e) => handleNamePartChange('first', e.target.value)}
                         placeholder="الاسم الأول" 
-                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFirst ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                       />
+                      {validationErrors.namePartsFirst && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFirst}</p>}
                     </div>
 
                     {/* Second Name */}
@@ -848,8 +905,9 @@ const UpdateInfo = () => {
                         value={nameParts.second}
                         onChange={(e) => handleNamePartChange('second', e.target.value)}
                         placeholder="الاسم الثاني" 
-                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsSecond ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                       />
+                      {validationErrors.namePartsSecond && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsSecond}</p>}
                     </div>
 
                     {/* Third Name */}
@@ -859,8 +917,9 @@ const UpdateInfo = () => {
                         value={nameParts.third}
                         onChange={(e) => handleNamePartChange('third', e.target.value)}
                         placeholder="الاسم الثالث" 
-                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                        className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsThird ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                       />
+                      {validationErrors.namePartsThird && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsThird}</p>}
                     </div>
 
                     {/* Fourth Name (Conditional) */}
@@ -871,8 +930,9 @@ const UpdateInfo = () => {
                           value={nameParts.fourth}
                           onChange={(e) => handleNamePartChange('fourth', e.target.value)}
                           placeholder="الاسم الرابع" 
-                          className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFourth ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
+                        {validationErrors.namePartsFourth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFourth}</p>}
                       </div>
                     )}
                   </div>
@@ -1013,7 +1073,17 @@ const UpdateInfo = () => {
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
                 <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
-                <Button className="px-8 bg-green-600 hover:bg-green-700">حفظ</Button>
+                <Button 
+                  className="px-8 bg-green-600 hover:bg-green-700"
+                  onClick={() => {
+                    if (validateForm()) {
+                      // Handle save
+                      console.log('Form valid, saving...');
+                    }
+                  }}
+                >
+                  حفظ
+                </Button>
               </div>
             </div>
           </div>
