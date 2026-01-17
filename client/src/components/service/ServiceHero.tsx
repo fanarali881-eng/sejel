@@ -101,12 +101,15 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
             </h1>
 
             {/* Tags */}
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4">
               <span className="bg-[#e6f2ff] text-[#0075c9] text-xs font-bold px-3 py-1 rounded">
                 {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : serviceId === 'renew-passport' || serviceId === 'issue-saudi-passport' ? 'وزارة الداخلية' : serviceId === 'issue-driving-license' || serviceId === 'renew-driving-license' || serviceId === 'renew-vehicle-registration' ? 'الإدارة العامة للمرور' : serviceId === 'renew-national-id' ? 'وزارة الداخلية' : 'وزارة التجارة'}
               </span>
               <span className="bg-[#e6fffa] text-[#006c35] text-xs font-bold px-3 py-1 rounded">
                 الاكثر استخداما
+              </span>
+              <span className="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded">
+                رسوم الخدمة
               </span>
             </div>
 
@@ -146,7 +149,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
           <div className="w-full md:w-auto mt-8 md:mt-0">
             <div className="bg-[#f0fdf4] p-4 rounded-lg shadow-sm border border-gray-100">
               <h3 className="text-[#006c35] text-center font-bold mb-3 text-sm">مشاركة الصفحة</h3>
-              <div className="flex gap-2">
+              <div className="flex justify-center gap-2">
                 <button className="w-8 h-8 bg-[#006c35] rounded text-white flex items-center justify-center hover:bg-[#005c2d]">
                   <Mail className="w-4 h-4" />
                 </button>
