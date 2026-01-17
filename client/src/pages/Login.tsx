@@ -49,11 +49,11 @@ export default function Login() {
         <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[700px] p-8 text-center">
           <h1 className="text-[30px] font-bold text-[#35363a] mb-[1.5rem]">تسجيل دخول</h1>
           
-          <p className="text-[#3b3b3b] text-[18px] mb-[24px] font-normal leading-[32px]">
+          <p className="text-[#3b3b3b] text-[18px] mb-[32px] font-normal leading-[32px]">
             للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
           </p>
           
-          <div className="flex justify-center mb-[32px]">
+          <div className="flex justify-center mb-[40px]">
             <img src="/images/nafath-logo.png" alt="Nafath" className="h-[90px] object-contain" />
           </div>
           
