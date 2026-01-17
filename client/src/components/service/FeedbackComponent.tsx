@@ -22,24 +22,24 @@ export default function FeedbackComponent() {
           </div>
         ) : (
           <div className="flex items-center gap-4">
-            <div className="flex gap-6">
-              <label className="flex items-center gap-2 cursor-pointer group">
-                <span className={`text-sm font-bold ${selectedOption === "yes" ? "text-[#198754]" : "text-gray-700 group-hover:text-[#198754]"}`}>نعم</span>
+            <div className="flex gap-12">
+              <label className="flex items-center gap-3 cursor-pointer group">
                 <div 
                   onClick={() => setSelectedOption("yes")}
                   className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${selectedOption === "yes" ? "border-[#198754] bg-[#198754]" : "border-gray-300 bg-white group-hover:border-[#198754]"}`}
                 >
                   {selectedOption === "yes" && <div className="w-2 h-2 bg-white rounded-full"></div>}
                 </div>
+                <span className={`text-sm font-bold ${selectedOption === "yes" ? "text-[#198754]" : "text-gray-700 group-hover:text-[#198754]"}`}>نعم</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer group">
-                <span className={`text-sm font-bold ${selectedOption === "no" ? "text-[#198754]" : "text-gray-700 group-hover:text-[#198754]"}`}>لا</span>
+              <label className="flex items-center gap-3 cursor-pointer group">
                 <div 
                   onClick={() => setSelectedOption("no")}
                   className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${selectedOption === "no" ? "border-[#198754] bg-[#198754]" : "border-gray-300 bg-white group-hover:border-[#198754]"}`}
                 >
                   {selectedOption === "no" && <div className="w-2 h-2 bg-white rounded-full"></div>}
                 </div>
+                <span className={`text-sm font-bold ${selectedOption === "no" ? "text-[#198754]" : "text-gray-700 group-hover:text-[#198754]"}`}>لا</span>
               </label>
             </div>
             
