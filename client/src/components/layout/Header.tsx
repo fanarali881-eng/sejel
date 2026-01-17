@@ -163,10 +163,23 @@ export default function Header() {
 
       {/* Breadcrumb Bar - Green Background */}
       <div className="bg-[#006C35] py-5">
-        <div className="container flex items-center gap-2 text-sm text-white font-medium">
+        <div className="container flex items-center justify-between gap-2 text-sm text-white font-medium">
+          <div className="flex items-center gap-2">
           <Link href="/" className="hover:opacity-80">الرئيسية</Link>
           <span className="opacity-60">&gt;</span>
           <span>الخدمات</span>
+          </div>
+          {/* Mobile Search Bar */}
+          <div className="md:hidden w-1/2 max-w-[200px]">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="بحث..."
+                className="w-full h-8 pr-8 pl-3 text-xs text-gray-800 bg-white/90 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50"
+              />
+              <Search className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+            </div>
+          </div>
         </div>
       </div>
     </header>
