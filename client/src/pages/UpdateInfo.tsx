@@ -743,7 +743,11 @@ const UpdateInfo = () => {
             {/* Owner Data Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
-                <h2 className="text-lg font-bold text-gray-800">بيانات مالك المؤسسة</h2>
+                <h2 className="text-lg font-bold text-gray-800">
+                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') 
+                    ? 'معلومات المالك' 
+                    : 'بيانات مالك المؤسسة'}
+                </h2>
               </div>
               
               <Card className="border-none shadow-sm bg-white">
@@ -964,7 +968,11 @@ const UpdateInfo = () => {
             {/* Contact Info Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
-                <h2 className="text-lg font-bold text-gray-800">عنوان وبيانات اتصال مالك المؤسسة</h2>
+                <h2 className="text-lg font-bold text-gray-800">
+                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') 
+                    ? 'عنوان وبيانات اتصال المالك' 
+                    : 'عنوان وبيانات اتصال مالك المؤسسة'}
+                </h2>
               </div>
 
               <Card className="border-none shadow-sm bg-white">
