@@ -1555,7 +1555,7 @@ const UpdateInfo = () => {
                       />
                     </div>
                     <div>
-                      <label htmlFor="declaration" className="font-bold text-gray-800 cursor-pointer select-none block mb-1">
+                      <label htmlFor="declaration" className="text-gray-800 cursor-pointer select-none block mb-1">
                         أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
                       </label>
                       <p className="text-sm text-gray-500">
