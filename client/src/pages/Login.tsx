@@ -63,7 +63,7 @@ export default function Login() {
           
           <a href="/nafath-login" className="w-full" onClick={handleLogin}>
             <Button 
-              className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[19.2px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[50px] border-[3px] border-[#716da5] flex items-center justify-center gap-2 relative"
+              className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[16px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[50px] border-[3px] border-[#716da5] flex items-center justify-center gap-2 relative"
               disabled={isLoading}
             >
               {isLoading ? (
