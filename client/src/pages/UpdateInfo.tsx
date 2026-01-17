@@ -1313,9 +1313,22 @@ const UpdateInfo = () => {
                         {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''} ${
                           generalActivity === 'trade' ? 'للتجارة' :
                           generalActivity === 'contracting' ? 'للمقاولات' :
-                          generalActivity === 'services' ? 'للخدمات' :
-                          generalActivity === 'industry' ? 'للصناعة' :
-                          generalActivity === 'agriculture' ? 'للزراعة' : ''
+                          generalActivity === 'services' ? 'للخدمات العامة' :
+                          generalActivity === 'industry' ? 'للصناعة والتعدين' :
+                          generalActivity === 'agriculture' ? 'للزراعة والصيد' :
+                          generalActivity === 'education' ? 'للتعليم والتدريب' :
+                          generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
+                          generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
+                          generalActivity === 'tourism' ? 'للسياحة والضيافة' :
+                          generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
+                          generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
+                          generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
+                          generalActivity === 'media' ? 'للإعلام والنشر' :
+                          generalActivity === 'entertainment' ? 'للترفيه والفنون' :
+                          generalActivity === 'energy' ? 'للطاقة والمرافق' :
+                          generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
+                          generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
+                          generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : ''
                         }`.trim()}
                       </span>
                     </div>
