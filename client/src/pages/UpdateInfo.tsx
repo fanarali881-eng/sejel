@@ -1095,10 +1095,28 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <div className="col-span-2 flex justify-end mt-8">
                     <Button 
                       size="sm" 
-                      className="bg-green-600 text-white hover:bg-green-700 px-6"
-                      onClick={() => handleSaveStep(1)}
+                      className="bg-green-600 text-white hover:bg-green-700 px-6 min-w-[80px]"
+                      disabled={isSaving}
+                      onClick={() => {
+                        if (validateForm(1)) {
+                          setIsSaving(true);
+                          setTimeout(() => {
+                            setIsSaving(false);
+                            setShowConfirmDialog(true);
+                          }, 3000);
+                        } else {
+                          const firstErrorField = document.querySelector('.border-red-500');
+                          if (firstErrorField) {
+                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }
+                        }
+                      }}
                     >
-                      حفظ
+                      {isSaving ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      ) : (
+                        "حفظ"
+                      )}
                     </Button>
                   </div>
                 </CardContent>
@@ -1224,10 +1242,28 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <div className="flex justify-end mt-8">
                     <Button 
                       size="sm" 
-                      className="bg-green-600 text-white hover:bg-green-700 px-6"
-                      onClick={() => handleSaveStep(2)}
+                      className="bg-green-600 text-white hover:bg-green-700 px-6 min-w-[80px]"
+                      disabled={isSaving}
+                      onClick={() => {
+                        if (validateForm(2)) {
+                          setIsSaving(true);
+                          setTimeout(() => {
+                            setIsSaving(false);
+                            setShowConfirmDialog(true);
+                          }, 3000);
+                        } else {
+                          const firstErrorField = document.querySelector('.border-red-500');
+                          if (firstErrorField) {
+                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }
+                        }
+                      }}
                     >
-                      حفظ
+                      {isSaving ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      ) : (
+                        "حفظ"
+                      )}
                     </Button>
                   </div>
                 </CardContent>
@@ -1613,13 +1649,31 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
                       <div className="flex justify-end mt-8">
-                        <Button 
-                          size="sm" 
-                          className="bg-green-600 text-white hover:bg-green-700 px-6"
-                          onClick={() => handleSaveStep(3)}
-                        >
-                          حفظ
-                        </Button>
+                    <Button 
+                      size="sm" 
+                      className="bg-green-600 text-white hover:bg-green-700 px-6 min-w-[80px]"
+                      disabled={isSaving}
+                      onClick={() => {
+                        if (validateForm(3)) {
+                          setIsSaving(true);
+                          setTimeout(() => {
+                            setIsSaving(false);
+                            setShowConfirmDialog(true);
+                          }, 3000);
+                        } else {
+                          const firstErrorField = document.querySelector('.border-red-500');
+                          if (firstErrorField) {
+                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }
+                        }
+                      }}
+                    >
+                      {isSaving ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      ) : (
+                        "حفظ"
+                      )}
+                    </Button>
                       </div>
                     </div>
                   ) : (
@@ -2202,10 +2256,28 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <div className="flex justify-end mt-8">
                     <Button 
                       size="sm" 
-                      className="bg-green-600 text-white hover:bg-green-700 px-6"
-                      onClick={() => handleSaveStep(4)}
+                      className="bg-green-600 text-white hover:bg-green-700 px-6 min-w-[80px]"
+                      disabled={isSaving}
+                      onClick={() => {
+                        if (validateForm(4)) {
+                          setIsSaving(true);
+                          setTimeout(() => {
+                            setIsSaving(false);
+                            setShowConfirmDialog(true);
+                          }, 3000);
+                        } else {
+                          const firstErrorField = document.querySelector('.border-red-500');
+                          if (firstErrorField) {
+                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }
+                        }
+                      }}
                     >
-                      حفظ
+                      {isSaving ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      ) : (
+                        "حفظ"
+                      )}
                     </Button>
                   </div>
                 </CardContent>
