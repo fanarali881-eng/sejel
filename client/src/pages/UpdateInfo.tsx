@@ -61,6 +61,14 @@ const UpdateInfo = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Calculate max date for 18 years old
   const maxDate = new Date();
@@ -528,7 +536,18 @@ const UpdateInfo = () => {
                 </div>
                 <div>
                   <span className="text-gray-500 ml-6">تاريخ الطلب</span>
-                  <span className="font-bold text-gray-800">2025-04-24</span>
+                  <span className="font-bold text-gray-800" dir="ltr">
+                    {currentDateTime.toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    }).replace(/\//g, '-')} {currentDateTime.toLocaleTimeString('en-US', {
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })}
+                  </span>
                 </div>
               </div>
             </div>
