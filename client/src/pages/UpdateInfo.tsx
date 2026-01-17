@@ -1827,6 +1827,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               id="addManagersYes" 
                               name="addManagers" 
                               className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                              checked={addManagers === true}
+                              onChange={() => setAddManagers(true)}
                             />
                             <label htmlFor="addManagersYes" className="text-sm text-gray-700">نعم</label>
                           </div>
@@ -1836,7 +1838,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               id="addManagersNo" 
                               name="addManagers" 
                               className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
-                              defaultChecked
+                              checked={addManagers === false}
+                              onChange={() => setAddManagers(false)}
                             />
                             <label htmlFor="addManagersNo" className="text-sm text-gray-700">لا</label>
                           </div>
