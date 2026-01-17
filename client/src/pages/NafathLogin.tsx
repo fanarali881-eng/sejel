@@ -226,28 +226,25 @@ export default function NafathLogin() {
 
       {/* Update Info Popup */}
       <Dialog open={showUpdatePopup} onOpenChange={setShowUpdatePopup}>
-        <DialogContent className="sm:max-w-[425px] text-right" dir="rtl">
-          <DialogHeader className="text-right">
-            <DialogTitle className="flex items-center gap-2 text-[#11998e]">
-              <AlertCircle className="w-6 h-6" />
-              تنبيه هام
-            </DialogTitle>
-            <DialogDescription className="pt-4 text-base text-gray-700 font-medium">
+        <DialogContent className="sm:max-w-[425px] text-right [&>button]:hidden" dir="rtl">
+          <DialogHeader className="text-right space-y-0">
+            <DialogTitle className="hidden">تنبيه</DialogTitle>
+            <DialogDescription className="pt-6 pb-4 text-lg text-gray-800 font-bold text-right">
               يجب تحديث البيانات وإستكمال عملية التجديد
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="sm:justify-start mt-4">
+          <div className="flex justify-center mt-2 mb-2">
             <Button 
               onClick={() => {
                 const searchParams = new URLSearchParams(window.location.search);
                 const serviceName = searchParams.get('service');
                 window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
               }}
-              className="bg-[#11998e] hover:bg-[#0e8c82] text-white w-full sm:w-auto"
+              className="bg-[#11998e] hover:bg-[#0e8c82] text-white px-12 py-2 text-base font-bold rounded-md"
             >
               متابعة
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
 
