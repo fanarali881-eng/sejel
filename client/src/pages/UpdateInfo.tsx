@@ -80,6 +80,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   // Signage Information State
   const [signageType, setSignageType] = useState('');
   const [signageArea, setSignageArea] = useState('');
+  const [trackType, setTrackType] = useState('fast'); // 'fast' or 'municipality'
   
   // Commercial Name State
   const [nameType, setNameType] = useState('triple');
@@ -1538,6 +1539,44 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
                       
+                      {/* Track Information Section */}
+                      <div className="mt-8 mb-6">
+                        <div className="flex items-center justify-end mb-4 gap-2 border-r-4 border-green-600 pr-3">
+                          <h3 className="text-xl font-bold text-gray-800">بيانات المسار</h3>
+                        </div>
+                        
+                        <div className="flex items-center justify-end gap-8 mt-4">
+                          <div className="flex items-center gap-2">
+                            <label htmlFor="municipality-track" className="text-sm font-bold text-gray-700 cursor-pointer">مسار البلدية</label>
+                            <div className="relative flex items-center">
+                              <input 
+                                type="radio" 
+                                id="municipality-track" 
+                                name="trackType" 
+                                value="municipality"
+                                checked={trackType === 'municipality'}
+                                onChange={() => setTrackType('municipality')}
+                                className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <label htmlFor="fast-track" className="text-sm font-bold text-gray-700 cursor-pointer">مسار سريع (مكتب هندسي)</label>
+                            <div className="relative flex items-center">
+                              <input 
+                                type="radio" 
+                                id="fast-track" 
+                                name="trackType" 
+                                value="fast"
+                                checked={trackType === 'fast'}
+                                onChange={() => setTrackType('fast')}
+                                className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
                     </div>
                   ) : (
