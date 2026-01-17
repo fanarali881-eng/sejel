@@ -667,7 +667,7 @@ const UpdateInfo = () => {
     { id: 2, label: 'عنوان وبيانات اتصال مالك المؤسسة', status: completedSteps.includes(2) ? 'completed' : 'upcoming' },
     { id: 3, label: 'تحديد الأنشطة التجارية ورأس المال', status: completedSteps.includes(3) ? 'completed' : 'upcoming' },
     { id: 4, label: 'بيانات الاسم التجاري', status: completedSteps.includes(4) ? 'completed' : 'upcoming' },
-    { id: 5, label: 'ملخص الطلب', status: completedSteps.includes(5) ? 'completed' : 'upcoming' },
+    { id: 5, label: 'الإقرار', status: completedSteps.includes(5) ? 'completed' : 'upcoming' },
   ];
 
   // List of countries (simplified for demo, usually this would be a long list)
@@ -1535,74 +1535,14 @@ const UpdateInfo = () => {
               </Card>
             </div>
 
-            {/* Summary Section (Step 5) */}
+            {/* Declaration Section (Step 5) */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
-                <h2 className="text-lg font-bold text-gray-800">ملخص الطلب</h2>
+                <h2 className="text-lg font-bold text-gray-800">الإقرار</h2>
               </div>
               
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
-                  <div className="bg-gray-50 rounded-lg p-6 border border-gray-100 mb-6">
-                    <h3 className="font-bold text-gray-800 mb-4 text-lg">مراجعة البيانات</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                      <div>
-                        <span className="text-gray-500 block mb-1">نوع الخدمة</span>
-                        <span className="font-bold text-gray-800">{serviceName}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500 block mb-1">رقم الطلب</span>
-                        <span className="font-bold text-gray-800">{requestId}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500 block mb-1">اسم المالك</span>
-                        <span className="font-bold text-gray-800">{arabicName || '-'}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500 block mb-1">رقم الهوية</span>
-                        <span className="font-bold text-gray-800">{nationalId || '-'}</span>
-                      </div>
-                      {serviceName === 'تسجيل علامة تجارية' ? (
-                        <>
-                          <div>
-                            <span className="text-gray-500 block mb-1">اسم العلامة التجارية (عربي)</span>
-                            <span className="font-bold text-gray-800">{trademarkArabicName || '-'}</span>
-                          </div>
-                          <div>
-                            <span className="text-gray-500 block mb-1">اسم العلامة التجارية (إنجليزي)</span>
-                            <span className="font-bold text-gray-800">{trademarkEnglishName || '-'}</span>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="col-span-2">
-                          <span className="text-gray-500 block mb-1">الاسم التجاري</span>
-                          <span className="font-bold text-gray-800">
-                            {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''} ${
-                              generalActivity === 'trade' ? 'للتجارة' :
-                              generalActivity === 'contracting' ? 'للمقاولات' :
-                              generalActivity === 'services' ? 'للخدمات العامة' :
-                              generalActivity === 'industry' ? 'للصناعة والتعدين' :
-                              generalActivity === 'agriculture' ? 'للزراعة والصيد' :
-                              generalActivity === 'education' ? 'للتعليم والتدريب' :
-                              generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
-                              generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
-                              generalActivity === 'tourism' ? 'للسياحة والضيافة' :
-                              generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
-                              generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
-                              generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
-                              generalActivity === 'media' ? 'للإعلام والنشر' :
-                              generalActivity === 'entertainment' ? 'للترفيه والفنون' :
-                              generalActivity === 'energy' ? 'للطاقة والمرافق' :
-                              generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
-                              generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
-                              generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : ''
-                            }`.trim()}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
                   {/* Declaration Checkbox */}
                   <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-3">
                     <div className="pt-1">
