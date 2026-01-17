@@ -64,8 +64,8 @@ export default function Header({ searchQuery, setSearchQuery }: HeaderProps) {
                   <ChevronDown className="w-3 h-3" />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-64 p-4" align="start">
-                <div className="flex flex-col items-center justify-center min-h-[60px] gap-2">
+              <PopoverContent className="w-56 p-2" align="start">
+                <div className="flex flex-col items-center justify-center min-h-[40px] gap-1">
                   {isVerifying ? (
                     <Loader2 className="w-8 h-8 text-[#006C35] animate-spin" />
                   ) : isVerified ? (
