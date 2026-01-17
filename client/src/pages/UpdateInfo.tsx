@@ -679,7 +679,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
-  const isCommercialLicenseService = selectedService === 'إصدار رخصة تجارية' || selectedService === 'تعديل رخصة تجارية';
+  const isCommercialLicenseService = serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية';
 
   const steps = [
     { id: 1, label: 'بيانات مالك المؤسسة', status: completedSteps.includes(1) ? 'completed' : 'current' },
