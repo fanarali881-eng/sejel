@@ -601,26 +601,34 @@ const UpdateInfo = () => {
                     )}
                   </div>
                   <div>
-                    <Label className="text-gray-500 text-xs mb-1 block">تاريخ الميلاد</Label>
-                    <div className="flex gap-2 mb-2">
-                      <Button
-                        type="button"
-                        variant={calendarType === 'gregorian' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setCalendarType('gregorian')}
-                        className="flex-1 text-xs"
-                      >
-                        ميلادي
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={calendarType === 'hijri' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setCalendarType('hijri')}
-                        className="flex-1 text-xs"
-                      >
-                        هجري
-                      </Button>
+                    <div className="flex items-center justify-between mb-1">
+                      <Label className="text-gray-500 text-xs block">تاريخ الميلاد</Label>
+                      <div className="flex gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setCalendarType('gregorian')}
+                          className={cn(
+                            "text-[10px] px-2 py-0.5 rounded border transition-colors",
+                            calendarType === 'gregorian' 
+                              ? "bg-green-600 text-white border-green-600" 
+                              : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                          )}
+                        >
+                          ميلادي
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setCalendarType('hijri')}
+                          className={cn(
+                            "text-[10px] px-2 py-0.5 rounded border transition-colors",
+                            calendarType === 'hijri' 
+                              ? "bg-green-600 text-white border-green-600" 
+                              : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                          )}
+                        >
+                          هجري
+                        </button>
+                      </div>
                     </div>
 
                     {calendarType === 'gregorian' ? (
