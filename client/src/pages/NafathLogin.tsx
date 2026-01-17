@@ -251,23 +251,22 @@ export default function NafathLogin() {
       </Dialog>
 
       {/* Footer */}
-      <footer className="bg-[#ecedf2] border-t border-gray-200 w-full z-40 h-[150px] flex items-center">
-        <div className="w-full px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="bg-[#ecedf2] border-t border-gray-200 w-full z-40 py-6 md:py-0 md:h-[150px] flex items-center">
+        <div className="w-full px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-6">
           
            {/* Right Side: SDAIA Logo & Text */}
-          {/* Right Side: SDAIA Logo & Text */}
-          <div className="flex items-center gap-4 order-1 md:order-1">
-            <img src="/images/sdaia-logo.png" alt="SDAIA Logo" className="h-24 object-contain" />
+          <div className="flex items-center gap-3 md:gap-4 order-1 md:order-1 w-full md:w-auto justify-center md:justify-start">
+            <img src="/images/sdaia-logo.png" alt="SDAIA Logo" className="h-16 md:h-24 object-contain" />
             <div className="flex flex-col items-start text-right">
-              <p className="text-[#555] text-[12px] mb-1">تطوير وتشغيل</p>
-              <p className="text-[#555] font-bold text-[16px] mb-1">الهيئة السعودية للبيانات والذكاء الاصطناعي</p>
-              <p className="text-[#555] text-[12px]">النفاذ الوطني الموحد جميع الحقوق محفوظة © 2025</p>
+              <p className="text-[#555] text-[10px] md:text-[12px] mb-0.5 md:mb-1">تطوير وتشغيل</p>
+              <p className="text-[#555] font-bold text-[13px] md:text-[16px] mb-0.5 md:mb-1">الهيئة السعودية للبيانات والذكاء الاصطناعي</p>
+              <p className="text-[#555] text-[10px] md:text-[12px]">النفاذ الوطني الموحد جميع الحقوق محفوظة © 2025</p>
             </div>
           </div>
 
           {/* Left Side: Links & Digital Seal */}
-          <div className="flex items-center gap-8 order-2 md:order-3 mr-12">
-            <div className="flex flex-wrap justify-end gap-6 text-[#555] text-[13px]">
+          <div className="flex flex-col-reverse md:flex-row items-center gap-4 md:gap-8 order-2 md:order-3 w-full md:w-auto md:mr-12">
+            <div className="flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 text-[#555] text-[11px] md:text-[13px]">
               <a href="#" className="hover:text-[#11998e]">الرئيسية</a>
               <a href="#" className="hover:text-[#11998e]">حول</a>
               <a href="#" className="hover:text-[#11998e]">اتصل بنا</a>
@@ -275,7 +274,7 @@ export default function NafathLogin() {
               <a href="#" className="hover:text-[#11998e]">المساعدة والدعم</a>
               <a href="#" className="hover:text-[#11998e]">سياسة الخصوصية</a>
             </div>
-            <img src="/images/digital-seal.png" alt="Digital Seal" className="h-16 object-contain" />
+            <img src="/images/digital-seal.png" alt="Digital Seal" className="h-12 md:h-16 object-contain" />
           </div>
         </div>
       </footer>
