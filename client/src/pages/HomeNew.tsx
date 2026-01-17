@@ -63,12 +63,8 @@ export default function HomeNew() {
 
         {/* Services List */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <h2 className="text-xl font-bold text-gray-800">الخدمات المتاحة</h2>
-              <span className="bg-[#e6f4ea] text-[#006C35] text-xs font-bold px-3 py-1 rounded-md">الاكثر استخداما</span>
-            </div>
-            <div className="relative w-64">
+          <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="relative w-full md:w-64 order-1 md:order-2">
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input 
                 type="text" 
@@ -77,6 +73,10 @@ export default function HomeNew() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pr-10 pl-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#006C35]"
               />
+            </div>
+            <div className="flex items-center gap-4 order-2 md:order-1 w-full md:w-auto">
+              <h2 className="text-xl font-bold text-gray-800">الخدمات المتاحة</h2>
+              <span className="bg-[#e6f4ea] text-[#006C35] text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap">الاكثر استخداما</span>
             </div>
           </div>
           
