@@ -50,9 +50,14 @@ const UpdateInfo = () => {
   // State for Commercial Activities
   const [generalActivity, setGeneralActivity] = useState('');
   const [specialActivity, setSpecialActivity] = useState('');
-  const [capital, setCapital] = useState('5000');
-  const [nameParts, setNameParts] = useState({ part1: '', part2: '', part3: '', part4: '' });
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [capitalAmount, setCapitalAmount] = useState('');
+  const [ownerType, setOwnerType] = useState('');
+  
+  // Commercial Name State
+  const [nameType, setNameType] = useState('triple');
+  const [nameParts, setNameParts] = useState({ first: '', second: '', third: '', fourth: '' });
+  const [addManagers, setAddManagers] = useState(false);
+  const [managers, setManagers] = useState([{ id: 1, type: '', name: '' }]);
 
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
@@ -93,7 +98,50 @@ const UpdateInfo = () => {
     setGeneralActivity(value);
     setSpecialActivity('');
   };
+
+  // Capital Amount Handler
+  const handleCapitalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCapitalAmount(e.target.value);
+  };
+
+  // Owner Type Handler (Arabic Only)
+  const handleOwnerTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setOwnerType(value);
+    }
+  };
+
+  const handleCapitalBlur = () => {
+    if (!capitalAmount) return;
+    
+    let value = parseInt(capitalAmount, 10);
+    
+    if (isNaN(value)) {
+      setCapitalAmount('');
+      return;
+    }
+
+    // Enforce minimum of 1000
+    if (value < 1000) {
+      value = 1000;
+    } else {
+      // Round to nearest 1000
+      value = Math.round(value / 1000) * 1000;
+    }
+
+    setCapitalAmount(value.toString());
+  };
   
+  // Name Parts Handler (Arabic Only)
+  const handleNamePartChange = (part: keyof typeof nameParts, value: string) => {
+    // Allow only Arabic characters and spaces
+    if (value === '' || /^[\u0600-\u06FF\s]+$/.test(value)) {
+      setNameParts(prev => ({ ...prev, [part]: value }));
+    }
+  };
+
   // Map refs
   const mapRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
@@ -151,30 +199,71 @@ const UpdateInfo = () => {
       return;
     }
 
-    // Max length 10
-    if (value.length > 10) {
-      return;
-    }
+    // Validation logic based on country code
+    if (countryCode === '+966') {
+      // Saudi Arabia Validation
+      if (value.length > 10) return; // Max length 10 for SA
 
-    setMobileNumber(value);
+      setMobileNumber(value);
 
-    // Validate length and prefix
-    if (value.length > 0) {
-      if (value.length < 10) {
-        setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+      if (value.length > 0) {
+        if (value.length < 10) {
+          setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+        } else {
+          const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
+          const prefix = value.substring(0, 3);
+          if (!validPrefixes.includes(prefix)) {
+            setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+          } else {
+            setMobileNumberError('');
+          }
+        }
       } else {
-        const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
-        const prefix = value.substring(0, 3);
-        if (!validPrefixes.includes(prefix)) {
-          setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+        setMobileNumberError('');
+      }
+    } else {
+      // International Validation (Generic)
+      if (value.length > 15) return; // Max length 15 for international
+
+      setMobileNumber(value);
+
+      if (value.length > 0) {
+        if (value.length < 7) {
+          setMobileNumberError('يجب أن يتكون رقم الجوال من 7 أرقام على الأقل');
         } else {
           setMobileNumberError('');
         }
+      } else {
+        setMobileNumberError('');
       }
-    } else {
-      setMobileNumberError('');
     }
   };
+
+  // Re-validate when country code changes
+  useEffect(() => {
+    // Trigger validation logic with current mobile number and new country code
+    // We can reuse the logic by calling a validation function, but for simplicity we'll just clear error if switching to non-SA
+    if (countryCode !== '+966') {
+       if (mobileNumber.length >= 7 && mobileNumber.length <= 15) {
+         setMobileNumberError('');
+       }
+    } else {
+       // Re-apply SA validation if switching back to SA
+       if (mobileNumber.length > 0) {
+          if (mobileNumber.length !== 10) {
+             setMobileNumberError('يجب أن يتكون رقم الجوال من 10 أرقام');
+          } else {
+             const validPrefixes = ['050', '053', '054', '055', '056', '057', '058', '059'];
+             const prefix = mobileNumber.substring(0, 3);
+             if (!validPrefixes.includes(prefix)) {
+                setMobileNumberError('يجب أن يبدأ رقم الجوال بـ 050, 053, 054, 055, 056, 057, 058, 059');
+             } else {
+                setMobileNumberError('');
+             }
+          }
+       }
+    }
+  }, [countryCode]);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -203,50 +292,6 @@ const UpdateInfo = () => {
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAddress = e.target.value;
     setAddress(newAddress);
-  };
-
-  const validateForm = () => {
-    const errors: Record<string, string> = {};
-    
-    // Validate Owner Data
-    if (!arabicName) errors.arabicName = 'مطلوب';
-    if (!englishName) errors.englishName = 'مطلوب';
-    if (!nationalId) errors.nationalId = 'مطلوب';
-    if (!dateOfBirth) errors.dateOfBirth = 'مطلوب';
-    
-    // Validate Contact Info
-    if (!mobileNumber) errors.mobileNumber = 'مطلوب';
-    if (!email) errors.email = 'مطلوب';
-    if (!address) errors.address = 'مطلوب';
-    
-    // Validate Activities
-    if (!generalActivity) errors.generalActivity = 'مطلوب';
-    if (!specialActivity) errors.specialActivity = 'مطلوب';
-    
-    // Validate Capital
-    if (!capital) errors.capital = 'مطلوب';
-
-    // Validate Name Parts
-    if (!nameParts.part1) errors.part1 = 'مطلوب';
-    if (!nameParts.part2) errors.part2 = 'مطلوب';
-    if (!nameParts.part3) errors.part3 = 'مطلوب';
-    if (!nameParts.part4) errors.part4 = 'مطلوب';
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSave = () => {
-    if (validateForm()) {
-      // Proceed with save
-      console.log('Form is valid, saving...');
-    } else {
-      // Show error toast or scroll to error
-      const firstError = document.querySelector('.border-red-500');
-      if (firstError) {
-        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
   };
 
   // Debounce geocoding to avoid too many requests
@@ -419,40 +464,20 @@ const UpdateInfo = () => {
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
                     <Input 
                       value={arabicName}
-                      onChange={(e) => {
-                        handleArabicNameChange(e);
-                        if (e.target.value) {
-                          setValidationErrors(prev => {
-                            const newErrors = {...prev};
-                            delete newErrors.arabicName;
-                            return newErrors;
-                          });
-                        }
-                      }}
+                      onChange={handleArabicNameChange}
                       placeholder="محمد عبدالله أحمد" 
-                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" 
                     />
-                    {validationErrors.arabicName && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
                     <Input 
                       value={englishName}
-                      onChange={(e) => {
-                        handleEnglishNameChange(e);
-                        if (e.target.value) {
-                          setValidationErrors(prev => {
-                            const newErrors = {...prev};
-                            delete newErrors.englishName;
-                            return newErrors;
-                          });
-                        }
-                      }}
+                      onChange={handleEnglishNameChange}
                       placeholder="Mohammed Abdullah Ahmed" 
-                      className={`font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400 ${validationErrors.englishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className="font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400" 
                       dir="ltr" 
                     />
-                    {validationErrors.englishName && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
@@ -471,27 +496,23 @@ const UpdateInfo = () => {
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
-                    <Input placeholder="سعودي" className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" />
+                    <Input 
+                      value={ownerType}
+                      onChange={handleOwnerTypeChange}
+                      placeholder="سعودي" 
+                      className="font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400" 
+                    />
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
                     <Input 
                       value={nationalId}
-                      onChange={(e) => {
-                        handleNationalIdChange(e);
-                        if (e.target.value) {
-                          setValidationErrors(prev => {
-                            const newErrors = {...prev};
-                            delete newErrors.nationalId;
-                            return newErrors;
-                          });
-                        }
-                      }}
+                      onChange={handleNationalIdChange}
                       placeholder="1012345678" 
-                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError || validationErrors.nationalId ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
-                    {(nationalIdError || validationErrors.nationalId) && (
-                      <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError || 'مطلوب'}</p>
+                    {nationalIdError && (
+                      <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError}</p>
                     )}
                   </div>
                   <div>
@@ -502,8 +523,7 @@ const UpdateInfo = () => {
                           variant={"outline"}
                           className={cn(
                             "w-full justify-start text-right font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400",
-                            !dateOfBirth && "text-muted-foreground font-normal",
-                            validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
+                            !dateOfBirth && "text-muted-foreground font-normal"
                           )}
                         >
                           <CalendarIcon className="ml-2 h-4 w-4" />
@@ -514,16 +534,7 @@ const UpdateInfo = () => {
                         <Calendar
                           mode="single"
                           selected={dateOfBirth}
-                          onSelect={(date) => {
-                            setDateOfBirth(date);
-                            if (date) {
-                              setValidationErrors(prev => {
-                                const newErrors = {...prev};
-                                delete newErrors.dateOfBirth;
-                                return newErrors;
-                              });
-                            }
-                          }}
+                          onSelect={setDateOfBirth}
                           initialFocus
                           captionLayout="dropdown"
                           fromYear={1900}
@@ -531,7 +542,6 @@ const UpdateInfo = () => {
                         />
                       </PopoverContent>
                     </Popover>
-                    {validationErrors.dateOfBirth && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
                   </div>
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
@@ -603,24 +613,17 @@ const UpdateInfo = () => {
                           </Select>
                           <Input 
                             value={mobileNumber}
-                            onChange={(e) => {
-                              handleMobileNumberChange(e);
-                              if (e.target.value) {
-                                setValidationErrors(prev => {
-                                  const newErrors = {...prev};
-                                  delete newErrors.mobileNumber;
-                                  return newErrors;
-                                });
-                              }
-                            }}
-                            placeholder={countryCode === '+966' ? "05xxxxxxxx" : ""} 
-                            className={`text-left ${mobileNumberError || validationErrors.mobileNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            onChange={handleMobileNumberChange}
+                            placeholder={countryCode === '+966' ? "5xxxxxxxx" : "xxxxxxxx"} 
+                            className={`text-left ${mobileNumberError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
                         </div>
-                        {(mobileNumberError || validationErrors.mobileNumber) ? (
-                          <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError || 'مطلوب'}</p>
+                        {mobileNumberError ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{mobileNumberError}</p>
                         ) : (
-                          <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة 05xxxxxxxx</p>
+                          <p className="text-xs text-gray-400 mt-1 text-right">
+                            {countryCode === '+966' ? 'يجب أن يكون بصيغة 05xxxxxxxx' : 'أدخل رقم الجوال بدون الرمز الدولي'}
+                          </p>
                         )}
                       </div>
 
@@ -629,22 +632,13 @@ const UpdateInfo = () => {
                         <Label className="text-gray-700 mb-2 block">البريد الإلكتروني</Label>
                         <Input 
                           value={email}
-                          onChange={(e) => {
-                            handleEmailChange(e);
-                            if (e.target.value) {
-                              setValidationErrors(prev => {
-                                const newErrors = {...prev};
-                                delete newErrors.email;
-                                return newErrors;
-                              });
-                            }
-                          }}
+                          onChange={handleEmailChange}
                           placeholder="someone@example.org" 
-                          className={`text-left ${emailError || validationErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`text-left ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr" 
                         />
-                        {(emailError || validationErrors.email) ? (
-                          <p className="text-xs text-red-500 mt-1 text-right">{emailError || 'مطلوب'}</p>
+                        {emailError ? (
+                          <p className="text-xs text-red-500 mt-1 text-right">{emailError}</p>
                         ) : (
                           <p className="text-xs text-gray-400 mt-1 text-right">يجب أن يكون بصيغة someone@example.org</p>
                         )}
@@ -656,20 +650,10 @@ const UpdateInfo = () => {
                         <div className="relative">
                           <Input 
                             value={address}
-                            onChange={(e) => {
-                              handleAddressChange(e);
-                              if (e.target.value) {
-                                setValidationErrors(prev => {
-                                  const newErrors = {...prev};
-                                  delete newErrors.address;
-                                  return newErrors;
-                                });
-                              }
-                            }}
+                            onChange={handleAddressChange}
                             placeholder="ابحث عن العنوان..." 
-                            className={`pl-10 ${validationErrors.address ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            className="pl-10"
                           />
-                          {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right absolute -bottom-5 right-0">مطلوب</p>}
                           <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                         </div>
                       </div>
@@ -693,64 +677,10 @@ const UpdateInfo = () => {
               </Card>
             </div>
 
-            {/* Commercial Name Data Section */}
-            <div className="mb-8">
-              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
-                <h2 className="text-lg font-bold text-gray-800">بيانات الاسم التجاري</h2>
-              </div>
-              
-              <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block">نوع الاسم</Label>
-                      <Input 
-                        value={nameParts.part1}
-                        onChange={(e) => setNameParts({...nameParts, part1: e.target.value})}
-                        placeholder="شركة" 
-                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part1 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.part1 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
-                    </div>
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block">الاسم المميز</Label>
-                      <Input 
-                        value={nameParts.part2}
-                        onChange={(e) => setNameParts({...nameParts, part2: e.target.value})}
-                        placeholder="التقنية" 
-                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part2 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.part2 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
-                    </div>
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block">النشاط</Label>
-                      <Input 
-                        value={nameParts.part3}
-                        onChange={(e) => setNameParts({...nameParts, part3: e.target.value})}
-                        placeholder="للحلوى" 
-                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part3 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.part3 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
-                    </div>
-                    <div>
-                      <Label className="text-gray-500 text-xs mb-1 block">الشكل القانوني</Label>
-                      <Input 
-                        value={nameParts.part4}
-                        onChange={(e) => setNameParts({...nameParts, part4: e.target.value})}
-                        placeholder="المحدودة" 
-                        className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.part4 ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      />
-                      {validationErrors.part4 && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
             {/* Commercial Activities Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
-                <h2 className="text-lg font-bold text-gray-800">تحديد الأنشطة التجارية</h2>
+                <h2 className="text-lg font-bold text-gray-800">تحديد الأنشطة التجارية ورأس المال</h2>
               </div>
               
               <Card className="border-none shadow-sm bg-white">
@@ -780,17 +710,8 @@ const UpdateInfo = () => {
                     {/* Right Dropdown (General Activity) - Matches "الأنشطة الرئيسية" width */}
                     <div className="w-1/2 pl-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
-                      <Select value={generalActivity} onValueChange={(val) => {
-                        handleGeneralActivityChange(val);
-                        if (val) {
-                          setValidationErrors(prev => {
-                            const newErrors = {...prev};
-                            delete newErrors.generalActivity;
-                            return newErrors;
-                          });
-                        }
-                      }}>
-                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 ring-1 ring-red-500' : ''}`}>
+                      <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
                           <SelectValue placeholder="اختر النشاط العام" />
                         </SelectTrigger>
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -806,17 +727,8 @@ const UpdateInfo = () => {
                     {/* Left Dropdown (Special Activity) - Matches "اسم النشاط التجاري" width */}
                     <div className="w-1/2 pr-6">
                       <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
-                      <Select value={specialActivity} onValueChange={(val) => {
-                        setSpecialActivity(val);
-                        if (val) {
-                          setValidationErrors(prev => {
-                            const newErrors = {...prev};
-                            delete newErrors.specialActivity;
-                            return newErrors;
-                          });
-                        }
-                      }} disabled={!generalActivity}>
-                        <SelectTrigger className={`bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 ring-1 ring-red-500' : ''}`}>
+                      <Select value={specialActivity} onValueChange={setSpecialActivity} disabled={!generalActivity}>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
                           <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
                         </SelectTrigger>
                         <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -837,7 +749,7 @@ const UpdateInfo = () => {
                       <div className="w-1/2 pl-6">
                         <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
                         <Select defaultValue="sar">
-                          <SelectTrigger className="bg-gray-50 border-gray-200 h-11 text-right flex-row-reverse w-full justify-between">
+                          <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
                             <SelectValue placeholder="اختر العملة" />
                           </SelectTrigger>
                           <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -850,31 +762,247 @@ const UpdateInfo = () => {
                       <div className="w-1/2 pr-6">
                         <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
                         <Input 
-                          value={capital}
-                          onChange={(e) => {
-                            setCapital(e.target.value);
-                            if (e.target.value) {
-                              setValidationErrors(prev => {
-                                const newErrors = {...prev};
-                                delete newErrors.capital;
-                                return newErrors;
-                              });
-                            }
-                          }}
-                          className={`bg-gray-50 border-gray-200 h-11 text-right ${validationErrors.capital ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          value={capitalAmount}
+                          onChange={handleCapitalChange}
+                          onBlur={handleCapitalBlur}
+                          placeholder="1000"
+                          className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300"
                           type="number"
+                          step="1000"
+                          min="1000"
                         />
-                        {validationErrors.capital && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
+                        {/* Info Alert Bar - Moved here to be under Capital input only */}
+                        <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
+                          <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                            <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                          </div>
+                          <span className="text-xs font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Commercial Name Data Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                <h2 className="text-lg font-bold text-gray-800">بيانات الاسم التجاري</h2>
+              </div>
+              
+              <Card className="border-none shadow-sm bg-white">
+                <CardContent className="p-6">
+                  {/* Styled Header Bar */}
+                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
+                    {/* Right Panel (Main Activities) */}
+                    <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
+                      نوع الاسم التجاري
+                    </div>
+                    
+                    {/* Left Panel (Commercial Activity Name) */}
+                    <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
+                      الاسم التجاري
+                    </div>
+
+                    {/* The Arrow Overlay - Centered */}
+                    <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
+                      <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
+                        <path d="M24 0L0 24L24 48" fill="white" />
+                        <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                    {/* 1. Name Type (Rightmost) */}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
+                      <Select value={nameType} onValueChange={setNameType}>
+                        <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                          <SelectValue placeholder="اختر" />
+                        </SelectTrigger>
+                        <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                          <SelectItem value="triple" className="text-right justify-start cursor-pointer pr-8">إسم ثلاثي</SelectItem>
+                          <SelectItem value="quadruple" className="text-right justify-start cursor-pointer pr-8">إسم رباعي</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Dynamic Name Fields */}
+                    {/* First Name */}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الأول</Label>
+                      <Input 
+                        value={nameParts.first}
+                        onChange={(e) => handleNamePartChange('first', e.target.value)}
+                        placeholder="الاسم الأول" 
+                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                      />
+                    </div>
+
+                    {/* Second Name */}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثاني</Label>
+                      <Input 
+                        value={nameParts.second}
+                        onChange={(e) => handleNamePartChange('second', e.target.value)}
+                        placeholder="الاسم الثاني" 
+                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                      />
+                    </div>
+
+                    {/* Third Name */}
+                    <div>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الثالث</Label>
+                      <Input 
+                        value={nameParts.third}
+                        onChange={(e) => handleNamePartChange('third', e.target.value)}
+                        placeholder="الاسم الثالث" 
+                        className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                      />
+                    </div>
+
+                    {/* Fourth Name (Conditional) */}
+                    {nameType === 'quadruple' && (
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم الرابع</Label>
+                        <Input 
+                          value={nameParts.fourth}
+                          onChange={(e) => handleNamePartChange('fourth', e.target.value)}
+                          placeholder="الاسم الرابع" 
+                          className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Formed Name Bar */}
+                  <div className="bg-blue-50 rounded-md p-3 flex items-center justify-between text-[#374151]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                        <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
+                      </div>
+                      <span className="text-xs font-bold">الاسم التجاري المعتمد</span>
+                      <span className="text-sm font-bold mr-2">
+                        {`مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''}`.trim()}
+                      </span>
+                    </div>
+                    
+                  </div>
+
+                  {/* Managers Section */}
+                  <div className="mt-6 border-t border-gray-100 pt-4">
+                    <div className="flex items-center gap-4 mb-4">
+                      <Label className="text-sm font-bold text-gray-700">هل ترغب بإضافة مدراء؟</Label>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            id="managers-yes" 
+                            name="managers" 
+                            checked={addManagers === true} 
+                            onChange={() => setAddManagers(true)}
+                            className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                          />
+                          <label htmlFor="managers-yes" className="text-sm text-gray-700 cursor-pointer">نعم</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            id="managers-no" 
+                            name="managers" 
+                            checked={addManagers === false} 
+                            onChange={() => setAddManagers(false)}
+                            className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                          />
+                          <label htmlFor="managers-no" className="text-sm text-gray-700 cursor-pointer">لا</label>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Info Alert Bar */}
-                    <div className="bg-[#F3F4F6] rounded-md p-3 flex items-center justify-end gap-2 text-[#374151]">
-                      <span className="text-sm font-medium">أقل قيمة لرأس المال: 1.00 ريال سعودي</span>
-                      <div className="w-5 h-5 rounded-full border-2 border-[#6B7280] flex items-center justify-center">
-                        <span className="text-xs font-bold text-[#6B7280]">i</span>
+                    {addManagers && (
+                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        {managers.map((manager, index) => (
+                          <div key={manager.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+                            <div>
+                              <Label className="text-gray-500 text-xs mb-1 block text-right">نوع المدير {managers.length > 1 ? index + 1 : ''}</Label>
+                              <Select 
+                                value={manager.type} 
+                                onValueChange={(val) => {
+                                  const newManagers = [...managers];
+                                  newManagers[index].type = val;
+                                  setManagers(newManagers);
+                                }}
+                              >
+                                <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                                  <SelectValue placeholder="اختر" />
+                                </SelectTrigger>
+                                <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                                  <SelectItem value="saudi" className="text-right justify-start cursor-pointer pr-8">مواطن سعودي</SelectItem>
+                                  <SelectItem value="resident" className="text-right justify-start cursor-pointer pr-8">مقيم</SelectItem>
+                                  <SelectItem value="foreigner" className="text-right justify-start cursor-pointer pr-8">أجنبي</SelectItem>
+                                  <SelectItem value="gcc" className="text-right justify-start cursor-pointer pr-8">خليجي</SelectItem>
+                                  <SelectItem value="gcc_resident" className="text-right justify-start cursor-pointer pr-8">خليجي مقيم</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            <div>
+                              <Label className="text-gray-500 text-xs mb-1 block text-right">اسم المدير {managers.length > 1 ? index + 1 : ''}</Label>
+                              <div className="flex gap-2 items-center">
+                                <Input 
+                                  value={manager.name}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
+                                      const newManagers = [...managers];
+                                      newManagers[index].name = val;
+                                      setManagers(newManagers);
+                                    }
+                                  }}
+                                  placeholder="الاسم الكامل" 
+                                  className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 flex-1"
+                                />
+                                <button 
+                                  onClick={() => {
+                                    const newManagers = managers.filter((_, i) => i !== index);
+                                    setManagers(newManagers);
+                                    if (newManagers.length === 0) {
+                                      setAddManagers(false);
+                                      setManagers([{ id: Date.now(), type: '', name: '' }]);
+                                    }
+                                  }}
+                                  className="w-9 h-9 rounded-md bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 transition-colors border border-red-100 flex-shrink-0"
+                                  title="حذف المدير"
+                                >
+                                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+
+                        {/* Add Manager Button */}
+                        {managers.length < 5 && (
+                          <div className="flex justify-center mt-2">
+                            <button 
+                              onClick={() => setManagers([...managers, { id: Date.now(), type: '', name: '' }])}
+                              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors border border-gray-300"
+                              title="إضافة مدير آخر"
+                            >
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                              </svg>
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -885,7 +1013,7 @@ const UpdateInfo = () => {
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
                 <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
-                <Button className="px-8 bg-green-600 hover:bg-green-700" onClick={handleSave}>حفظ</Button>
+                <Button className="px-8 bg-green-600 hover:bg-green-700">حفظ</Button>
               </div>
             </div>
           </div>
