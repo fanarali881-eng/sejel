@@ -77,6 +77,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [contractType, setContractType] = useState<string>('rent');
   const [ownerType, setOwnerType] = useState('');
   
+  // Signage Information State
+  const [signageType, setSignageType] = useState('');
+  const [signageArea, setSignageArea] = useState('');
+  
   // Commercial Name State
   const [nameType, setNameType] = useState('triple');
   const [nameParts, setNameParts] = useState({ first: '', second: '', third: '', fourth: '' });
@@ -1469,36 +1473,96 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </Card>
             </div>
 
-            {/* Commercial Name Data Section */}
+            {/* Commercial Name Data Section / Signage Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
-                  {serviceName === 'تسجيل علامة تجارية' ? 'بيانات العلامة التجارية' : 'بيانات الاسم التجاري'}
+                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') 
+                    ? 'بيانات اللوحات' 
+                    : (serviceName === 'تسجيل علامة تجارية' ? 'بيانات العلامة التجارية' : 'بيانات الاسم التجاري')}
                 </h2>
               </div>
               
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
-                  {/* Styled Header Bar */}
-                  <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
-                    {/* Right Panel (Main Activities) */}
-                    <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
-                      {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالعربي' : 'نوع الاسم التجاري'}
-                    </div>
-                    
-                    {/* Left Panel (Commercial Activity Name) */}
-                    <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
-                      {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالانجليزي' : 'الاسم التجاري'}
-                    </div>
+                  {(serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية') ? (
+                    // Signage Information Form
+                    <div className="space-y-6">
+                      {/* Info Message */}
+                      <div className="bg-gray-50 p-4 rounded-md text-right text-sm text-gray-600 mb-6">
+                        عزيزي المستفيد... يمكنك الاطلاع على لائحة استيفاء اشتراطات اللوحات التجارية من خلال زيارة الرابط التالي: <a href="#" className="text-blue-500 hover:underline">لائحة استيفاء اشتراطات اللوحات</a>
+                      </div>
 
-                    {/* The Arrow Overlay - Centered */}
-                    <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
-                      <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
-                        <path d="M24 0L0 24L24 48" fill="white" />
-                        <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
-                      </svg>
+                      <div className="grid grid-cols-2 gap-x-12">
+                        {/* Signage Type */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            نوع اللوحة <span className="text-red-500">*</span>
+                            <span className="inline-block mr-1 text-gray-400 cursor-help" title="معلومات عن نوع اللوحة">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                              </svg>
+                            </span>
+                          </Label>
+                          <Select value={signageType} onValueChange={setSignageType}>
+                            <SelectTrigger className="bg-gray-50 border-gray-200 h-10 text-right flex-row-reverse w-full justify-between">
+                              <SelectValue placeholder="-اختر-" />
+                            </SelectTrigger>
+                            <SelectContent align="end" dir="rtl">
+                              <SelectItem value="guidance">إرشادية</SelectItem>
+                              <SelectItem value="advertising">إعلانية</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Signage Area */}
+                        <div>
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
+                            مساحة اللوحة بالمتر المربع <span className="text-red-500">*</span>
+                            <span className="inline-block mr-1 text-gray-400 cursor-help" title="مساحة اللوحة بالمتر المربع">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                              </svg>
+                            </span>
+                          </Label>
+                          <Input 
+                            value={signageArea}
+                            onChange={(e) => setSignageArea(e.target.value)}
+                            className="bg-gray-50 border-gray-200 h-10 text-right"
+                            type="number"
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      {/* Styled Header Bar */}
+                      <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
+                        {/* Right Panel (Main Activities) */}
+                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
+                          {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالعربي' : 'نوع الاسم التجاري'}
+                        </div>
+                        
+                        {/* Left Panel (Commercial Activity Name) */}
+                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
+                          {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالانجليزي' : 'الاسم التجاري'}
+                        </div>
+
+                        {/* The Arrow Overlay - Centered */}
+                        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
+                          <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
+                            <path d="M24 0L0 24L24 48" fill="white" />
+                            <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
+                          </svg>
+                        </div>
+                      </div>
+
+                  </>
+                  )}
 
                   {/* CR Number Field - Conditionally Rendered */}
                   {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية') && (
