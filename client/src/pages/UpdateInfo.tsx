@@ -902,7 +902,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       value={arabicName}
                       onChange={handleArabicNameChange}
                       placeholder="محمد عبدالله أحمد" 
-                      className={`font-bold text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-sm md:text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
                     {validationErrors.arabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.arabicName}</p>}
                   </div>
