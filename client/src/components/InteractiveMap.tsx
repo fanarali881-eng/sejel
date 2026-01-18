@@ -301,9 +301,9 @@ export function InteractiveMap({
       )}
 
       {/* Current Location Display */}
-      <div className="text-sm text-gray-600 flex items-center gap-2">
+      <div className="text-sm text-gray-600 flex items-center gap-2 break-words">
         <MapPin className="w-4 h-4 flex-shrink-0" />
-        <span className="truncate">
+        <span>
           {address || `${currentLocation.lat.toFixed(4)}, ${currentLocation.lng.toFixed(4)}`}
         </span>
       </div>
