@@ -40,7 +40,19 @@ const UpdateInfo = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const serviceName = searchParams.get('service') || 'تحديث بيانات الخدمة';
   
-  const [currentTime, setCurrentTime] = useState('');
+  const [currentTime, setCurrentTime] = useState(() => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      calendar: 'islamic-umalqura',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    };
+    return now.toLocaleString('ar-SA-u-ca-islamic-umalqura', options).replace('،', '');
+  });
 
   useEffect(() => {
     const updateTime = () => {
