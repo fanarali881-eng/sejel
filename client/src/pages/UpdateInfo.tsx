@@ -2350,7 +2350,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
                   {/* Declaration Checkbox */}
-                  <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-3">
+                  <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-2">
                     <div className="pt-1">
                       <input 
                         type="checkbox" 
