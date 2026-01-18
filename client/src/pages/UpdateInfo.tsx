@@ -1359,7 +1359,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                       {/* Conditional Brand Name Field */}
                       {hasTrademark === 'yes' && (
-                        <div className="grid grid-cols-2 gap-x-12 mb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 mb-6">
                           <div className="col-span-2">
                             <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
                               أدخل اسم العلامة التجارية <span className="text-red-500">*</span>
@@ -1387,7 +1387,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       )}
 
-                      <div className="grid grid-cols-2 gap-y-6 gap-x-12">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                         {/* Shop Name */}
                         <div>
                           <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
@@ -1877,7 +1877,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         عزيزي المستفيد... يمكنك الاطلاع على لائحة استيفاء اشتراطات اللوحات التجارية من خلال زيارة الرابط التالي: <a href="#" className="text-blue-500 hover:underline">لائحة استيفاء اشتراطات اللوحات</a>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-x-12">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
                         {/* Signage Type */}
                         <div>
                            <Label className="text-gray-800 font-bold text-sm mb-1 block text-right h-6">
