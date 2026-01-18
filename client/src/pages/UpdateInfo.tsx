@@ -822,9 +822,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans" dir="rtl">
       {/* Top Navigation Bar (Simplified for this page) */}
       <header className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center">
-        <div className="flex items-center gap-8">
-          <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-12" />
-          <a href="#" onClick={(e) => e.preventDefault()} className="text-sm text-gray-600 hover:text-green-600 font-medium">الرئيسية</a>
+        <div className="flex items-center gap-4 md:gap-8 w-full">
+          <a href="#" onClick={(e) => e.preventDefault()} className="text-sm text-gray-600 hover:text-green-600 font-medium order-2 md:order-1">الرئيسية</a>
+          <div className="flex-grow md:flex-grow-0 order-1 md:order-2 flex justify-end md:justify-start">
+            <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
+          </div>
         </div>
       </header>
 
@@ -844,17 +846,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </div>
 
             {/* Request Info Bar */}
-            <div className="bg-blue-50 rounded-lg p-4 mb-8 flex justify-between items-center text-sm">
-              <div className="flex gap-16">
-                <div>
+            <div className="bg-blue-50 rounded-lg p-4 mb-8 flex flex-col md:flex-row justify-between items-center text-sm gap-4 md:gap-0">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-16 w-full md:w-auto">
+                <div className="flex justify-between md:justify-start w-full md:w-auto">
                   <span className="text-gray-500 ml-6">رقم الطلب</span>
                   <span className="font-bold text-gray-800">{requestId}</span>
                 </div>
-                <div>
+<div className="flex justify-between md:justify-start w-full md:w-auto">
                   <span className="text-gray-500 ml-6">الحالة</span>
-                  <span className="font-bold text-gray-800">مسودة</span>
+                  <span className="font-bold">مسودة</span>
                 </div>
-                <DateTimeDisplay />
               </div>
             </div>
 
