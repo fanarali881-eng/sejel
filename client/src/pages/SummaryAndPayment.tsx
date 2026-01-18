@@ -24,8 +24,8 @@ export default function SummaryAndPayment() {
     floor: ''
   });
 
-  // Load data from localStorage (passed from BusinessCenterInfo)
-  useEffect(() => {
+  // Function to load data from localStorage
+  const loadDataFromLocalStorage = () => {
     // Load personal info
     const savedData = localStorage.getItem('businessCenterPersonalInfo');
     if (savedData) {
@@ -37,7 +37,7 @@ export default function SummaryAndPayment() {
       }
     }
 
-    // Load service name, request ID, and time from localStorage (passed from BusinessCenterInfo)
+    // Load service name, request ID, and time from localStorage
     const savedServiceData = localStorage.getItem('businessCenterServiceInfo');
     if (savedServiceData) {
       try {
@@ -54,6 +54,23 @@ export default function SummaryAndPayment() {
       setServiceName('الخدمة');
       setRequestId('ABC123456');
     }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadDataFromLocalStorage();
+  }, []);
+
+  // Refresh data when page becomes visible (user returns from another tab)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        loadDataFromLocalStorage();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   const getGenderLabel = (value: string) => {
