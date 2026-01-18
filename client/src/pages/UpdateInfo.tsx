@@ -895,7 +895,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-2 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 gap-x-12">
+                <CardContent className="p-2 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 gap-x-4">
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
                     <Input 
