@@ -1,28 +1,23 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import HomeNew from "./pages/HomeNew";
-import Login from "./pages/Login";
-import NafathLogin from "./pages/NafathLogin";
-import UpdateInfo from "./pages/UpdateInfo";
+import Services from "./pages/Services";
+import BusinessCenter from "./pages/BusinessCenter";
+import NafathUsername from "./pages/NafathUsername";
+import BusinessCenterInfo from "./pages/BusinessCenterInfo";
 
 
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={HomeNew} />
-      <Route path={"/login"} component={Login} />
-      <Route path={"/nafath-login"} component={NafathLogin} />
-      <Route path={"/update-info"} component={UpdateInfo} />
+      <Route path={"/"} component={Services} />
+      <Route path={"/business-center"} component={BusinessCenter} />
+      <Route path={"/nafath-username"} component={NafathUsername} />
+      <Route path={"/business-center-info"} component={BusinessCenterInfo} />
       <Route path={"/service/:id?"} component={Home} />
-      
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
     </Switch>
   );
 }
