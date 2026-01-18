@@ -1751,7 +1751,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-y-1 md:gap-y-6 gap-x-2 auto-rows-fr">
+                      <div className="grid grid-cols-2 gap-y-0 md:gap-y-6 gap-x-2 auto-rows-fr">
                         {/* Right Dropdown (General Activity) */}
                         <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
