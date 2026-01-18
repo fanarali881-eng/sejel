@@ -841,14 +841,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </div>
 
             {/* Request Info Bar */}
-            <div className="bg-blue-50 rounded-lg p-4 mb-8 flex flex-col md:flex-row justify-between items-center text-sm gap-4 md:gap-0">
-              <div className="flex flex-col md:flex-row gap-4 md:gap-16 w-full md:w-auto">
-                <div className="flex justify-between md:justify-start w-full md:w-auto">
-                  <span className="text-gray-500 ml-6">رقم الطلب</span>
+            <div className="bg-blue-50 rounded-lg p-3 md:p-4 mb-6 md:mb-8 flex flex-row justify-between items-center text-xs md:text-sm">
+              <div className="flex flex-row gap-4 md:gap-16 w-full">
+                <div className="flex items-center">
+                  <span className="text-gray-500 ml-2 md:ml-6">رقم الطلب</span>
                   <span className="font-bold text-gray-800">{requestId}</span>
                 </div>
-<div className="flex justify-between md:justify-start w-full md:w-auto">
-                  <span className="text-gray-500 ml-6">الحالة</span>
+                <div className="flex items-center">
+                  <span className="text-gray-500 ml-2 md:ml-6">الحالة</span>
                   <span className="font-bold">مسودة</span>
                 </div>
               </div>
