@@ -1280,6 +1280,29 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       />
                     </div>
                   </div>
+                  {/* Building Number and Floor Fields */}
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-6 mt-6">
+                    {/* Right: Building Number */}
+                    <div className="min-w-0 w-full flex-1">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم المبنى</Label>
+                      <Input 
+                        placeholder="أدخل رقم المبنى"
+                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
+                        type="text"
+                      />
+                    </div>
+
+                    {/* Left: Floor */}
+                    <div className="min-w-0 w-full flex-1">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الدور</Label>
+                      <Input 
+                        placeholder="أدخل رقم الدور"
+                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+
                   <div className="flex justify-end mt-8">
                     <Button 
                       size="sm" 
