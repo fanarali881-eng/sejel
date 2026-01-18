@@ -40,6 +40,30 @@ const UpdateInfo = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const serviceName = searchParams.get('service') || 'تحديث بيانات الخدمة';
   
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        calendar: 'islamic-umalqura',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      };
+      // Force 'en-US-u-ca-islamic-umalqura' to get standard digits if needed, 
+      // or use 'ar-SA' for Arabic digits. Using 'en-US' with calendar extension for consistent formatting.
+      setCurrentTime(now.toLocaleString('en-US-u-ca-islamic-umalqura', options).replace(',', ''));
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const [requestId] = useState(() => {
     const idFromUrl = searchParams.get('id');
     if (idFromUrl) return idFromUrl;
@@ -851,7 +875,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 <span className="font-bold">مسودة</span>
               </div>
               <div className="flex items-center text-gray-500" dir="ltr">
-                <span>29/07/1446 10:30 PM</span>
+                <span>{currentTime}</span>
               </div>
             </div>
 
