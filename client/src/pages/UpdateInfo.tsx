@@ -841,16 +841,17 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </div>
 
             {/* Request Info Bar */}
-            <div className="bg-blue-50 rounded-lg p-3 md:p-4 mb-6 md:mb-8 flex flex-row justify-between items-center text-xs md:text-sm">
-              <div className="flex flex-row gap-4 md:gap-16 w-full">
-                <div className="flex items-center">
-                  <span className="text-gray-500 ml-2 md:ml-6">رقم الطلب</span>
-                  <span className="font-bold text-gray-800">{requestId}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-gray-500 ml-2 md:ml-6">الحالة</span>
-                  <span className="font-bold">مسودة</span>
-                </div>
+            <div className="bg-blue-50 rounded-lg p-3 md:p-4 mb-6 md:mb-8 flex flex-row justify-between items-center text-[10px] md:text-sm">
+              <div className="flex items-center">
+                <span className="text-gray-500 ml-1 md:ml-6">رقم الطلب</span>
+                <span className="font-bold text-gray-800">{requestId}</span>
+              </div>
+              <div className="flex items-center">
+                <span className="text-gray-500 ml-1 md:ml-6">الحالة</span>
+                <span className="font-bold">مسودة</span>
+              </div>
+              <div className="flex items-center text-gray-500" dir="ltr">
+                <span>29/07/1446 10:30 PM</span>
               </div>
             </div>
 
