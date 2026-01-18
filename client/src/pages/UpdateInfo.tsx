@@ -91,6 +91,8 @@ const UpdateInfo = () => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [address, setAddress] = useState('');
+  const [buildingNumber, setBuildingNumber] = useState('');
+  const [floor, setFloor] = useState('');
   
   // State for Commercial Activities
   const [generalActivity, setGeneralActivity] = useState('');
@@ -152,6 +154,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!mobileNumber) errors.mobileNumber = 'رقم الجوال مطلوب';
       if (!email) errors.email = 'البريد الإلكتروني مطلوب';
       if (!address) errors.address = 'العنوان الوطني مطلوب';
+      if (!buildingNumber) errors.buildingNumber = 'رقم المبنى مطلوب';
+      if (!floor) errors.floor = 'رقم الدور مطلوب';
     }
 
     const isLicenseService = ['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName);
@@ -1284,22 +1288,50 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <div className="grid grid-cols-2 gap-x-2 gap-y-6 mt-6">
                     {/* Right: Building Number */}
                     <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم المبنى</Label>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم المبنى <span className="text-red-500">*</span></Label>
                       <Input 
+                        value={buildingNumber}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          setBuildingNumber(value);
+                          if (validationErrors.buildingNumber) {
+                            setValidationErrors(prev => {
+                              const newErrors = { ...prev };
+                              delete newErrors.buildingNumber;
+                              return newErrors;
+                            });
+                          }
+                        }}
                         placeholder="أدخل رقم المبنى"
-                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
+                        className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300 ${validationErrors.buildingNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         type="text"
+                        inputMode="numeric"
                       />
+                      {validationErrors.buildingNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.buildingNumber}</p>}
                     </div>
 
                     {/* Left: Floor */}
                     <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الدور</Label>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الدور <span className="text-red-500">*</span></Label>
                       <Input 
+                        value={floor}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          setFloor(value);
+                          if (validationErrors.floor) {
+                            setValidationErrors(prev => {
+                              const newErrors = { ...prev };
+                              delete newErrors.floor;
+                              return newErrors;
+                            });
+                          }
+                        }}
                         placeholder="أدخل رقم الدور"
-                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
+                        className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300 ${validationErrors.floor ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         type="text"
+                        inputMode="numeric"
                       />
+                      {validationErrors.floor && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floor}</p>}
                     </div>
                   </div>
 
