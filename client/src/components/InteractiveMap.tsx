@@ -66,7 +66,7 @@ export function InteractiveMap({
   const getAddressFromCoordinates = async (lat: number, lng: number) => {
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
         {
           headers: {
             "Accept": "application/json",
@@ -74,9 +74,7 @@ export function InteractiveMap({
         }
       );
       const data = await response.json();
-      const resultAddress = data.address?.country === "Saudi Arabia" 
-        ? data.display_name 
-        : `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      const resultAddress = data.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
       setAddress(resultAddress);
       if (onLocationSelect) {
         onLocationSelect({ lat, lng, address: resultAddress });
