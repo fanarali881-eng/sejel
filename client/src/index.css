@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-size-2xs: 0.625rem;
-  --line-height-2xs: 0.75rem;
+  --font-size-2xs: 0.5rem;
+  --line-height-2xs: 0.625rem;
   --font-sans: "Cairo", sans-serif;
   
   --radius-sm: 2px;
