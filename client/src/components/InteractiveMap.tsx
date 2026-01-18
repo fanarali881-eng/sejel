@@ -109,13 +109,17 @@ export function InteractiveMap({
         maxZoom: 19,
       }).addTo(map.current);
 
-      // Create custom icon
+      // Create custom icon (Google Maps style marker)
+      const googleMapsMarkerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+        <path d="M20 0C11.7 0 5 6.7 5 15c0 8 15 25 15 25s15-17 15-25c0-8.3-6.7-15-15-15z" fill="#EF4444"/>
+        <circle cx="20" cy="15" r="6" fill="white"/>
+      </svg>`;
+      const googleMapsMarkerBase64 = btoa(googleMapsMarkerSvg);
       const customIcon = L.icon({
-        iconUrl:
-          "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMTYgMkM5LjM3IDIgNCA3LjM3IDQgMTZjMCA4IDEyIDEyIDEyIDEyczAgNCA0IDRzNCAwIDQtNGMwLTguNjMtNS4zNy0xNC0xMi0xNHoiIGZpbGw9IiNFRjQ0NDQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==",
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32],
+        iconUrl: `data:image/svg+xml;base64,${googleMapsMarkerBase64}`,
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
       });
 
       // Create marker
