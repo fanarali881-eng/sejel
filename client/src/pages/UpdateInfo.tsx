@@ -56,7 +56,7 @@ const UpdateInfo = () => {
       };
       // Force 'en-US-u-ca-islamic-umalqura' to get standard digits if needed, 
       // or use 'ar-SA' for Arabic digits. Using 'en-US' with calendar extension for consistent formatting.
-      setCurrentTime(now.toLocaleString('en-US-u-ca-islamic-umalqura', options).replace(',', ''));
+      setCurrentTime(now.toLocaleString('ar-SA-u-ca-islamic-umalqura', options).replace('،', ''));
     };
 
     updateTime();
