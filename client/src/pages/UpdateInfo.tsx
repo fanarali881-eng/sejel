@@ -2350,10 +2350,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       />
                     </div>
                     <div>
-                      <label htmlFor="declaration" className="text-2xs md:text-sm text-gray-800 cursor-pointer select-none block mb-1">
+                      <label htmlFor="declaration" className="text-2xs md:text-sm text-gray-800 cursor-pointer select-none block mb-1" style={{fontSize: '12px'}}>
                         أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
                       </label>
-                      <p className="text-2xs md:text-sm text-gray-500">
+                      <p className="text-2xs md:text-sm text-gray-500" style={{fontSize: '11px'}}>
                         بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
                       </p>
                     </div>
