@@ -1262,13 +1262,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         {/* Building Number */}
                         <div>
                           <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
-                            رقم المبني <span className="text-red-500">*</span>
+                            رقم المبنى <span className="text-red-500">*</span>
                           </Label>
                           <Input
                             type="text"
-                            placeholder="أدخل رقم المبني"
+                            placeholder="أدخل رقم المبنى"
                             value={buildingNumber}
-                            onChange={(e) => setBuildingNumber(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/[^0-9]/g, '');
+                              setBuildingNumber(value);
+                            }}
                             className="w-full p-2 border border-gray-300 rounded-md text-right"
                             style={{ fontSize: "11px" }}
                           />
@@ -1284,7 +1287,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             type="text"
                             placeholder="أدخل رقم الدور"
                             value={floorNumber}
-                            onChange={(e) => setFloorNumber(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/[^0-9]/g, '');
+                              setFloorNumber(value);
+                            }}
                             className="w-full p-2 border border-gray-300 rounded-md text-right"
                             style={{ fontSize: "11px" }}
                           />
@@ -1314,13 +1320,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     {/* Building Number */}
                     <div>
                       <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
-                        رقم المبني <span className="text-red-500">*</span>
+                        رقم المبنى <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         type="text"
-                        placeholder="أدخل رقم المبني"
+                        placeholder="أدخل رقم المبنى"
                         value={buildingNumber}
-                        onChange={(e) => setBuildingNumber(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          setBuildingNumber(value);
+                        }}
                         className="w-full p-2 border border-gray-300 rounded-md text-right"
                         style={{ fontSize: "11px" }}
                       />
@@ -1336,7 +1345,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         type="text"
                         placeholder="أدخل رقم الدور"
                         value={floorNumber}
-                        onChange={(e) => setFloorNumber(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          setFloorNumber(value);
+                        }}
                         className="w-full p-2 border border-gray-300 rounded-md text-right"
                         style={{ fontSize: "11px" }}
                       />
