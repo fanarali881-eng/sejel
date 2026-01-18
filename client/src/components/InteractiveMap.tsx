@@ -262,6 +262,11 @@ export function InteractiveMap({
 
   return (
     <div className={cn("w-full space-y-3", className)}>
+      {/* Title */}
+      {title && (
+        <h3 className="text-gray-700 font-medium">{title}</h3>
+      )}
+
       {/* Search Bar */}
       <div className="flex gap-2">
         <div className="flex-1 relative">

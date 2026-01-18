@@ -1254,10 +1254,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       </div>
 
                       {/* Address Label */}
-                      <div>
-                        <Label className="text-gray-700 mb-2 block">عنوان داخل المملكة</Label>
-                        {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
-                      </div>
+                      {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
                     </div>
 
                     {/* Left Side: Map (Swapped to be second in RTL grid) */}
