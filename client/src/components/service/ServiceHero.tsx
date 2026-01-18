@@ -116,7 +116,11 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
   };
 
   const handleStartService = () => {
-    setLocation('/business-center');
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setLocation('/business-center');
+    }, 3000);
   };
 
   return (
