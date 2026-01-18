@@ -37,10 +37,8 @@ export default function HomeNew() {
   const handleServiceClick = (link: string | undefined, name: string) => {
     if (!link) return;
     setLoadingService(name);
-    setTimeout(() => {
-      setLocation(link);
-      setLoadingService(null);
-    }, 3000);
+    setLocation(link);
+    setLoadingService(null);
   };
 
   return (
