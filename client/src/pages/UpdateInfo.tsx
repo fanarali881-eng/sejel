@@ -1751,10 +1751,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-y-1 gap-x-2 auto-rows-fr">
+                      <div className="grid grid-cols-2 gap-y-0 gap-x-2 auto-rows-fr">
                         {/* Right Dropdown (General Activity) */}
-                        <div className="min-w-0 w-full flex-1">
-                          <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
+                        <div className="min-w-0 w-full flex-1 -mt-1">
+                          <Label className="text-gray-500 text-xs mb-0 block text-right">النشاط العام</Label>
                           <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
                             <SelectTrigger className={`bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
                               <SelectValue placeholder="اختر النشاط العام" />
@@ -1784,8 +1784,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Left Dropdown (Special Activity) */}
-                        <div className="min-w-0 w-full flex-1">
-                          <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
+                        <div className="min-w-0 w-full flex-1 -mt-1">
+                          <Label className="text-gray-500 text-xs mb-0 block text-right">النشاط الخاص</Label>
                           <Select value={specialActivity} onValueChange={(val) => {
                             setSpecialActivity(val);
                             if (validationErrors.specialActivity) {
@@ -1811,8 +1811,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Right: Currency */}
-                        <div className="min-w-0 w-full flex-1">
-                          <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
+                        <div className="min-w-0 w-full flex-1 -mt-1">
+                          <Label className="text-gray-500 text-xs mb-0 block text-right">العملة</Label>
                           <Select defaultValue="sar">
                             <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between">
                               <SelectValue placeholder="اختر العملة" />
@@ -1824,8 +1824,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Left: Capital Amount */}
-                        <div className="min-w-0 w-full flex-1">
-                          <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
+                        <div className="min-w-0 w-full flex-1 -mt-1">
+                          <Label className="text-gray-500 text-xs mb-0 block text-right">رأس المال</Label>
                           <Input 
                             value={capitalAmount}
                             onChange={handleCapitalChange}
