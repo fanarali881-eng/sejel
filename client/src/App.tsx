@@ -8,6 +8,7 @@ import Services from "./pages/Services";
 import BusinessCenter from "./pages/BusinessCenter";
 import NafathUsername from "./pages/NafathUsername";
 import BusinessCenterInfo from "./pages/BusinessCenterInfo";
+import SummaryAndPayment from "./pages/SummaryAndPayment";
 
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
       <Route path={"/business-center"} component={BusinessCenter} />
       <Route path={"/nafath-username"} component={NafathUsername} />
       <Route path={"/business-center-info"} component={BusinessCenterInfo} />
+      <Route path={"/summary-and-payment"} component={SummaryAndPayment} />
       <Route path={"/service/:id?"} component={Home} />
     </Switch>
   );
