@@ -105,11 +105,14 @@ const UpdateInfo = () => {
   const [address, setAddress] = useState('');
   const [buildingNumber, setBuildingNumber] = useState('');
   const [floor, setFloor] = useState('');
+  const [commercialRegNumber, setCommercialRegNumber] = useState('');
+  const [approvedCommercialName, setApprovedCommercialName] = useState('');
+  const [capital, setCapital] = useState('');
   
   // State for Commercial Activities
   const [generalActivity, setGeneralActivity] = useState('');
   const [specialActivity, setSpecialActivity] = useState('');
-const [capitalAmount, setCapitalAmount] = useState('1000');
+  const [capitalAmount, setCapitalAmount] = useState('1000');
   
   // Shop Information State
   const [hasTrademark, setHasTrademark] = useState<string>('no');
@@ -1373,6 +1376,45 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         inputMode="numeric"
                       />
                       {validationErrors.floor && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floor}</p>}
+                    </div>
+                  </div>
+
+                  {/* Commercial Registration Fields */}
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-6 mt-6">
+                    {/* Right: Commercial Registration Number */}
+                    <div className="min-w-0 w-full flex-1">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري <span className="text-red-500">*</span></Label>
+                      <Input 
+                        value={commercialRegNumber || ''}
+                        onChange={(e) => setCommercialRegNumber(e.target.value)}
+                        placeholder="أدخل رقم السجل التجاري"
+                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
+                        type="text"
+                      />
+                    </div>
+
+                    {/* Left: Approved Commercial Name */}
+                    <div className="min-w-0 w-full flex-1">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم التجاري المعتمد <span className="text-red-500">*</span></Label>
+                      <Input 
+                        value={approvedCommercialName || ''}
+                        onChange={(e) => setApprovedCommercialName(e.target.value)}
+                        placeholder="أدخل الاسم التجاري المعتمد"
+                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
+                        type="text"
+                      />
+                    </div>
+
+                    {/* Right: Capital */}
+                    <div className="min-w-0 w-full flex-1">
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال <span className="text-red-500">*</span></Label>
+                      <Input 
+                        value={capital || ''}
+                        onChange={(e) => setCapital(e.target.value)}
+                        placeholder="أدخل رأس المال"
+                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
+                        type="text"
+                      />
                     </div>
                   </div>
 
