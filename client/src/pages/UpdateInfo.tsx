@@ -1253,19 +1253,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         )}
                       </div>
 
-                      {/* Address Input */}
+                      {/* Address Label */}
                       <div>
                         <Label className="text-gray-700 mb-2 block">عنوان داخل المملكة</Label>
-                        <div className="relative">
-                          <Input 
-                            value={address}
-                            onChange={handleAddressChange}
-                            placeholder="ابحث عن العنوان..." 
-                            className={`pl-10 h-12 ${validationErrors.address ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                          />
-                          {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
-                          <MapPin className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                        </div>
+                        {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
                       </div>
                     </div>
 

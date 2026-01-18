@@ -23,6 +23,7 @@ interface InteractiveMapProps {
   initialZoom?: number;
   onLocationSelect?: (location: { lat: number; lng: number; address: string }) => void;
   searchAddress?: string;
+  title?: string;
 }
 
 export function InteractiveMap({
@@ -31,6 +32,7 @@ export function InteractiveMap({
   initialZoom = 12,
   onLocationSelect,
   searchAddress = "",
+  title = "عنوان داخل المملكة",
 }: InteractiveMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
@@ -260,6 +262,11 @@ export function InteractiveMap({
 
   return (
     <div className={cn("w-full space-y-3", className)}>
+      {/* Title */}
+      {title && (
+        <h3 className="text-gray-700 font-medium">{title}</h3>
+      )}
+
       {/* Search Bar */}
       <div className="flex gap-2">
         <div className="flex-1 relative">
