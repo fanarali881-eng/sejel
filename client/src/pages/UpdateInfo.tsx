@@ -855,7 +855,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
         {/* Main Content Area */}
         <main className="flex-1 p-2 md:p-8 overflow-hidden">
-          <div className="max-w-5xl mx-auto">
+          <div className="w-full px-4">
             {/* Page Title */}
             <h1 className="text-2xl font-bold text-gray-800 mb-8 text-right">{serviceName}</h1>
 
@@ -895,14 +895,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-2 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 gap-x-4 auto-rows-fr">
+                <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-8 auto-rows-fr">
                   <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
                     <Input 
                       value={arabicName}
                       onChange={handleArabicNameChange}
                       placeholder="محمد عبدالله أحمد" 
-                      className={`font-bold text-sm md:text-base text-gray-800 h-10 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-base text-gray-800 h-10 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
                     {validationErrors.arabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.arabicName}</p>}
                   </div>
