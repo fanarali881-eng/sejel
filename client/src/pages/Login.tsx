@@ -15,7 +15,7 @@ export default function Login() {
     setTimeout(() => {
       const searchParams = new URLSearchParams(window.location.search);
       const serviceName = searchParams.get('service');
-      window.location.href = serviceName ? `/nafath-username?service=${encodeURIComponent(serviceName)}` : "/nafath-username";
+      window.location.href = serviceName ? `/nafath-login?service=${encodeURIComponent(serviceName)}` : "/nafath-login";
     }, 3000);
   };
 

@@ -40,19 +40,7 @@ const UpdateInfo = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const serviceName = searchParams.get('service') || 'تحديث بيانات الخدمة';
   
-  const [currentTime, setCurrentTime] = useState(() => {
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      calendar: 'islamic-umalqura',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    };
-    return now.toLocaleString('ar-SA-u-ca-islamic-umalqura', options).replace('،', '');
-  });
+  const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
     const updateTime = () => {
@@ -103,14 +91,11 @@ const UpdateInfo = () => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [address, setAddress] = useState('');
-  const [buildingNumber, setBuildingNumber] = useState('');
-  const [floor, setFloor] = useState('');
-  const [commercialRegNumber, setCommercialRegNumber] = useState('');
   
   // State for Commercial Activities
   const [generalActivity, setGeneralActivity] = useState('');
   const [specialActivity, setSpecialActivity] = useState('');
-  const [capitalAmount, setCapitalAmount] = useState('1000');
+const [capitalAmount, setCapitalAmount] = useState('1000');
   
   // Shop Information State
   const [hasTrademark, setHasTrademark] = useState<string>('no');
@@ -146,36 +131,6 @@ const UpdateInfo = () => {
   const [pendingStep, setPendingStep] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [collapsedSteps, setCollapsedSteps] = useState<number[]>([]);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-
-  // Save service info to localStorage whenever it changes
-  useEffect(() => {
-    const serviceInfo = {
-      serviceName: serviceName,
-      requestId: requestId,
-      currentTime: currentTime
-    };
-    localStorage.setItem('businessCenterServiceInfo', JSON.stringify(serviceInfo));
-  }, [serviceName, requestId, currentTime]);
-  
-  // Save personal info to localStorage whenever it changes
-  useEffect(() => {
-    const personalInfo = {
-      arabicName,
-      englishName,
-      nationality,
-      gender,
-      nationalId,
-      dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : '',
-      mobileNumber,
-      countryCode,
-      email,
-      address,
-      buildingNumber,
-      floor
-    };
-    localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
-  }, [arabicName, englishName, nationality, gender, nationalId, dateOfBirth, mobileNumber, countryCode, email, address, buildingNumber, floor]);
 
   const validateForm = (step?: number) => {
     const errors: Record<string, string> = {};
@@ -197,8 +152,6 @@ const UpdateInfo = () => {
       if (!mobileNumber) errors.mobileNumber = 'رقم الجوال مطلوب';
       if (!email) errors.email = 'البريد الإلكتروني مطلوب';
       if (!address) errors.address = 'العنوان الوطني مطلوب';
-      if (!buildingNumber) errors.buildingNumber = 'رقم المبنى مطلوب';
-      if (!floor) errors.floor = 'رقم الدور مطلوب';
     }
 
     const isLicenseService = ['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName);
@@ -263,6 +216,7 @@ const UpdateInfo = () => {
   };
   const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [declarationChecked, setDeclarationChecked] = useState(false);
 
   // Calculate max date for 18 years old
@@ -1326,57 +1280,6 @@ const UpdateInfo = () => {
                       />
                     </div>
                   </div>
-                  {/* Building Number and Floor Fields */}
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-6 mt-6">
-                    {/* Right: Building Number */}
-                    <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم المبنى <span className="text-red-500">*</span></Label>
-                      <Input 
-                        value={buildingNumber}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, '');
-                          setBuildingNumber(value);
-                          if (validationErrors.buildingNumber) {
-                            setValidationErrors(prev => {
-                              const newErrors = { ...prev };
-                              delete newErrors.buildingNumber;
-                              return newErrors;
-                            });
-                          }
-                        }}
-                        placeholder="أدخل رقم المبنى"
-                        className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300 ${validationErrors.buildingNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        type="text"
-                        inputMode="numeric"
-                      />
-                      {validationErrors.buildingNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.buildingNumber}</p>}
-                    </div>
-
-                    {/* Left: Floor */}
-                    <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الدور <span className="text-red-500">*</span></Label>
-                      <Input 
-                        value={floor}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, '');
-                          setFloor(value);
-                          if (validationErrors.floor) {
-                            setValidationErrors(prev => {
-                              const newErrors = { ...prev };
-                              delete newErrors.floor;
-                              return newErrors;
-                            });
-                          }
-                        }}
-                        placeholder="أدخل رقم الدور"
-                        className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300 ${validationErrors.floor ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        type="text"
-                        inputMode="numeric"
-                      />
-                      {validationErrors.floor && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floor}</p>}
-                    </div>
-                  </div>
-
                   <div className="flex justify-end mt-8">
                     <Button 
                       size="sm" 
@@ -2526,58 +2429,6 @@ const UpdateInfo = () => {
                   setCollapsedSteps(prev => [...prev, pendingStep]);
                   setCompletedSteps(prev => [...prev, pendingStep]);
                   setPendingStep(null);
-                  
-                  // Save service info to localStorage
-                  const serviceInfo = {
-                    serviceName: serviceName,
-                    requestId: requestId,
-                    currentTime: currentTime
-                  };
-                  localStorage.setItem('businessCenterServiceInfo', JSON.stringify(serviceInfo));
-                  
-                  // Build approved commercial name
-                  const approvedCommercialName = serviceName === 'تسجيل علامة تجارية' 
-                    ? trademarkArabicName 
-                    : `مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''} ${
-                    generalActivity === 'trade' ? 'للتجارة' :
-                    generalActivity === 'contracting' ? 'للمقاولات' :
-                    generalActivity === 'services' ? 'للخدمات العامة' :
-                    generalActivity === 'industry' ? 'للصناعة والتعدين' :
-                    generalActivity === 'agriculture' ? 'للزراعة والصيد' :
-                    generalActivity === 'education' ? 'للتعليم والتدريب' :
-                    generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
-                    generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
-                    generalActivity === 'tourism' ? 'للسياحة والضيافة' :
-                    generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
-                    generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
-                    generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
-                    generalActivity === 'media' ? 'للإعلام والنشر' :
-                    generalActivity === 'entertainment' ? 'للترفيه والفنون' :
-                    generalActivity === 'energy' ? 'للطاقة والمرافق' :
-                    generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
-                    generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
-                    generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : ''
-                  }`.trim();
-
-                  // Save personal info to localStorage
-                  const personalInfo = {
-                    arabicName,
-                    englishName,
-                    nationality,
-                    gender,
-                    nationalId,
-                    dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : '',
-                    mobileNumber,
-                    countryCode,
-                    email,
-                    address,
-                    buildingNumber,
-                    floor,
-                    commercialRegNumber,
-                    capitalAmount,
-                    approvedCommercialName
-                  };
-                  localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
                 }
               }}
             >
