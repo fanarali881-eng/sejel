@@ -1377,37 +1377,6 @@ const UpdateInfo = () => {
                     </div>
                   </div>
 
-                  {/* Commercial Registration Fields */}
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-6 mt-6">
-                    {/* Right: Commercial Registration Number */}
-                    <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
-                      <Input 
-                        value={commercialRegNumber || ''}
-                        onChange={(e) => setCommercialRegNumber(e.target.value)}
-                        placeholder="أدخل رقم السجل التجاري"
-                        className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300"
-                        type="text"
-                      />
-                    </div>
-
-                    {/* Left: Approved Commercial Name (Read-only) */}
-                    <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">الاسم التجاري المعتمد</Label>
-                      <div className="bg-gray-50 border border-gray-200 h-12 rounded-md flex items-center px-3 text-right text-gray-600">
-                        الاسم التجاري المعتمد
-                      </div>
-                    </div>
-
-                    {/* Right: Capital (Read-only) */}
-                    <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
-                      <div className="bg-gray-50 border border-gray-200 h-12 rounded-md flex items-center px-3 text-right text-gray-600">
-                        رأس المال
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="flex justify-end mt-8">
                     <Button 
                       size="sm" 
@@ -2580,11 +2549,7 @@ const UpdateInfo = () => {
                     address,
                     buildingNumber,
                     floor,
-                    commercialRegNumber,
-                    nameParts,
-                    nameType,
-                    generalActivity,
-                    capitalAmount
+                    commercialRegNumber
                   };
                   localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
                 }

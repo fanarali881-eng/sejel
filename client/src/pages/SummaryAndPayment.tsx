@@ -22,11 +22,7 @@ export default function SummaryAndPayment() {
     address: '',
     buildingNumber: '',
     floor: '',
-    commercialRegNumber: '',
-    nameParts: { first: '', second: '', third: '', fourth: '' },
-    nameType: 'triple',
-    generalActivity: '',
-    capitalAmount: ''
+    commercialRegNumber: ''
   });
 
   // Function to load data from localStorage
@@ -38,11 +34,7 @@ export default function SummaryAndPayment() {
         const data = JSON.parse(savedData);
         setPersonalInfo({
           ...data,
-          commercialRegNumber: data.commercialRegNumber || '',
-          nameParts: data.nameParts || { first: '', second: '', third: '', fourth: '' },
-          nameType: data.nameType || 'triple',
-          generalActivity: data.generalActivity || '',
-          capitalAmount: data.capitalAmount || ''
+          commercialRegNumber: data.commercialRegNumber || ''
         });
       } catch (error) {
         console.error('Error loading personal info:', error);
@@ -91,33 +83,6 @@ export default function SummaryAndPayment() {
 
   const getNationalityLabel = (value: string) => {
     return value === 'saudi' ? 'سعودي' : 'غير سعودي';
-  };
-
-  const buildCommercialName = () => {
-    if (!personalInfo.nameParts || !personalInfo.generalActivity) return '-';
-    const { first, second, third, fourth } = personalInfo.nameParts;
-    const nameStr = `مؤسسة ${first} ${second} ${third} ${personalInfo.nameType === 'quadruple' ? fourth : ''} `.trim();
-    
-    const activityLabel = personalInfo.generalActivity === 'trade' ? 'للتجارة' :
-      personalInfo.generalActivity === 'contracting' ? 'للمقاولات' :
-      personalInfo.generalActivity === 'services' ? 'للخدمات العامة' :
-      personalInfo.generalActivity === 'industry' ? 'للصناعة والتعدين' :
-      personalInfo.generalActivity === 'agriculture' ? 'للزراعة والصيد' :
-      personalInfo.generalActivity === 'education' ? 'للتعليم والتدريب' :
-      personalInfo.generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
-      personalInfo.generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
-      personalInfo.generalActivity === 'tourism' ? 'للسياحة والضيافة' :
-      personalInfo.generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
-      personalInfo.generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
-      personalInfo.generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
-      personalInfo.generalActivity === 'media' ? 'للإعلام والنشر' :
-      personalInfo.generalActivity === 'entertainment' ? 'للترفيه والفنون' :
-      personalInfo.generalActivity === 'energy' ? 'للطاقة والمرافق' :
-      personalInfo.generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
-      personalInfo.generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
-      personalInfo.generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : '';
-    
-    return `${nameStr} ${activityLabel}`.trim();
   };
 
   const formatDateOfBirth = (date: string) => {
@@ -273,8 +238,8 @@ export default function SummaryAndPayment() {
                 {/* Approved Commercial Name */}
                 <div>
                   <label className="text-gray-700 text-sm font-medium mb-2 block">الاسم التجاري المعتمد</label>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 min-h-12 flex items-center">
-                    <p className="text-gray-800 text-sm">{buildCommercialName()}</p>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
+                    <p className="text-gray-800 text-sm">-</p>
                   </div>
                 </div>
 
@@ -282,7 +247,7 @@ export default function SummaryAndPayment() {
                 <div>
                   <label className="text-gray-700 text-sm font-medium mb-2 block">رأس المال</label>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
-                    <p className="text-gray-800">{personalInfo.capitalAmount || '-'}</p>
+                    <p className="text-gray-800">-</p>
                   </div>
                 </div>
               </div>
