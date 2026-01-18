@@ -19,6 +19,7 @@ function Router() {
       <Route path={"/nafath-username"} component={NafathUsername} />
       <Route path={"/business-center-info"} component={BusinessCenterInfo} />
       <Route path={"/summary-and-payment"} component={SummaryAndPayment} />
+      <Route path={"/update-info"} component={BusinessCenterInfo} />
       <Route path={"/service/:id?"} component={Home} />
     </Switch>
   );

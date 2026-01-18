@@ -81,6 +81,18 @@ export default function SummaryAndPayment() {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
+  // Listen for localStorage changes
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'businessCenterPersonalInfo' || e.key === 'businessCenterServiceInfo') {
+        loadDataFromLocalStorage();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   const getGenderLabel = (value: string) => {
     return value === 'male' ? 'ذكر' : 'أنثى';
   };
