@@ -141,7 +141,7 @@ export default function SummaryAndPayment() {
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-6 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">
-                  المعلومات الشخصية
+                  المعلومات
                 </h2>
               </div>
 
