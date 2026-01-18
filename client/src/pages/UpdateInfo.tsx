@@ -1381,7 +1381,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                               placeholder="أدخل اسم العلامة التجارية" 
-                              className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
+                              className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                             />
                           </div>
                         </div>
@@ -1410,7 +1410,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="أدخل اسم المحل" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                           />
                         </div>
 
@@ -1435,7 +1435,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="544" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                           />
                         </div>
 
@@ -1460,7 +1460,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder={['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? "أدخل رقم العقار" : ""}
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                           />
                         </div>
 
@@ -1485,7 +1485,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="5" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                           />
                         </div>
 
@@ -1510,7 +1510,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="6" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                           />
                         </div>
 
@@ -1535,7 +1535,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="9" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                           />
                         </div>
 
@@ -1934,7 +1934,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 });
                               }
                             }}
-                            className="bg-gray-50 border-gray-200 h-12 text-right box-border"                         type="number"
+                            className="bg-gray-50 border-gray-200 h-12 text-right box-border w-full"                         type="number"
                           />
                         </div>
                       </div>
