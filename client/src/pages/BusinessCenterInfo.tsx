@@ -135,6 +135,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [collapsedSteps, setCollapsedSteps] = useState<number[]>([]);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
+  // Save service info to localStorage whenever it changes
+  useEffect(() => {
+    const serviceInfo = {
+      serviceName: serviceName,
+      requestId: requestId,
+      currentTime: currentTime
+    };
+    localStorage.setItem('businessCenterServiceInfo', JSON.stringify(serviceInfo));
+  }, [serviceName, requestId, currentTime]);
+  
   // Save personal info to localStorage whenever it changes
   useEffect(() => {
     const personalInfo = {
