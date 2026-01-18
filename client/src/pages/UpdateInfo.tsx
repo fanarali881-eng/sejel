@@ -1181,7 +1181,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         <Label className="text-gray-700 mb-2 block">رقم الجوال</Label>
                         <div className="flex gap-2" dir="ltr">
                           <Select value={countryCode} onValueChange={setCountryCode}>
-                            <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 px-3">
+                            <SelectTrigger className="w-[120px] bg-gray-50 border-gray-300 px-3 h-12">
                               <div className="flex items-center gap-2 w-full">
                                 {selectedCountry && (
                                   <>
@@ -1221,7 +1221,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             value={mobileNumber}
                             onChange={handleMobileNumberChange}
                             placeholder={countryCode === '+966' ? "05xxxxxxxx" : ""} 
-                            className={`text-left ${mobileNumberError || validationErrors.mobileNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            className={`text-left h-12 ${mobileNumberError || validationErrors.mobileNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
                         </div>
                         {(mobileNumberError || validationErrors.mobileNumber) ? (
@@ -1240,7 +1240,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           value={email}
                           onChange={handleEmailChange}
                           placeholder="someone@example.org" 
-                          className={`text-left ${emailError || validationErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`text-left h-12 ${emailError || validationErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr" 
                         />
                         {(emailError || validationErrors.email) ? (
@@ -1258,10 +1258,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             value={address}
                             onChange={handleAddressChange}
                             placeholder="ابحث عن العنوان..." 
-                            className={`pl-10 ${validationErrors.address ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            className={`pl-10 h-12 ${validationErrors.address ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
                           {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
-                          <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <MapPin className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                         </div>
                       </div>
                     </div>
@@ -1392,7 +1392,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                               placeholder="أدخل اسم العلامة التجارية" 
-                              className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                              className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
                             />
                           </div>
                         </div>
@@ -1421,7 +1421,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="أدخل اسم المحل" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
                           />
                         </div>
 
@@ -1446,7 +1446,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="544" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
                           />
                         </div>
 
@@ -1471,7 +1471,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder={['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? "أدخل رقم العقار" : ""}
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
                           />
                         </div>
 
@@ -1496,7 +1496,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="5" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
                           />
                         </div>
 
@@ -1521,7 +1521,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="6" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
                           />
                         </div>
 
@@ -1546,7 +1546,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="9" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12"
                           />
                         </div>
 
@@ -1756,7 +1756,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         <div className="w-1/2 pl-6">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
                           <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
-                            <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                            <SelectTrigger className={`bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
                               <SelectValue placeholder="اختر النشاط العام" />
                             </SelectTrigger>
                             {validationErrors.generalActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.generalActivity}</p>}
@@ -1796,7 +1796,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               });
                             }
                           }} disabled={!generalActivity}>
-                            <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                            <SelectTrigger className={`bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between ${validationErrors.specialActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
                               <SelectValue placeholder={generalActivity ? "اختر النشاط الخاص" : "اختر النشاط العام أولاً"} />
                             </SelectTrigger>
                             {validationErrors.specialActivity && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.specialActivity}</p>}
@@ -1818,7 +1818,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <div className="w-1/2 pl-6">
                             <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
                             <Select defaultValue="sar">
-                              <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                              <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between">
                                 <SelectValue placeholder="اختر العملة" />
                               </SelectTrigger>
                               <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -1835,7 +1835,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               onChange={handleCapitalChange}
                               onBlur={handleCapitalBlur}
                               placeholder="1000"
-                              className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                              className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                               type="number"
                               step="1000"
                             />
@@ -1916,7 +1916,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               });
                             }
                           }}>
-                            <SelectTrigger className="bg-gray-50 border-gray-200 h-[40px] text-right flex-row-reverse w-full justify-between box-border">
+                            <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between box-border">
                               <SelectValue placeholder="-اختر-" />
                             </SelectTrigger>
                             <SelectContent align="end" dir="rtl">
@@ -1950,7 +1950,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 });
                               }
                             }}
-                            className="bg-gray-50 border-gray-200 h-[40px] text-right box-border"
+                            className="bg-gray-50 border-gray-200 h-12 text-right box-border"
                             type="number"
                           />
                         </div>
@@ -2051,7 +2051,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
                           placeholder="رقم السجل التجاري" 
-                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
                         {validationErrors.crNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.crNumber}</p>}
@@ -2072,7 +2072,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           value={trademarkArabicName}
                           onChange={handleTrademarkArabicNameChange}
                           placeholder="اسم العلامة التجارية بالعربي" 
-                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.trademarkArabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.trademarkArabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                         {validationErrors.trademarkArabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.trademarkArabicName}</p>}
                       </div>
@@ -2084,7 +2084,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           value={trademarkEnglishName}
                           onChange={handleTrademarkEnglishNameChange}
                           placeholder="English Trademark Name" 
-                          className={`bg-gray-50 border-gray-200 h-9 text-left placeholder:text-gray-400 ${validationErrors.trademarkEnglishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`bg-gray-50 border-gray-200 h-12 text-left placeholder:text-gray-400 ${validationErrors.trademarkEnglishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
                         {validationErrors.trademarkEnglishName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.trademarkEnglishName}</p>}
@@ -2096,7 +2096,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <div>
                         <Label className="text-gray-500 text-xs mb-1 block text-right">نوع الاسم</Label>
                         <Select value={nameType} onValueChange={setNameType}>
-                          <SelectTrigger className={`bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between ${validationErrors.nameType ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                          <SelectTrigger className={`bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between ${validationErrors.nameType ? 'border-red-500 focus:ring-red-500' : ''}`}>
                             <SelectValue placeholder="اختر" />
                           </SelectTrigger>
                           {validationErrors.nameType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nameType}</p>}
@@ -2115,7 +2115,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           value={nameParts.first}
                           onChange={(e) => handleNamePartChange('first', e.target.value)}
                           placeholder="الاسم الأول" 
-                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFirst ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.namePartsFirst ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                         {validationErrors.namePartsFirst && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFirst}</p>}
                       </div>
@@ -2127,7 +2127,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           value={nameParts.second}
                           onChange={(e) => handleNamePartChange('second', e.target.value)}
                           placeholder="الاسم الثاني" 
-                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsSecond ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.namePartsSecond ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                         {validationErrors.namePartsSecond && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsSecond}</p>}
                       </div>
@@ -2139,7 +2139,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           value={nameParts.third}
                           onChange={(e) => handleNamePartChange('third', e.target.value)}
                           placeholder="الاسم الثالث" 
-                          className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsThird ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.namePartsThird ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         />
                         {validationErrors.namePartsThird && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsThird}</p>}
                       </div>
@@ -2152,7 +2152,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             value={nameParts.fourth}
                             onChange={(e) => handleNamePartChange('fourth', e.target.value)}
                             placeholder="الاسم الرابع" 
-                            className={`bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 ${validationErrors.namePartsFourth ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.namePartsFourth ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           />
                           {validationErrors.namePartsFourth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.namePartsFourth}</p>}
                         </div>
@@ -2244,7 +2244,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                   setManagers(newManagers);
                                 }}
                               >
-                                <SelectTrigger className="bg-gray-50 border-gray-200 h-9 text-right flex-row-reverse w-full justify-between">
+                                <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between">
                                   <SelectValue placeholder="اختر" />
                                 </SelectTrigger>
                                 <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
@@ -2271,7 +2271,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                     }
                                   }}
                                   placeholder="الاسم الكامل" 
-                                  className="bg-gray-50 border-gray-200 h-9 text-right placeholder:text-gray-400 flex-1"
+                                  className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 flex-1"
                                 />
                                 <button 
                                   onClick={() => {
@@ -2282,7 +2282,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                       setManagers([{ id: Date.now(), type: '', name: '' }]);
                                     }
                                   }}
-                                  className="w-9 h-9 rounded-md bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 transition-colors border border-red-100 flex-shrink-0"
+                                  className="w-12 h-12 rounded-md bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 transition-colors border border-red-100 flex-shrink-0"
                                   title="حذف المدير"
                                 >
                                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
