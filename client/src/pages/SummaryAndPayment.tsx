@@ -233,6 +233,25 @@ export default function SummaryAndPayment() {
                 </div>
               </div>
 
+              {/* Commercial Fields */}
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                {/* Approved Commercial Name */}
+                <div>
+                  <label className="text-gray-700 text-sm font-medium mb-2 block">الاسم التجاري المعتمد</label>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
+                    <p className="text-gray-800">الاسم التجاري المعتمد</p>
+                  </div>
+                </div>
+
+                {/* Capital */}
+                <div>
+                  <label className="text-gray-700 text-sm font-medium mb-2 block">رأس المال</label>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
+                    <p className="text-gray-800">رأس المال</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Commercial Registration Number - Only show if has value */}
               {personalInfo.commercialRegNumber && (
                 <div>
