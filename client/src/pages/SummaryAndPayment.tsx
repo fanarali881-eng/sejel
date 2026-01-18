@@ -22,7 +22,8 @@ export default function SummaryAndPayment() {
     address: '',
     buildingNumber: '',
     floor: '',
-    commercialRegNumber: ''
+    commercialRegNumber: '',
+    capitalAmount: ''
   });
 
   // Function to load data from localStorage
@@ -34,7 +35,8 @@ export default function SummaryAndPayment() {
         const data = JSON.parse(savedData);
         setPersonalInfo({
           ...data,
-          commercialRegNumber: data.commercialRegNumber || ''
+          commercialRegNumber: data.commercialRegNumber || '',
+          capitalAmount: data.capitalAmount || ''
         });
       } catch (error) {
         console.error('Error loading personal info:', error);
@@ -247,7 +249,7 @@ export default function SummaryAndPayment() {
                 <div>
                   <label className="text-gray-700 text-sm font-medium mb-2 block">رأس المال</label>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
-                    <p className="text-gray-800">-</p>
+                    <p className="text-gray-800">{personalInfo.capitalAmount || '-'}</p>
                   </div>
                 </div>
               </div>

@@ -2549,7 +2549,8 @@ const UpdateInfo = () => {
                     address,
                     buildingNumber,
                     floor,
-                    commercialRegNumber
+                    commercialRegNumber,
+                    capitalAmount
                   };
                   localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
                 }
