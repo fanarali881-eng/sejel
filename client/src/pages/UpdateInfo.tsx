@@ -2377,7 +2377,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
-                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
+                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 hidden">إلغاء</Button>
                 <Button 
                   className="px-8 bg-green-600 hover:bg-green-700 min-w-[100px]"
                   disabled={!declarationChecked || isSaving}
