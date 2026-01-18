@@ -1,10 +1,10 @@
 /**
- * INTERACTIVE MAP COMPONENT - Mobile-Optimized
+ * INTERACTIVE MAP COMPONENT - Saudi Arabia Only
  * 
  * Features:
  * - Works reliably on mobile devices
+ * - Search restricted to Saudi Arabia only
  * - Click on map to select location (opens in new window)
- * - Search for address via geocoding
  * - Displays current location
  * - Touch-friendly interface
  */
@@ -36,6 +36,24 @@ export function InteractiveMap({
   const [error, setError] = useState("");
   const [address, setAddress] = useState("");
   const geocoderRef = useRef<google.maps.Geocoder | null>(null);
+
+  // Saudi Arabia bounds: lat 16.0 to 32.2, lng 34.5 to 55.7
+  const SAUDI_BOUNDS = {
+    north: 32.2,
+    south: 16.0,
+    east: 55.7,
+    west: 34.5,
+  };
+
+  // Check if location is within Saudi Arabia bounds
+  const isSaudiLocation = (lat: number, lng: number): boolean => {
+    return (
+      lat >= SAUDI_BOUNDS.south &&
+      lat <= SAUDI_BOUNDS.north &&
+      lng >= SAUDI_BOUNDS.west &&
+      lng <= SAUDI_BOUNDS.east
+    );
+  };
 
   // Initialize geocoder on component mount
   useEffect(() => {
@@ -107,10 +125,9 @@ export function InteractiveMap({
     setError("");
 
     try {
-      // Use a simple geocoding API call via a public service
-      // Since we need to work on mobile, we'll use a simpler approach
+      // Search with Saudi Arabia boundary
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchInput)}&limit=1`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchInput + " Saudi Arabia")}&limit=10&countrycodes=sa`,
         {
           headers: {
             "Accept": "application/json",
@@ -121,21 +138,37 @@ export function InteractiveMap({
       const results = await response.json();
 
       if (results && results.length > 0) {
-        const result = results[0];
-        const lat = parseFloat(result.lat);
-        const lng = parseFloat(result.lon);
-        const resultAddress = result.display_name;
-
-        setCurrentLocation({ lat, lng });
-        setAddress(resultAddress);
-
-        if (onLocationSelect) {
-          onLocationSelect({ lat, lng, address: resultAddress });
+        // Find first result within Saudi Arabia bounds
+        let foundLocation = null;
+        for (const result of results) {
+          const lat = parseFloat(result.lat);
+          const lng = parseFloat(result.lon);
+          if (isSaudiLocation(lat, lng)) {
+            foundLocation = { lat, lng, address: result.display_name };
+            break;
+          }
         }
 
-        console.log("[InteractiveMap] Search result:", resultAddress);
+        if (foundLocation) {
+          setCurrentLocation({ lat: foundLocation.lat, lng: foundLocation.lng });
+          setAddress(foundLocation.address);
+
+          if (onLocationSelect) {
+            onLocationSelect({
+              lat: foundLocation.lat,
+              lng: foundLocation.lng,
+              address: foundLocation.address,
+            });
+          }
+
+          console.log("[InteractiveMap] Search result:", foundLocation.address);
+        } else {
+          setError(
+            "العنوان خارج المملكة العربية السعودية. الرجاء البحث عن عنوان داخل السعودية."
+          );
+        }
       } else {
-        setError("لم يتم العثور على العنوان");
+        setError("لم يتم العثور على العنوان داخل السعودية");
       }
     } catch (err) {
       console.error("[InteractiveMap] Search error:", err);
@@ -151,7 +184,7 @@ export function InteractiveMap({
     }
   };
 
-  // Generate map URL for iframe
+  // Generate map URL for iframe - restricted to Saudi Arabia
   const mapUrl = `https://maps.google.com/maps?q=${currentLocation.lat},${currentLocation.lng}&t=&z=${initialZoom}&ie=UTF8&iwloc=&output=embed`;
   const mapsLink = `https://maps.google.com/maps?q=${currentLocation.lat},${currentLocation.lng}`;
 
@@ -161,7 +194,7 @@ export function InteractiveMap({
       <div className="flex gap-2">
         <div className="flex-1 relative">
           <Input
-            placeholder="ابحث عن عنوان..."
+            placeholder="ابحث عن عنوان في السعودية..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -226,7 +259,7 @@ export function InteractiveMap({
       <div className="text-xs text-gray-500 space-y-1">
         <p>💡 يمكنك:</p>
         <ul className="list-disc list-inside space-y-0.5">
-          <li>البحث عن عنوان في شريط البحث</li>
+          <li>البحث عن عنوان في السعودية</li>
           <li>فتح الخريطة في تطبيق جوجل ماب للتفاعل الكامل</li>
           <li>تحديد الموقع من خلال تطبيق الخرائط</li>
         </ul>
