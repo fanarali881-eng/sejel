@@ -216,24 +216,7 @@ export default function SummaryAndPayment() {
                 </div>
               </div>
 
-              {/* Building Number and Floor */}
-              <div className="grid grid-cols-2 gap-6 mb-6">
-                {/* Building Number */}
-                <div>
-                  <label className="text-gray-700 text-sm font-medium mb-2 block">رقم المبنى</label>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
-                    <p className="text-gray-800">{personalInfo.buildingNumber || '-'}</p>
-                  </div>
-                </div>
 
-                {/* Floor */}
-                <div>
-                  <label className="text-gray-700 text-sm font-medium mb-2 block">الدور</label>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
-                    <p className="text-gray-800">{personalInfo.floor || '-'}</p>
-                  </div>
-                </div>
-              </div>
             </CardContent>
           </Card>
 
