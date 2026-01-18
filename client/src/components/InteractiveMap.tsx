@@ -283,8 +283,7 @@ export function InteractiveMap({
         <Button
           onClick={handleSearch}
           disabled={isSearching || !mapLoaded}
-          size="sm"
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-blue-600 hover:bg-blue-700 h-10 px-4"
         >
           {isSearching ? "جاري..." : "بحث"}
         </Button>
