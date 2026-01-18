@@ -1916,7 +1916,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               });
                             }
                           }}>
-                            <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between box-border">
+                           <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between box-border">
                               <SelectValue placeholder="-اختر-" />
                             </SelectTrigger>
                             <SelectContent align="end" dir="rtl">
@@ -1950,8 +1950,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 });
                               }
                             }}
-                            className="bg-gray-50 border-gray-200 h-12 text-right box-border"
-                            type="number"
+                            className="bg-gray-50 border-gray-200 h-12 text-right box-border"                         type="number"
                           />
                         </div>
                       </div>
