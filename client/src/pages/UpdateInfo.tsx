@@ -1324,7 +1324,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     // Shop Information Form
                     <div className="space-y-6">
                       {/* Trademark Question */}
-                      <div className="grid grid-cols-2 gap-x-12">
+                      <div className="grid grid-cols-2 gap-x-12 max-w-2xl">
                         <div className="col-span-2">
                           <Label className="text-gray-800 font-bold mb-2 block text-right">
                             هل يوجد لديك علامة تجارية ؟ <span className="text-red-500">*</span>
@@ -1387,7 +1387,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       )}
 
-                      <div className="grid grid-cols-2 gap-y-6 gap-x-12">
+                      <div className="grid grid-cols-2 gap-y-6 gap-x-12 max-w-2xl">
                         {/* Shop Name */}
                         <div>
                           <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
@@ -1877,7 +1877,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         عزيزي المستفيد... يمكنك الاطلاع على لائحة استيفاء اشتراطات اللوحات التجارية من خلال زيارة الرابط التالي: <a href="#" className="text-blue-500 hover:underline">لائحة استيفاء اشتراطات اللوحات</a>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-x-12">
+                      <div className="grid grid-cols-2 gap-x-12 max-w-2xl">
                         {/* Signage Type */}
                         <div>
                            <Label className="text-gray-800 font-bold text-sm mb-1 block text-right h-6">
