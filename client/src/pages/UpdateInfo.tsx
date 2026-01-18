@@ -2012,7 +2012,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <Input 
                             value={signageArea}
                             onChange={(e) => {
-                              const value = e.target.value.replace(/[^0-9.]/g, '');
+                              const value = e.target.value.replace(/[^0-9]/g, '');
                               setSignageArea(value);
                               if (validationErrors.signageArea) {
                                 setValidationErrors(prev => {
@@ -2022,7 +2022,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 });
                               }
                             }}
-                            className="bg-gray-50 border-gray-200 h-12 text-right box-border w-full"                         type="number"
+                            className="bg-gray-50 border-gray-200 h-12 text-right box-border w-full"                         type="text"
                           />
                         </div>
                       </div>
