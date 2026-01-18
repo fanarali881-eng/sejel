@@ -835,7 +835,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         <SBCSidebar serviceName={serviceName} />
 
         {/* Main Content Area */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 md:p-8 overflow-hidden">
           <div className="max-w-5xl mx-auto">
             {/* Page Title */}
             <h1 className="text-2xl font-bold text-gray-800 mb-8 text-right">{serviceName}</h1>
