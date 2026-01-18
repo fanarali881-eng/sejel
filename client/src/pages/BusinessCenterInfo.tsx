@@ -2535,6 +2535,30 @@ const UpdateInfo = () => {
                   };
                   localStorage.setItem('businessCenterServiceInfo', JSON.stringify(serviceInfo));
                   
+                  // Build approved commercial name
+                  const approvedCommercialName = serviceName === 'تسجيل علامة تجارية' 
+                    ? trademarkArabicName 
+                    : `مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''} ${
+                    generalActivity === 'trade' ? 'للتجارة' :
+                    generalActivity === 'contracting' ? 'للمقاولات' :
+                    generalActivity === 'services' ? 'للخدمات العامة' :
+                    generalActivity === 'industry' ? 'للصناعة والتعدين' :
+                    generalActivity === 'agriculture' ? 'للزراعة والصيد' :
+                    generalActivity === 'education' ? 'للتعليم والتدريب' :
+                    generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
+                    generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
+                    generalActivity === 'tourism' ? 'للسياحة والضيافة' :
+                    generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
+                    generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
+                    generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
+                    generalActivity === 'media' ? 'للإعلام والنشر' :
+                    generalActivity === 'entertainment' ? 'للترفيه والفنون' :
+                    generalActivity === 'energy' ? 'للطاقة والمرافق' :
+                    generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
+                    generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
+                    generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : ''
+                  }`.trim();
+
                   // Save personal info to localStorage
                   const personalInfo = {
                     arabicName,
@@ -2550,7 +2574,8 @@ const UpdateInfo = () => {
                     buildingNumber,
                     floor,
                     commercialRegNumber,
-                    capitalAmount
+                    capitalAmount,
+                    approvedCommercialName
                   };
                   localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
                 }

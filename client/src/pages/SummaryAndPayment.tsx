@@ -23,7 +23,8 @@ export default function SummaryAndPayment() {
     buildingNumber: '',
     floor: '',
     commercialRegNumber: '',
-    capitalAmount: ''
+    capitalAmount: '',
+    approvedCommercialName: ''
   });
 
   // Function to load data from localStorage
@@ -36,7 +37,8 @@ export default function SummaryAndPayment() {
         setPersonalInfo({
           ...data,
           commercialRegNumber: data.commercialRegNumber || '',
-          capitalAmount: data.capitalAmount || ''
+          capitalAmount: data.capitalAmount || '',
+          approvedCommercialName: data.approvedCommercialName || ''
         });
       } catch (error) {
         console.error('Error loading personal info:', error);
@@ -240,8 +242,8 @@ export default function SummaryAndPayment() {
                 {/* Approved Commercial Name */}
                 <div>
                   <label className="text-gray-700 text-sm font-medium mb-2 block">الاسم التجاري المعتمد</label>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
-                    <p className="text-gray-800 text-sm">-</p>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 min-h-12 flex items-center">
+                    <p className="text-gray-800 text-sm">{personalInfo.approvedCommercialName || '-'}</p>
                   </div>
                 </div>
 
