@@ -895,14 +895,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6 grid grid-cols-2 gap-y-6 gap-x-12">
+                <CardContent className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 gap-x-12">
                   <div>
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
                     <Input 
                       value={arabicName}
                       onChange={handleArabicNameChange}
                       placeholder="محمد عبدالله أحمد" 
-                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-sm md:text-base text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
                     {validationErrors.arabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.arabicName}</p>}
                   </div>
@@ -912,7 +912,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       value={englishName}
                       onChange={handleEnglishNameChange}
                       placeholder="Mohammed Abdullah Ahmed" 
-                      className={`font-bold text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400 ${validationErrors.englishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-sm md:text-base text-gray-800 text-left placeholder:font-normal placeholder:text-gray-400 ${validationErrors.englishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                       dir="ltr" 
                     />
                     {validationErrors.englishName && <p className="text-xs text-red-500 mt-1 text-left">{validationErrors.englishName}</p>}
@@ -929,7 +929,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         });
                       }
                     }} dir="rtl">
-                      <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                      <SelectTrigger className={`font-bold text-sm md:text-base text-gray-800 w-full text-right ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
                       {validationErrors.nationality && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nationality}</p>}
@@ -948,7 +948,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       value={ownerType}
                       onChange={handleOwnerTypeChange}
                       placeholder="سعودي" 
-                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.ownerType ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-sm md:text-base text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${validationErrors.ownerType ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
                     {validationErrors.ownerType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.ownerType}</p>}
                   </div>
@@ -958,7 +958,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       value={nationalId}
                       onChange={handleNationalIdChange}
                       placeholder="1012345678" 
-                      className={`font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError || validationErrors.nationalId ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      className={`font-bold text-sm md:text-base text-gray-800 placeholder:font-normal placeholder:text-gray-400 ${nationalIdError || validationErrors.nationalId ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
                     {(nationalIdError || validationErrors.nationalId) && (
                       <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError || validationErrors.nationalId}</p>
@@ -1112,7 +1112,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         });
                       }
                     }} dir="rtl">
-                      <SelectTrigger className={`font-bold text-gray-800 w-full text-right ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                      <SelectTrigger className={`font-bold text-sm md:text-base text-gray-800 w-full text-right ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="ذكر" />
                       </SelectTrigger>
                       {validationErrors.gender && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.gender}</p>}
