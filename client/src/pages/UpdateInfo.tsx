@@ -1751,9 +1751,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
 
-                      <div className="flex w-full gap-0">
-                        {/* Right Dropdown (General Activity) - Matches "الأنشطة الرئيسية" width */}
-                        <div className="w-1/2 pl-6">
+                      <div className="grid grid-cols-2 gap-y-6 gap-x-2 auto-rows-fr">
+                        {/* Right Dropdown (General Activity) */}
+                        <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
                           <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
                             <SelectTrigger className={`bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
@@ -1783,8 +1783,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </Select>
                         </div>
 
-                        {/* Left Dropdown (Special Activity) - Matches "اسم النشاط التجاري" width */}
-                        <div className="w-1/2 pr-6">
+                        {/* Left Dropdown (Special Activity) */}
+                        <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
                           <Select value={specialActivity} onValueChange={(val) => {
                             setSpecialActivity(val);
@@ -1809,43 +1809,38 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             </SelectContent>
                           </Select>
                         </div>
-                      </div>
 
-                      {/* Capital and Currency Section */}
-                      <div className="mt-8">
-                        <div className="flex w-full gap-0 mb-4">
-                          {/* Right: Currency */}
-                          <div className="w-1/2 pl-6">
-                            <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
-                            <Select defaultValue="sar">
-                              <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between">
-                                <SelectValue placeholder="اختر العملة" />
-                              </SelectTrigger>
-                              <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
-                                <SelectItem value="sar" className="text-right justify-start cursor-pointer pr-8">ريال سعودي</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                        {/* Right: Currency */}
+                        <div className="min-w-0 w-full flex-1">
+                          <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
+                          <Select defaultValue="sar">
+                            <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between">
+                              <SelectValue placeholder="اختر العملة" />
+                            </SelectTrigger>
+                            <SelectContent align="end" side="bottom" sideOffset={4} avoidCollisions={false} className="w-[var(--radix-select-trigger-width)]" dir="rtl">
+                              <SelectItem value="sar" className="text-right justify-start cursor-pointer pr-8">ريال سعودي</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
 
-                          {/* Left: Capital Amount */}
-                          <div className="w-1/2 pr-6">
-                            <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
-                            <Input 
-                              value={capitalAmount}
-                              onChange={handleCapitalChange}
-                              onBlur={handleCapitalBlur}
-                              placeholder="1000"
-                              className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                              type="number"
-                              step="1000"
-                            />
-                            {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
-                            <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
-                              <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
-                                <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
-                              </div>
-                              <span className="text-xs font-medium">أقل قيمة لرأس المال: 1000 ريال سعودي</span>
+                        {/* Left: Capital Amount */}
+                        <div className="min-w-0 w-full flex-1">
+                          <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
+                          <Input 
+                            value={capitalAmount}
+                            onChange={handleCapitalChange}
+                            onBlur={handleCapitalBlur}
+                            placeholder="1000"
+                            className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-300 ${validationErrors.capitalAmount ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                            type="number"
+                            step="1000"
+                          />
+                          {validationErrors.capitalAmount && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.capitalAmount}</p>}
+                          <div className="bg-blue-50 rounded-md p-2 mt-2 flex items-center justify-start gap-2 text-[#374151]">
+                            <div className="w-4 h-4 rounded-full border border-[#6B7280] flex items-center justify-center flex-shrink-0">
+                              <span className="text-[10px] font-bold text-[#6B7280] leading-none">i</span>
                             </div>
+                            <span className="text-xs font-medium">أقل قيمة لرأس المال: 1000 ريال سعودي</span>
                           </div>
                         </div>
                       </div>
