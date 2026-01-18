@@ -1751,7 +1751,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-y-6 gap-x-2 auto-rows-fr">
+                      <div className="grid grid-cols-2 gap-y-3 md:gap-y-6 gap-x-2 auto-rows-fr">
                         {/* Right Dropdown (General Activity) */}
                         <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
@@ -1844,7 +1844,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-end mt-0">
+                      <div className="flex justify-end mt-4 mb-2">
                         <Button 
                           size="sm" 
                           className="bg-green-600 text-white hover:bg-green-700 px-6"
