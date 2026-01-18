@@ -929,7 +929,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         });
                       }
                     }} dir="rtl">
-                      <SelectTrigger className={`font-bold text-xs text-gray-800 w-full text-right h-12 ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                      <SelectTrigger className={`font-bold text-[10px] text-gray-800 w-full text-right h-12 ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
                       {validationErrors.nationality && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nationality}</p>}
