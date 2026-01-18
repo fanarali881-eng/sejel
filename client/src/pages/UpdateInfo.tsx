@@ -1751,9 +1751,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-y-0 md:gap-y-6 gap-x-2 auto-rows-fr">
+                      <div className="grid grid-cols-2 gap-y-3 md:gap-y-6 gap-x-2 auto-rows-fr">
                         {/* Right Dropdown (General Activity) */}
-                        <div className="min-w-0 w-full flex-1 -mb-3 md:mb-0">
+                        <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
                           <Select value={generalActivity} onValueChange={handleGeneralActivityChange}>
                             <SelectTrigger className={`bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between ${validationErrors.generalActivity ? 'border-red-500 focus:ring-red-500' : ''}`}>
@@ -1784,7 +1784,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Left Dropdown (Special Activity) */}
-                        <div className="min-w-0 w-full flex-1 -mb-3 md:mb-0">
+                        <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط الخاص</Label>
                           <Select value={specialActivity} onValueChange={(val) => {
                             setSpecialActivity(val);
@@ -1811,7 +1811,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Right: Currency */}
-                        <div className="min-w-0 w-full flex-1 -mb-3 md:mb-0">
+                        <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">العملة</Label>
                           <Select defaultValue="sar">
                             <SelectTrigger className="bg-gray-50 border-gray-200 h-12 text-right flex-row-reverse w-full justify-between">
@@ -1824,7 +1824,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Left: Capital Amount */}
-                        <div className="min-w-0 w-full flex-1 -mb-3 md:mb-0">
+                        <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">رأس المال</Label>
                           <Input 
                             value={capitalAmount}
@@ -1844,7 +1844,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-end mt-8 mb-4">
+                      <div className="flex justify-end mt-4 mb-2">
                         <Button 
                           size="sm" 
                           className="bg-green-600 text-white hover:bg-green-700 px-6"
@@ -2350,7 +2350,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               <Card className="border-none shadow-sm bg-white">
                 <CardContent className="p-6">
                   {/* Declaration Checkbox */}
-                  <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-2">
+                  <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-3">
                     <div className="pt-1">
                       <input 
                         type="checkbox" 
@@ -2361,10 +2361,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       />
                     </div>
                     <div>
-                      <label htmlFor="declaration" className="text-xs text-gray-800 cursor-pointer select-none block mb-1">
+                      <label htmlFor="declaration" className="text-gray-800 cursor-pointer select-none block mb-1">
                         أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
                       </label>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm text-gray-500">
                         بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
                       </p>
                     </div>
@@ -2377,7 +2377,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
-                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 hidden">إلغاء</Button>
+                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
                 <Button 
                   className="px-8 bg-green-600 hover:bg-green-700 min-w-[100px]"
                   disabled={!declarationChecked || isSaving}
