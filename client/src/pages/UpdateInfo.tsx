@@ -111,6 +111,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [contractType, setContractType] = useState<string>('rent');
   const [ownerType, setOwnerType] = useState('');
   
+  // Address Details State
+  const [buildingNumber, setBuildingNumber] = useState('');
+  const [floorNumber, setFloorNumber] = useState('');
+  
   // Signage Information State
   const [signageType, setSignageType] = useState('');
   const [signageArea, setSignageArea] = useState('');
@@ -1269,6 +1273,42 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       />
                     </div>
                   </div>
+
+                  {/* Building Number and Floor Number Fields */}
+                  <div className="grid grid-cols-2 gap-4 mt-6">
+                    {/* Building Number */}
+                    <div>
+                      <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
+                        رقم المبني <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="أدخل رقم المبني"
+                        value={buildingNumber}
+                        onChange={(e) => setBuildingNumber(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md text-right"
+                        style={{ fontSize: "11px" }}
+                      />
+                      {validationErrors.buildingNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.buildingNumber}</p>}
+                    </div>
+
+                    {/* Floor Number */}
+                    <div>
+                      <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
+                        رقم الدور <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="أدخل رقم الدور"
+                        value={floorNumber}
+                        onChange={(e) => setFloorNumber(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md text-right"
+                        style={{ fontSize: "11px" }}
+                      />
+                      {validationErrors.floorNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floorNumber}</p>}
+                    </div>
+                  </div>
+
                   <div className="flex justify-end mt-8">
                     <Button 
                       size="sm" 
