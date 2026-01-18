@@ -2484,6 +2484,31 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   setCollapsedSteps(prev => [...prev, pendingStep]);
                   setCompletedSteps(prev => [...prev, pendingStep]);
                   setPendingStep(null);
+                  
+                  // Save service info to localStorage
+                  const serviceInfo = {
+                    serviceName: serviceName,
+                    requestId: requestId,
+                    currentTime: currentTime
+                  };
+                  localStorage.setItem('businessCenterServiceInfo', JSON.stringify(serviceInfo));
+                  
+                  // Save personal info to localStorage
+                  const personalInfo = {
+                    arabicName,
+                    englishName,
+                    nationality,
+                    gender,
+                    nationalId,
+                    dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : '',
+                    mobileNumber,
+                    countryCode,
+                    email,
+                    address,
+                    buildingNumber,
+                    floor
+                  };
+                  localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
                 }
               }}
             >

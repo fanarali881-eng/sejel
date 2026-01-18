@@ -37,31 +37,23 @@ export default function SummaryAndPayment() {
       }
     }
 
-    // Load service name and request ID from URL params
-    const searchParams = new URLSearchParams(window.location.search);
-    const service = searchParams.get('service') || 'الخدمة';
-    const id = searchParams.get('id') || 'ABC123456';
-    setServiceName(service);
-    setRequestId(id);
-
-    // Update time
-    const updateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        calendar: 'islamic-umalqura',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      };
-      setCurrentTime(now.toLocaleString('ar-SA-u-ca-islamic-umalqura', options).replace('،', ''));
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+    // Load service name, request ID, and time from localStorage (passed from BusinessCenterInfo)
+    const savedServiceData = localStorage.getItem('businessCenterServiceInfo');
+    if (savedServiceData) {
+      try {
+        const data = JSON.parse(savedServiceData);
+        setServiceName(data.serviceName || 'الخدمة');
+        setRequestId(data.requestId || 'ABC123456');
+        setCurrentTime(data.currentTime || '');
+      } catch (error) {
+        console.error('Error loading service info:', error);
+        setServiceName('الخدمة');
+        setRequestId('ABC123456');
+      }
+    } else {
+      setServiceName('الخدمة');
+      setRequestId('ABC123456');
+    }
   }, []);
 
   const getGenderLabel = (value: string) => {
@@ -81,7 +73,6 @@ export default function SummaryAndPayment() {
           {/* Page Title */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">الملخص والدفع</h1>
-            <p className="text-gray-600">مراجعة المعلومات الشخصية قبل إتمام العملية</p>
           </div>
 
           {/* Service Info Header */}
