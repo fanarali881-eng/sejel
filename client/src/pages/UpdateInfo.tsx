@@ -1361,7 +1361,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       {hasTrademark === 'yes' && (
                         <div className="grid grid-cols-2 gap-x-12 mb-6">
                           <div className="col-span-2">
-                            <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                            <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                               أدخل اسم العلامة التجارية <span className="text-red-500">*</span>
                             </Label>
                             <Input 
@@ -1390,7 +1390,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <div className="grid grid-cols-2 gap-y-6 gap-x-12 max-w-4xl">
                         {/* Shop Name */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             اسم المحل <span className="text-red-500">*</span>
                           </Label>
                           <Input 
@@ -1416,7 +1416,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Shop Number */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             رقم المحل <span className="text-red-500">*</span>
                           </Label>
                           <Input 
@@ -1441,7 +1441,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Property Number */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             رقم العقار
                           </Label>
                           <Input 
@@ -1466,7 +1466,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Number of Openings */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             عدد الفتحات <span className="text-red-500">*</span>
                           </Label>
                           <Input 
@@ -1491,7 +1491,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Number of Floors */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             عدد الأدوار في المحل <span className="text-red-500">*</span>
                           </Label>
                           <Input 
@@ -1516,7 +1516,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Number of Cameras */}
                         <div>
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             عدد الكاميرات في المحل <span className="text-red-500">*</span>
                           </Label>
                           <Input 
@@ -1541,7 +1541,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Has Elevator */}
                         <div className="col-span-2 md:col-span-1">
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             هل يوجد مصعد في المحل؟ <span className="text-red-500">*</span>
                           </Label>
                           <div className="flex w-full border rounded-md overflow-hidden">
@@ -1591,7 +1591,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* In Commercial Center */}
                         <div className="col-span-2 md:col-span-1">
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             هل يقع المحل في مركز تجاري؟ <span className="text-red-500">*</span>
                           </Label>
                           <div className="flex w-full border rounded-md overflow-hidden">
@@ -1641,7 +1641,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         {/* Contract Type */}
                         <div className="col-span-2">
-                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right">
+                          <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                             نوع العقد
                           </Label>
                           <div className="flex w-full gap-4">
