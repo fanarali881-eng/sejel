@@ -929,7 +929,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         });
                       }
                     }} dir="rtl">
-                      <SelectTrigger className={`font-bold text-xs md:text-sm text-gray-800 w-full text-right h-12 ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
+                      <SelectTrigger className={`font-bold text-xs text-gray-800 w-full text-right h-12 ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
                       {validationErrors.nationality && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.nationality}</p>}
@@ -965,9 +965,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     )}
                   </div>
                   <div>
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center justify-between mb-1 h-[16px]">
                       <Label className="text-gray-500 text-xs block">تاريخ الميلاد</Label>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 h-full items-center">
                         <button
                           type="button"
                           onClick={() => setCalendarType('gregorian')}
