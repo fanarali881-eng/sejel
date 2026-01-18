@@ -1257,6 +1257,41 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         )}
                       </div>
 
+                      {/* Building Number and Floor Number Fields - Desktop Only */}
+                      <div className="hidden md:grid grid-cols-2 gap-4 col-span-1">
+                        {/* Building Number */}
+                        <div>
+                          <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
+                            رقم المبني <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            type="text"
+                            placeholder="أدخل رقم المبني"
+                            value={buildingNumber}
+                            onChange={(e) => setBuildingNumber(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded-md text-right"
+                            style={{ fontSize: "11px" }}
+                          />
+                          {validationErrors.buildingNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.buildingNumber}</p>}
+                        </div>
+
+                        {/* Floor Number */}
+                        <div>
+                          <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
+                            رقم الدور <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            type="text"
+                            placeholder="أدخل رقم الدور"
+                            value={floorNumber}
+                            onChange={(e) => setFloorNumber(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded-md text-right"
+                            style={{ fontSize: "11px" }}
+                          />
+                          {validationErrors.floorNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floorNumber}</p>}
+                        </div>
+                      </div>
+
                       {/* Address Label */}
                       {validationErrors.address && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.address}</p>}
                     </div>
@@ -1274,8 +1309,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     </div>
                   </div>
 
-                  {/* Building Number and Floor Number Fields */}
-                  <div className="grid grid-cols-2 gap-4 mt-6">
+                  {/* Building Number and Floor Number Fields - Mobile Only */}
+                  <div className="grid grid-cols-2 gap-4 mt-6 md:hidden">
                     {/* Building Number */}
                     <div>
                       <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
