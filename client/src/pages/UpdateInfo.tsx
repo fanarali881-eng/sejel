@@ -2012,7 +2012,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <Input 
                             value={signageArea}
                             onChange={(e) => {
-                              setSignageArea(e.target.value);
+                              const value = e.target.value.replace(/[^0-9.]/g, '');
+                              setSignageArea(value);
                               if (validationErrors.signageArea) {
                                 setValidationErrors(prev => {
                                   const newErrors = { ...prev };
