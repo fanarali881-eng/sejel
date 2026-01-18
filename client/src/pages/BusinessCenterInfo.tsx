@@ -2580,7 +2580,10 @@ const UpdateInfo = () => {
                     address,
                     buildingNumber,
                     floor,
-                    commercialRegNumber
+                    commercialRegNumber,
+                    generalActivity,
+                    specialActivity,
+                    capitalAmount
                   };
                   localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
                 }
