@@ -40,7 +40,7 @@ export default function HomeNew() {
     setTimeout(() => {
       setLocation(link);
       setLoadingService(null);
-    }, 500);
+    }, 3000);
   };
 
   return (
