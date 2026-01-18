@@ -895,8 +895,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-2 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 gap-x-4">
-                  <div className="min-w-0 w-full">
+                <CardContent className="p-2 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 gap-x-4 auto-rows-fr">
+                  <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالعربي</Label>
                     <Input 
                       value={arabicName}
@@ -906,7 +906,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     />
                     {validationErrors.arabicName && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.arabicName}</p>}
                   </div>
-                  <div className="min-w-0 w-full">
+                  <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">الاسم بالإنجليزي</Label>
                     <Input 
                       value={englishName}
@@ -917,7 +917,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     />
                     {validationErrors.englishName && <p className="text-xs text-red-500 mt-1 text-left">{validationErrors.englishName}</p>}
                   </div>
-                  <div className="min-w-0 w-full">
+                  <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">الجنسية</Label>
                     <Select value={nationality} onValueChange={(val) => {
                       setNationality(val);
@@ -942,7 +942,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="min-w-0 w-full">
+                  <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
                     <Input 
                       value={ownerType}
@@ -952,7 +952,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     />
                     {validationErrors.ownerType && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.ownerType}</p>}
                   </div>
-                  <div className="min-w-0 w-full">
+                  <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
                     <Input 
                       value={nationalId}
@@ -1100,7 +1100,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     )}
                     {validationErrors.dateOfBirth && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.dateOfBirth}</p>}
                   </div>
-                  <div className="min-w-0 w-full">
+                  <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">الجنس</Label>
                     <Select value={gender} onValueChange={(val) => {
                       setGender(val);
