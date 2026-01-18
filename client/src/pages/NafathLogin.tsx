@@ -211,7 +211,7 @@ export default function NafathLogin() {
         </div>
 
         {/* New Platform Banner */}
-        <div className="mt-8 w-full max-w-[750px] bg-[#11998e] rounded-lg p-8 text-white flex flex-col items-center justify-center text-center shadow-sm">
+        <div className="mt-8 w-[90%] max-w-[750px] bg-[#11998e] rounded-lg p-8 text-white flex flex-col items-center justify-center text-center shadow-sm">
           <h3 className="font-bold text-xl mb-2">منصة النفاذ الجديدة</h3>
           <p className="opacity-90 text-sm font-light mb-6">لتجربة أكثر سهولة استخدم النسخة المحدثة من منصة النفاذ الوطني الموحد</p>
           <button 
