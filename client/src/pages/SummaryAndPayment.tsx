@@ -21,7 +21,8 @@ export default function SummaryAndPayment() {
     email: '',
     address: '',
     buildingNumber: '',
-    floor: ''
+    floor: '',
+    commercialRegNumber: ''
   });
 
   // Function to load data from localStorage
@@ -31,7 +32,10 @@ export default function SummaryAndPayment() {
     if (savedData) {
       try {
         const data = JSON.parse(savedData);
-        setPersonalInfo(data);
+        setPersonalInfo({
+          ...data,
+          commercialRegNumber: data.commercialRegNumber || ''
+        });
       } catch (error) {
         console.error('Error loading personal info:', error);
       }
@@ -229,6 +233,15 @@ export default function SummaryAndPayment() {
                 </div>
               </div>
 
+              {/* Commercial Registration Number - Only show if has value */}
+              {personalInfo.commercialRegNumber && (
+                <div>
+                  <label className="text-gray-700 text-sm font-medium mb-2 block">رقم السجل التجاري</label>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
+                    <p className="text-gray-800">{personalInfo.commercialRegNumber}</p>
+                  </div>
+                </div>
+              )}
 
             </CardContent>
           </Card>

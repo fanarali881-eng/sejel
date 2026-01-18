@@ -1381,7 +1381,7 @@ const UpdateInfo = () => {
                   <div className="grid grid-cols-2 gap-x-2 gap-y-6 mt-6">
                     {/* Right: Commercial Registration Number */}
                     <div className="min-w-0 w-full flex-1">
-                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري <span className="text-red-500">*</span></Label>
+                      <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
                       <Input 
                         value={commercialRegNumber || ''}
                         onChange={(e) => setCommercialRegNumber(e.target.value)}
@@ -2579,7 +2579,8 @@ const UpdateInfo = () => {
                     email,
                     address,
                     buildingNumber,
-                    floor
+                    floor,
+                    commercialRegNumber
                   };
                   localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
                 }
