@@ -821,13 +821,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans" dir="rtl">
       {/* Top Navigation Bar (Simplified for this page) */}
-      <header className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center">
-        <div className="flex items-center gap-4 md:gap-8 w-full">
-          <a href="#" onClick={(e) => e.preventDefault()} className="text-sm text-gray-600 hover:text-green-600 font-medium order-2 md:order-1">الرئيسية</a>
-          <div className="flex-grow md:flex-grow-0 order-1 md:order-2 flex justify-end md:justify-start">
-            <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
-          </div>
-        </div>
+      <header className="bg-white border-b border-gray-200 py-3 px-6 flex items-center justify-start">
+        <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
       </header>
 
       <div className="flex flex-1">
