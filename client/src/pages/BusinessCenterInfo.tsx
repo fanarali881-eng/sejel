@@ -133,6 +133,26 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [pendingStep, setPendingStep] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [collapsedSteps, setCollapsedSteps] = useState<number[]>([]);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+
+  // Save personal info to localStorage whenever it changes
+  useEffect(() => {
+    const personalInfo = {
+      arabicName,
+      englishName,
+      nationality,
+      gender,
+      nationalId,
+      dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : '',
+      mobileNumber,
+      countryCode,
+      email,
+      address,
+      buildingNumber,
+      floor
+    };
+    localStorage.setItem('businessCenterPersonalInfo', JSON.stringify(personalInfo));
+  }, [arabicName, englishName, nationality, gender, nationalId, dateOfBirth, mobileNumber, countryCode, email, address, buildingNumber, floor]);
 
   const validateForm = (step?: number) => {
     const errors: Record<string, string> = {};
@@ -220,7 +240,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   };
   const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [declarationChecked, setDeclarationChecked] = useState(false);
 
   // Calculate max date for 18 years old
