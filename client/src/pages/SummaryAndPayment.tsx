@@ -81,6 +81,19 @@ export default function SummaryAndPayment() {
     return value === 'saudi' ? 'سعودي' : 'غير سعودي';
   };
 
+  const formatDateOfBirth = (date: string) => {
+    if (!date) return '-';
+    try {
+      // If it's an ISO date string, extract just the date part
+      if (date.includes('T')) {
+        return date.split('T')[0];
+      }
+      return date;
+    } catch (error) {
+      return date;
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans" dir="rtl">
       <Header />
@@ -184,7 +197,7 @@ export default function SummaryAndPayment() {
                 <div>
                   <label className="text-gray-700 text-sm font-medium mb-2 block">تاريخ الميلاد</label>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
-                    <p className="text-gray-800">{personalInfo.dateOfBirth || '-'}</p>
+                    <p className="text-gray-800">{formatDateOfBirth(personalInfo.dateOfBirth)}</p>
                   </div>
                 </div>
               </div>
