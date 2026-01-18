@@ -1,11 +1,12 @@
 /**
- * INTERACTIVE MAP COMPONENT - Saudi Arabia Only with Full Interactivity
+ * INTERACTIVE MAP COMPONENT - Saudi Arabia Only using Leaflet
  * 
  * Features:
  * - Click on map to place marker
  * - Drag marker to move location
  * - Search for address
  * - Works on mobile and desktop
+ * - No API key required (OpenStreetMap)
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -13,16 +14,12 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MapPin, Search } from "lucide-react";
-
-declare global {
-  interface Window {
-    google?: typeof google;
-  }
-}
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 interface InteractiveMapProps {
   className?: string;
-  initialCenter?: google.maps.LatLngLiteral;
+  initialCenter?: { lat: number; lng: number };
   initialZoom?: number;
   onLocationSelect?: (location: { lat: number; lng: number; address: string }) => void;
   searchAddress?: string;
@@ -36,9 +33,8 @@ export function InteractiveMap({
   searchAddress = "",
 }: InteractiveMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<google.maps.Map | null>(null);
-  const marker = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
-  const geocoder = useRef<google.maps.Geocoder | null>(null);
+  const map = useRef<L.Map | null>(null);
+  const marker = useRef<L.Marker | null>(null);
   const [currentLocation, setCurrentLocation] = useState(initialCenter);
   const [searchInput, setSearchInput] = useState(searchAddress);
   const [isSearching, setIsSearching] = useState(false);
@@ -64,152 +60,125 @@ export function InteractiveMap({
     );
   };
 
-  // Get address from coordinates
-  const getAddressFromCoordinates = (lat: number, lng: number) => {
-    if (geocoder.current) {
-      geocoder.current.geocode(
-        { location: { lat, lng } },
-        (results, status) => {
-          if (status === "OK" && results?.[0]) {
-            const resultAddress = results[0].formatted_address;
-            setAddress(resultAddress);
-            if (onLocationSelect) {
-              onLocationSelect({ lat, lng, address: resultAddress });
-            }
-          }
+  // Get address from coordinates using reverse geocoding
+  const getAddressFromCoordinates = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+        {
+          headers: {
+            "Accept": "application/json",
+          },
         }
       );
-    }
-  };
-
-  // Load Google Maps script
-  const loadMapScript = () => {
-    return new Promise<void>((resolve, reject) => {
-      if (window.google?.maps) {
-        console.log("[InteractiveMap] Google Maps already loaded");
-        resolve();
-        return;
+      const data = await response.json();
+      const resultAddress = data.address?.country === "Saudi Arabia" 
+        ? data.display_name 
+        : `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      setAddress(resultAddress);
+      if (onLocationSelect) {
+        onLocationSelect({ lat, lng, address: resultAddress });
       }
-
-      const API_KEY = import.meta.env.VITE_FRONTEND_FORGE_API_KEY || "default-key";
-      const FORGE_BASE_URL =
-        import.meta.env.VITE_FRONTEND_FORGE_API_URL ||
-        "https://forge.manus.im";
-      const MAPS_PROXY_URL = `${FORGE_BASE_URL}/v1/maps/proxy`;
-
-      const script = document.createElement("script");
-      script.src = `${MAPS_PROXY_URL}/maps/api/js?key=${API_KEY}&v=weekly&libraries=marker,geocoding`;
-      script.async = true;
-      script.defer = true;
-      script.crossOrigin = "anonymous";
-
-      script.onload = () => {
-        console.log("[InteractiveMap] Script loaded");
-        let attempts = 0;
-        const checkGoogle = () => {
-          attempts++;
-          if (window.google?.maps) {
-            console.log("[InteractiveMap] Google Maps ready");
-            resolve();
-          } else if (attempts < 100) {
-            setTimeout(checkGoogle, 100);
-          } else {
-            reject(new Error("Timeout waiting for Google Maps"));
-          }
-        };
-        checkGoogle();
-      };
-
-      script.onerror = () => {
-        console.error("[InteractiveMap] Failed to load Google Maps script");
-        reject(new Error("Failed to load Google Maps"));
-      };
-
-      document.head.appendChild(script);
-    });
+    } catch (err) {
+      console.error("[InteractiveMap] Reverse geocoding error:", err);
+      setAddress(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+    }
   };
 
   // Initialize map
   useEffect(() => {
-    const initMap = async () => {
-      try {
-        console.log("[InteractiveMap] Initializing map");
-        await loadMapScript();
+    if (!mapContainer.current || map.current) {
+      return;
+    }
 
-        if (!mapContainer.current || !window.google?.maps) {
-          console.error("[InteractiveMap] Map container or Google Maps not available");
+    try {
+      console.log("[InteractiveMap] Initializing Leaflet map");
+
+      // Create map
+      map.current = L.map(mapContainer.current).setView(
+        [initialCenter.lat, initialCenter.lng],
+        initialZoom
+      );
+
+      // Add OpenStreetMap tiles
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
+      }).addTo(map.current);
+
+      // Create custom icon
+      const customIcon = L.icon({
+        iconUrl:
+          "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMTYgMkM5LjM3IDIgNCA3LjM3IDQgMTZjMCA4IDEyIDEyIDEyIDEyczAgNCA0IDRzNCAwIDQtNGMwLTguNjMtNS4zNy0xNC0xMi0xNHoiIGZpbGw9IiNFRjQ0NDQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+      });
+
+      // Create marker
+      marker.current = L.marker([initialCenter.lat, initialCenter.lng], {
+        icon: customIcon,
+        draggable: true,
+        title: "اختر الموقع",
+      }).addTo(map.current);
+
+      // Handle marker drag end
+      marker.current.on("dragend", () => {
+        if (marker.current) {
+          const pos = marker.current.getLatLng();
+          const lat = pos.lat;
+          const lng = pos.lng;
+
+          if (!isSaudiLocation(lat, lng)) {
+            setError("الموقع خارج المملكة العربية السعودية");
+            // Return marker to previous position
+            marker.current.setLatLng([currentLocation.lat, currentLocation.lng]);
+            return;
+          }
+
+          setCurrentLocation({ lat, lng });
+          setError("");
+          map.current?.setView([lat, lng], initialZoom);
+          getAddressFromCoordinates(lat, lng);
+        }
+      });
+
+      // Handle map click
+      map.current.on("click", (e: L.LeafletMouseEvent) => {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        if (!isSaudiLocation(lat, lng)) {
+          setError("الموقع خارج المملكة العربية السعودية");
           return;
         }
 
-        // Create map
-        map.current = new window.google.maps.Map(mapContainer.current, {
-          zoom: initialZoom,
-          center: initialCenter,
-          mapTypeControl: true,
-          zoomControl: true,
-          streetViewControl: false,
-          fullscreenControl: true,
-          gestureHandling: "greedy",
-          mapId: "INTERACTIVE_MAP_ID",
-        });
+        setCurrentLocation({ lat, lng });
+        setError("");
 
-        // Initialize geocoder
-        geocoder.current = new window.google.maps.Geocoder();
+        if (marker.current) {
+          marker.current.setLatLng([lat, lng]);
+        }
 
-        // Create marker
-        marker.current = new window.google.maps.marker.AdvancedMarkerElement({
-          map: map.current,
-          position: initialCenter,
-          title: "اختر الموقع",
-          gmpDraggable: true,
-        });
+        getAddressFromCoordinates(lat, lng);
+      });
 
-        // Handle marker drag end
-        marker.current.addListener("dragend", () => {
-          if (marker.current?.position) {
-            const pos = marker.current.position;
-            const lat = typeof pos.lat === "function" ? pos.lat() : pos.lat;
-            const lng = typeof pos.lng === "function" ? pos.lng() : pos.lng;
+      // Get initial address
+      getAddressFromCoordinates(initialCenter.lat, initialCenter.lng);
+      setMapLoaded(true);
+      console.log("[InteractiveMap] Map initialized successfully");
+    } catch (error) {
+      console.error("[InteractiveMap] Error initializing map:", error);
+      setError("فشل تحميل الخريطة");
+    }
 
-            setCurrentLocation({ lat, lng });
-            map.current?.setCenter({ lat, lng });
-            getAddressFromCoordinates(lat, lng);
-          }
-        });
-
-        // Handle map click
-        map.current.addListener("click", (e: google.maps.MapMouseEvent) => {
-          if (e.latLng) {
-            const lat = e.latLng.lat();
-            const lng = e.latLng.lng();
-
-            if (!isSaudiLocation(lat, lng)) {
-              setError("الموقع خارج المملكة العربية السعودية");
-              return;
-            }
-
-            setCurrentLocation({ lat, lng });
-            setError("");
-
-            if (marker.current) {
-              marker.current.position = { lat, lng };
-            }
-
-            getAddressFromCoordinates(lat, lng);
-          }
-        });
-
-        // Get initial address
-        getAddressFromCoordinates(initialCenter.lat, initialCenter.lng);
-        setMapLoaded(true);
-        console.log("[InteractiveMap] Map initialized successfully");
-      } catch (error) {
-        console.error("[InteractiveMap] Error initializing map:", error);
-        setError("فشل تحميل الخريطة");
+    return () => {
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
       }
     };
-
-    initMap();
   }, []);
 
   // Handle search
@@ -223,56 +192,63 @@ export function InteractiveMap({
     setError("");
 
     try {
-      if (!geocoder.current) {
-        setError("خدمة الخريطة غير متاحة");
-        setIsSearching(false);
-        return;
-      }
-
-      geocoder.current.geocode(
-        { address: searchInput + " Saudi Arabia" },
-        (results, status) => {
-          setIsSearching(false);
-
-          if (status === "OK" && results?.[0]) {
-            const location = results[0].geometry.location;
-            const lat = location.lat();
-            const lng = location.lng();
-            const resultAddress = results[0].formatted_address;
-
-            // Check if location is in Saudi Arabia
-            if (!isSaudiLocation(lat, lng)) {
-              setError("العنوان خارج المملكة العربية السعودية. الرجاء البحث عن عنوان داخل السعودية.");
-              return;
-            }
-
-            setCurrentLocation({ lat, lng });
-            setAddress(resultAddress);
-
-            if (map.current) {
-              map.current.setCenter({ lat, lng });
-              map.current.setZoom(15);
-            }
-
-            if (marker.current) {
-              marker.current.position = { lat, lng };
-            }
-
-            if (onLocationSelect) {
-              onLocationSelect({ lat, lng, address: resultAddress });
-            }
-
-            console.log("[InteractiveMap] Search result:", resultAddress);
-          } else {
-            setError("لم يتم العثور على العنوان");
-            console.error("[InteractiveMap] Geocode error:", status);
-          }
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchInput + " Saudi Arabia")}&limit=10&countrycodes=sa`,
+        {
+          headers: {
+            "Accept": "application/json",
+          },
         }
       );
+
+      const results = await response.json();
+
+      if (results && results.length > 0) {
+        // Find first result within Saudi Arabia bounds
+        let foundLocation = null;
+        for (const result of results) {
+          const lat = parseFloat(result.lat);
+          const lng = parseFloat(result.lon);
+          if (isSaudiLocation(lat, lng)) {
+            foundLocation = { lat, lng, address: result.display_name };
+            break;
+          }
+        }
+
+        if (foundLocation) {
+          setCurrentLocation({ lat: foundLocation.lat, lng: foundLocation.lng });
+          setAddress(foundLocation.address);
+
+          if (map.current) {
+            map.current.setView([foundLocation.lat, foundLocation.lng], 15);
+          }
+
+          if (marker.current) {
+            marker.current.setLatLng([foundLocation.lat, foundLocation.lng]);
+          }
+
+          if (onLocationSelect) {
+            onLocationSelect({
+              lat: foundLocation.lat,
+              lng: foundLocation.lng,
+              address: foundLocation.address,
+            });
+          }
+
+          console.log("[InteractiveMap] Search result:", foundLocation.address);
+        } else {
+          setError(
+            "العنوان خارج المملكة العربية السعودية. الرجاء البحث عن عنوان داخل السعودية."
+          );
+        }
+      } else {
+        setError("لم يتم العثور على العنوان داخل السعودية");
+      }
     } catch (err) {
-      setIsSearching(false);
-      setError("خطأ في البحث عن العنوان");
       console.error("[InteractiveMap] Search error:", err);
+      setError("خطأ في البحث عن العنوان");
+    } finally {
+      setIsSearching(false);
     }
   };
 
