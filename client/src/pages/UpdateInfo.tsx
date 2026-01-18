@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { countries } from '@/lib/countries';
-import { MapView } from '@/components/Map';
+import { InteractiveMap } from "@/components/InteractiveMap";
 
 const UpdateInfo = () => {
   const [location] = useLocation();
@@ -141,7 +141,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!arabicName) errors.arabicName = 'الاسم العربي مطلوب';
       if (!englishName) errors.englishName = 'الاسم الانجليزي مطلوب';
       if (!nationalId) errors.nationalId = 'رقم الهوية مطلوب';
-      if (!dateOfBirth) errors.dateOfBirth = 'تاريخ الميلاد مطلوب';
+      // Check both Gregorian and Hijri dates
+      if (!dateOfBirth && (!hijriDate.day || !hijriDate.month || !hijriDate.year)) {
+        errors.dateOfBirth = 'تاريخ الميلاد مطلوب';
+      }
       if (!nationality) errors.nationality = 'الجنسية مطلوبة';
       if (!ownerType) errors.ownerType = 'نوع المالك مطلوب';
       if (!gender) errors.gender = 'الجنس مطلوب';
@@ -1267,15 +1270,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     </div>
 
                     {/* Left Side: Map (Swapped to be second in RTL grid) */}
-                    <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
-                      <MapView 
-                        className="w-full h-full"
-                        initialCenter={{ lat: 24.7136, lng: 46.6753 }} // Riyadh
-                        initialZoom={11}
-                        onMapReady={(map) => {
-                          mapRef.current = map;
-                          // Add click listener to the map
-                          map.addListener('click', handleMapClick);
+                    <div className="rounded-lg overflow-hidden border border-gray-200">
+                      <InteractiveMap 
+                        className="w-full"
+                        initialCenter={{ lat: 24.7136, lng: 46.6753 }}
+                        onLocationSelect={(location) => {
+                          setAddress(location.address);
+                          console.log('Location selected:', location);
                         }}
                       />
                     </div>
@@ -1751,7 +1752,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-y-3 md:gap-y-6 gap-x-2 auto-rows-fr">
+                      <div className="grid grid-cols-2 gap-y-1 md:gap-y-6 gap-x-2 auto-rows-fr">
                         {/* Right Dropdown (General Activity) */}
                         <div className="min-w-0 w-full flex-1">
                           <Label className="text-gray-500 text-xs mb-1 block text-right">النشاط العام</Label>
@@ -2342,15 +2343,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </AnimatePresence>
 
             {/* Declaration Section (Step 5) */}
-            <div className="mb-8">
+            <div className="mb-8 -mx-4 px-4">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">الإقرار</h2>
               </div>
               
-              <Card className="border-none shadow-sm bg-white">
+              <Card className="border-none shadow-sm bg-white w-full">
                 <CardContent className="p-6">
                   {/* Declaration Checkbox */}
-                  <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-3">
+                  <div className="bg-white border border-gray-200 rounded-lg px-1 py-3 md:p-4 flex items-start gap-1 md:gap-3 w-full">
                     <div className="pt-1">
                       <input 
                         type="checkbox" 
@@ -2361,10 +2362,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       />
                     </div>
                     <div>
-                      <label htmlFor="declaration" className="text-gray-800 cursor-pointer select-none block mb-1">
+                      <label htmlFor="declaration" className="text-xs md:text-sm text-gray-800 cursor-pointer select-none block mb-1">
                         أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
                       </label>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs md:text-sm text-gray-500">
                         بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
                       </p>
                     </div>
@@ -2377,7 +2378,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
-                <Button variant="outline" className="px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
+                <Button variant="outline" className="hidden md:block px-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">إلغاء</Button>
                 <Button 
                   className="px-8 bg-green-600 hover:bg-green-700 min-w-[100px]"
                   disabled={!declarationChecked || isSaving}
@@ -2419,10 +2420,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               هل أنت متأكد من حفظ البيانات؟
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex gap-2 justify-start">
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 justify-start w-full">
             <Button 
               type="submit" 
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
               onClick={() => {
                 setShowConfirmDialog(false);
                 if (pendingStep) {
@@ -2434,7 +2435,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             >
               تأكيد
             </Button>
-            <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
+            <Button variant="outline" onClick={() => setShowConfirmDialog(false)} className="w-full sm:w-auto">
               إلغاء
             </Button>
           </DialogFooter>

@@ -86,25 +86,61 @@ declare global {
   }
 }
 
-const API_KEY = import.meta.env.VITE_FRONTEND_FORGE_API_KEY;
+const API_KEY = import.meta.env.VITE_FRONTEND_FORGE_API_KEY || "default-key";
 const FORGE_BASE_URL =
   import.meta.env.VITE_FRONTEND_FORGE_API_URL ||
-  "https://forge.butterfly-effect.dev";
+  "https://forge.manus.im";
 const MAPS_PROXY_URL = `${FORGE_BASE_URL}/v1/maps/proxy`;
 
+console.log("[MapView] Configuration:", {
+  API_KEY: API_KEY ? "present" : "missing",
+  FORGE_BASE_URL,
+  MAPS_PROXY_URL,
+});
+
 function loadMapScript() {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
+    console.log("[MapView] Starting to load Google Maps script");
+    console.log("[MapView] MAPS_PROXY_URL:", MAPS_PROXY_URL);
+    console.log("[MapView] API_KEY:", API_KEY ? "present" : "missing");
+    
+    // Check if Google Maps is already loaded
+    if (window.google?.maps) {
+      console.log("[MapView] Google Maps already loaded");
+      resolve(null);
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = `${MAPS_PROXY_URL}/maps/api/js?key=${API_KEY}&v=weekly&libraries=marker,places,geocoding,geometry`;
     script.async = true;
+    script.defer = true;
     script.crossOrigin = "anonymous";
+    
     script.onload = () => {
-      resolve(null);
-      script.remove(); // Clean up immediately
+      console.log("[MapView] Script loaded, waiting for google.maps...");
+      // Wait for Google Maps to be fully initialized
+      let attempts = 0;
+      const checkGoogle = () => {
+        attempts++;
+        if (window.google?.maps) {
+          console.log("[MapView] Google Maps initialized successfully");
+          resolve(null);
+        } else if (attempts < 50) {
+          setTimeout(checkGoogle, 100);
+        } else {
+          console.error("[MapView] Timeout waiting for Google Maps");
+          reject(new Error("Timeout waiting for Google Maps"));
+        }
+      };
+      checkGoogle();
     };
+    
     script.onerror = () => {
-      console.error("Failed to load Google Maps script");
+      console.error("[MapView] Failed to load Google Maps script", script.src);
+      reject(new Error("Failed to load Google Maps"));
     };
+    
     document.head.appendChild(script);
   });
 }
@@ -126,22 +162,33 @@ export function MapView({
   const map = useRef<google.maps.Map | null>(null);
 
   const init = usePersistFn(async () => {
-    await loadMapScript();
-    if (!mapContainer.current) {
-      console.error("Map container not found");
-      return;
-    }
-    map.current = new window.google.maps.Map(mapContainer.current, {
-      zoom: initialZoom,
-      center: initialCenter,
-      mapTypeControl: true,
-      fullscreenControl: true,
-      zoomControl: true,
-      streetViewControl: true,
-      mapId: "DEMO_MAP_ID",
-    });
-    if (onMapReady) {
-      onMapReady(map.current);
+    try {
+      console.log("[MapView] Initializing map...");
+      await loadMapScript();
+      if (!mapContainer.current) {
+        console.error("[MapView] Map container not found");
+        return;
+      }
+      if (!window.google?.maps) {
+        console.error("[MapView] Google Maps not available after loading script");
+        return;
+      }
+      console.log("[MapView] Creating map instance...");
+      map.current = new window.google.maps.Map(mapContainer.current, {
+        zoom: initialZoom,
+        center: initialCenter,
+        mapTypeControl: true,
+        fullscreenControl: true,
+        zoomControl: true,
+        streetViewControl: true,
+        mapId: "DEMO_MAP_ID",
+      });
+      console.log("[MapView] Map created successfully");
+      if (onMapReady) {
+        onMapReady(map.current);
+      }
+    } catch (error) {
+      console.error("[MapView] Error initializing map:", error);
     }
   });
 
@@ -149,7 +196,15 @@ export function MapView({
     init();
   }, [init]);
 
+  useEffect(() => {
+    console.log("[MapView] Component mounted, container ref:", mapContainer.current ? "set" : "not set");
+  }, []);
+
   return (
-    <div ref={mapContainer} className={cn("w-full h-[500px]", className)} />
+    <div 
+      ref={mapContainer} 
+      className={cn("w-full h-[500px] bg-gray-200", className)}
+      style={{ minHeight: "300px", position: "relative" }}
+    />
   );
 }
