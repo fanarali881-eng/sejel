@@ -1175,7 +1175,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
 
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-2 md:p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Right Side: Inputs (Swapped to be first in RTL grid) */}
                     <div className="space-y-6">
@@ -1319,7 +1319,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-2 md:p-6">
                   {['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? (
                     // Shop Information Form
                     <div className="space-y-6">
@@ -1868,7 +1868,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
               
               <Card className="border-none shadow-sm bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-2 md:p-6">
                   {['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? (
                     // Signage Information Form
                     <div className="space-y-6">
@@ -2337,7 +2337,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
               
               <Card className="border-none shadow-sm bg-white w-full">
-                <CardContent className="p-6">
+                <CardContent className="p-2 md:p-6">
                   {/* Declaration Checkbox */}
                   <div className="bg-white border border-gray-200 rounded-lg px-1 py-3 md:p-4 flex items-start gap-1 md:gap-3 w-full">
                     <div className="pt-1">
