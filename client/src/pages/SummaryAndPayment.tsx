@@ -208,7 +208,7 @@ export default function SummaryAndPayment() {
                 <div>
                   <label className="text-gray-700 text-sm font-medium mb-2 block">رقم الجوال</label>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 h-12 flex items-center">
-                    <p className="text-gray-800">+{personalInfo.countryCode.replace('+', '')}{personalInfo.mobileNumber || '-'}</p>
+                    <p className="text-gray-800">{personalInfo.countryCode.replace('+', '')}{personalInfo.mobileNumber || '-'}+</p>
                   </div>
                 </div>
 
