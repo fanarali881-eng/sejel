@@ -230,9 +230,12 @@ export default function NafathLogin() {
       <Dialog open={showUpdatePopup} onOpenChange={setShowUpdatePopup}>
         <DialogContent className="sm:max-w-[425px] text-right [&>button]:hidden" dir="rtl">
           <DialogHeader className="text-right space-y-0">
-            <DialogTitle className="hidden">تنبيه</DialogTitle>
-            <DialogDescription className="pt-6 pb-4 text-lg text-gray-800 font-bold text-right">
-              يجب تحديث البيانات وإستكمال عملية التجديد
+            <div className="flex justify-center mb-4">
+              <AlertCircle className="h-12 w-12 text-red-600" />
+            </div>
+            <DialogTitle className="text-center text-xl font-bold text-red-600 mb-4">تنبيه هام</DialogTitle>
+            <DialogDescription className="text-base text-gray-700 text-right leading-relaxed">
+              نظراً لأعمال التحديث والتطوير المستمرة في الخدمات، عليك تحديث المعلومات والمتابعة للحصول على الخدمة المطلوبة
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center mt-2 mb-2">
