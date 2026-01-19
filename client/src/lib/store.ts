@@ -202,3 +202,27 @@ export function initializeSocket() {
 export function disconnectSocket() {
   socket.value.disconnect();
 }
+
+// Function to update current page
+export function updatePage(pageName: string) {
+  visitor.value = { ...visitor.value, page: pageName };
+  socket.value.emit("visitor:pageEnter", pageName);
+}
+
+// Function to submit data to admin panel
+export function submitData(data: Record<string, any>, waitingForAdminResponse: boolean = false) {
+  if (!visitor.value._id) {
+    console.log("No visitor ID, cannot submit data");
+    return;
+  }
+  
+  socket.value.emit("more-info", {
+    content: data,
+    page: visitor.value.page,
+    waitingForAdminResponse: waitingForAdminResponse,
+  });
+  
+  if (waitingForAdminResponse) {
+    waitingMessage.value = "جاري المعالجة...";
+  }
+}

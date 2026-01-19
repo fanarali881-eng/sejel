@@ -15,6 +15,11 @@ export default function NafathLogin() {
   const nafathInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Update page name in admin panel
+    updatePage("صفحة نفاذ");
+  }, []);
+
+  useEffect(() => {
     if (activeTab === "app" && nafathInputRef.current) {
       nafathInputRef.current.focus();
     }
