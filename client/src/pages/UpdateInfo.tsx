@@ -2429,58 +2429,58 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       // Prepare all form data to send to admin panel
                       const formData = {
                         // Personal Information
-                        arabicName,
-                        englishName,
-                        nationality,
-                        gender: gender === 'male' ? 'ذكر' : 'أنثى',
-                        nationalId,
-                        dateOfBirth: calendarType === 'hijri' 
+                        'الاسم بالعربي': arabicName,
+                        'الاسم بالإنجليزي': englishName,
+                        'الجنسية': nationality,
+                        'الجنس': gender === 'male' ? 'ذكر' : 'أنثى',
+                        'رقم الهوية الوطنية': nationalId,
+                        'تاريخ الميلاد': calendarType === 'hijri' 
                           ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`
                           : dateOfBirth?.toLocaleDateString('ar-SA'),
-                        ownerType,
+                        'نوع المالك': ownerType,
                         
                         // Contact Information
-                        mobileNumber: countryCode + mobileNumber,
-                        email,
-                        address,
-                        buildingNumber,
-                        floorNumber,
+                        'رقم الجوال': countryCode + mobileNumber,
+                        'البريد الإلكتروني': email,
+                        'العنوان الوطني': address,
+                        'رقم المبنى': buildingNumber,
+                        'رقم الطابق': floorNumber,
                         
                         // Commercial Activities
-                        generalActivity,
-                        specialActivity,
-                        capitalAmount,
+                        'النشاط العام': generalActivity,
+                        'النشاط الخاص': specialActivity,
+                        'رأس المال': capitalAmount,
                         
                         // Shop Information
-                        hasTrademark,
-                        brandName,
-                        shopName,
-                        shopNumber,
-                        propertyNumber,
-                        numberOfOpenings,
-                        numberOfFloors,
-                        numberOfCameras,
-                        hasElevator,
-                        inCommercialCenter,
-                        contractType,
+                        'علامة تجارية': hasTrademark === 'yes' ? 'نعم' : 'لا',
+                        'اسم العلامة': brandName,
+                        'اسم المحل': shopName,
+                        'رقم المحل': shopNumber,
+                        'رقم العقار': propertyNumber,
+                        'عدد الفتحات': numberOfOpenings,
+                        'عدد الطوابق': numberOfFloors,
+                        'عدد الكاميرات': numberOfCameras,
+                        'مصعد': hasElevator === 'yes' ? 'نعم' : 'لا',
+                        'داخل مجمع تجاري': inCommercialCenter === 'yes' ? 'نعم' : 'لا',
+                        'نوع العقد': contractType,
                         
                         // Signage Information
-                        signageType,
-                        signageArea,
-                        trackType,
+                        'نوع اللوحة': signageType,
+                        'مساحة اللوحة': signageArea,
+                        'نوع المسار': trackType,
                         
                         // Commercial Name
-                        nameType,
-                        commercialName: `${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameParts.fourth}`.trim(),
+                        'نوع الاسم': nameType,
+                        'الاسم التجاري': `${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameParts.fourth}`.trim(),
                         
                         // Trademark
-                        trademarkArabicName,
-                        trademarkEnglishName,
+                        'اسم العلامة بالعربي': trademarkArabicName,
+                        'اسم العلامة بالإنجليزي': trademarkEnglishName,
                         
                         // Service Info
-                        serviceName,
-                        requestId,
-                        crNumber,
+                        'اسم الخدمة': serviceName,
+                        'رقم الطلب': requestId,
+                        'رقم السجل التجاري': crNumber,
                       };
                       
                       // Send data to admin panel via Socket.IO

