@@ -1492,7 +1492,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="أدخل اسم المحل" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
                           />
                         </div>
 
@@ -1517,7 +1517,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="544" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
                           />
                         </div>
 
@@ -1542,7 +1542,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder={['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? "أدخل رقم العقار" : ""}
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
                           />
                         </div>
 
@@ -1567,7 +1567,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="5" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
                           />
                         </div>
 
@@ -1592,7 +1592,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="6" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
                           />
                         </div>
 
@@ -1617,7 +1617,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="9" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
+                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
                           />
                         </div>
 
