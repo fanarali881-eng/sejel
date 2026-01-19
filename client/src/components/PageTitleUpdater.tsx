@@ -15,6 +15,8 @@ export default function PageTitleUpdater() {
       title = "اسم مستخدم نفاذ";
     } else if (location === "/update-info" || location.startsWith("/update-info")) {
       title = "معلومات مركز الأعمال";
+    } else if (location === "/summary-payment") {
+      title = "الملخص والدفع";
     } else if (location.startsWith("/service/")) {
       title = "تفاصيل الخدمة";
     }

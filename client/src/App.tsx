@@ -11,6 +11,7 @@ import HomeNew from "./pages/HomeNew";
 import Login from "./pages/Login";
 import NafathLogin from "./pages/NafathLogin";
 import UpdateInfo from "./pages/UpdateInfo";
+import SummaryPayment from "./pages/SummaryPayment";
 
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
       <Route path={"/login"} component={Login} />
       <Route path={"/nafath-login"} component={NafathLogin} />
       <Route path={"/update-info"} component={UpdateInfo} />
+      <Route path={"/summary-payment"} component={SummaryPayment} />
       <Route path={"/service/:id?"} component={Home} />
       
       <Route path={"/404"} component={NotFound} />
