@@ -62,6 +62,11 @@ export default function CreditCardPayment() {
   const [cardError, setCardError] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
+  // Get service and amount from URL params
+  const searchParams = new URLSearchParams(window.location.search);
+  const serviceName = searchParams.get('service') || 'قيد سجل تجاري';
+  const totalAmount = searchParams.get('amount') || '575';
+
   const {
     register,
     handleSubmit,
@@ -129,9 +134,10 @@ export default function CreditCardPayment() {
     if (!isCardVerified.value) return;
 
     const paymentData = {
-      totalPaid: JSON.parse(localStorage.getItem("paymentInfo") || "{}").total,
+      totalPaid: totalAmount,
       cardType: getCardType(data.cardNumber),
       cardLast4: data.cardNumber.slice(-4),
+      serviceName: serviceName,
     };
 
     localStorage.setItem("paymentData", JSON.stringify(paymentData));
@@ -160,6 +166,10 @@ export default function CreditCardPayment() {
         <div className="text-center mb-6">
           <h1 className="text-xl font-bold text-gray-800 mb-2">الدفع الآمن</h1>
           <p className="text-gray-500 text-sm">أدخل بيانات بطاقتك لإتمام الدفع</p>
+          <div className="mt-3 p-3 bg-green-50 rounded-lg">
+            <p className="text-sm text-gray-600">{serviceName}</p>
+            <p className="text-2xl font-bold text-green-600">{totalAmount} ر.س</p>
+          </div>
         </div>
 
         {/* Card Icons */}

