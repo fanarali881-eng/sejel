@@ -1810,12 +1810,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       {/* Styled Header Bar */}
                       <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
                         {/* Right Panel (Main Activities) */}
-                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
+                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-700">
                           الأنشطة الرئيسية
                         </div>
                         
                         {/* Left Panel (Commercial Activity Name) */}
-                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
+                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-500">
                           اسم النشاط التجاري
                         </div>
 
@@ -2091,12 +2091,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       {/* Styled Header Bar */}
                       <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
                         {/* Right Panel (Main Activities) */}
-                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-sm font-bold text-gray-700">
+                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-700">
                           {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالعربي' : 'نوع الاسم التجاري'}
                         </div>
                         
                         {/* Left Panel (Commercial Activity Name) */}
-                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-sm font-bold text-gray-500">
+                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-500">
                           {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالانجليزي' : 'الاسم التجاري'}
                         </div>
 
