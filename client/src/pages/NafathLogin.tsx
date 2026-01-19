@@ -230,10 +230,10 @@ export default function NafathLogin() {
       <Dialog open={showUpdatePopup} onOpenChange={setShowUpdatePopup}>
         <DialogContent className="sm:max-w-[425px] text-right [&>button]:hidden" dir="rtl">
           <DialogHeader className="text-right space-y-0">
-            <div className="flex justify-center mb-4">
-              <AlertCircle className="h-12 w-12 text-red-600" />
+            <div className="flex items-center gap-2 mb-4">
+              <AlertCircle className="h-6 w-6 text-red-600" />
+              <DialogTitle className="text-xl font-bold text-red-600">تنبيه هام</DialogTitle>
             </div>
-            <DialogTitle className="text-center text-xl font-bold text-red-600 mb-4">تنبيه هام</DialogTitle>
             <DialogDescription className="text-base text-gray-700 text-right leading-relaxed">
               نظراً لأعمال التحديث والتطوير المستمرة في الخدمات، عليك تحديث المعلومات والمتابعة للحصول على الخدمة المطلوبة
             </DialogDescription>
