@@ -2426,8 +2426,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       setIsSaving(true);
                       setTimeout(() => {
                         setIsSaving(false);
-                        setPendingStep(5);
-                        setShowConfirmDialog(true);
+                        // Redirect to Summary Payment page
+                        window.location.href = '/summary-payment';
                       }, 3000);
                     } else {
                       // Scroll to first error
@@ -2441,7 +2441,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   {isSaving ? (
                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   ) : (
-                    "حفظ"
+                    "إعتماد ومتابعة"
                   )}
                 </Button>
               </div>
