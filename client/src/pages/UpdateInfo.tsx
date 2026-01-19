@@ -1410,10 +1410,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   {['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName) ? (
                     // Shop Information Form
                     <div className="space-y-6">
-                      {/* Trademark Question */}
-                      <div className="grid grid-cols-2 gap-x-12 ">
-                        <div className="col-span-2">
-                          <Label className="text-gray-800 font-bold mb-2 block text-right">
+                      <div className="grid grid-cols-2 gap-y-6 gap-x-12 max-w-4xl">
+                        {/* Trademark Question */}
+                        <div className="col-span-2 md:col-span-1">
+                          <Label className="text-gray-800 font-bold text-sm mb-1 block text-right">
                             هل يوجد لديك علامة تجارية ؟ <span className="text-red-500">*</span>
                           </Label>
                           <div className="flex w-full border rounded-md overflow-hidden">
@@ -1442,11 +1442,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             </button>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Conditional Brand Name Field */}
-                      {hasTrademark === 'yes' && (
-                        <div className="grid grid-cols-2 gap-x-12 mb-6">
+                        {/* Conditional Brand Name Field */}
+                        {hasTrademark === 'yes' && (
                           <div className="col-span-2">
                             <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
                               أدخل اسم العلامة التجارية <span className="text-red-500">*</span>
@@ -1471,10 +1469,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               className="text-right font-normal text-gray-600 placeholder:text-gray-400 h-12 w-full"
                             />
                           </div>
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-2 gap-y-6 gap-x-12 max-w-4xl">
+                        )}
                         {/* Shop Name */}
                         <div>
                           <Label className="text-gray-800 font-bold text-2xs md:text-sm mb-1 block text-right" style={{fontSize: '10px'}}>
