@@ -2496,12 +2496,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               type="submit" 
               className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
               onClick={() => {
-                setShowConfirmDialog(false);
                 if (pendingStep) {
                   setCollapsedSteps(prev => [...prev, pendingStep]);
                   setCompletedSteps(prev => [...prev, pendingStep]);
                   setPendingStep(null);
                 }
+                setShowConfirmDialog(false);
               }}
             >
               تأكيد
