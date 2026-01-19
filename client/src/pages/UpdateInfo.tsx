@@ -1807,26 +1807,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   ) : (
                     // Default Commercial Activities Form
                     <>
-                      {/* Styled Header Bar */}
-                      <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
-                        {/* Right Panel (Main Activities) */}
-                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-700">
-                          الأنشطة الرئيسية
-                        </div>
-                        
-                        {/* Left Panel (Commercial Activity Name) */}
-                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-500">
-                          اسم النشاط التجاري
-                        </div>
 
-                        {/* The Arrow Overlay - Centered */}
-                        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
-                          <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
-                            <path d="M24 0L0 24L24 48" fill="white" />
-                            <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
-                          </svg>
-                        </div>
-                      </div>
 
                       <div className="grid grid-cols-2 gap-y-1 md:gap-y-6 gap-x-2 auto-rows-fr">
                         {/* Right Dropdown (General Activity) */}
@@ -2088,26 +2069,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     </div>
                   ) : (
                     <>
-                      {/* Styled Header Bar */}
-                      <div className="flex w-full border border-gray-200 rounded-lg overflow-hidden mb-6 h-12 relative bg-gray-50">
-                        {/* Right Panel (Main Activities) */}
-                        <div className="w-1/2 h-full bg-white flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-700">
-                          {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالعربي' : 'نوع الاسم التجاري'}
-                        </div>
-                        
-                        {/* Left Panel (Commercial Activity Name) */}
-                        <div className="w-1/2 h-full bg-gray-50 flex items-center justify-center text-[10px] md:text-sm font-bold text-gray-500">
-                          {serviceName === 'تسجيل علامة تجارية' ? 'اسم العلامة التجارية بالانجليزي' : 'الاسم التجاري'}
-                        </div>
 
-                        {/* The Arrow Overlay - Centered */}
-                        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-full z-10 h-full">
-                          <svg width="24" height="100%" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="block h-full">
-                            <path d="M24 0L0 24L24 48" fill="white" />
-                            <path d="M24 0L0 24L24 48" stroke="#E5E7EB" strokeWidth="1" fill="none" />
-                          </svg>
-                        </div>
-                      </div>
 
                   </>
                   )}
