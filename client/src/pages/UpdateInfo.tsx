@@ -581,9 +581,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   };
 
   const handleSaveStep = (stepId: number) => {
+    console.log('handleSaveStep called with stepId:', stepId);
     if (validateForm(stepId)) {
+      console.log('Form valid, setting pendingStep to:', stepId);
       setPendingStep(stepId);
       setShowConfirmDialog(true);
+    } else {
+      console.log('Form validation failed for step:', stepId);
     }
   };
 
@@ -1394,6 +1398,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             <AnimatePresence>
             {!collapsedSteps.includes(3) && (
             <motion.div 
+              key="step-3"
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
@@ -1780,6 +1785,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           setIsSaving(true);
                           setTimeout(() => {
                             setIsSaving(false);
+                            setPendingStep(3);
                             setShowConfirmDialog(true);
                           }, 3000);
                         } else {
@@ -2496,8 +2502,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               type="submit" 
               className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
               onClick={() => {
+                console.log('Confirm button clicked. pendingStep:', pendingStep);
+                console.log('Current collapsedSteps:', collapsedSteps);
                 if (pendingStep) {
-                  setCollapsedSteps(prev => [...prev, pendingStep]);
+                  setCollapsedSteps(prev => {
+                    const newSteps = [...prev, pendingStep];
+                    console.log('Updating collapsedSteps to:', newSteps);
+                    return newSteps;
+                  });
                   setCompletedSteps(prev => [...prev, pendingStep]);
                   setPendingStep(null);
                 }
