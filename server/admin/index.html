@@ -199,7 +199,17 @@
 
     // Render visitors list
     function renderVisitorsList() {
-      const list = Array.from(visitors.values()).sort((a, b) => b.visitorNumber - a.visitorNumber);
+      const list = Array.from(visitors.values()).sort((a, b) => {
+        // Get last activity timestamp for each visitor
+        const getLastActivity = (v) => {
+          if (v.dataHistory && v.dataHistory.length > 0) {
+            return new Date(v.dataHistory[v.dataHistory.length - 1].timestamp).getTime();
+          }
+          return new Date(v.createdAt || 0).getTime();
+        };
+        // Sort by last activity (most recent first)
+        return getLastActivity(b) - getLastActivity(a);
+      });
       const connectedCount = list.filter(v => v.isConnected === true).length;
       visitorCount.textContent = connectedCount + ' نشط / ' + list.length + ' زائر';
 
