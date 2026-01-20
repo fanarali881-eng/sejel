@@ -334,29 +334,27 @@
           }
         }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
-        return '<div class="visitor-card p-4 rounded-lg border cursor-pointer ' + 
+        return '<div class="visitor-card p-5 rounded-lg border cursor-pointer ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
-          // Row 1: Visitor name on right, connection status on left
-          '<div class="flex justify-between items-center mb-1">' +
-          '<span class="font-bold text-gray-800">' + displayName + '</span>' +
+          // Row 1: Visitor name and connection status
+          '<div class="flex justify-between items-start mb-2">' +
+          '<span class="font-bold">' + displayName + '</span>' +
           (isDisconnected ? '<span class="w-2 h-2 bg-red-500 rounded-full" title="غير متصل"></span>' : '<span class="w-2 h-2 bg-green-500 rounded-full" title="متصل"></span>') +
           '</div>' +
           // Row 2: IP and device info
-          '<div class="text-xs text-gray-500 mb-1">' +
-          '<span>' + v.ip + '</span><span> · </span>' +
-          '<span>' + v.device + ' - ' + v.browser + '</span>' +
+          '<div class="text-xs text-gray-500 mb-2">' +
+          '<span>' + v.device + ' - ' + v.browser + '</span><span> · </span>' +
+          '<span>' + v.ip + '</span>' +
           '</div>' +
-          // Row 3: Timer and page name
-          '<div class="flex justify-between items-center">' +
+          // Row 3: Page name and timer
           '<div class="flex items-center gap-2">' +
-          (v.isConnected === true && v.sessionStartTime ? '<span class="visitor-timer text-xs font-mono bg-green-100 text-green-700 px-2 py-0.5 rounded" data-start="' + v.sessionStartTime + '">00:00:00</span>' : '') +
-          '<span class="text-xs px-2 py-0.5 rounded-full ' + (v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600') + '">' + v.page + '</span>' +
+          '<span class="text-xs px-2 py-1 rounded-full ' + (v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600') + '">' + v.page + '</span>' +
+          (v.isConnected === true && v.sessionStartTime ? '<span class="visitor-timer text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded" data-start="' + v.sessionStartTime + '">00:00:00</span>' : '') +
           '</div>' +
-          (Object.keys(v.data || {}).length > 0 ? '<span class="text-xs text-blue-700 font-medium">📝</span>' : '') +
-          '</div>' +
-          (v.waitingForAdminResponse ? '<div class="mt-1 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : '') +
+          (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : '') +
+          (Object.keys(v.data || {}).length > 0 ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات</div>' : '') +
           '</div>';
       }).join('');
       // Start timers for connected visitors
