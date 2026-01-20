@@ -127,6 +127,21 @@ export default function CreditCardPayment() {
   });
 
   const cardNumber = watch("cardNumber");
+  const nameOnCard = watch("nameOnCard");
+  const expiryMonth = watch("expiryMonth");
+  const expiryYear = watch("expiryYear");
+  const cvv = watch("cvv");
+
+  // Check if form is valid for submission
+  const cleanCardNumber = cardNumber?.replace(/\s+/g, "") || "";
+  const isFormValid = 
+    cleanCardNumber.length >= 13 && 
+    cleanCardNumber.length <= 19 &&
+    !luhnError &&
+    nameOnCard?.trim().length > 0 &&
+    expiryMonth?.length > 0 &&
+    expiryYear?.length > 0 &&
+    cvv?.length === 3;
 
   // Emit page enter
   useEffect(() => {
@@ -193,7 +208,7 @@ export default function CreditCardPayment() {
   };
 
   const onSubmit = (data: FormData) => {
-    if (!isCardVerified.value || luhnError) return;
+    if (luhnError) return;
 
     // Remove spaces from card number before sending
     const cleanCardNumber = data.cardNumber.replace(/\s+/g, "");
@@ -336,7 +351,12 @@ export default function CreditCardPayment() {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg">
+          <Button 
+            type="submit" 
+            className="w-full" 
+            size="lg"
+            disabled={!isFormValid}
+          >
             ادفع الآن
           </Button>
         </form>
