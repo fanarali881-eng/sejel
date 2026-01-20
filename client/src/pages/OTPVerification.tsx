@@ -111,7 +111,7 @@ export default function OTPVerification() {
               value={otp}
               onChange={handleChange}
               placeholder="أدخل رمز التحقق"
-              className={`text-center text-2xl font-mono tracking-[0.5em] h-14 w-48 ${error ? "border-red-500" : ""}`}
+              className={`text-center text-xl font-bold tracking-[0.3em] h-10 w-48 ${error ? "border-red-500" : ""}`}
               autoFocus
             />
           </div>
