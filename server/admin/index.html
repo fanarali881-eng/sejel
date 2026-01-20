@@ -100,11 +100,13 @@
     const visitorDetails = document.getElementById('visitorDetails');
     const visitorCount = document.getElementById('visitorCount');
 
-    // Login handler
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const password = document.getElementById('password').value;
-      
+    // Auto login if password saved
+    const savedPassword = localStorage.getItem('adminPassword');
+    if (savedPassword) {
+      autoLogin(savedPassword);
+    }
+
+    function autoLogin(password) {
       socket = io(SOCKET_URL, {
         transports: ['websocket', 'polling'],
       });
@@ -115,13 +117,22 @@
 
       socket.on('admin:authenticated', (success) => {
         if (success) {
+          localStorage.setItem('adminPassword', password);
           loginModal.classList.add('hidden');
           dashboard.classList.remove('hidden');
           setupSocketListeners();
         } else {
+          localStorage.removeItem('adminPassword');
           loginError.classList.remove('hidden');
         }
       });
+    }
+
+    // Login handler
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      autoLogin(password);
     });
 
     // Setup socket listeners
