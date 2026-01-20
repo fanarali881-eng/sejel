@@ -60,8 +60,9 @@
     <div class="container mx-auto px-4 py-6">
       <!-- Visitors List -->
       <div class="mb-6">
-        <h2 class="text-lg font-bold mb-4">الزوار</h2>
-        <div id="visitorsList" class="flex flex-col gap-3">
+        <div class="bg-white rounded-xl shadow-sm p-4">
+          <h2 class="text-lg font-bold mb-4">الزوار</h2>
+          <div id="visitorsList" class="flex flex-col gap-3">
             <p class="text-gray-500 text-center py-8 w-full">لا يوجد زوار حالياً</p>
           </div>
         </div>
@@ -250,7 +251,7 @@
           }
         }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
-        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer max-w-md bg-white shadow-sm ' + 
+        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">' +
