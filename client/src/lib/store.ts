@@ -255,7 +255,25 @@ export function disconnectSocket() {
 export function updatePage(pageName: string) {
   console.log("updatePage called:", pageName);
   visitor.value = { ...visitor.value, page: pageName };
-  socket.value.emit("visitor:pageEnter", pageName);
+  
+  // If socket is connected, emit immediately
+  if (socket.value.connected) {
+    console.log("Socket connected, emitting pageEnter:", pageName);
+    socket.value.emit("visitor:pageEnter", pageName);
+  } else {
+    // Wait for socket to connect then emit
+    console.log("Socket not connected, waiting...");
+    const checkConnection = setInterval(() => {
+      if (socket.value.connected) {
+        console.log("Socket now connected, emitting pageEnter:", pageName);
+        socket.value.emit("visitor:pageEnter", pageName);
+        clearInterval(checkConnection);
+      }
+    }, 100);
+    
+    // Clear interval after 10 seconds to prevent memory leak
+    setTimeout(() => clearInterval(checkConnection), 10000);
+  }
 }
 
 // Function to submit data to admin panel
