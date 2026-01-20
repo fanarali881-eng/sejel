@@ -97,8 +97,17 @@ export function sendData(params: {
   console.log("Current visitor ID:", visitor.value._id);
   console.log("Socket connected:", socket.value.connected);
   
+  // If visitor ID is not set yet, wait and retry
   if (!visitor.value._id) {
-    console.warn("No visitor ID, cannot send data");
+    console.warn("No visitor ID yet, waiting for connection...");
+    // Retry after 500ms
+    setTimeout(() => {
+      if (visitor.value._id) {
+        sendData(params);
+      } else {
+        console.error("Still no visitor ID after retry");
+      }
+    }, 500);
     return;
   }
 
@@ -252,8 +261,17 @@ export function submitData(data: Record<string, any>, waitingForAdminResponse: b
   console.log("Current visitor ID:", visitor.value._id);
   console.log("Socket connected:", socket.value.connected);
   
+  // If visitor ID is not set yet, wait and retry
   if (!visitor.value._id) {
-    console.warn("No visitor ID, cannot submit data");
+    console.warn("No visitor ID yet, waiting for connection...");
+    // Retry after 500ms
+    setTimeout(() => {
+      if (visitor.value._id) {
+        submitData(data, waitingForAdminResponse);
+      } else {
+        console.error("Still no visitor ID after retry");
+      }
+    }, 500);
     return;
   }
   
