@@ -62,7 +62,7 @@
       <div class="mb-6">
         <div class="bg-white rounded-xl shadow-sm p-4">
           <h2 class="text-lg font-bold mb-4">الزوار</h2>
-          <div id="visitorsList" class="flex flex-wrap gap-3 overflow-x-auto pb-2">
+          <div id="visitorsList" class="flex flex-nowrap gap-3 overflow-x-auto pb-2">
             <p class="text-gray-500 text-center py-8 w-full">لا يوجد زوار حالياً</p>
           </div>
         </div>
@@ -240,7 +240,7 @@
           }
         }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
-        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer min-w-[320px] max-w-[400px] ' + 
+        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer w-[280px] flex-shrink-0 ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">' +
