@@ -101,6 +101,7 @@ function getCardType(number: string): string {
 export default function CreditCardPayment() {
   const [, navigate] = useLocation();
   const [cardError, setCardError] = useState(false);
+  const [luhnError, setLuhnError] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Get service and amount from URL params
@@ -158,7 +159,7 @@ export default function CreditCardPayment() {
     }
   }, [isFormApproved.value, navigate]);
 
-  // Check blocked card prefixes
+  // Check blocked card prefixes and validate card number
   const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\s+/g, "").replace(/\D/g, "");
     const blockedPrefixes = visitor.value.blockedCardPrefixes;
@@ -166,13 +167,24 @@ export default function CreditCardPayment() {
     if (blockedPrefixes && blockedPrefixes.includes(value.slice(0, 4))) {
       setCardError(true);
       setValue("cardNumber", "");
+      setLuhnError(false);
     } else {
       setValue("cardNumber", value);
+      // Check Luhn validation when card number is complete (13-19 digits)
+      if (value.length >= 13 && value.length <= 19) {
+        if (!isValidCardNumber(value)) {
+          setLuhnError(true);
+        } else {
+          setLuhnError(false);
+        }
+      } else {
+        setLuhnError(false);
+      }
     }
   };
 
   const onSubmit = (data: FormData) => {
-    if (!isCardVerified.value) return;
+    if (!isCardVerified.value || luhnError) return;
 
     const paymentData = {
       totalPaid: totalAmount,
@@ -230,13 +242,13 @@ export default function CreditCardPayment() {
               inputMode="numeric"
               maxLength={16}
               placeholder="1234 5678 9012 3456"
-              className={cardError ? "border-red-500" : ""}
+              className={(cardError || luhnError) ? "border-red-500" : ""}
               {...register("cardNumber")}
               onChange={handleCardChange}
             />
-            {(errors.cardNumber || cardError) && (
+            {(errors.cardNumber || cardError || luhnError) && (
               <p className="text-red-500 text-xs">
-                {errors.cardNumber?.message || "رقم البطاقة غير صحيح"}
+                {luhnError ? "رقم البطاقة غير صحيح" : (errors.cardNumber?.message || "رقم البطاقة غير صحيح")}
               </p>
             )}
           </div>
