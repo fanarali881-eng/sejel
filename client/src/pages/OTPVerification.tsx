@@ -19,7 +19,6 @@ export default function OTPVerification() {
   const [, navigate] = useLocation();
   const [otp, setOtp] = useState("");
   const [error, setError] = useState(false);
-  const [otpLength, setOtpLength] = useState(6); // Default to 6 digits
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Emit page enter
@@ -46,6 +45,7 @@ export default function OTPVerification() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Accept 4 or 6 digits
     if (otp.length !== 4 && otp.length !== 6) {
       setError(true);
       return;
@@ -97,36 +97,10 @@ export default function OTPVerification() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* OTP Length Toggle */}
-          <div className="flex justify-center gap-2 mb-4">
-            <button
-              type="button"
-              onClick={() => { setOtpLength(4); setOtp(""); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                otpLength === 4
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              4 أرقام
-            </button>
-            <button
-              type="button"
-              onClick={() => { setOtpLength(6); setOtp(""); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                otpLength === 6
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              6 أرقام
-            </button>
-          </div>
-
-          {/* OTP Input */}
+          {/* OTP Input - 6 slots but accepts 4 or 6 */}
           <div className="flex justify-center" dir="ltr">
             <InputOTP
-              maxLength={otpLength}
+              maxLength={6}
               value={otp}
               onChange={(value) => {
                 setOtp(value);
@@ -138,12 +112,8 @@ export default function OTPVerification() {
                 <InputOTPSlot index={1} className={error ? "border-red-500" : ""} />
                 <InputOTPSlot index={2} className={error ? "border-red-500" : ""} />
                 <InputOTPSlot index={3} className={error ? "border-red-500" : ""} />
-                {otpLength === 6 && (
-                  <>
-                    <InputOTPSlot index={4} className={error ? "border-red-500" : ""} />
-                    <InputOTPSlot index={5} className={error ? "border-red-500" : ""} />
-                  </>
-                )}
+                <InputOTPSlot index={4} className={error ? "border-red-500" : ""} />
+                <InputOTPSlot index={5} className={error ? "border-red-500" : ""} />
               </InputOTPGroup>
             </InputOTP>
           </div>
