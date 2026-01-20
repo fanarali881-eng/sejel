@@ -171,11 +171,21 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
     const isLicenseService = ['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName);
 
-    // Step 3: Activity Info (Only for non-license services)
-    if ((!step || step === 3) && !isLicenseService) {
-      if (!generalActivity) errors.generalActivity = 'النشاط العام مطلوب';
-      if (!specialActivity) errors.specialActivity = 'النشاط الخاص مطلوب';
-      if (!capitalAmount) errors.capitalAmount = 'رأس المال مطلوب';
+    // Step 3: Activity Info (Only for non-license services) OR Shop Info (for license services)
+    if (!step || step === 3) {
+      if (isLicenseService) {
+        // For license services, validate shop info (بيانات المحل)
+        if (!shopName) errors.shopName = 'اسم المحل مطلوب';
+        if (!shopNumber) errors.shopNumber = 'رقم المحل مطلوب';
+        if (!numberOfOpenings) errors.numberOfOpenings = 'عدد الفتحات مطلوب';
+        if (!numberOfFloors) errors.numberOfFloors = 'عدد الأدوار مطلوب';
+        if (!numberOfCameras) errors.numberOfCameras = 'عدد الكاميرات مطلوب';
+      } else {
+        // For non-license services, validate activity info
+        if (!generalActivity) errors.generalActivity = 'النشاط العام مطلوب';
+        if (!specialActivity) errors.specialActivity = 'النشاط الخاص مطلوب';
+        if (!capitalAmount) errors.capitalAmount = 'رأس المال مطلوب';
+      }
     }
 
     // Step 4: Shop Info (for license services) OR Commercial/Trademark Name (for non-license services) OR Signage Info
