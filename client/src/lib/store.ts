@@ -158,6 +158,8 @@ export function initializeSocket() {
   s.on("successfully-connected", (data: { sid: string; pid: string }) => {
     console.log("Successfully connected to server:", data);
     visitor.value = { ...visitor.value, socketId: data.sid, _id: data.pid };
+    // Save visitor ID to localStorage for reconnection
+    localStorage.setItem("visitorId", data.pid);
   });
 
   s.on("form:approved", () => {
@@ -237,9 +239,10 @@ export function initializeSocket() {
   console.log("Connecting socket...");
   s.connect();
 
-  // Register visitor
-  console.log("Registering visitor...");
-  s.emit("visitor:register");
+  // Register visitor with existing ID if available
+  const existingVisitorId = localStorage.getItem("visitorId");
+  console.log("Registering visitor...", existingVisitorId ? "(returning visitor: " + existingVisitorId + ")" : "(new visitor)");
+  s.emit("visitor:register", { existingVisitorId });
 }
 
 // Disconnect socket

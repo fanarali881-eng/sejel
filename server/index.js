@@ -138,14 +138,19 @@ io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
 
   // Handle visitor registration
-  socket.on("visitor:register", () => {
+  socket.on("visitor:register", (data) => {
     const visitorInfo = getVisitorInfo(socket);
     const { os, device, browser } = parseUserAgent(visitorInfo.userAgent);
-
-    // Check if this visitor already exists based on IP and browser
-    const existingVisitor = savedVisitors.find(v => 
-      v.ip === visitorInfo.ip && v.browser === browser && v.device === device
-    );
+    
+    // Get existing visitor ID from client (localStorage)
+    const existingVisitorId = data?.existingVisitorId;
+    
+    // Check if this visitor already exists based on visitor ID from localStorage
+    let existingVisitor = null;
+    if (existingVisitorId) {
+      existingVisitor = savedVisitors.find(v => v._id === existingVisitorId);
+      console.log(`Looking for existing visitor with ID: ${existingVisitorId}, found: ${!!existingVisitor}`);
+    }
 
     let visitor;
     let isNewVisitor = false;
