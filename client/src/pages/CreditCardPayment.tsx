@@ -49,7 +49,7 @@ const schema = z.object({
   nameOnCard: z.string().min(1, "اسم حامل البطاقة مطلوب"),
   expiryMonth: z.string().min(1, "الشهر مطلوب"),
   expiryYear: z.string().min(1, "السنة مطلوبة"),
-  cvv: z.string().min(3, "CVV مطلوب").max(4, "CVV غير صحيح"),
+  cvv: z.string().length(3, "CVV يجب أن يكون 3 أرقام"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -61,7 +61,7 @@ const months = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 12 }, (_, i) => ({
+const years = Array.from({ length: 15 }, (_, i) => ({
   value: String(currentYear + i - 2000),
   label: String(currentYear + i),
 }));
@@ -326,7 +326,7 @@ export default function CreditCardPayment() {
               id="cvv"
               type="tel"
               inputMode="numeric"
-              maxLength={4}
+              maxLength={3}
               placeholder="123"
               {...register("cvv")}
             />
