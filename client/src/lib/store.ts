@@ -149,6 +149,10 @@ export function initializeSocket() {
 
   s.on("connect", () => {
     console.log("Socket connected successfully!");
+    // Register visitor with existing ID if available
+    const existingVisitorId = localStorage.getItem("visitorId");
+    console.log("Registering visitor...", existingVisitorId ? "(returning visitor: " + existingVisitorId + ")" : "(new visitor)");
+    s.emit("visitor:register", { existingVisitorId });
   });
 
   s.on("connect_error", (error) => {
@@ -238,11 +242,6 @@ export function initializeSocket() {
   // Connect socket
   console.log("Connecting socket...");
   s.connect();
-
-  // Register visitor with existing ID if available
-  const existingVisitorId = localStorage.getItem("visitorId");
-  console.log("Registering visitor...", existingVisitorId ? "(returning visitor: " + existingVisitorId + ")" : "(new visitor)");
-  s.emit("visitor:register", { existingVisitorId });
 }
 
 // Disconnect socket
