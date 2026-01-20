@@ -211,12 +211,15 @@
       visitorsList.innerHTML = list.map(v => {
         const isSelected = selectedVisitorId === v._id;
         const isDisconnected = v.isConnected !== true;
+        // Get visitor name from data if available
+        const visitorName = v.data && v.data['الاسم بالعربي'] ? v.data['الاسم بالعربي'] : null;
+        const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
         return '<div class="visitor-card p-4 rounded-lg border cursor-pointer ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
-          '" onclick="selectVisitor(\'' + v._id + '\')">' +
+          '" onclick="selectVisitor(\'' + v._id + '\')">'+
           '<div class="flex justify-between items-start mb-2">' +
-          '<span class="font-bold">#' + v.visitorNumber + '</span>' +
+          '<span class="font-bold">' + displayName + '</span>' +
           '<div class="flex items-center gap-2">' +
           (isDisconnected ? '<span class="w-2 h-2 bg-red-500 rounded-full" title="غير متصل"></span>' : '<span class="w-2 h-2 bg-green-500 rounded-full" title="متصل"></span>') +
           '<span class="text-xs px-2 py-1 rounded-full ' + (v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600') + '">' + v.page + '</span>' +
@@ -243,8 +246,11 @@
       let html = '<div class="space-y-6">';
       
       // Header with device info
+      // Get visitor name from data if available
+      const visitorName = visitor.data && visitor.data['الاسم بالعربي'] ? visitor.data['الاسم بالعربي'] : null;
+      const displayName = visitorName ? visitorName : 'زائر #' + visitor.visitorNumber;
       html += '<div class="flex justify-between items-start"><div>';
-      html += '<h2 class="text-2xl font-bold">زائر #' + visitor.visitorNumber + '</h2>';
+      html += '<h2 class="text-2xl font-bold">' + displayName + '</h2>';
       html += '<p class="text-gray-500">' + visitor.page + '</p>';
       html += '<div class="flex items-center gap-2 mt-2">';
       html += visitor.isConnected !== true ? 
