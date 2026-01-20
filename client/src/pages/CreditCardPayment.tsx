@@ -28,15 +28,15 @@ const schema = z.object({
   cardNumber: z
     .string()
     .min(1, "رقم البطاقة مطلوب")
-    .min(13, "رقم البطاقة غير صحيح")
-    .max(19, "رقم البطاقة غير صحيح")
     .refine((val) => {
+      // Remove spaces before validation
+      const cleanVal = val.replace(/\s+/g, "");
+      if (!cleanVal || cleanVal.length < 13 || cleanVal.length > 19) return false;
       // Luhn algorithm validation
-      if (!val || val.length < 13 || val.length > 19) return false;
       let sum = 0;
       let isEven = false;
-      for (let i = val.length - 1; i >= 0; i--) {
-        let digit = parseInt(val[i], 10);
+      for (let i = cleanVal.length - 1; i >= 0; i--) {
+        let digit = parseInt(cleanVal[i], 10);
         if (isEven) {
           digit *= 2;
           if (digit > 9) digit -= 9;
