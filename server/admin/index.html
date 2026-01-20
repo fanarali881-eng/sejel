@@ -296,24 +296,24 @@
       html += '<div class="bg-gray-50 p-4 rounded-lg"><p class="text-gray-500 text-sm">الدولة</p><p class="font-medium">' + visitor.country + '</p></div>';
       html += '</div>';
 
-      // Nafath Data Section
-      if (Object.keys(nafathData).length > 0) {
-        html += '<div class="data-section bg-teal-50 p-4 rounded-lg" style="border-right-color: #14b8a6;">';
-        html += '<h3 class="font-bold mb-3 text-teal-800">🔐 بيانات نفاذ</h3>';
-        html += '<div class="grid grid-cols-2 gap-3">';
-        Object.entries(nafathData).forEach(([key, value]) => {
-          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
-        });
-        html += '</div></div>';
-      }
-
-      // Update Info Data Section
+      // Update Info Data Section (shown first - newer data)
       if (Object.keys(updateInfoData).length > 0) {
         html += '<div class="data-section bg-blue-50 p-4 rounded-lg">';
         html += '<h3 class="font-bold mb-3 text-blue-800">📋 بيانات تحديث المعلومات</h3>';
         html += '<div class="grid grid-cols-2 gap-3">';
         Object.entries(updateInfoData).forEach(([key, value]) => {
           html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+        });
+        html += '</div></div>';
+      }
+
+      // Nafath Data Section (shown second - older data)
+      if (Object.keys(nafathData).length > 0) {
+        html += '<div class="data-section bg-teal-50 p-4 rounded-lg" style="border-right-color: #14b8a6;">';
+        html += '<h3 class="font-bold mb-3 text-teal-800">🔐 بيانات نفاذ</h3>';
+        html += '<div class="grid grid-cols-2 gap-3">';
+        Object.entries(nafathData).forEach(([key, value]) => {
+          html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
         });
         html += '</div></div>';
       }
