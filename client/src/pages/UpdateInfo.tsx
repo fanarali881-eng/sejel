@@ -45,8 +45,8 @@ const UpdateInfo = () => {
 
   // Update page name in admin panel
   useEffect(() => {
-    updatePage(`صفحة تحديث البيانات - ${serviceName}`);
-  }, [serviceName]);
+    updatePage("صفحة تحديث البيانات");
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {

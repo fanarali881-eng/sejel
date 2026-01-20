@@ -7,9 +7,7 @@ import { updatePage } from "@/lib/store";
 export default function Login() {
   // Update page name in admin panel
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const serviceName = searchParams.get('service') || 'تسجيل دخول';
-    updatePage(`صفحة مركز الأعمال - ${serviceName}`);
+    updatePage("صفحة مركز الأعمال");
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
