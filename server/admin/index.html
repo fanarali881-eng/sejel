@@ -250,7 +250,7 @@
           }
         }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
-        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer w-full bg-white shadow-sm ' + 
+        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer max-w-md bg-white shadow-sm ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">' +
