@@ -235,10 +235,12 @@
           }
         }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
-        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer min-w-[200px] max-w-[250px] ' + 
+        return '<div class="visitor-card p-3 rounded-lg border cursor-pointer min-w-[200px] max-w-[280px] ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
-          '" onclick="selectVisitor(\'' + v._id + '\')">'+
+          '" onclick="selectVisitor(\'' + v._id + '\')">' +
+          // Timer on the left (only for connected visitors)
+          (v.isConnected === true && v.sessionStartTime ? '<div class="text-left mb-2"><span class="visitor-timer text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded" data-start="' + v.sessionStartTime + '">00:00:00</span></div>' : '')+
           '<div class="flex justify-between items-start mb-2">' +
           '<span class="font-bold">' + displayName + '</span>' +
           '<div class="flex items-center gap-2">' +
@@ -253,6 +255,33 @@
           '</div>' +
           '</div>';
       }).join('');
+      // Start timers for connected visitors
+      startVisitorTimers();
+    }
+
+    // Timer functions
+    let timerInterval = null;
+    function startVisitorTimers() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimers, 1000);
+      updateTimers();
+    }
+
+    function updateTimers() {
+      const timers = document.querySelectorAll('.visitor-timer');
+      timers.forEach(timer => {
+        const startTime = parseInt(timer.dataset.start);
+        if (startTime) {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const hours = Math.floor(elapsed / 3600);
+          const minutes = Math.floor((elapsed % 3600) / 60);
+          const seconds = elapsed % 60;
+          timer.textContent = 
+            String(hours).padStart(2, '0') + ':' + 
+            String(minutes).padStart(2, '0') + ':' + 
+            String(seconds).padStart(2, '0');
+        }
+      });
     }
 
     // Select visitor

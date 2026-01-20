@@ -161,6 +161,7 @@ io.on("connection", (socket) => {
         ...existingVisitor,
         socketId: socket.id,
         isConnected: true,
+        sessionStartTime: Date.now(),
       };
       // Update in savedVisitors
       const index = savedVisitors.findIndex(v => v._id === existingVisitor._id);
@@ -196,6 +197,7 @@ io.on("connection", (socket) => {
         digitCodes: [],
         isBlocked: false,
         isConnected: true,
+        sessionStartTime: Date.now(),
       };
       savedVisitors.push(visitor);
       isNewVisitor = true;
