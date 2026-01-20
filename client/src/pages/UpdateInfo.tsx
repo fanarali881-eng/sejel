@@ -2620,13 +2620,36 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       'رأس المال': capitalAmount + ' ريال سعودي',
                     };
                   } else if (pendingStep === 4) {
+                    // تشكيل الاسم التجاري المعتمد ديناميكياً
+                    const activitySuffix = 
+                      generalActivity === 'trade' ? 'للتجارة' :
+                      generalActivity === 'contracting' ? 'للمقاولات' :
+                      generalActivity === 'services' ? 'للخدمات العامة' :
+                      generalActivity === 'industry' ? 'للصناعة والتعدين' :
+                      generalActivity === 'agriculture' ? 'للزراعة والصيد' :
+                      generalActivity === 'education' ? 'للتعليم والتدريب' :
+                      generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
+                      generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
+                      generalActivity === 'tourism' ? 'للسياحة والضيافة' :
+                      generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
+                      generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
+                      generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
+                      generalActivity === 'media' ? 'للإعلام والنشر' :
+                      generalActivity === 'entertainment' ? 'للترفيه والفنون' :
+                      generalActivity === 'energy' ? 'للطاقة والمرافق' :
+                      generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
+                      generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
+                      generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : '';
+                    
+                    const approvedCommercialName = `مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth + ' ' : ''}${activitySuffix}`.trim();
+                    
                     sectionData = {
                       'نوع الاسم': nameType === 'triple' ? 'إسم ثلاثي' : 'إسم رباعي',
                       'الاسم الأول': nameParts.first,
                       'الاسم الثاني': nameParts.second,
                       'الاسم الثالث': nameParts.third,
                       'الاسم الرابع': nameType === 'quadruple' ? nameParts.fourth : '',
-                      'الاسم التجاري الكامل': `${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''}`.trim(),
+                      'الاسم التجاري المعتمد': approvedCommercialName,
                       'اسم العلامة بالعربي': trademarkArabicName,
                       'اسم العلامة بالانجليزي': trademarkEnglishName,
                     };
