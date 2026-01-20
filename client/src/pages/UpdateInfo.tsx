@@ -263,6 +263,31 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const hijriYears = Array.from({ length: 100 }, (_, i) => maxHijriYear - i);
   const hijriDays = Array.from({ length: 30 }, (_, i) => (i + 1).toString());
 
+  // دالة للحصول على الاسم العربي للنشاط العام
+  const getGeneralActivityLabel = (value: string): string => {
+    const labels: Record<string, string> = {
+      trade: 'التجارة',
+      contracting: 'المقاولات',
+      services: 'الخدمات العامة',
+      industry: 'الصناعة والتعدين',
+      agriculture: 'الزراعة والصيد',
+      education: 'التعليم والتدريب',
+      health: 'الصحة والأنشطة الطبية',
+      technology: 'تقنية المعلومات والاتصالات',
+      tourism: 'السياحة والضيافة',
+      transport: 'النقل والخدمات اللوجستية',
+      real_estate: 'الأنشطة العقارية',
+      finance: 'الأنشطة المالية والتأمين',
+      media: 'الإعلام والنشر',
+      entertainment: 'الترفيه والفنون',
+      energy: 'الطاقة والمرافق',
+      consulting: 'الخدمات الاستشارية والمهنية',
+      security: 'الخدمات الأمنية والسلامة',
+      environment: 'البيئة وإدارة النفايات',
+    };
+    return labels[value] || value;
+  };
+
   // Activities Data
   const activitiesData: Record<string, { value: string; label: string }[]> = {
     trade: [
@@ -377,6 +402,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       { value: "environmental_consulting", label: "الاستشارات البيئية" },
       { value: "landscaping", label: "تنسيق الحدائق" },
     ]
+  };
+
+  // دالة للحصول على الاسم العربي للنشاط الخاص
+  const getSpecialActivityLabel = (generalValue: string, specialValue: string): string => {
+    const activities = activitiesData[generalValue];
+    if (activities) {
+      const activity = activities.find(a => a.value === specialValue);
+      if (activity) return activity.label;
+    }
+    return specialValue;
   };
 
   // Reset special activity when general activity changes
@@ -2457,8 +2492,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         'رقم الطابق': floorNumber,
                         
                         // Commercial Activities
-                        'النشاط العام': generalActivity,
-                        'النشاط الخاص': specialActivity,
+                        'النشاط العام': getGeneralActivityLabel(generalActivity),
+                        'النشاط الخاص': getSpecialActivityLabel(generalActivity, specialActivity),
                         'رأس المال': capitalAmount,
                         
                         // Shop Information
@@ -2580,8 +2615,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     };
                   } else if (pendingStep === 3) {
                     sectionData = {
-                      'النشاط العام': generalActivity,
-                      'النشاط الخاص': specialActivity,
+                      'النشاط العام': getGeneralActivityLabel(generalActivity),
+                      'النشاط الخاص': getSpecialActivityLabel(generalActivity, specialActivity),
                       'رأس المال': capitalAmount + ' ريال سعودي',
                     };
                   } else if (pendingStep === 4) {
