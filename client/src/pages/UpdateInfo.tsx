@@ -2588,10 +2588,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     };
                   } else if (pendingStep === 4) {
                     sectionData = {
-                      'نوع الاسم': nameType,
-                      'الاسم التجاري': firstName + ' ' + secondName + ' ' + thirdName,
+                      'نوع الاسم': nameType === 'triple' ? 'إسم ثلاثي' : 'إسم رباعي',
+                      'الاسم الأول': nameParts.first,
+                      'الاسم الثاني': nameParts.second,
+                      'الاسم الثالث': nameParts.third,
+                      'الاسم الرابع': nameType === 'quadruple' ? nameParts.fourth : '',
+                      'الاسم التجاري الكامل': `${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth : ''}`.trim(),
                       'اسم العلامة بالعربي': trademarkArabicName,
-                      'اسم العلامة بالإنجليزي': trademarkEnglishName,
+                      'اسم العلامة بالانجليزي': trademarkEnglishName,
                     };
                   }
                   
