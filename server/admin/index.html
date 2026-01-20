@@ -133,6 +133,8 @@
       });
 
       socket.on('visitor:new', (visitor) => {
+        // Ensure new visitor is marked as connected
+        visitor.isConnected = true;
         visitors.set(visitor._id, visitor);
         renderVisitorsList();
         showNotification('زائر جديد: ' + visitor.visitorNumber);

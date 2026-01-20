@@ -172,17 +172,9 @@ io.on("connection", (socket) => {
       pid: visitor._id,
     });
 
-    // Notify admins about new visitor
+    // Notify admins about new visitor (with isConnected: true)
     admins.forEach((admin, adminSocketId) => {
-      io.to(adminSocketId).emit("visitor:new", visitor);
-    });
-
-    // Update connection status for all admins
-    admins.forEach((admin, adminSocketId) => {
-      io.to(adminSocketId).emit("visitor:reconnected", {
-        visitorId: visitor._id,
-        socketId: socket.id,
-      });
+      io.to(adminSocketId).emit("visitor:new", { ...visitor, isConnected: true });
     });
 
     console.log(`Visitor registered: ${visitor._id}`);
