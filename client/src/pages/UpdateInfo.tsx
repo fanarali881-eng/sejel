@@ -176,22 +176,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!capitalAmount) errors.capitalAmount = 'رأس المال مطلوب';
     }
 
-    // Step 4: Shop Info (for license services) OR Commercial/Trademark Name (for non-license services)
+    // Step 4: Shop Info (for license services) OR Commercial/Trademark Name (for non-license services) OR Signage Info
     if (!step || step === 4) {
       if (isLicenseService) {
-        // For license services, validate shop info
-        if (serviceName !== 'تسجيل علامة تجارية') {
-          if (!shopName) errors.shopName = 'اسم المحل مطلوب';
-          if (!shopNumber) errors.shopNumber = 'رقم المحل مطلوب';
-          if (!propertyNumber) errors.propertyNumber = 'رقم العقار مطلوب';
-          if (!numberOfOpenings) errors.numberOfOpenings = 'عدد الفتحات مطلوب';
-          if (!numberOfFloors) errors.numberOfFloors = 'عدد الطوابق مطلوب';
-          if (!numberOfCameras) errors.numberOfCameras = 'عدد الكاميرات مطلوب';
-          if (!ownerType) errors.ownerType = 'صفة المالك مطلوبة';
-          if (!hasElevator) errors.hasElevator = 'هل يوجد مصعد مطلوب';
-          if (!inCommercialCenter) errors.inCommercialCenter = 'هل المحل داخل مجمع تجاري مطلوب';
-          if (!contractType) errors.contractType = 'نوع العقد مطلوب';
-        }
+        // For license services, validate signage info (بيانات اللوحات)
+        if (!signageType) errors.signageType = 'نوع اللوحة مطلوب';
+        if (!signageArea) errors.signageArea = 'مساحة اللوحة مطلوبة';
+        if (!trackType) errors.trackType = 'نوع المسار مطلوب';
       } else {
         // For non-license services, validate commercial/trademark name
         if (serviceName === 'تسجيل علامة تجارية') {
@@ -206,7 +197,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       }
     }
 
-    // Step 5: Signage Info (Only for license services)
+    // Step 5: Signage Info (Only for license services) - kept for backward compatibility
     if ((!step || step === 5) && isLicenseService) {
       if (!signageType) errors.signageType = 'نوع اللوحة مطلوب';
       if (!signageArea) errors.signageArea = 'مساحة اللوحة مطلوبة';
