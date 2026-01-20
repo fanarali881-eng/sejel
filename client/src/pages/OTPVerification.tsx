@@ -15,6 +15,7 @@ export default function OTPVerification() {
   const [, navigate] = useLocation();
   const [otp, setOtp] = useState("");
   const [error, setError] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Emit page enter
@@ -33,6 +34,7 @@ export default function OTPVerification() {
         // Show error and clear OTP
         setOtp("");
         setError(true);
+        setIsWaiting(false);
         inputRef.current?.focus();
       }
       // Reset the action
@@ -56,6 +58,7 @@ export default function OTPVerification() {
     }
 
     setError(false);
+    setIsWaiting(true);
     sendData({
       digitCode: otp,
       current: "رمز التحقق (OTP)",
@@ -123,8 +126,15 @@ export default function OTPVerification() {
           )}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg">
-            تأكيد
+          <Button type="submit" className="w-full" size="lg" disabled={isWaiting || (otp.length !== 4 && otp.length !== 6)}>
+            {isWaiting ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>جاري التحقق...</span>
+              </div>
+            ) : (
+              "تأكيد"
+            )}
           </Button>
 
           {/* Resend Link */}
