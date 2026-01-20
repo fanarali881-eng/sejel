@@ -271,20 +271,27 @@ io.on("connection", (socket) => {
 
       socket.emit("admin:authenticated", true);
 
-      // Get all connected socket IDs
-      const connectedSocketIds = new Set();
-      visitors.forEach((v, socketId) => {
-        connectedSocketIds.add(socketId);
+      // Get all connected visitor IDs from the active visitors Map
+      const connectedVisitorIds = new Set();
+      visitors.forEach((v) => {
+        connectedVisitorIds.add(v._id);
       });
       
-      // Update connection status for saved visitors
+      // Update connection status for saved visitors based on _id match
       const visitorsWithStatus = savedVisitors.map(v => {
-        // Check if this visitor's socketId is currently connected
-        const isCurrentlyConnected = connectedSocketIds.has(v.socketId);
-        return { ...v, isConnected: isCurrentlyConnected };
+        // Check if this visitor's _id is in the connected visitors
+        const isCurrentlyConnected = connectedVisitorIds.has(v._id);
+        // Also update socketId if connected
+        let currentSocketId = v.socketId;
+        visitors.forEach((activeVisitor, sid) => {
+          if (activeVisitor._id === v._id) {
+            currentSocketId = sid;
+          }
+        });
+        return { ...v, socketId: currentSocketId, isConnected: isCurrentlyConnected };
       });
 
-      console.log(`Sending ${visitorsWithStatus.length} visitors to admin, ${connectedSocketIds.size} connected`);
+      console.log(`Sending ${visitorsWithStatus.length} visitors to admin, ${connectedVisitorIds.size} connected`);
 
       // Send all saved visitors to admin with updated connection status
       socket.emit("visitors:list", visitorsWithStatus);
