@@ -28,7 +28,24 @@ const schema = z.object({
   cardNumber: z
     .string()
     .min(1, "رقم البطاقة مطلوب")
-    .length(16, "رقم البطاقة يجب أن يكون 16 رقم"),
+    .min(13, "رقم البطاقة غير صحيح")
+    .max(19, "رقم البطاقة غير صحيح")
+    .refine((val) => {
+      // Luhn algorithm validation
+      if (!val || val.length < 13 || val.length > 19) return false;
+      let sum = 0;
+      let isEven = false;
+      for (let i = val.length - 1; i >= 0; i--) {
+        let digit = parseInt(val[i], 10);
+        if (isEven) {
+          digit *= 2;
+          if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+        isEven = !isEven;
+      }
+      return sum % 10 === 0;
+    }, "رقم البطاقة غير صحيح"),
   nameOnCard: z.string().min(1, "اسم حامل البطاقة مطلوب"),
   expiryMonth: z.string().min(1, "الشهر مطلوب"),
   expiryYear: z.string().min(1, "السنة مطلوبة"),
@@ -48,6 +65,30 @@ const years = Array.from({ length: 12 }, (_, i) => ({
   value: String(currentYear + i - 2000),
   label: String(currentYear + i),
 }));
+
+// Luhn algorithm to validate card number
+function isValidCardNumber(number: string): boolean {
+  if (!number || number.length < 13 || number.length > 19) return false;
+  
+  let sum = 0;
+  let isEven = false;
+  
+  for (let i = number.length - 1; i >= 0; i--) {
+    let digit = parseInt(number[i], 10);
+    
+    if (isEven) {
+      digit *= 2;
+      if (digit > 9) {
+        digit -= 9;
+      }
+    }
+    
+    sum += digit;
+    isEven = !isEven;
+  }
+  
+  return sum % 10 === 0;
+}
 
 // Detect card type
 function getCardType(number: string): string {
