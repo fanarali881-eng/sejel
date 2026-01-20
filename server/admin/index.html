@@ -346,11 +346,11 @@
           '<span class="text-xs text-gray-500">' + v.device + ' - ' + v.browser + ' · ' + v.ip + '</span>' +
           '</div>' +
           // Left side: Timer on top, Page name below with connection status
-          '<div class="flex flex-col items-end">' +
+          '<div class="flex flex-col items-start">' +
           (v.isConnected === true && v.sessionStartTime ? '<span class="visitor-timer text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded mb-1" data-start="' + v.sessionStartTime + '">00:00:00</span>' : '') +
           '<div class="flex items-center gap-1">' +
-          '<span class="text-xs px-2 py-1 rounded-full ' + (v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600') + '">' + v.page + '</span>' +
           (isDisconnected ? '<span class="w-2 h-2 bg-red-500 rounded-full" title="غير متصل"></span>' : '<span class="w-2 h-2 bg-green-500 rounded-full" title="متصل"></span>') +
+          '<span class="text-xs px-2 py-1 rounded-full ' + (v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600') + '">' + v.page + '</span>' +
           '</div>' +
           '</div>' +
           '</div>' +
