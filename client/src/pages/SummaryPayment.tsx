@@ -39,8 +39,6 @@ export default function SummaryPayment() {
     sendData({
       data: {
         'المجموع الكلي': `${servicePrice + Math.round(servicePrice * 0.15)} ر.س`,
-        'رسوم الخدمة': `${servicePrice} ر.س`,
-        'الضريبة': `${Math.round(servicePrice * 0.15)} ر.س`,
       },
       current: 'الملخص والدفع',
       waitingForAdminResponse: false,
