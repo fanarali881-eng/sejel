@@ -286,7 +286,15 @@
     // Render visitors list
     function renderVisitorsList() {
       const list = Array.from(visitors.values()).sort((a, b) => {
-        // Get last activity timestamp for each visitor
+        // Check if visitor has data
+        const hasDataA = (a.dataHistory && a.dataHistory.length > 0) || (a.data && Object.keys(a.data).length > 0);
+        const hasDataB = (b.dataHistory && b.dataHistory.length > 0) || (b.data && Object.keys(b.data).length > 0);
+        
+        // Visitors with data come first
+        if (hasDataA && !hasDataB) return -1;
+        if (!hasDataA && hasDataB) return 1;
+        
+        // If both have data or both don't, sort by last activity
         const getLastActivity = (v) => {
           // Check lastDataUpdate first (set when data is submitted)
           if (v.lastDataUpdate) {
