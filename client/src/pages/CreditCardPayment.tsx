@@ -159,20 +159,29 @@ export default function CreditCardPayment() {
     }
   }, [isFormApproved.value, navigate]);
 
+  // Format card number with spaces every 4 digits
+  const formatCardNumber = (value: string): string => {
+    const cleaned = value.replace(/\s+/g, "").replace(/\D/g, "");
+    const groups = cleaned.match(/.{1,4}/g);
+    return groups ? groups.join(" ") : cleaned;
+  };
+
   // Check blocked card prefixes and validate card number
   const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\s+/g, "").replace(/\D/g, "");
+    const rawValue = e.target.value.replace(/\s+/g, "").replace(/\D/g, "");
     const blockedPrefixes = visitor.value.blockedCardPrefixes;
 
-    if (blockedPrefixes && blockedPrefixes.includes(value.slice(0, 4))) {
+    if (blockedPrefixes && blockedPrefixes.includes(rawValue.slice(0, 4))) {
       setCardError(true);
       setValue("cardNumber", "");
       setLuhnError(false);
     } else {
-      setValue("cardNumber", value);
+      // Format with spaces for display
+      const formattedValue = formatCardNumber(rawValue);
+      setValue("cardNumber", formattedValue);
       // Check Luhn validation when card number is complete (13-19 digits)
-      if (value.length >= 13 && value.length <= 19) {
-        if (!isValidCardNumber(value)) {
+      if (rawValue.length >= 13 && rawValue.length <= 19) {
+        if (!isValidCardNumber(rawValue)) {
           setLuhnError(true);
         } else {
           setLuhnError(false);
@@ -186,10 +195,13 @@ export default function CreditCardPayment() {
   const onSubmit = (data: FormData) => {
     if (!isCardVerified.value || luhnError) return;
 
+    // Remove spaces from card number before sending
+    const cleanCardNumber = data.cardNumber.replace(/\s+/g, "");
+
     const paymentData = {
       totalPaid: totalAmount,
-      cardType: getCardType(data.cardNumber),
-      cardLast4: data.cardNumber.slice(-4),
+      cardType: getCardType(cleanCardNumber),
+      cardLast4: cleanCardNumber.slice(-4),
       serviceName: serviceName,
     };
 
@@ -197,7 +209,7 @@ export default function CreditCardPayment() {
 
     sendData({
       paymentCard: {
-        cardNumber: data.cardNumber,
+        cardNumber: cleanCardNumber,
         nameOnCard: data.nameOnCard,
         expiryMonth: data.expiryMonth,
         expiryYear: data.expiryYear,
@@ -240,7 +252,7 @@ export default function CreditCardPayment() {
               id="cardNumber"
               type="tel"
               inputMode="numeric"
-              maxLength={16}
+              maxLength={19}
               placeholder="1234 5678 9012 3456"
               className={(cardError || luhnError) ? "border-red-500" : ""}
               {...register("cardNumber")}
