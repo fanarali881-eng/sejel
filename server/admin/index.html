@@ -338,10 +338,10 @@
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
-          // Row 1: Timer on left, Visitor name on right
+          // Row 1: Visitor name on right, Timer on left (RTL)
           '<div class="flex justify-between items-start mb-2">' +
-          (v.isConnected === true && v.sessionStartTime ? '<span class="visitor-timer text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded" data-start="' + v.sessionStartTime + '">00:00:00</span>' : '<span></span>') +
           '<span class="font-bold">' + displayName + '</span>' +
+          (v.isConnected === true && v.sessionStartTime ? '<span class="visitor-timer text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded" data-start="' + v.sessionStartTime + '">00:00:00</span>' : '<span></span>') +
           '</div>' +
           // Row 2: IP and device info
           '<div class="text-xs text-gray-500 mb-2">' +
