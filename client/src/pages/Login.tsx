@@ -1,9 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Info, Loader2 } from "lucide-react";
 import { Link } from "wouter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { updatePage } from "@/lib/store";
 
 export default function Login() {
+  // Update page name in admin panel
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const serviceName = searchParams.get('service') || 'تسجيل دخول';
+    updatePage(`صفحة مركز الأعمال - ${serviceName}`);
+  }, []);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isLinkLoading, setIsLinkLoading] = useState(false);
 
