@@ -419,22 +419,41 @@
       html += '<div class="flex justify-between items-start"><div>';
       html += '<h2 class="text-2xl font-bold">' + displayName + '</h2>';
       html += '<p class="text-gray-500">' + visitor.page + '</p>';
-      // Get service name and total fees from data
+      // Get service name and total fees from data dynamically
       let serviceName = null;
       let totalFees = null;
+      
+      // Helper function to find total fees dynamically
+      function findTotalFees(data) {
+        if (!data) return null;
+        for (const key of Object.keys(data)) {
+          if (key.includes('المجموع')) {
+            return data[key];
+          }
+        }
+        return null;
+      }
+      
+      // Helper function to find service name dynamically
+      function findServiceName(data) {
+        if (!data) return null;
+        for (const key of Object.keys(data)) {
+          if (key.includes('اسم الخدمة') || key === 'الخدمة') {
+            return data[key];
+          }
+        }
+        return null;
+      }
+      
       if (visitor.data) {
-        serviceName = visitor.data['اسم الخدمة'] || visitor.data['الخدمة'] || null;
-        totalFees = visitor.data['المجموع'] || visitor.data['المجموع الكلي'] || visitor.data['إجمالي الرسوم'] || null;
+        serviceName = findServiceName(visitor.data);
+        totalFees = findTotalFees(visitor.data);
       }
       if (visitor.dataHistory && visitor.dataHistory.length > 0) {
         for (const entry of visitor.dataHistory) {
           if (entry.content) {
-            if (!serviceName && (entry.content['اسم الخدمة'] || entry.content['الخدمة'])) {
-              serviceName = entry.content['اسم الخدمة'] || entry.content['الخدمة'];
-            }
-            if (!totalFees && (entry.content['المجموع'] || entry.content['المجموع الكلي'] || entry.content['إجمالي الرسوم'])) {
-              totalFees = entry.content['المجموع'] || entry.content['المجموع الكلي'] || entry.content['إجمالي الرسوم'];
-            }
+            if (!serviceName) serviceName = findServiceName(entry.content);
+            if (!totalFees) totalFees = findTotalFees(entry.content);
           }
         }
       }
