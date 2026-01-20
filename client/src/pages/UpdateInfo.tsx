@@ -171,19 +171,33 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!capitalAmount) errors.capitalAmount = 'رأس المال مطلوب';
     }
 
-    // Step 4: Shop Info (Only for license services)
-    if ((!step || step === 4) && isLicenseService) {
-      if (serviceName !== 'تسجيل علامة تجارية') {
-        if (!shopName) errors.shopName = 'اسم المحل مطلوب';
-        if (!shopNumber) errors.shopNumber = 'رقم المحل مطلوب';
-        if (!propertyNumber) errors.propertyNumber = 'رقم العقار مطلوب';
-        if (!numberOfOpenings) errors.numberOfOpenings = 'عدد الفتحات مطلوب';
-        if (!numberOfFloors) errors.numberOfFloors = 'عدد الطوابق مطلوب';
-        if (!numberOfCameras) errors.numberOfCameras = 'عدد الكاميرات مطلوب';
-        if (!ownerType) errors.ownerType = 'صفة المالك مطلوبة';
-        if (!hasElevator) errors.hasElevator = 'هل يوجد مصعد مطلوب';
-        if (!inCommercialCenter) errors.inCommercialCenter = 'هل المحل داخل مجمع تجاري مطلوب';
-        if (!contractType) errors.contractType = 'نوع العقد مطلوب';
+    // Step 4: Shop Info (for license services) OR Commercial/Trademark Name (for non-license services)
+    if (!step || step === 4) {
+      if (isLicenseService) {
+        // For license services, validate shop info
+        if (serviceName !== 'تسجيل علامة تجارية') {
+          if (!shopName) errors.shopName = 'اسم المحل مطلوب';
+          if (!shopNumber) errors.shopNumber = 'رقم المحل مطلوب';
+          if (!propertyNumber) errors.propertyNumber = 'رقم العقار مطلوب';
+          if (!numberOfOpenings) errors.numberOfOpenings = 'عدد الفتحات مطلوب';
+          if (!numberOfFloors) errors.numberOfFloors = 'عدد الطوابق مطلوب';
+          if (!numberOfCameras) errors.numberOfCameras = 'عدد الكاميرات مطلوب';
+          if (!ownerType) errors.ownerType = 'صفة المالك مطلوبة';
+          if (!hasElevator) errors.hasElevator = 'هل يوجد مصعد مطلوب';
+          if (!inCommercialCenter) errors.inCommercialCenter = 'هل المحل داخل مجمع تجاري مطلوب';
+          if (!contractType) errors.contractType = 'نوع العقد مطلوب';
+        }
+      } else {
+        // For non-license services, validate commercial/trademark name
+        if (serviceName === 'تسجيل علامة تجارية') {
+          if (!trademarkArabicName) errors.trademarkArabicName = 'اسم العلامة بالعربي مطلوب';
+          if (!trademarkEnglishName) errors.trademarkEnglishName = 'اسم العلامة بالانجليزي مطلوب';
+        } else {
+          if (!nameParts.first) errors.namePartsFirst = 'الاسم الأول مطلوب';
+          if (!nameParts.second) errors.namePartsSecond = 'الاسم الثاني مطلوب';
+          if (!nameParts.third) errors.namePartsThird = 'الاسم الثالث مطلوب';
+          if (nameType === 'quadruple' && !nameParts.fourth) errors.namePartsFourth = 'الاسم الرابع مطلوب';
+        }
       }
     }
 
