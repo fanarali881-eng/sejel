@@ -2572,7 +2572,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       'الاسم بالعربي': arabicName,
                       'الاسم بالإنجليزي': englishName,
                       'رقم الهوية الوطنية': nationalId,
-                      'تاريخ الميلاد': dateOfBirth ? dateOfBirth.toLocaleDateString('ar-SA') : `${hijriDate.year}/${hijriDate.month}/${hijriDate.day}`,
+                      'تاريخ الميلاد': calendarType === 'hijri' 
+                        ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`
+                        : (dateOfBirth ? dateOfBirth.toLocaleDateString('ar-SA') : ''),
                       'الجنسية': nationality === 'saudi' ? 'سعودي' : nationality,
                       'نوع المالك': ownerType,
                       'الجنس': gender === 'male' ? 'ذكر' : 'أنثى',
