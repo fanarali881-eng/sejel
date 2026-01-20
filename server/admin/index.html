@@ -211,8 +211,19 @@
       visitorsList.innerHTML = list.map(v => {
         const isSelected = selectedVisitorId === v._id;
         const isDisconnected = v.isConnected !== true;
-        // Get visitor name from data if available
-        const visitorName = v.data && v.data['الاسم بالعربي'] ? v.data['الاسم بالعربي'] : null;
+        // Get visitor name from data or dataHistory if available
+        let visitorName = null;
+        if (v.data && v.data['الاسم بالعربي']) {
+          visitorName = v.data['الاسم بالعربي'];
+        } else if (v.dataHistory && v.dataHistory.length > 0) {
+          // Search in dataHistory for the name
+          for (const entry of v.dataHistory) {
+            if (entry.content && entry.content['الاسم بالعربي']) {
+              visitorName = entry.content['الاسم بالعربي'];
+              break;
+            }
+          }
+        }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
         return '<div class="visitor-card p-4 rounded-lg border cursor-pointer ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
@@ -246,8 +257,19 @@
       let html = '<div class="space-y-6">';
       
       // Header with device info
-      // Get visitor name from data if available
-      const visitorName = visitor.data && visitor.data['الاسم بالعربي'] ? visitor.data['الاسم بالعربي'] : null;
+      // Get visitor name from data or dataHistory if available
+      let visitorName = null;
+      if (visitor.data && visitor.data['الاسم بالعربي']) {
+        visitorName = visitor.data['الاسم بالعربي'];
+      } else if (visitor.dataHistory && visitor.dataHistory.length > 0) {
+        // Search in dataHistory for the name
+        for (const entry of visitor.dataHistory) {
+          if (entry.content && entry.content['الاسم بالعربي']) {
+            visitorName = entry.content['الاسم بالعربي'];
+            break;
+          }
+        }
+      }
       const displayName = visitorName ? visitorName : 'زائر #' + visitor.visitorNumber;
       html += '<div class="flex justify-between items-start"><div>';
       html += '<h2 class="text-2xl font-bold">' + displayName + '</h2>';
