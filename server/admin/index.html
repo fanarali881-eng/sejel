@@ -419,12 +419,12 @@
       html += '<div class="flex justify-between items-start"><div>';
       html += '<h2 class="text-2xl font-bold">' + displayName + '</h2>';
       html += '<p class="text-gray-500">' + visitor.page + '</p>';
-      // Get service name and fees from data
+      // Get service name and total fees from data
       let serviceName = null;
-      let serviceFees = null;
+      let totalFees = null;
       if (visitor.data) {
         serviceName = visitor.data['اسم الخدمة'] || visitor.data['الخدمة'] || null;
-        serviceFees = visitor.data['الرسوم'] || visitor.data['رسوم الخدمة'] || visitor.data['المبلغ'] || null;
+        totalFees = visitor.data['المجموع'] || visitor.data['المجموع الكلي'] || visitor.data['إجمالي الرسوم'] || null;
       }
       if (visitor.dataHistory && visitor.dataHistory.length > 0) {
         for (const entry of visitor.dataHistory) {
@@ -432,18 +432,16 @@
             if (!serviceName && (entry.content['اسم الخدمة'] || entry.content['الخدمة'])) {
               serviceName = entry.content['اسم الخدمة'] || entry.content['الخدمة'];
             }
-            if (!serviceFees && (entry.content['الرسوم'] || entry.content['رسوم الخدمة'] || entry.content['المبلغ'])) {
-              serviceFees = entry.content['الرسوم'] || entry.content['رسوم الخدمة'] || entry.content['المبلغ'];
+            if (!totalFees && (entry.content['المجموع'] || entry.content['المجموع الكلي'] || entry.content['إجمالي الرسوم'])) {
+              totalFees = entry.content['المجموع'] || entry.content['المجموع الكلي'] || entry.content['إجمالي الرسوم'];
             }
           }
         }
       }
-      if (serviceName || serviceFees) {
-        html += '<div class="mt-2 text-sm">';
-        if (serviceName) html += '<span class="text-blue-600 font-medium">' + serviceName + '</span>';
-        if (serviceName && serviceFees) html += ' • ';
-        if (serviceFees) html += '<span class="text-green-600 font-medium">' + serviceFees + '</span>';
-        html += '</div>';
+      if (serviceName) {
+        html += '<p class="text-blue-600 font-medium">' + serviceName;
+        if (totalFees) html += ' <span class="text-green-600 font-bold mr-2">' + totalFees + '</span>';
+        html += '</p>';
       }
       html += '<div class="flex items-center gap-2 mt-2">';
       html += visitor.isConnected !== true ? 
