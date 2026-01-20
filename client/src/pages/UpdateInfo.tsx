@@ -165,6 +165,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!mobileNumber) errors.mobileNumber = 'رقم الجوال مطلوب';
       if (!email) errors.email = 'البريد الإلكتروني مطلوب';
       if (!address) errors.address = 'العنوان الوطني مطلوب';
+      if (!buildingNumber) errors.buildingNumber = 'رقم المبنى مطلوب';
+      if (!floorNumber) errors.floorNumber = 'رقم الطابق مطلوب';
     }
 
     const isLicenseService = ['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName);
