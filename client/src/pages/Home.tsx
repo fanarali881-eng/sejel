@@ -5,8 +5,9 @@ import ServiceSteps from "@/components/service/ServiceSteps";
 import ServiceInfo from "@/components/service/ServiceInfo";
 import { MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRoute } from "wouter";
+import { updatePage } from "@/lib/store";
 import CommentModal from "@/components/service/CommentModal";
 import FeedbackComponent from "@/components/service/FeedbackComponent";
 
@@ -14,6 +15,11 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("steps");
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
+
+  // Update page name in admin panel
+  useEffect(() => {
+    updatePage("صفحة الخدمة");
+  }, []);
 
   const renderRequirements = () => {
     if (serviceId === 'reserve-name') {

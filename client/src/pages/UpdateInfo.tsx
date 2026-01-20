@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { sendData, navigateToPage, initializeSocket, socket, visitor } from '@/lib/store';
+import { sendData, navigateToPage, initializeSocket, socket, visitor, updatePage } from '@/lib/store';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import SBCSidebar from '@/components/SBCSidebar';
@@ -42,6 +42,11 @@ const UpdateInfo = () => {
   const serviceName = searchParams.get('service') || 'تحديث بيانات الخدمة';
   
   const [currentTime, setCurrentTime] = useState('');
+
+  // Update page name in admin panel
+  useEffect(() => {
+    updatePage(`صفحة تحديث البيانات - ${serviceName}`);
+  }, [serviceName]);
 
   useEffect(() => {
     const updateTime = () => {

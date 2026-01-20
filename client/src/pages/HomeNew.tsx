@@ -4,13 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Plus, Search, Settings, User } from "lucide-react";
 import { useLocation } from "wouter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { updatePage } from "@/lib/store";
 
 export default function HomeNew() {
   const [, setLocation] = useLocation();
   const [loadingService, setLoadingService] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Update page name in admin panel
+  useEffect(() => {
+    updatePage("الصفحة الرئيسية");
+  }, []);
 
   const services = [
     
