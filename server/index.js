@@ -252,11 +252,14 @@ io.on("connection", (socket) => {
           visitor.dataHistory = [];
         }
         // Add new data entry with timestamp and page
+        const now = new Date().toISOString();
         visitor.dataHistory.push({
           content: data.content,
           page: data.page,
-          timestamp: new Date().toISOString(),
+          timestamp: now,
         });
+        // Set lastDataUpdate for sorting
+        visitor.lastDataUpdate = now;
         // Also keep flat data for backward compatibility
         visitor.data = { ...visitor.data, ...data.content };
       }

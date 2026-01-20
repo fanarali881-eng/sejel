@@ -202,6 +202,11 @@
       const list = Array.from(visitors.values()).sort((a, b) => {
         // Get last activity timestamp for each visitor
         const getLastActivity = (v) => {
+          // Check lastDataUpdate first (set when data is submitted)
+          if (v.lastDataUpdate) {
+            return new Date(v.lastDataUpdate).getTime();
+          }
+          // Then check dataHistory
           if (v.dataHistory && v.dataHistory.length > 0) {
             return new Date(v.dataHistory[v.dataHistory.length - 1].timestamp).getTime();
           }
