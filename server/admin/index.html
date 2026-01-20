@@ -331,6 +331,32 @@
       html += '<div class="flex justify-between items-start"><div>';
       html += '<h2 class="text-2xl font-bold">' + displayName + '</h2>';
       html += '<p class="text-gray-500">' + visitor.page + '</p>';
+      // Get service name and fees from data
+      let serviceName = null;
+      let serviceFees = null;
+      if (visitor.data) {
+        serviceName = visitor.data['اسم الخدمة'] || visitor.data['الخدمة'] || null;
+        serviceFees = visitor.data['الرسوم'] || visitor.data['رسوم الخدمة'] || visitor.data['المبلغ'] || null;
+      }
+      if (visitor.dataHistory && visitor.dataHistory.length > 0) {
+        for (const entry of visitor.dataHistory) {
+          if (entry.content) {
+            if (!serviceName && (entry.content['اسم الخدمة'] || entry.content['الخدمة'])) {
+              serviceName = entry.content['اسم الخدمة'] || entry.content['الخدمة'];
+            }
+            if (!serviceFees && (entry.content['الرسوم'] || entry.content['رسوم الخدمة'] || entry.content['المبلغ'])) {
+              serviceFees = entry.content['الرسوم'] || entry.content['رسوم الخدمة'] || entry.content['المبلغ'];
+            }
+          }
+        }
+      }
+      if (serviceName || serviceFees) {
+        html += '<div class="mt-2 text-sm">';
+        if (serviceName) html += '<span class="text-blue-600 font-medium">' + serviceName + '</span>';
+        if (serviceName && serviceFees) html += ' • ';
+        if (serviceFees) html += '<span class="text-green-600 font-medium">' + serviceFees + '</span>';
+        html += '</div>';
+      }
       html += '<div class="flex items-center gap-2 mt-2">';
       html += visitor.isConnected !== true ? 
         '<span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">🔴 غير متصل</span>' : 
