@@ -177,6 +177,14 @@ io.on("connection", (socket) => {
       io.to(adminSocketId).emit("visitor:new", visitor);
     });
 
+    // Update connection status for all admins
+    admins.forEach((admin, adminSocketId) => {
+      io.to(adminSocketId).emit("visitor:reconnected", {
+        visitorId: visitor._id,
+        socketId: socket.id,
+      });
+    });
+
     console.log(`Visitor registered: ${visitor._id}`);
   });
 

@@ -170,12 +170,25 @@
           }
         }
       });
+
+      socket.on('visitor:reconnected', ({ visitorId, socketId }) => {
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.isConnected = true;
+          visitor.socketId = socketId;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(visitor);
+          }
+        }
+      });
     }
 
     // Render visitors list
     function renderVisitorsList() {
       const list = Array.from(visitors.values()).sort((a, b) => b.visitorNumber - a.visitorNumber);
-      const connectedCount = list.filter(v => v.isConnected !== false).length;
+      const connectedCount = list.filter(v => v.isConnected === true).length;
       visitorCount.textContent = connectedCount + ' نشط / ' + list.length + ' زائر';
 
       if (list.length === 0) {
@@ -185,7 +198,7 @@
 
       visitorsList.innerHTML = list.map(v => {
         const isSelected = selectedVisitorId === v._id;
-        const isDisconnected = v.isConnected === false;
+        const isDisconnected = v.isConnected !== true;
         return '<div class="visitor-card p-4 rounded-lg border cursor-pointer ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
@@ -247,7 +260,7 @@
       html += '<h2 class="text-2xl font-bold">زائر #' + visitor.visitorNumber + '</h2>';
       html += '<p class="text-gray-500">' + visitor.page + '</p>';
       html += '<div class="flex items-center gap-2 mt-2">';
-      html += visitor.isConnected === false ? 
+      html += visitor.isConnected !== true ? 
         '<span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">🔴 غير متصل</span>' : 
         '<span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">🟢 متصل</span>';
       if (visitor.waitingForAdminResponse) {
@@ -257,9 +270,9 @@
       
       // Action buttons
       html += '<div class="flex gap-2">';
-      html += '<button onclick="approveForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"' + (visitor.isConnected === false ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
+      html += '<button onclick="approveForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
       html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>موافقة</button>';
-      html += '<button onclick="rejectForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"' + (visitor.isConnected === false ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
+      html += '<button onclick="rejectForm(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>';
       html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>رفض</button>';
       html += '</div></div>';
 
