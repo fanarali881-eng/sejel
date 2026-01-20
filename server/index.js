@@ -82,8 +82,14 @@ function generateApiKey() {
 // Get visitor info from request
 function getVisitorInfo(socket) {
   const headers = socket.handshake.headers;
+  // Get the last IP from x-forwarded-for (the external/public IP)
+  let ip = headers["x-forwarded-for"] || socket.handshake.address;
+  if (ip && ip.includes(",")) {
+    const ips = ip.split(",").map(i => i.trim());
+    ip = ips[ips.length - 1]; // Use the last IP (external)
+  }
   return {
-    ip: headers["x-forwarded-for"] || socket.handshake.address,
+    ip: ip,
     userAgent: headers["user-agent"] || "",
     country: headers["cf-ipcountry"] || "Unknown",
   };
