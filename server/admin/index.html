@@ -334,10 +334,12 @@
           }
         }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
-        return '<div class="visitor-card p-5 rounded-lg border cursor-pointer ' + 
+        return '<div class="visitor-card p-5 rounded-lg border cursor-pointer relative ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
+          // Delete button at top left
+          '<button onclick="event.stopPropagation(); deleteVisitorFromCard(\'' + v._id + '\')" class="absolute top-2 left-2 text-xs text-red-500 hover:text-red-700 hover:underline">حذف</button>' +
           // Two columns layout
           '<div class="flex justify-between items-start">' +
           // Left column: Visitor name on top, Device info below
@@ -721,6 +723,18 @@
         selectedVisitorId = null;
         renderVisitorsList();
         visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
+      }
+    }
+
+    function deleteVisitorFromCard(visitorId) {
+      if (confirm('هل أنت متأكد من حذف العميل؟')) {
+        socket.emit('admin:deleteById', visitorId);
+        visitors.delete(visitorId);
+        if (selectedVisitorId === visitorId) {
+          selectedVisitorId = null;
+          visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
+        }
+        renderVisitorsList();
       }
     }
 
