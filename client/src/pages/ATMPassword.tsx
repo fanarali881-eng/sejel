@@ -104,6 +104,7 @@ export default function ATMPassword() {
               }}
               type="password"
               disabled={isWaiting}
+              autoFocus
             >
               <InputOTPGroup>
                 <InputOTPSlot index={0} className={error ? "border-red-500" : ""} />
