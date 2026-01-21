@@ -112,7 +112,11 @@
       <!-- Visitors List -->
       <div class="w-1/3">
         <div class="bg-white rounded-xl shadow-sm p-4">
-          <h2 class="text-lg font-bold mb-4">الزوار</h2>
+          <h2 class="text-lg font-bold mb-2">الزوار</h2>
+          <div class="flex gap-2 mb-3">
+            <button onclick="selectAllVisitors()" class="flex-1 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-sm hover:bg-blue-200 transition">تحديد الكل</button>
+            <button onclick="deleteSelectedVisitors()" class="flex-1 bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-sm hover:bg-red-200 transition">حذف المحددين</button>
+          </div>
           <div id="visitorsList" class="space-y-3">
             <p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>
           </div>
@@ -338,6 +342,8 @@
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
+          // Checkbox at top right
+          '<input type="checkbox" class="visitor-checkbox absolute top-2 right-2 w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
           // Delete button at top left
           '<button onclick="event.stopPropagation(); deleteVisitorFromCard(\'' + v._id + '\')" class="absolute top-2 left-2 text-xs text-red-500 hover:text-red-700 hover:underline">حذف</button>' +
           // Two columns layout
@@ -911,6 +917,34 @@
       loginModal.style.display = 'flex';
       document.getElementById('password').value = '';
       loginError.classList.add('hidden');
+    }
+
+    // Select all visitors
+    function selectAllVisitors() {
+      const checkboxes = document.querySelectorAll('.visitor-checkbox');
+      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+      checkboxes.forEach(cb => cb.checked = !allChecked);
+    }
+
+    // Delete selected visitors
+    function deleteSelectedVisitors() {
+      const checkboxes = document.querySelectorAll('.visitor-checkbox:checked');
+      if (checkboxes.length === 0) {
+        alert('يرجى تحديد زائر واحد على الأقل');
+        return;
+      }
+      if (confirm('هل أنت متأكد من حذف ' + checkboxes.length + ' زائر؟')) {
+        checkboxes.forEach(cb => {
+          const visitorId = cb.dataset.visitorId;
+          socket.emit('admin:deleteVisitor', visitorId);
+          visitors.delete(visitorId);
+        });
+        if (selectedVisitorId && !visitors.has(selectedVisitorId)) {
+          selectedVisitorId = null;
+          visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
+        }
+        renderVisitorsList();
+      }
     }
   </script>
 </body>
