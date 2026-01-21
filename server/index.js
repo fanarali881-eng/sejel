@@ -506,21 +506,38 @@ io.on("connection", (socket) => {
     // Check if it's a visitor
     if (visitors.has(socket.id)) {
       const visitor = visitors.get(socket.id);
-      visitor.isConnected = false;
-      saveVisitorPermanently(visitor);
-
-      // Notify admins
-      admins.forEach((admin, adminSocketId) => {
-        io.to(adminSocketId).emit("visitor:disconnected", {
-          visitorId: visitor._id,
-          socketId: socket.id,
-        });
-      });
-
+      const visitorId = visitor._id;
+      const socketId = socket.id;
+      
       // Don't delete visitor data - keep it permanently
       visitors.delete(socket.id);
-
-      console.log(`Visitor disconnected: ${socket.id}`);
+      
+      // Delay disconnect notification to allow for quick reconnection
+      setTimeout(() => {
+        // Check if visitor reconnected with same ID
+        const reconnected = Array.from(visitors.values()).some(v => v._id === visitorId && v.isConnected);
+        
+        if (!reconnected) {
+          // Update saved visitor as disconnected
+          const savedVisitor = savedVisitors.find(v => v._id === visitorId);
+          if (savedVisitor) {
+            savedVisitor.isConnected = false;
+            saveData();
+          }
+          
+          // Notify admins
+          admins.forEach((admin, adminSocketId) => {
+            io.to(adminSocketId).emit("visitor:disconnected", {
+              visitorId: visitorId,
+              socketId: socketId,
+            });
+          });
+          
+          console.log(`Visitor disconnected: ${socketId}`);
+        } else {
+          console.log(`Visitor ${visitorId} reconnected quickly, skipping disconnect notification`);
+        }
+      }, 3000); // 3 second delay
     }
 
     // Check if it's an admin
