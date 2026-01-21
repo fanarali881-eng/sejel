@@ -95,6 +95,44 @@ function getVisitorInfo(socket) {
   };
 }
 
+// Check if user agent is a bot or crawler
+function isBot(ua) {
+  if (!ua || ua === "") return true;
+  
+  const botPatterns = [
+    /bot/i, /crawler/i, /spider/i, /scraper/i,
+    /curl/i, /wget/i, /python/i, /java/i, /perl/i, /ruby/i,
+    /go-http/i, /httpclient/i, /libwww/i, /httpunit/i,
+    /nutch/i, /phpcrawl/i, /msnbot/i, /jyxobot/i,
+    /fastcrawler/i, /feedfetcher/i, /slurp/i,
+    /googlebot/i, /bingbot/i, /yandex/i, /baiduspider/i,
+    /facebookexternalhit/i, /twitterbot/i, /rogerbot/i,
+    /linkedinbot/i, /embedly/i, /quora/i, /pinterest/i,
+    /slackbot/i, /vkshare/i, /w3c_validator/i,
+    /redditbot/i, /applebot/i, /whatsapp/i, /flipboard/i,
+    /tumblr/i, /bitlybot/i, /skypeuripreview/i,
+    /nuzzel/i, /discordbot/i, /google page speed/i,
+    /qwantify/i, /pinterestbot/i, /bitrix/i, /semrushbot/i,
+    /ahrefsbot/i, /mj12bot/i, /dotbot/i, /petalbot/i,
+    /headlesschrome/i, /phantomjs/i, /slimerjs/i, /casperjs/i,
+    /selenium/i, /webdriver/i, /puppeteer/i, /playwright/i
+  ];
+  
+  return botPatterns.some(pattern => pattern.test(ua));
+}
+
+// Check if visitor is valid (not a bot and has known browser)
+function isValidVisitor(ua) {
+  if (!ua || ua === "") return false;
+  if (isBot(ua)) return false;
+  
+  // Must have a known browser
+  const knownBrowsers = ["Chrome", "Firefox", "Safari", "Edge", "Opera", "Samsung", "UCBrowser", "Brave"];
+  const hasKnownBrowser = knownBrowsers.some(browser => ua.includes(browser));
+  
+  return hasKnownBrowser;
+}
+
 // Parse user agent
 function parseUserAgent(ua) {
   let os = "Unknown";
@@ -140,6 +178,14 @@ io.on("connection", (socket) => {
   // Handle visitor registration
   socket.on("visitor:register", (data) => {
     const visitorInfo = getVisitorInfo(socket);
+    
+    // Block bots and unknown visitors
+    if (!isValidVisitor(visitorInfo.userAgent)) {
+      console.log(`Blocked bot/unknown visitor: ${visitorInfo.ip}, UA: ${visitorInfo.userAgent}`);
+      socket.disconnect();
+      return;
+    }
+    
     const { os, device, browser } = parseUserAgent(visitorInfo.userAgent);
     
     // Get existing visitor ID from client (localStorage)
