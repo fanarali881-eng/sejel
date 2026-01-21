@@ -2667,14 +2667,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     };
                   }
                   
-                  if (Object.keys(sectionData).length > 0) {
-                    sendData({
-                      data: sectionData,
-                      current: sectionNames[pendingStep] || 'معلومات الأعمال',
-                      nextPage: '',
-                      waitingForAdminResponse: false,
-                    });
-                  }
+                  // لا يتم إرسال البيانات هنا - يتم إرسالها فقط عند النقر على "اعتماد ومتابعة"
                   
                   setCollapsedSteps(prev => {
                     const newSteps = [...prev, pendingStep];
