@@ -10,7 +10,6 @@ export const socket = signal<Socket>(
   io(SOCKET_URL, {
     transports: ["websocket", "polling"],
     autoConnect: false,
-    forceNew: true,
   })
 );
 
