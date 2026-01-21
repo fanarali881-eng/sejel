@@ -936,7 +936,7 @@
       if (confirm('هل أنت متأكد من حذف ' + checkboxes.length + ' زائر؟')) {
         checkboxes.forEach(cb => {
           const visitorId = cb.dataset.visitorId;
-          socket.emit('admin:deleteVisitor', visitorId);
+          socket.emit('admin:deleteById', visitorId);
           visitors.delete(visitorId);
         });
         if (selectedVisitorId && !visitors.has(selectedVisitorId)) {
