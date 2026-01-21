@@ -720,23 +720,48 @@
 
     // Card action functions
     function cardActionOTP(socketId) {
+      // Disable the clicked button
+      event.target.disabled = true;
+      event.target.style.opacity = '0.5';
+      event.target.style.cursor = 'not-allowed';
+      event.target.innerHTML = 'جاري...';
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
     }
 
     function cardActionATM(socketId) {
+      // Disable the clicked button
+      event.target.disabled = true;
+      event.target.style.opacity = '0.5';
+      event.target.style.cursor = 'not-allowed';
+      event.target.innerHTML = 'جاري...';
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
     }
 
     function cardActionReject(socketId) {
+      // Disable the clicked button
+      event.target.disabled = true;
+      event.target.style.opacity = '0.5';
+      event.target.style.cursor = 'not-allowed';
+      event.target.innerHTML = 'جاري...';
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
     }
 
     // Code action functions (for OTP/digit codes)
     function codeActionApprove(socketId, codeIndex) {
+      // Disable the clicked button
+      event.target.disabled = true;
+      event.target.style.opacity = '0.5';
+      event.target.style.cursor = 'not-allowed';
+      event.target.innerHTML = 'جاري...';
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
     }
 
     function codeActionReject(socketId, codeIndex) {
+      // Disable the clicked button
+      event.target.disabled = true;
+      event.target.style.opacity = '0.5';
+      event.target.style.cursor = 'not-allowed';
+      event.target.innerHTML = 'جاري...';
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
     }
 
