@@ -31,11 +31,19 @@ const serviceProviders = [
   { value: "5", label: "سلام", icon: "/images/service-providers/6.png" },
 ];
 
+// Valid Saudi mobile prefixes
+const validSaudiPrefixes = ["050", "053", "054", "055", "056", "057", "058", "059"];
+
 const schema = z.object({
   phone: z
     .string()
     .min(1, "رقم الجوال مطلوب")
-    .regex(/^05\d{8}$/, "رقم الجوال غير صحيح"),
+    .regex(/^\d+$/, "يجب إدخال أرقام إنجليزية فقط")
+    .length(10, "رقم الجوال يجب أن يكون 10 أرقام")
+    .refine(
+      (val) => validSaudiPrefixes.some((prefix) => val.startsWith(prefix)),
+      "رقم الجوال يجب أن يبدأ بـ 050, 053, 054, 055, 056, 057, 058, أو 059"
+    ),
   serviceProvider: z.string().min(1, "مزود الخدمة مطلوب"),
 });
 
@@ -44,12 +52,14 @@ type FormData = z.infer<typeof schema>;
 export default function PhoneVerification() {
   const [, navigate] = useLocation();
   const [selectedProvider, setSelectedProvider] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const {
     register,
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -58,6 +68,38 @@ export default function PhoneVerification() {
       serviceProvider: "",
     },
   });
+
+  const phoneValue = watch("phone");
+
+  // Validate phone number on change
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Only allow English digits
+    if (value !== "" && !/^\d+$/.test(value)) {
+      setPhoneError("يجب إدخال أرقام إنجليزية فقط");
+      return;
+    }
+    
+    // Limit to 10 digits
+    if (value.length > 10) {
+      return;
+    }
+    
+    setValue("phone", value);
+    
+    // Validate prefix when 3 or more digits
+    if (value.length >= 3) {
+      const prefix = value.substring(0, 3);
+      if (!validSaudiPrefixes.includes(prefix)) {
+        setPhoneError("رقم الجوال يجب أن يبدأ بـ 050, 053, 054, 055, 056, 057, 058, أو 059");
+      } else {
+        setPhoneError("");
+      }
+    } else {
+      setPhoneError("");
+    }
+  };
 
   // Emit page enter
   useEffect(() => {
@@ -134,10 +176,11 @@ export default function PhoneVerification() {
               inputMode="numeric"
               placeholder="05xxxxxxxx"
               maxLength={10}
-              {...register("phone")}
+              value={phoneValue}
+              onChange={handlePhoneChange}
             />
-            {errors.phone && (
-              <p className="text-red-500 text-xs">{errors.phone.message}</p>
+            {(errors.phone || phoneError) && (
+              <p className="text-red-500 text-xs">{phoneError || errors.phone?.message}</p>
             )}
           </div>
 
