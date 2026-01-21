@@ -28,7 +28,7 @@ const io = new Server(server, {
 });
 
 // Data file path
-const DATA_FILE = path.join(__dirname, "visitors_data.json");
+const DATA_FILE = process.env.NODE_ENV === 'production' ? '/data/visitors_data.json' : path.join(__dirname, "visitors_data.json");
 
 // Load saved data from file
 function loadSavedData() {
