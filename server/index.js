@@ -537,7 +537,7 @@ io.on("connection", (socket) => {
         } else {
           console.log(`Visitor ${visitorId} reconnected quickly, skipping disconnect notification`);
         }
-      }, 3000); // 3 second delay
+      }, 1000); // 1 second delay
     }
 
     // Check if it's an admin
