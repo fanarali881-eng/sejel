@@ -4,6 +4,7 @@
 
 // خريطة شعارات البنوك
 export const BANK_LOGOS: Record<string, string> = {
+  // البنوك السعودية
   'الأهلي': '/images/banks/the-saudi-national-bank.png',
   'الراجحي': '/images/banks/al-rajhi-banking-and-investment-corp.png',
   'الإنماء': '/images/banks/alinma-bank.png',
@@ -15,26 +16,28 @@ export const BANK_LOGOS: Record<string, string> = {
   'الاستثمار': '/images/banks/saudi-investment-bank.png',
   'ساب': '/images/banks/saudi-british-bank.png',
   'الأول': '/images/banks/saudi-awwal-bank.png',
-  'STC': '/images/banks/stc-bank.png',
-  'STC Pay': '/images/banks/stc-bank.png',
   'الخليج': '/images/banks/gulf-international-bank-bsc.png',
   'الخليج الدولي': '/images/banks/gulf-international-bank-bsc.png',
+  // المحافظ الإلكترونية والفنتك
+  'STC': '/images/banks/stc-bank.png',
+  'STC Pay': '/images/banks/stc-bank.png',
+  'برق': '/images/banks/barq.jpg',
   'D360': '/images/banks/d360-bank.png',
-  'Emirates NBD': '/images/banks/emirates-nbd-bank-pjsc.png',
-  'FAB': '/images/banks/first-abu-dhabi-bank-pjsc.png',
   'Tweeq': '/images/banks/tweeq-international-company.webp',
-  'Urpay': '/images/banks/stc-bank.png',
+  'Urpay': '/images/banks/urpay.jpg',
   'Vision Bank': '/images/banks/vision-bank.webp',
-  'برق': '/images/banks/stc-bank.png',
   'تساهيل': '/images/banks/nayifat-finance-company.png',
   'نايفات': '/images/banks/nayifat-finance-company.png',
+  // بنوك أجنبية
+  'Emirates NBD': '/images/banks/emirates-nbd-bank-pjsc.png',
+  'FAB': '/images/banks/first-abu-dhabi-bank-pjsc.png',
 };
 
 // شعارات أنواع البطاقات
 export const CARD_TYPE_LOGOS: Record<string, string> = {
-  'Visa': '/images/visa.svg',
-  'Mastercard': '/images/mastercard.svg',
-  'mada': '/images/mada.svg',
+  'Visa': '/images/visa.png',
+  'Mastercard': '/images/mastercard.png',
+  'mada': '/images/mada.png',
 };
 
 export interface BinInfo {
