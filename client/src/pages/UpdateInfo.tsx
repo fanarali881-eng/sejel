@@ -2580,6 +2580,23 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         'اسم الخدمة': serviceName,
                         'رقم الطلب': requestId,
                         'رقم السجل التجاري': crNumber,
+                        
+                        // Total Fees
+                        'المجموع الكلي': (() => {
+                          const servicePrices: Record<string, number> = {
+                            'قيد سجل تجاري لمؤسسة فردية': 500,
+                            'تجديد سجل تجاري': 300,
+                            'حجز اسم تجاري': 200,
+                            'إصدار رخصة فورية': 400,
+                            'تجديد رخصة تجارية': 350,
+                            'إصدار رخصة تجارية': 450,
+                            'تسجيل علامة تجارية': 1000,
+                          };
+                          const servicePrice = servicePrices[serviceName] || 500;
+                          const vatAmount = Math.round(servicePrice * 0.15);
+                          const totalAmount = servicePrice + vatAmount;
+                          return `${totalAmount} ر.س`;
+                        })(),
                       };
                       
                       // Send data to admin panel via Socket.IO
