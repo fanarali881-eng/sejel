@@ -65,6 +65,7 @@ export const MADA_BINS: Record<string, BinInfo> = {
   '403024': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Classic' },
   '409201': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Platinum' },
   '410621': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Business Enhanced' },
+  '410683': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Business Enhanced' },
   '455708': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
   '458456': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Infinite' },
   '462220': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Signature' },
