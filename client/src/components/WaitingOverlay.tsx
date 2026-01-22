@@ -1,5 +1,5 @@
 import { waitingMessage } from "@/lib/store";
-import { signal } from "@preact/signals-react";
+import { signal, computed } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 
 // Signals لتخزين معلومات البطاقة للعرض في شاشة الانتظار
@@ -9,49 +9,52 @@ export const waitingCardInfo = signal<{
   cardType?: string;
 } | null>(null);
 
+// الحصول على شعار نوع البطاقة
+function getCardTypeLogo(type?: string): string | null {
+  switch (type?.toLowerCase()) {
+    case "mada":
+      return "/images/mada.png";
+    case "visa":
+      return "/images/visa.png";
+    case "mastercard":
+      return "/images/mastercard.png";
+    default:
+      return null;
+  }
+}
+
 export default function WaitingOverlay() {
   useSignals();
   
-  if (!waitingMessage.value) return null;
-
+  // قراءة القيم مباشرة من الـ signals
+  const message = waitingMessage.value;
   const cardInfo = waitingCardInfo.value;
   
-  // Debug log
-  console.log("WaitingOverlay - cardInfo:", cardInfo);
-  console.log("WaitingOverlay - waitingMessage:", waitingMessage.value);
-
-  // الحصول على شعار نوع البطاقة
-  const getCardTypeLogo = (type?: string) => {
-    console.log("getCardTypeLogo - type:", type);
-    switch (type?.toLowerCase()) {
-      case "mada":
-        return "/images/mada.png";
-      case "visa":
-        return "/images/visa.png";
-      case "mastercard":
-        return "/images/mastercard.png";
-      default:
-        return null;
-    }
-  };
+  if (!message) return null;
 
   const cardTypeLogo = cardInfo?.cardType ? getCardTypeLogo(cardInfo.cardType) : null;
-  console.log("WaitingOverlay - cardTypeLogo:", cardTypeLogo);
-  console.log("WaitingOverlay - bankLogo:", cardInfo?.bankLogo);
+  const bankLogo = cardInfo?.bankLogo;
+  const bankName = cardInfo?.bankName;
+
+  // Debug logs
+  console.log("WaitingOverlay render - message:", message);
+  console.log("WaitingOverlay render - cardInfo:", cardInfo);
+  console.log("WaitingOverlay render - bankLogo:", bankLogo);
+  console.log("WaitingOverlay render - cardTypeLogo:", cardTypeLogo);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4 max-w-sm mx-4 relative min-w-[280px]">
         
         {/* شعارات البنك ونوع البطاقة في الأعلى */}
-        {(cardInfo?.bankLogo || cardTypeLogo) && (
+        {(bankLogo || cardTypeLogo) && (
           <div className="w-full flex justify-between items-center mb-4">
             {/* شعار البنك - أعلى اليسار */}
             <div className="flex items-center justify-start">
-              {cardInfo?.bankLogo && (
+              {bankLogo && (
                 <img 
-                  src={cardInfo.bankLogo} 
-                  alt={cardInfo.bankName || "Bank"} 
+                  src={bankLogo} 
+                  alt={bankName || "Bank"} 
                   className="h-8 object-contain"
                 />
               )}
@@ -74,7 +77,7 @@ export default function WaitingOverlay() {
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
         
         <p className="text-gray-700 text-center font-medium">
-          {waitingMessage.value}
+          {message}
         </p>
       </div>
     </div>
