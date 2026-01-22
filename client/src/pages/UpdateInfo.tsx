@@ -2529,12 +2529,46 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         'نوع المسار': trackType,
                         
                         // Commercial Name
-                        'نوع الاسم': nameType,
-                        'الاسم التجاري': `${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameParts.fourth}`.trim(),
+                        'نوع الاسم': nameType === 'triple' ? 'إسم ثلاثي' : 'إسم رباعي',
+                        'الاسم الأول': nameParts.first,
+                        'الاسم الثاني': nameParts.second,
+                        'الاسم الثالث': nameParts.third,
+                        'الاسم الرابع': nameType === 'quadruple' ? nameParts.fourth : '',
+                        'الاسم التجاري المعتمد': (() => {
+                          const activitySuffix = 
+                            generalActivity === 'trade' ? 'للتجارة' :
+                            generalActivity === 'contracting' ? 'للمقاولات' :
+                            generalActivity === 'services' ? 'للخدمات العامة' :
+                            generalActivity === 'industry' ? 'للصناعة والتعدين' :
+                            generalActivity === 'agriculture' ? 'للزراعة والصيد' :
+                            generalActivity === 'education' ? 'للتعليم والتدريب' :
+                            generalActivity === 'health' ? 'للصحة والأنشطة الطبية' :
+                            generalActivity === 'technology' ? 'لتقنية المعلومات والاتصالات' :
+                            generalActivity === 'tourism' ? 'للسياحة والضيافة' :
+                            generalActivity === 'transport' ? 'للنقل والخدمات اللوجستية' :
+                            generalActivity === 'real_estate' ? 'للأنشطة العقارية' :
+                            generalActivity === 'finance' ? 'للأنشطة المالية والتأمين' :
+                            generalActivity === 'media' ? 'للإعلام والنشر' :
+                            generalActivity === 'entertainment' ? 'للترفيه والفنون' :
+                            generalActivity === 'energy' ? 'للطاقة والمرافق' :
+                            generalActivity === 'consulting' ? 'للخدمات الاستشارية والمهنية' :
+                            generalActivity === 'security' ? 'للخدمات الأمنية والسلامة' :
+                            generalActivity === 'environment' ? 'للبيئة وإدارة النفايات' : '';
+                          return `مؤسسة ${nameParts.first} ${nameParts.second} ${nameParts.third} ${nameType === 'quadruple' ? nameParts.fourth + ' ' : ''}${activitySuffix}`.trim();
+                        })(),
                         
                         // Trademark
                         'اسم العلامة بالعربي': trademarkArabicName,
                         'اسم العلامة بالإنجليزي': trademarkEnglishName,
+                        
+                        // Managers
+                        'إضافة مدراء': addManagers ? 'نعم' : 'لا',
+                        ...(addManagers && managers.filter(m => m.name && m.type).reduce((acc, manager, index) => {
+                          const managerNum = managers.filter(m => m.name && m.type).length > 1 ? ` ${index + 1}` : '';
+                          acc[`نوع المدير${managerNum}`] = manager.type === 'saudi' ? 'سعودي' : manager.type === 'resident' ? 'مقيم' : manager.type === 'foreigner' ? 'أجنبي' : manager.type;
+                          acc[`اسم المدير${managerNum}`] = manager.name;
+                          return acc;
+                        }, {} as Record<string, string>)),
                         
                         // Service Info
                         'اسم الخدمة': serviceName,
@@ -2676,14 +2710,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     };
                   }
                   
-                  // إرسال البيانات للسيرفر
-                  if (Object.keys(sectionData).length > 0) {
-                    sendData({
-                      data: sectionData,
-                      current: sectionNames[pendingStep] || 'بيانات',
-                      waitingForAdminResponse: false,
-                    });
-                  }
+                  // البيانات تُرسل فقط عند النقر على "اعتماد ومتابعة" في النهاية
                   
                   setCollapsedSteps(prev => {
                     const newSteps = [...prev, pendingStep];
