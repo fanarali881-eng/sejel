@@ -441,7 +441,7 @@
       function findTotalFees(data) {
         if (!data) return null;
         for (const key of Object.keys(data)) {
-          if (key.includes('المجموع')) {
+          if (key.includes('المجموع') || key.includes('الإجمالي') || key.includes('الكلي')) {
             return data[key];
           }
         }
@@ -462,19 +462,8 @@
       // Helper function to find commercial name (الاسم التجاري المعتمد)
       function findCommercialName(data) {
         if (!data) return null;
-        // Check for direct commercial name field
-        if (data['الاسم التجاري']) return data['الاسم التجاري'];
+        // أخذ الاسم التجاري المعتمد المُشكّل ديناميكياً فقط
         if (data['الاسم التجاري المعتمد']) return data['الاسم التجاري المعتمد'];
-        
-        // Build from parts: الاسم الأول + الاسم الثاني + الاسم الثالث + مؤسسة
-        const parts = [];
-        if (data['الاسم الأول'] || data['الاسم الاول']) parts.push(data['الاسم الأول'] || data['الاسم الاول']);
-        if (data['الاسم الثاني']) parts.push(data['الاسم الثاني']);
-        if (data['الاسم الثالث']) parts.push(data['الاسم الثالث']);
-        
-        if (parts.length > 0) {
-          return 'مؤسسة ' + parts.join(' ');
-        }
         return null;
       }
       
