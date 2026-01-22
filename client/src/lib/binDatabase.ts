@@ -14,9 +14,20 @@ export const BANK_LOGOS: Record<string, string> = {
   'الجزيرة': '/images/banks/bank-al-jazira.png',
   'الاستثمار': '/images/banks/saudi-investment-bank.png',
   'ساب': '/images/banks/saudi-british-bank.png',
-  'الأول': '/images/banks/the-saudi-national-bank.png',
+  'الأول': '/images/banks/saudi-awwal-bank.png',
   'STC': '/images/banks/stc-bank.png',
+  'STC Pay': '/images/banks/stc-bank.png',
   'الخليج': '/images/banks/gulf-international-bank-bsc.png',
+  'الخليج الدولي': '/images/banks/gulf-international-bank-bsc.png',
+  'D360': '/images/banks/d360-bank.png',
+  'Emirates NBD': '/images/banks/emirates-nbd-bank-pjsc.png',
+  'FAB': '/images/banks/first-abu-dhabi-bank-pjsc.png',
+  'Tweeq': '/images/banks/tweeq-international-company.webp',
+  'Urpay': '/images/banks/stc-bank.png',
+  'Vision Bank': '/images/banks/vision-bank.webp',
+  'برق': '/images/banks/stc-bank.png',
+  'تساهيل': '/images/banks/nayifat-finance-company.png',
+  'نايفات': '/images/banks/nayifat-finance-company.png',
 };
 
 // شعارات أنواع البطاقات
