@@ -828,11 +828,17 @@
       socket.on('visitor:dataSubmitted', ({ visitorId, data, visitor }) => {
         // Ensure visitor is marked as connected and update data
         visitor.isConnected = true;
+        visitor.hasNewData = true;
         visitors.set(visitorId, visitor);
         renderVisitorsList();
         // Always update details if this visitor is selected
         if (selectedVisitorId === visitorId) {
+          // Mark as read immediately since admin is viewing this visitor
+          socket.emit('admin:markAsRead', visitorId);
+          visitor.hasNewData = false;
+          visitors.set(visitorId, visitor);
           renderVisitorDetails(visitor);
+          renderVisitorsList();
         }
         // Show notification with sound
         showNotification('📝 بيانات جديدة من الزائر #' + visitor.visitorNumber);
@@ -946,7 +952,7 @@
           '</div>' +
           '</div>' +
           (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : '') +
-          (Object.keys(v.data || {}).length > 0 ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات</div>' : '') +
+          (v.hasNewData ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات جديدة</div>' : '') +
           '</div>';
       }).join('');
       // Start timers for connected visitors
@@ -983,6 +989,12 @@
       selectedVisitorId = visitorId;
       const visitor = visitors.get(visitorId);
       if (visitor) {
+        // Mark as read when admin clicks on visitor
+        if (visitor.hasNewData) {
+          socket.emit('admin:markAsRead', visitorId);
+          visitor.hasNewData = false;
+          visitors.set(visitorId, visitor);
+        }
         renderVisitorDetails(visitor);
         renderVisitorsList();
       }

