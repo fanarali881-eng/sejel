@@ -174,7 +174,7 @@ const BANK_DATABASE: Record<string, { bank: string; logo: string }> = {
   '489318': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
   '489319': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
   '427015': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '432328': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '432328': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
   '457997': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
   // مصرف الإنماء
   '407197': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
