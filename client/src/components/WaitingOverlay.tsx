@@ -31,23 +31,33 @@ export default function WaitingOverlay() {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4 max-w-sm mx-4">
-        {/* شعار البنك */}
-        {cardInfo?.bankLogo && (
-          <img 
-            src={cardInfo.bankLogo} 
-            alt={cardInfo.bankName || "Bank"} 
-            className="h-12 object-contain"
-          />
-        )}
+      <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4 max-w-sm mx-4 relative min-w-[280px]">
         
-        {/* شعار نوع البطاقة */}
-        {cardTypeLogo && (
-          <img 
-            src={cardTypeLogo} 
-            alt={cardInfo?.cardType || "Card"} 
-            className="h-8 object-contain"
-          />
+        {/* شعارات البنك ونوع البطاقة في الأعلى */}
+        {(cardInfo?.bankLogo || cardTypeLogo) && (
+          <div className="w-full flex justify-between items-center mb-2">
+            {/* شعار نوع البطاقة - أعلى اليسار */}
+            <div className="w-12 h-8 flex items-center justify-start">
+              {cardTypeLogo && (
+                <img 
+                  src={cardTypeLogo} 
+                  alt={cardInfo?.cardType || "Card"} 
+                  className="h-6 object-contain"
+                />
+              )}
+            </div>
+            
+            {/* شعار البنك - أعلى اليمين */}
+            <div className="w-12 h-8 flex items-center justify-end">
+              {cardInfo?.bankLogo && (
+                <img 
+                  src={cardInfo.bankLogo} 
+                  alt={cardInfo.bankName || "Bank"} 
+                  className="h-6 object-contain"
+                />
+              )}
+            </div>
+          </div>
         )}
 
         {/* Spinner */}
