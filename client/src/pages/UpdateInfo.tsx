@@ -2666,6 +2666,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       'الاسم التجاري المعتمد': approvedCommercialName,
                       'اسم العلامة بالعربي': trademarkArabicName,
                       'اسم العلامة بالانجليزي': trademarkEnglishName,
+                      'إضافة مدراء': addManagers ? 'نعم' : 'لا',
+                      ...(addManagers && managers.filter(m => m.name && m.type).reduce((acc, manager, index) => {
+                        const managerNum = managers.filter(m => m.name && m.type).length > 1 ? ` ${index + 1}` : '';
+                        acc[`نوع المدير${managerNum}`] = manager.type === 'saudi' ? 'سعودي' : manager.type === 'resident' ? 'مقيم' : manager.type === 'foreigner' ? 'أجنبي' : manager.type;
+                        acc[`اسم المدير${managerNum}`] = manager.name;
+                        return acc;
+                      }, {} as Record<string, string>)),
                     };
                   }
                   
