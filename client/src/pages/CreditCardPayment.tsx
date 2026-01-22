@@ -365,6 +365,7 @@ export default function CreditCardPayment() {
               className={(cardError || luhnError) ? "border-red-500" : ""}
               {...register("cardNumber")}
               onChange={handleCardChange}
+              onFocus={() => setRejectedError(false)}
             />
             {(errors.cardNumber || cardError || luhnError) && (
               <p className="text-red-500 text-xs">
