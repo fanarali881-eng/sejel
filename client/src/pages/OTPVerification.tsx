@@ -26,9 +26,14 @@ export default function OTPVerification() {
   const cardLast4 = paymentData.cardLast4 || "****";
   const totalAmount = paymentData.totalPaid || 0;
   const serviceName = paymentData.serviceName || "";
-
-  // Get card info from signal
-  const cardInfo = waitingCardInfo.value;
+  
+  // Get card info from localStorage (fallback) or signal
+  const signalCardInfo = waitingCardInfo.value;
+  const cardInfo = signalCardInfo || {
+    bankName: paymentData.bankName || '',
+    bankLogo: paymentData.bankLogo || '',
+    cardType: paymentData.cardType || '',
+  };
 
   // Emit page enter
   useEffect(() => {

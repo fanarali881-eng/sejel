@@ -285,6 +285,8 @@ export default function CreditCardPayment() {
       cardType: cardType,
       cardLast4: cleanCardNumber.slice(-4),
       serviceName: serviceName,
+      bankName: bankInfo?.bank || '',
+      bankLogo: bankInfo?.logo || '',
     };
 
     localStorage.setItem("paymentData", JSON.stringify(paymentData));
