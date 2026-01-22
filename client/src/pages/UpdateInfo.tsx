@@ -2473,7 +2473,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </div>
             )}
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Only show in last step */}
+            {collapsedSteps.includes(4) && (
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
@@ -2610,6 +2611,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 </Button>
               </div>
             </div>
+            )}
           </div>
         </main>
       </div>
