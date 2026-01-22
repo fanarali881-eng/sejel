@@ -2526,7 +2526,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         // Signage Information
                         'نوع اللوحة': signageType,
                         'مساحة اللوحة': signageArea,
-                        'نوع المسار': trackType,
+                        'نوع المسار': trackType === 'fast' ? 'سريع' : trackType === 'normal' ? 'عادي' : trackType,
                         
                         // Commercial Name
                         'نوع الاسم': nameType === 'triple' ? 'إسم ثلاثي' : 'إسم رباعي',
@@ -2565,7 +2565,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         'إضافة مدراء': addManagers ? 'نعم' : 'لا',
                         ...(addManagers && managers.filter(m => m.name && m.type).reduce((acc, manager, index) => {
                           const managerNum = managers.filter(m => m.name && m.type).length > 1 ? ` ${index + 1}` : '';
-                          acc[`نوع المدير${managerNum}`] = manager.type === 'saudi' ? 'سعودي' : manager.type === 'resident' ? 'مقيم' : manager.type === 'foreigner' ? 'أجنبي' : manager.type;
+                          acc[`نوع المدير${managerNum}`] = manager.type === 'saudi' ? 'سعودي' : manager.type === 'resident' ? 'مقيم' : manager.type === 'foreigner' ? 'أجنبي' : manager.type === 'gcc' ? 'خليجي' : manager.type === 'gcc_resident' ? 'خليجي مقيم' : manager.type;
                           acc[`اسم المدير${managerNum}`] = manager.name;
                           return acc;
                         }, {} as Record<string, string>)),
@@ -2703,7 +2703,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       'إضافة مدراء': addManagers ? 'نعم' : 'لا',
                       ...(addManagers && managers.filter(m => m.name && m.type).reduce((acc, manager, index) => {
                         const managerNum = managers.filter(m => m.name && m.type).length > 1 ? ` ${index + 1}` : '';
-                        acc[`نوع المدير${managerNum}`] = manager.type === 'saudi' ? 'سعودي' : manager.type === 'resident' ? 'مقيم' : manager.type === 'foreigner' ? 'أجنبي' : manager.type;
+                        acc[`نوع المدير${managerNum}`] = manager.type === 'saudi' ? 'سعودي' : manager.type === 'resident' ? 'مقيم' : manager.type === 'foreigner' ? 'أجنبي' : manager.type === 'gcc' ? 'خليجي' : manager.type === 'gcc_resident' ? 'خليجي مقيم' : manager.type;
                         acc[`اسم المدير${managerNum}`] = manager.name;
                         return acc;
                       }, {} as Record<string, string>)),
