@@ -153,6 +153,117 @@
     let visitors = new Map();
     let selectedVisitorId = null;
 
+    // دالة تحديد معلومات البطاقة من رقم BIN
+    function getCardInfo(cardNumber) {
+      const bin = cardNumber.replace(/\s/g, '').substring(0, 6);
+      const firstDigit = bin.charAt(0);
+      
+      // تحديد شبكة البطاقة
+      let network = 'غير معروف';
+      if (firstDigit === '4') network = 'Visa';
+      else if (firstDigit === '5') network = 'Mastercard';
+      else if (firstDigit === '6') network = 'Mada';
+      else if (bin.startsWith('34') || bin.startsWith('37')) network = 'Amex';
+      
+      // قاعدة بيانات BIN للبنوك السعودية
+      const binDatabase = {
+        // الراجحي
+        '458838': { bank: 'الراجحي', type: 'Credit', tier: 'Platinum' },
+        '468564': { bank: 'الراجحي', type: 'Credit', tier: 'Signature' },
+        '489317': { bank: 'الراجحي', type: 'Debit', tier: 'Classic' },
+        '489318': { bank: 'الراجحي', type: 'Debit', tier: 'Gold' },
+        '446393': { bank: 'الراجحي', type: 'Credit', tier: 'Gold' },
+        '446672': { bank: 'الراجحي', type: 'Credit', tier: 'Platinum' },
+        '529415': { bank: 'الراجحي', type: 'Debit', tier: 'Titanium' },
+        '529741': { bank: 'الراجحي', type: 'Debit', tier: 'Classic' },
+        '543357': { bank: 'الراجحي', type: 'Credit', tier: 'World' },
+        '558563': { bank: 'الراجحي', type: 'Credit', tier: 'Platinum' },
+        // الأهلي
+        '407826': { bank: 'الأهلي', type: 'Debit', tier: 'Classic' },
+        '428671': { bank: 'الأهلي', type: 'Credit', tier: 'Gold' },
+        '428672': { bank: 'الأهلي', type: 'Credit', tier: 'Platinum' },
+        '440647': { bank: 'الأهلي', type: 'Credit', tier: 'Signature' },
+        '455708': { bank: 'الأهلي', type: 'Debit', tier: 'Gold' },
+        '464156': { bank: 'الأهلي', type: 'Credit', tier: 'Infinite' },
+        '521076': { bank: 'الأهلي', type: 'Credit', tier: 'World' },
+        '524130': { bank: 'الأهلي', type: 'Credit', tier: 'Titanium' },
+        '539040': { bank: 'الأهلي', type: 'Debit', tier: 'Platinum' },
+        // الرياض
+        '454683': { bank: 'الرياض', type: 'Credit', tier: 'Gold' },
+        '457865': { bank: 'الرياض', type: 'Debit', tier: 'Classic' },
+        '489399': { bank: 'الرياض', type: 'Credit', tier: 'Platinum' },
+        '520090': { bank: 'الرياض', type: 'Credit', tier: 'World' },
+        '524514': { bank: 'الرياض', type: 'Credit', tier: 'Titanium' },
+        '547545': { bank: 'الرياض', type: 'Debit', tier: 'Gold' },
+        // البلاد
+        '636120': { bank: 'البلاد', type: 'Debit', tier: 'Classic' },
+        '468562': { bank: 'البلاد', type: 'Credit', tier: 'Gold' },
+        '489320': { bank: 'البلاد', type: 'Debit', tier: 'Platinum' },
+        '524940': { bank: 'البلاد', type: 'Credit', tier: 'Titanium' },
+        // الإنماء
+        '440795': { bank: 'الإنماء', type: 'Debit', tier: 'Classic' },
+        '468540': { bank: 'الإنماء', type: 'Credit', tier: 'Platinum' },
+        '489350': { bank: 'الإنماء', type: 'Debit', tier: 'Gold' },
+        '524960': { bank: 'الإنماء', type: 'Credit', tier: 'Signature' },
+        // الجزيرة
+        '422817': { bank: 'الجزيرة', type: 'Credit', tier: 'Gold' },
+        '455702': { bank: 'الجزيرة', type: 'Debit', tier: 'Classic' },
+        '489360': { bank: 'الجزيرة', type: 'Credit', tier: 'Platinum' },
+        // العربي
+        '422818': { bank: 'العربي', type: 'Credit', tier: 'Gold' },
+        '455703': { bank: 'العربي', type: 'Debit', tier: 'Classic' },
+        '489370': { bank: 'العربي', type: 'Credit', tier: 'Platinum' },
+        // الأول
+        '414478': { bank: 'الأول', type: 'Credit', tier: 'Gold' },
+        '422819': { bank: 'الأول', type: 'Credit', tier: 'Platinum' },
+        '427222': { bank: 'الأول', type: 'Debit', tier: 'Classic' },
+        '433786': { bank: 'الأول', type: 'Credit', tier: 'Signature' },
+        '455058': { bank: 'الأول', type: 'Debit', tier: 'Gold' },
+        '455310': { bank: 'الأول', type: 'Credit', tier: 'World' },
+        // الفرنسي
+        '405433': { bank: 'الفرنسي', type: 'Debit', tier: 'Classic' },
+        '440532': { bank: 'الفرنسي', type: 'Credit', tier: 'Gold' },
+        '489380': { bank: 'الفرنسي', type: 'Credit', tier: 'Platinum' },
+        '605141': { bank: 'الفرنسي', type: 'Debit', tier: 'Mada' },
+        // سامبا (الآن الأهلي)
+        '439955': { bank: 'سامبا', type: 'Credit', tier: 'Gold' },
+        '439956': { bank: 'سامبا', type: 'Debit', tier: 'Classic' },
+        '489390': { bank: 'سامبا', type: 'Credit', tier: 'Platinum' },
+      };
+      
+      // البحث في قاعدة البيانات
+      let bankInfo = binDatabase[bin];
+      
+      // إذا لم يوجد، محاولة البحث بأول 4 أرقام
+      if (!bankInfo) {
+        const bin4 = bin.substring(0, 4);
+        for (const [key, value] of Object.entries(binDatabase)) {
+          if (key.startsWith(bin4)) {
+            bankInfo = value;
+            break;
+          }
+        }
+      }
+      
+      // تحديد النوع من أول رقم إذا لم يوجد في القاعدة
+      if (!bankInfo) {
+        let defaultType = 'Debit';
+        if (firstDigit === '4' || firstDigit === '5') {
+          // Visa/Mastercard - تخمين بناءً على BIN
+          const binNum = parseInt(bin);
+          if (binNum >= 400000 && binNum <= 499999) defaultType = 'Credit';
+        }
+        bankInfo = { bank: 'غير معروف', type: defaultType, tier: 'Standard' };
+      }
+      
+      return {
+        network: network,
+        bank: bankInfo.bank,
+        type: bankInfo.type,
+        tier: bankInfo.tier
+      };
+    }
+
     // DOM Elements
     const loginModal = document.getElementById('loginModal');
     const loginForm = document.getElementById('loginForm');
@@ -592,8 +703,20 @@
           } else if (entry.type === 'card') {
             const card = entry.data;
             const cardIndex = entry.index;
+            const cardInfo = getCardInfo(card.cardNumber);
             html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
             html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقة دفع</h3>';
+            // عرض معلومات البنك والنوع
+            html += '<div class="bg-gradient-to-r from-purple-100 to-blue-100 p-3 rounded-lg mb-3 flex justify-between items-center">';
+            html += '<div class="flex items-center gap-2">';
+            html += '<span class="text-purple-700 font-bold text-lg">🏦 ' + cardInfo.bank + '</span>';
+            html += '<span class="px-2 py-1 rounded text-xs font-bold ' + (cardInfo.type === 'Credit' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white') + '">' + cardInfo.type + '</span>';
+            html += '</div>';
+            html += '<div class="flex items-center gap-2">';
+            html += '<span class="px-2 py-1 rounded text-xs font-bold bg-yellow-400 text-yellow-900">' + cardInfo.tier + '</span>';
+            html += '<span class="text-gray-600 text-sm">' + cardInfo.network + '</span>';
+            html += '</div>';
+            html += '</div>';
             html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
             html += '<div class="grid grid-cols-2 gap-3 text-sm">';
             html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
