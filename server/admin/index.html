@@ -1197,7 +1197,7 @@
             html += '</div>';
             html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
             html += '<div class="grid grid-cols-2 gap-3 text-sm">';
-            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
+            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + (card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '') + '</span></div>';
             html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
             html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
             html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
