@@ -494,9 +494,7 @@
           }
         }
       }
-      if (commercialName) {
-        html += '<p class="text-purple-600 font-bold text-lg">الاسم التجاري: ' + commercialName + '</p>';
-      }
+      // Commercial name is now shown in the data section below
       if (serviceName) {
         html += '<p class="text-blue-600 font-medium">' + serviceName;
         if (totalFees) html += ' <span class="text-green-600 font-bold mr-2">' + totalFees + '</span>';
@@ -638,6 +636,19 @@
           html += '<div class="data-section ' + bgColor + ' p-4 rounded-lg" style="border-right-color: ' + borderColor + ';">';
           html += '<h3 class="font-bold mb-3 ' + textColor + '">📋 ' + (entry.page || 'بيانات') + '</h3>';
           html += '<div class="grid grid-cols-2 gap-3">';
+          
+          // Build commercial name - use الاسم التجاري field with مؤسسة prefix
+          let commercialNameBuilt = null;
+          const content = entry.content;
+          if (content['الاسم التجاري']) {
+            commercialNameBuilt = 'مؤسسة ' + content['الاسم التجاري'];
+          }
+          
+          // Add commercial name field first if built
+          if (commercialNameBuilt) {
+            html += '<div class="bg-purple-100 p-3 rounded-lg col-span-2"><span class="text-purple-600 text-sm block font-bold">الاسم التجاري المعتمد</span><span class="font-bold text-purple-800 text-lg">' + commercialNameBuilt + '</span></div>';
+          }
+          
           Object.entries(entry.content).forEach(([key, value]) => {
             html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
           });
