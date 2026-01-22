@@ -42,7 +42,7 @@ export default function WaitingOverlay() {
                 <img 
                   src={cardTypeLogo} 
                   alt={cardInfo?.cardType || "Card"} 
-                  className="h-6 object-contain"
+                  className="h-10 object-contain"
                 />
               )}
             </div>
@@ -53,7 +53,7 @@ export default function WaitingOverlay() {
                 <img 
                   src={cardInfo.bankLogo} 
                   alt={cardInfo.bankName || "Bank"} 
-                  className="h-6 object-contain"
+                  className="h-10 object-contain"
                 />
               )}
             </div>
