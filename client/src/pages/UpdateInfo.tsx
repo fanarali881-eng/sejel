@@ -1227,7 +1227,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Contact Info Section */}
             <AnimatePresence>
-            {!collapsedSteps.includes(2) && (
+            {collapsedSteps.includes(1) && !collapsedSteps.includes(2) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -1454,7 +1454,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Commercial Activities / Shop Information Section */}
             <AnimatePresence>
-            {!collapsedSteps.includes(3) && (
+            {collapsedSteps.includes(2) && !collapsedSteps.includes(3) && (
             <motion.div 
               key="step-3"
               className="mb-8"
@@ -1979,7 +1979,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Commercial Name Data Section / Signage Information */}
             <AnimatePresence>
-            {!collapsedSteps.includes(4) && (
+            {collapsedSteps.includes(3) && !collapsedSteps.includes(4) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -2440,6 +2440,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </AnimatePresence>
 
             {/* Declaration Section (Step 5) */}
+            {collapsedSteps.includes(4) && (
             <div className="mb-8 -mx-4 px-4">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">الإقرار</h2>
@@ -2470,6 +2471,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 </CardContent>
               </Card>
             </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex justify-between pt-4">
