@@ -181,7 +181,7 @@ export default function ATMPassword() {
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className={`w-14 h-14 text-center text-xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                className={`w-12 h-12 text-center text-lg font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                   error ? "border-red-500" : "border-gray-300"
                 }`}
               />
@@ -197,7 +197,7 @@ export default function ATMPassword() {
           {/* Submit Button */}
           <Button 
             type="submit" 
-            className="w-full h-12 text-base" 
+            className="w-full h-11 text-sm" 
             disabled={isWaiting || !isPinComplete}
           >
             {isWaiting ? (
