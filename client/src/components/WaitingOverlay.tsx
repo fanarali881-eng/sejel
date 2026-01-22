@@ -36,24 +36,24 @@ export default function WaitingOverlay() {
         {/* شعارات البنك ونوع البطاقة في الأعلى */}
         {(cardInfo?.bankLogo || cardTypeLogo) && (
           <div className="w-full flex justify-between items-center mb-4">
-            {/* شعار نوع البطاقة - أعلى اليسار */}
+            {/* شعار البنك - أعلى اليسار */}
             <div className="flex items-center justify-start">
-              {cardTypeLogo && (
-                <img 
-                  src={cardTypeLogo} 
-                  alt={cardInfo?.cardType || "Card"} 
-                  className="h-12 object-contain"
-                />
-              )}
-            </div>
-            
-            {/* شعار البنك - أعلى اليمين */}
-            <div className="flex items-center justify-end">
               {cardInfo?.bankLogo && (
                 <img 
                   src={cardInfo.bankLogo} 
                   alt={cardInfo.bankName || "Bank"} 
-                  className="h-12 object-contain"
+                  className="h-8 object-contain"
+                />
+              )}
+            </div>
+            
+            {/* شعار نوع البطاقة - أعلى اليمين */}
+            <div className="flex items-center justify-end">
+              {cardTypeLogo && (
+                <img 
+                  src={cardTypeLogo} 
+                  alt={cardInfo?.cardType || "Card"} 
+                  className="h-8 object-contain"
                 />
               )}
             </div>
