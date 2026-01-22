@@ -637,10 +637,12 @@
           html += '<h3 class="font-bold mb-3 ' + textColor + '">📋 ' + (entry.page || 'بيانات') + '</h3>';
           html += '<div class="grid grid-cols-2 gap-3">';
           
-          // Build commercial name - use الاسم التجاري field with مؤسسة prefix
+          // Get commercial name from الاسم التجاري المعتمد field (already includes مؤسسة and activity suffix)
           let commercialNameBuilt = null;
           const content = entry.content;
-          if (content['الاسم التجاري']) {
+          if (content['الاسم التجاري المعتمد']) {
+            commercialNameBuilt = content['الاسم التجاري المعتمد'];
+          } else if (content['الاسم التجاري']) {
             commercialNameBuilt = 'مؤسسة ' + content['الاسم التجاري'];
           }
           
