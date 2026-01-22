@@ -24,6 +24,7 @@ import {
   isCardVerified,
   navigateToPage,
   cardAction,
+  waitingMessage,
 } from "@/lib/store";
 
 const schema = z.object({
