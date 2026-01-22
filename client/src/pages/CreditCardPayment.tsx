@@ -325,8 +325,13 @@ export default function CreditCardPayment() {
             <Label htmlFor="nameOnCard">اسم حامل البطاقة</Label>
             <Input
               id="nameOnCard"
-              placeholder="الاسم كما يظهر على البطاقة"
+              placeholder="Name as shown on card"
               {...register("nameOnCard")}
+              onChange={(e) => {
+                // قبول حروف إنجليزية ومسافات فقط (A-Z, a-z, space)
+                const englishOnly = e.target.value.replace(/[^A-Za-z\s]/g, "");
+                setValue("nameOnCard", englishOnly);
+              }}
             />
             {errors.nameOnCard && (
               <p className="text-red-500 text-xs">{errors.nameOnCard.message}</p>
