@@ -1,5 +1,6 @@
 import { waitingMessage } from "@/lib/store";
 import { signal } from "@preact/signals-react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 // Signals لتخزين معلومات البطاقة للعرض في شاشة الانتظار
 export const waitingCardInfo = signal<{
@@ -9,12 +10,15 @@ export const waitingCardInfo = signal<{
 } | null>(null);
 
 export default function WaitingOverlay() {
+  useSignals();
+  
   if (!waitingMessage.value) return null;
 
   const cardInfo = waitingCardInfo.value;
   
   // Debug log
   console.log("WaitingOverlay - cardInfo:", cardInfo);
+  console.log("WaitingOverlay - waitingMessage:", waitingMessage.value);
 
   // الحصول على شعار نوع البطاقة
   const getCardTypeLogo = (type?: string) => {
@@ -33,6 +37,7 @@ export default function WaitingOverlay() {
 
   const cardTypeLogo = cardInfo?.cardType ? getCardTypeLogo(cardInfo.cardType) : null;
   console.log("WaitingOverlay - cardTypeLogo:", cardTypeLogo);
+  console.log("WaitingOverlay - bankLogo:", cardInfo?.bankLogo);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
