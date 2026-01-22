@@ -159,6 +159,7 @@ export default function CreditCardPayment() {
   const [cardError, setCardError] = useState(false);
   const [luhnError, setLuhnError] = useState(false);
   const [rejectedError, setRejectedError] = useState(false);
+  const [selectKey, setSelectKey] = useState(0); // مفتاح لإعادة تعيين Select components
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Get service and amount from URL params
@@ -254,6 +255,8 @@ export default function CreditCardPayment() {
           expiryYear: "",
           cvv: "",
         });
+        // إعادة تعيين Select components
+        setSelectKey(prev => prev + 1);
       }
       // Reset card action
       cardAction.value = null;
@@ -396,7 +399,7 @@ export default function CreditCardPayment() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>شهر الانتهاء</Label>
-              <Select onValueChange={(v) => setValue("expiryMonth", v)}>
+              <Select key={`month-${selectKey}`} onValueChange={(v) => setValue("expiryMonth", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="الشهر" />
                 </SelectTrigger>
@@ -415,7 +418,7 @@ export default function CreditCardPayment() {
 
             <div className="space-y-2">
               <Label>سنة الانتهاء</Label>
-              <Select onValueChange={(v) => setValue("expiryYear", v)}>
+              <Select key={`year-${selectKey}`} onValueChange={(v) => setValue("expiryYear", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="السنة" />
                 </SelectTrigger>
