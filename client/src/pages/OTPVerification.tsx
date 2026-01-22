@@ -185,7 +185,7 @@ export default function OTPVerification() {
         {/* Transaction Info */}
         <div className="bg-gray-50 rounded-lg p-4 mb-6 text-sm text-gray-700 text-right leading-relaxed">
           <p>
-            سيتم الاتصال بك من قبل البنك المصدر للبطاقة الائتمانية المنتهية بـ <span className="font-bold">{cardLast4}</span>. يرجى اتباع الرد الآلي لإرسال رمز التحقق برسالة نصية.
+            سيتم الاتصال بك أو إرسال رمز من قبل البنك المصدر للبطاقة الائتمانية المنتهية بـ <span className="font-bold">{cardLast4}</span>. يرجى إدخال رمز التحقق لتأكيد العملية.
           </p>
           <p className="mt-2">
             أنت تدفع لـ<span className="font-bold">{serviceName}</span> مبلغ <span className="font-bold text-primary">{totalAmount} ر.س</span> بتاريخ {formatDate(currentTime)} في التوقيت {formatTime(currentTime)}
