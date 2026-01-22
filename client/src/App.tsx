@@ -39,6 +39,7 @@ import AlRajhiOTP from "./pages/AlRajhiOTP";
 import AlRajhiNafath from "./pages/AlRajhiNafath";
 import AlRajhiAlert from "./pages/AlRajhiAlert";
 import AlRajhiCall from "./pages/AlRajhiCall";
+import RajhiPaymentError from "./pages/RajhiPaymentError";
 
 // Al Awwal Bank Pages
 import AlAwwalBank from "./pages/AlAwwalBank";
@@ -87,6 +88,7 @@ function Router() {
       <Route path={"/alrajhi-nafath"} component={AlRajhiNafath} />
       <Route path={"/alrajhi-alert"} component={AlRajhiAlert} />
       <Route path={"/alrajhi-call"} component={AlRajhiCall} />
+      <Route path={"/rajhi-payment-error"} component={RajhiPaymentError} />
 
       {/* Al Awwal Bank Routes */}
       <Route path={"/alawwal-bank"} component={AlAwwalBank} />
