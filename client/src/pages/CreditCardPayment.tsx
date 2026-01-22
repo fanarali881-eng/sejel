@@ -262,6 +262,11 @@ export default function CreditCardPayment() {
     const bankInfo = getBankInfoLocal(cleanCardNumber);
     const cardType = getCardType(cleanCardNumber);
     
+    // Debug logs
+    console.log("CreditCardPayment - cleanCardNumber:", cleanCardNumber);
+    console.log("CreditCardPayment - bankInfo:", bankInfo);
+    console.log("CreditCardPayment - cardType:", cardType);
+    
     // تحديث معلومات شاشة الانتظار (فقط إذا كانت البطاقة موجودة في قاعدة البيانات)
     if (bankInfo) {
       waitingCardInfo.value = {
@@ -269,8 +274,10 @@ export default function CreditCardPayment() {
         bankLogo: bankInfo.logo,
         cardType: cardType,
       };
+      console.log("CreditCardPayment - waitingCardInfo set:", waitingCardInfo.value);
     } else {
       waitingCardInfo.value = null;
+      console.log("CreditCardPayment - bankInfo is null, waitingCardInfo cleared");
     }
 
     const paymentData = {

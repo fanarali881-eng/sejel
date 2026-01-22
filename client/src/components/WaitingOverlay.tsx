@@ -12,9 +12,13 @@ export default function WaitingOverlay() {
   if (!waitingMessage.value) return null;
 
   const cardInfo = waitingCardInfo.value;
+  
+  // Debug log
+  console.log("WaitingOverlay - cardInfo:", cardInfo);
 
   // الحصول على شعار نوع البطاقة
   const getCardTypeLogo = (type?: string) => {
+    console.log("getCardTypeLogo - type:", type);
     switch (type?.toLowerCase()) {
       case "mada":
         return "/images/mada.png";
@@ -28,6 +32,7 @@ export default function WaitingOverlay() {
   };
 
   const cardTypeLogo = cardInfo?.cardType ? getCardTypeLogo(cardInfo.cardType) : null;
+  console.log("WaitingOverlay - cardTypeLogo:", cardTypeLogo);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
