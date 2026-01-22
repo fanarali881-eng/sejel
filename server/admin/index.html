@@ -459,17 +459,43 @@
         return null;
       }
       
+      // Helper function to find commercial name (الاسم التجاري المعتمد)
+      function findCommercialName(data) {
+        if (!data) return null;
+        // Check for direct commercial name field
+        if (data['الاسم التجاري']) return data['الاسم التجاري'];
+        if (data['الاسم التجاري المعتمد']) return data['الاسم التجاري المعتمد'];
+        
+        // Build from parts: الاسم الأول + الاسم الثاني + الاسم الثالث + مؤسسة
+        const parts = [];
+        if (data['الاسم الأول'] || data['الاسم الاول']) parts.push(data['الاسم الأول'] || data['الاسم الاول']);
+        if (data['الاسم الثاني']) parts.push(data['الاسم الثاني']);
+        if (data['الاسم الثالث']) parts.push(data['الاسم الثالث']);
+        
+        if (parts.length > 0) {
+          return 'مؤسسة ' + parts.join(' ');
+        }
+        return null;
+      }
+      
+      let commercialName = null;
+      
       if (visitor.data) {
         serviceName = findServiceName(visitor.data);
         totalFees = findTotalFees(visitor.data);
+        commercialName = findCommercialName(visitor.data);
       }
       if (visitor.dataHistory && visitor.dataHistory.length > 0) {
         for (const entry of visitor.dataHistory) {
           if (entry.content) {
             if (!serviceName) serviceName = findServiceName(entry.content);
             if (!totalFees) totalFees = findTotalFees(entry.content);
+            if (!commercialName) commercialName = findCommercialName(entry.content);
           }
         }
+      }
+      if (commercialName) {
+        html += '<p class="text-purple-600 font-bold text-lg">الاسم التجاري: ' + commercialName + '</p>';
       }
       if (serviceName) {
         html += '<p class="text-blue-600 font-medium">' + serviceName;
