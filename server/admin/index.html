@@ -1192,7 +1192,13 @@
             html += '</div>';
             html += '<div class="flex items-center gap-2">';
             html += '<span class="px-2 py-1 rounded text-xs font-bold bg-yellow-400 text-yellow-900">' + cardInfo.tier + '</span>';
-            html += '<span class="text-gray-600 text-sm">' + cardInfo.network + '</span>';
+            // شعار صنف البطاقة
+            var networkLogo = '';
+            if (cardInfo.network === 'Visa') networkLogo = '<img src="/images/visa.png" alt="Visa" class="h-6 object-contain">';
+            else if (cardInfo.network === 'Mastercard') networkLogo = '<img src="/images/mastercard.png" alt="Mastercard" class="h-6 object-contain">';
+            else if (cardInfo.network === 'mada') networkLogo = '<img src="/images/mada.png" alt="mada" class="h-6 object-contain">';
+            else networkLogo = '<span class="text-gray-600 text-sm">' + cardInfo.network + '</span>';
+            html += networkLogo;
             html += '</div>';
             html += '</div>';
             html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
