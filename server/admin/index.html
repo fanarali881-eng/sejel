@@ -616,7 +616,7 @@
 
       // Display data history in reverse order (newest first)
       if (visitor.dataHistory && visitor.dataHistory.length > 0) {
-        const reversedHistory = [...visitor.dataHistory].reverse();
+        const reversedHistory = [...visitor.dataHistory].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         reversedHistory.forEach((entry, index) => {
           const bgColor = index % 2 === 0 ? 'bg-blue-50' : 'bg-teal-50';
           const borderColor = index % 2 === 0 ? '#3b82f6' : '#14b8a6';
