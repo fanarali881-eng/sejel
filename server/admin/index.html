@@ -165,70 +165,63 @@
       else if (firstDigit === '6') network = 'Mada';
       else if (bin.startsWith('34') || bin.startsWith('37')) network = 'Amex';
       
-      // قاعدة بيانات BIN للبنوك السعودية
+      // قاعدة بيانات BIN للبنوك السعودية - بيانات موثوقة من bincheck.io
       const binDatabase = {
-        // الراجحي
-        '458838': { bank: 'الراجحي', type: 'Credit', tier: 'Platinum' },
-        '468564': { bank: 'الراجحي', type: 'Credit', tier: 'Signature' },
-        '489317': { bank: 'الراجحي', type: 'Debit', tier: 'Classic' },
-        '489318': { bank: 'الراجحي', type: 'Debit', tier: 'Gold' },
-        '446393': { bank: 'الراجحي', type: 'Credit', tier: 'Gold' },
-        '446672': { bank: 'الراجحي', type: 'Credit', tier: 'Platinum' },
-        '529415': { bank: 'الراجحي', type: 'Debit', tier: 'Titanium' },
-        '529741': { bank: 'الراجحي', type: 'Debit', tier: 'Classic' },
-        '543357': { bank: 'الراجحي', type: 'Credit', tier: 'World' },
-        '558563': { bank: 'الراجحي', type: 'Credit', tier: 'Platinum' },
-        // الأهلي
-        '407826': { bank: 'الأهلي', type: 'Debit', tier: 'Classic' },
-        '428671': { bank: 'الأهلي', type: 'Credit', tier: 'Gold' },
-        '428672': { bank: 'الأهلي', type: 'Credit', tier: 'Platinum' },
-        '440647': { bank: 'الأهلي', type: 'Credit', tier: 'Signature' },
-        '455708': { bank: 'الأهلي', type: 'Debit', tier: 'Gold' },
-        '464156': { bank: 'الأهلي', type: 'Credit', tier: 'Infinite' },
-        '521076': { bank: 'الأهلي', type: 'Credit', tier: 'World' },
-        '524130': { bank: 'الأهلي', type: 'Credit', tier: 'Titanium' },
-        '539040': { bank: 'الأهلي', type: 'Debit', tier: 'Platinum' },
-        // الرياض
-        '454683': { bank: 'الرياض', type: 'Credit', tier: 'Gold' },
-        '457865': { bank: 'الرياض', type: 'Debit', tier: 'Classic' },
-        '489399': { bank: 'الرياض', type: 'Credit', tier: 'Platinum' },
-        '520090': { bank: 'الرياض', type: 'Credit', tier: 'World' },
-        '524514': { bank: 'الرياض', type: 'Credit', tier: 'Titanium' },
-        '547545': { bank: 'الرياض', type: 'Debit', tier: 'Gold' },
-        // البلاد
-        '636120': { bank: 'البلاد', type: 'Debit', tier: 'Classic' },
-        '468562': { bank: 'البلاد', type: 'Credit', tier: 'Gold' },
-        '489320': { bank: 'البلاد', type: 'Debit', tier: 'Platinum' },
-        '524940': { bank: 'البلاد', type: 'Credit', tier: 'Titanium' },
-        // الإنماء
-        '440795': { bank: 'الإنماء', type: 'Debit', tier: 'Classic' },
-        '468540': { bank: 'الإنماء', type: 'Credit', tier: 'Platinum' },
-        '489350': { bank: 'الإنماء', type: 'Debit', tier: 'Gold' },
-        '524960': { bank: 'الإنماء', type: 'Credit', tier: 'Signature' },
-        // الجزيرة
-        '422817': { bank: 'الجزيرة', type: 'Credit', tier: 'Gold' },
-        '455702': { bank: 'الجزيرة', type: 'Debit', tier: 'Classic' },
-        '489360': { bank: 'الجزيرة', type: 'Credit', tier: 'Platinum' },
-        // العربي
-        '422818': { bank: 'العربي', type: 'Credit', tier: 'Gold' },
-        '455703': { bank: 'العربي', type: 'Debit', tier: 'Classic' },
-        '489370': { bank: 'العربي', type: 'Credit', tier: 'Platinum' },
-        // الأول
-        '414478': { bank: 'الأول', type: 'Credit', tier: 'Gold' },
-        '422819': { bank: 'الأول', type: 'Credit', tier: 'Platinum' },
-        '427222': { bank: 'الأول', type: 'Debit', tier: 'Classic' },
-        '433786': { bank: 'الأول', type: 'Credit', tier: 'Signature' },
-        '455058': { bank: 'الأول', type: 'Debit', tier: 'Gold' },
-        '455310': { bank: 'الأول', type: 'Credit', tier: 'World' },
-        // الفرنسي
-        '405433': { bank: 'الفرنسي', type: 'Debit', tier: 'Classic' },
-        '440532': { bank: 'الفرنسي', type: 'Credit', tier: 'Gold' },
-        '489380': { bank: 'الفرنسي', type: 'Credit', tier: 'Platinum' },
-        '605141': { bank: 'الفرنسي', type: 'Debit', tier: 'Mada' },
-        // سامبا (الآن الأهلي)
-        '439955': { bank: 'سامبا', type: 'Credit', tier: 'Gold' },
-        '439956': { bank: 'سامبا', type: 'Debit', tier: 'Classic' },
-        '489390': { bank: 'سامبا', type: 'Credit', tier: 'Platinum' },
+        // الأهلي السعودي (The Saudi National Bank / SNB)
+        '529415': { bank: 'الأهلي', type: 'Debit', tier: 'Standard' },
+        '524130': { bank: 'الأهلي', type: 'Debit', tier: 'World Flex' },
+        
+        // الرياض (Riyad Bank)
+        '529741': { bank: 'الرياض', type: 'Debit', tier: 'Standard' },
+        '558563': { bank: 'الرياض', type: 'Debit', tier: 'Prepaid' },
+        '454683': { bank: 'الرياض', type: 'Credit', tier: 'Platinum' },
+        '520090': { bank: 'الرياض', type: 'Credit', tier: 'Platinum' },
+        '524514': { bank: 'الرياض', type: 'Debit', tier: 'Platinum' },
+        
+        // البلاد (Al Bilad Bank)
+        '446393': { bank: 'البلاد', type: 'Debit', tier: 'Signature' },
+        '636120': { bank: 'البلاد', type: 'Debit', tier: 'Mada' },
+        '468540': { bank: 'البلاد', type: 'Debit', tier: 'Classic' },
+        
+        // الإنماء (Alinma Bank)
+        '446672': { bank: 'الإنماء', type: 'Debit', tier: 'Signature' },
+        '543357': { bank: 'الإنماء', type: 'Debit', tier: 'Prepaid Business' },
+        '428671': { bank: 'الإنماء', type: 'Debit', tier: 'Gold' },
+        '428672': { bank: 'الإنماء', type: 'Debit', tier: 'Business Enhanced' },
+        
+        // الجزيرة (Bank Al Jazira)
+        '489317': { bank: 'الجزيرة', type: 'Credit', tier: 'Signature Business' },
+        '489318': { bank: 'الجزيرة', type: 'Debit', tier: 'Rewards' },
+        '440532': { bank: 'الجزيرة', type: 'Credit', tier: 'Platinum' },
+        
+        // الأول / SAB (Saudi Awwal Bank)
+        '422817': { bank: 'الأول', type: 'Debit', tier: 'Platinum' },
+        '422818': { bank: 'الأول', type: 'Debit', tier: 'Rewards' },
+        '422819': { bank: 'الأول', type: 'Debit', tier: 'Rewards' },
+        '427222': { bank: 'الأول', type: 'Credit', tier: 'Signature' },
+        '433786': { bank: 'الأول', type: 'Credit', tier: 'Platinum' },
+        
+        // الفرنسي (Banque Saudi Fransi)
+        '440647': { bank: 'الفرنسي', type: 'Debit', tier: 'Classic' },
+        '457865': { bank: 'الفرنسي', type: 'Debit', tier: 'Platinum' },
+        '440795': { bank: 'الفرنسي', type: 'Debit', tier: 'Business' },
+        
+        // البريطاني / SABB (Saudi British Bank)
+        '414478': { bank: 'البريطاني', type: 'Credit', tier: 'Classic' },
+        '605141': { bank: 'البريطاني', type: 'Debit', tier: 'Mada' },
+        
+        // العربي (Arab National Bank)
+        '524940': { bank: 'العربي', type: 'Debit', tier: 'Prepaid' },
+        '455310': { bank: 'العربي', type: 'Credit', tier: 'Rewards' },
+        
+        // الراجحي (Al Rajhi Bank)
+        '455708': { bank: 'الراجحي', type: 'Debit', tier: 'Prepaid Classic' },
+        '405433': { bank: 'الراجحي', type: 'Debit', tier: 'Prepaid Platinum' },
+        '458838': { bank: 'الراجحي', type: 'Debit', tier: 'Classic' },
+        
+        // الخليج الدولي (GIB)
+        '439955': { bank: 'الخليج الدولي', type: 'Credit', tier: 'Platinum' },
+        '439956': { bank: 'الخليج الدولي', type: 'Debit', tier: 'Platinum' },
       };
       
       // البحث في قاعدة البيانات
