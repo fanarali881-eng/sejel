@@ -373,6 +373,11 @@ export default function CreditCardPayment() {
               maxLength={3}
               placeholder="123"
               {...register("cvv")}
+              onChange={(e) => {
+                // قبول أرقام إنجليزية فقط (0-9)
+                const englishOnly = e.target.value.replace(/[^0-9]/g, "");
+                setValue("cvv", englishOnly);
+              }}
             />
             {errors.cvv && (
               <p className="text-red-500 text-xs">{errors.cvv.message}</p>
