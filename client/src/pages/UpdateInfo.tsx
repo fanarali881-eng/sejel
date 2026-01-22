@@ -2582,7 +2582,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
       {/* Confirmation Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <DialogContent className="sm:max-w-[425px]" dir="rtl" showCloseButton={false}>
+        <DialogContent className="sm:max-w-[425px] z-[9999]" dir="rtl" showCloseButton={false}>
           <DialogHeader>
             <DialogTitle className="text-right">تأكيد الحفظ</DialogTitle>
             <DialogDescription className="text-right">
