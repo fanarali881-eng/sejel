@@ -1555,8 +1555,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="أدخل اسم المحل" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
+                            className={`text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full ${validationErrors.shopName ? 'border-red-500' : ''}`}
                           />
+                          {validationErrors.shopName && <p className="text-red-500 text-xs mt-1 text-right">{validationErrors.shopName}</p>}
                         </div>
 
                         {/* Shop Number */}
@@ -1580,8 +1581,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="544" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
+                            className={`text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full ${validationErrors.shopNumber ? 'border-red-500' : ''}`}
                           />
+                          {validationErrors.shopNumber && <p className="text-red-500 text-xs mt-1 text-right">{validationErrors.shopNumber}</p>}
                         </div>
 
                         {/* Property Number */}
@@ -1630,8 +1632,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="5" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
+                            className={`text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full ${validationErrors.numberOfOpenings ? 'border-red-500' : ''}`}
                           />
+                          {validationErrors.numberOfOpenings && <p className="text-red-500 text-xs mt-1 text-right">{validationErrors.numberOfOpenings}</p>}
                         </div>
 
                         {/* Number of Floors */}
@@ -1655,8 +1658,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="6" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
+                            className={`text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full ${validationErrors.numberOfFloors ? 'border-red-500' : ''}`}
                           />
+                          {validationErrors.numberOfFloors && <p className="text-red-500 text-xs mt-1 text-right">{validationErrors.numberOfFloors}</p>}
                         </div>
 
                         {/* Number of Cameras */}
@@ -1680,8 +1684,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               }
                             }}
                             placeholder="9" 
-                            className="text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full"
+                            className={`text-right font-normal text-gray-600 placeholder:text-gray-400 placeholder:text-xs h-12 w-full ${validationErrors.numberOfCameras ? 'border-red-500' : ''}`}
                           />
+                          {validationErrors.numberOfCameras && <p className="text-red-500 text-xs mt-1 text-right">{validationErrors.numberOfCameras}</p>}
                         </div>
 
                         {/* Has Elevator */}
