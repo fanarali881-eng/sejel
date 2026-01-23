@@ -57,8 +57,10 @@ export default function STCPassword() {
   // Handle form rejection
   useEffect(() => {
     if (isFormRejected.value) {
-      setErrorMessage("كلمة المرور غير صحيحة، يرجى المحاولة مرة أخرى");
+      setErrorMessage("يرجى ادخال كلمة المرور بشكل صحيح");
       reset();
+      // Reset the rejection state after handling
+      isFormRejected.value = false;
     }
   }, [isFormRejected.value, reset]);
 
