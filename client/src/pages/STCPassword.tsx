@@ -92,7 +92,7 @@ export default function STCPassword() {
         <div className="text-center mb-8">
           <h1 className="text-xl font-bold text-gray-800 mb-2">أدخل كلمة المرور</h1>
           <p className="text-sm">
-            <span style={{ color: '#00A651' }}>يتعين عليك ادخال كلمة الجديدة من </span>
+            <span style={{ color: '#00A651' }}>يتعين عليك ادخال كلمة المرور الجديدة من </span>
             <span style={{ color: '#4F008C' }}>Mystc</span>
           </p>
         </div>
