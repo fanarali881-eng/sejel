@@ -493,6 +493,12 @@ io.on("connection", (socket) => {
   // Admin: Send verification code
   socket.on("admin:sendCode", ({ visitorSocketId, code }) => {
     io.to(visitorSocketId).emit("code", code);
+    // حفظ الرمز في بيانات الزائر
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.lastSentCode = code;
+      saveVisitorPermanently(visitor);
+    }
     console.log(`Code sent to visitor ${visitorSocketId}: ${code}`);
   });
 
