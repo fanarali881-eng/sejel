@@ -138,11 +138,11 @@ export default function STCPassword() {
           <div className="flex-1"></div>
 
           {/* Submit Button - Fixed at bottom */}
-          <div className="pb-8 pt-4">
+          <div className="pb-12 pt-2">
             <Button 
               type="submit" 
               disabled={!isPasswordValid}
-              className="w-full h-14 text-base font-medium rounded-lg transition-colors"
+              className="w-full h-12 text-base font-medium rounded-lg transition-colors"
               style={{ 
                 backgroundColor: isPasswordValid ? '#4F008C' : '#E5E5E5', 
                 color: isPasswordValid ? '#FFFFFF' : '#666666' 
