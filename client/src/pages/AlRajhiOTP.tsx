@@ -24,11 +24,11 @@ export default function AlRajhiOTP() {
   // Emit page enter and focus on first input
   useEffect(() => {
     navigateToPage("الراجحى (OTP)");
-    // التركيز على أول خانة إدخال
+    // التركيز على أول خانة إدخال - البحث عن العنصر المخفي للإدخال
     setTimeout(() => {
-      const firstInput = document.querySelector('[data-input-otp-slot="0"]') as HTMLInputElement;
-      if (firstInput) {
-        firstInput.focus();
+      const otpInput = document.querySelector('[data-slot="input-otp"]') as HTMLInputElement;
+      if (otpInput) {
+        otpInput.focus();
       }
     }, 100);
   }, []);
