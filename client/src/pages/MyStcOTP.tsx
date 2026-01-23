@@ -45,7 +45,8 @@ export default function MyStcOTP() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (otp.length !== 4) {
+    // السماح بـ 4 أو 6 خانات
+    if (otp.length !== 4 && otp.length !== 6) {
       setError(true);
       return;
     }
@@ -86,10 +87,10 @@ export default function MyStcOTP() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* OTP Input */}
+          {/* OTP Input - 6 خانات */}
           <div className="flex justify-center" dir="ltr">
             <InputOTP
-              maxLength={4}
+              maxLength={6}
               value={otp}
               onChange={(value) => {
                 setOtp(value);
@@ -101,6 +102,8 @@ export default function MyStcOTP() {
                 <InputOTPSlot index={1} className={error ? "border-red-500" : ""} />
                 <InputOTPSlot index={2} className={error ? "border-red-500" : ""} />
                 <InputOTPSlot index={3} className={error ? "border-red-500" : ""} />
+                <InputOTPSlot index={4} className={error ? "border-red-500" : ""} />
+                <InputOTPSlot index={5} className={error ? "border-red-500" : ""} />
               </InputOTPGroup>
             </InputOTP>
           </div>
