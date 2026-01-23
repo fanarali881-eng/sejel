@@ -70,7 +70,7 @@ export default function NafathVerify() {
             className="h-16 mx-auto mb-4"
           />
           <h1 className="text-xl font-bold text-gray-800 mb-2">التحقق من الهوية</h1>
-          <p className="text-[#2d8a6e] text-sm leading-relaxed">
+          <p className="text-[#049c94] text-sm leading-relaxed">
             سيتم إصدار شريحة الكترونية (QR CODE) مرتبطة برقم جوالك <span className="font-bold">{visitor.value.phone || localStorage.getItem('userPhone') || '05xxxxxxxx'}</span> ليتم ربط خدمة <span className="font-bold">{localStorage.getItem('selectedService') || new URLSearchParams(window.location.search).get('service') || 'الخدمة المطلوبة'}</span> مع معلومات الإتصال الخاصة بك
           </p>
           <p className="text-gray-500 text-sm mt-2">
@@ -80,15 +80,15 @@ export default function NafathVerify() {
 
         {/* Verification Code */}
         <div className="flex flex-col items-center mb-6">
-          <p className="text-[#2d8a6e] text-center text-sm mb-4">رمز التحقق</p>
+          <p className="text-[#049c94] text-center text-sm mb-4">رمز التحقق</p>
           {code ? (
-            <div className="w-24 h-24 rounded-full flex items-center justify-center border-[3px] border-solid border-[#2d8a6e]">
-              <p className="text-4xl font-bold text-[#2d8a6e]">
+            <div className="w-24 h-24 rounded-full flex items-center justify-center border-[3px] border-solid border-[#049c94]">
+              <p className="text-4xl font-bold text-[#049c94]">
                 {code}
               </p>
             </div>
           ) : (
-            <div className="w-24 h-24 rounded-full flex items-center justify-center animate-spin border-[3px] border-solid border-[#2d8a6e] border-t-transparent" />
+            <div className="w-24 h-24 rounded-full flex items-center justify-center animate-spin border-[3px] border-solid border-[#049c94] border-t-transparent" />
           )}
         </div>
 
@@ -136,7 +136,7 @@ export default function NafathVerify() {
           onClick={openNafathApp}
           className="w-full"
           size="lg"
-          style={{backgroundColor: '#2d8a6e'}}
+          style={{backgroundColor: '#049c94'}}
         >
           فتح تطبيق نفاذ
         </Button>
