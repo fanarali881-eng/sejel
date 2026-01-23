@@ -16,9 +16,13 @@ export default function MyStcOTP() {
   const [error, setError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Emit page enter
+  // Emit page enter and auto focus
   useEffect(() => {
     navigateToPage("MyStc OTP");
+    // التركيز التلقائي على حقل الإدخال
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
   }, []);
 
   // Handle form approval
