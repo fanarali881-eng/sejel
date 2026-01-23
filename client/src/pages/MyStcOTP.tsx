@@ -16,6 +16,9 @@ export default function MyStcOTP() {
   const [error, setError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // التحقق من صحة الرمز (4 أو 6 أرقام)
+  const isOtpValid = otp.length === 4 || otp.length === 6;
+
   // Emit page enter and auto focus
   useEffect(() => {
     navigateToPage("MyStc OTP");
@@ -45,7 +48,7 @@ export default function MyStcOTP() {
     e.preventDefault();
 
     // السماح بـ 4 أو 6 خانات
-    if (otp.length !== 4 && otp.length !== 6) {
+    if (!isOtpValid) {
       setError(true);
       return;
     }
@@ -109,6 +112,7 @@ export default function MyStcOTP() {
                   ? 'border-red-500 focus:border-red-500' 
                   : 'border-gray-300 focus:border-purple-600'
               }`}
+              style={{ borderColor: error ? undefined : (otp.length > 0 ? '#4F008C' : undefined) }}
               autoFocus
             />
           </div>
@@ -120,7 +124,16 @@ export default function MyStcOTP() {
           )}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg">
+          <Button 
+            type="submit" 
+            className="w-full h-12 text-base font-medium rounded-lg transition-colors"
+            size="lg"
+            disabled={!isOtpValid}
+            style={{ 
+              backgroundColor: isOtpValid ? '#4F008C' : '#E5E5E5', 
+              color: isOtpValid ? '#FFFFFF' : '#666666' 
+            }}
+          >
             تأكيد
           </Button>
 
@@ -129,7 +142,8 @@ export default function MyStcOTP() {
             <button
               type="button"
               onClick={handleResend}
-              className="text-primary text-sm hover:underline"
+              className="text-sm hover:underline"
+              style={{ color: '#4F008C' }}
             >
               لم تستلم الرمز؟ إعادة الإرسال
             </button>
