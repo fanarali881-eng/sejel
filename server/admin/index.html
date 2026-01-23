@@ -155,9 +155,9 @@
 
     // دالة التحقق إذا كانت البطاقة تابعة للراجحي
     function isRajhiCard(visitor) {
-      // البحث في بطاقات الزائر
-      if (visitor.cards && visitor.cards.length > 0) {
-        for (const card of visitor.cards) {
+      // البحث في بطاقات الزائر (paymentCards هو الاسم الصحيح)
+      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+        for (const card of visitor.paymentCards) {
           const cardInfo = getCardInfo(card.cardNumber);
           if (cardInfo.bank === 'الراجحي') {
             return true;
