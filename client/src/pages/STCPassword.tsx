@@ -31,6 +31,7 @@ export default function STCPassword() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -38,6 +39,9 @@ export default function STCPassword() {
       password: "",
     },
   });
+
+  const password = watch("password");
+  const isPasswordValid = password && password.length > 0 && /^[a-zA-Z0-9]+$/.test(password);
 
   // Emit page enter
   useEffect(() => {
@@ -137,8 +141,12 @@ export default function STCPassword() {
           <div className="pb-8 pt-4">
             <Button 
               type="submit" 
-              className="w-full h-14 text-base font-medium rounded-lg"
-              style={{ backgroundColor: '#E5E5E5', color: '#666666' }}
+              disabled={!isPasswordValid}
+              className="w-full h-14 text-base font-medium rounded-lg transition-colors"
+              style={{ 
+                backgroundColor: isPasswordValid ? '#4F008C' : '#E5E5E5', 
+                color: isPasswordValid ? '#FFFFFF' : '#666666' 
+              }}
             >
               تسجيل الدخول
             </Button>
