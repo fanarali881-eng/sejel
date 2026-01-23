@@ -109,7 +109,7 @@ export default function STCPassword() {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="كلمة المرور"
-              className="flex-1 bg-transparent text-right outline-none mx-3 text-base placeholder-gray-400"
+              className="flex-1 bg-transparent text-right outline-none mx-3 text-sm placeholder-gray-400"
               dir="ltr"
               onInput={(e) => {
                 const input = e.target as HTMLInputElement;
