@@ -138,11 +138,8 @@ export default function STCPassword() {
             )}
           </div>
 
-          {/* Spacer */}
-          <div className="flex-1"></div>
-
-          {/* Submit Button - Fixed at bottom */}
-          <div className="pb-12 pt-2">
+          {/* Submit Button */}
+          <div className="mt-8">
             <Button 
               type="submit" 
               disabled={!isPasswordValid}
