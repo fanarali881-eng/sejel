@@ -105,7 +105,7 @@ export default function MyStcOTP() {
             className="h-12 mx-auto mb-4"
           />
           <h1 className="text-xl font-bold text-gray-800 mb-2">رمز التحقق MySTC</h1>
-          <p className="text-gray-500 text-sm">
+          <p className="text-sm" style={{ color: '#00A651' }}>
             أدخل رمز التحقق المرسل من تطبيق MySTC
           </p>
         </div>
