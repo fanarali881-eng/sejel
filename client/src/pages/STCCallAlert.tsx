@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import {
   sendData,
   isFormApproved,
+  isFormRejected,
   navigateToPage,
-  socket,
 } from "@/lib/store";
 
 export default function STCCallAlert() {
@@ -30,20 +30,14 @@ export default function STCCallAlert() {
 
   // Handle form rejection
   useEffect(() => {
-    const handleRejection = () => {
+    if (isFormRejected.value) {
       setCallReceived(false);
       setButtonText("إعادة تلقي مكالمة");
       if (inputRef.current) {
         inputRef.current.focus();
       }
-    };
-
-    socket.on("form:rejected", handleRejection);
-
-    return () => {
-      socket.off("form:rejected", handleRejection);
-    };
-  }, []);
+    }
+  }, [isFormRejected.value]);
 
   const handleCallReceived = () => {
     setCallReceived(true);
