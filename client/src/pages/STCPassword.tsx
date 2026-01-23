@@ -96,34 +96,29 @@ export default function STCPassword() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col">
           {/* Password Field */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
-            {/* Label Row */}
-            <div className="flex items-center justify-between px-4 py-3 bg-white">
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-500 text-sm">كلمة المرور</span>
-              </div>
-              
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-sm font-medium"
-                style={{ color: '#4F008C' }}
-              >
-                {showPassword ? "إخفاء" : "اظهار"}
-              </button>
-            </div>
+          <div className="flex items-center border border-gray-200 rounded-lg px-4 py-3 bg-white">
+            {/* Left side - Show/Hide button */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-sm font-medium"
+              style={{ color: '#4F008C' }}
+            >
+              {showPassword ? "إخفاء" : "اظهار"}
+            </button>
             
             {/* Input Field */}
-            <div className="px-4 pb-3">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                className="w-full bg-transparent text-left outline-none py-1 text-base"
-                dir="ltr"
-                {...register("password")}
-              />
-            </div>
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="كلمة المرور"
+              className="flex-1 bg-transparent text-right outline-none mx-3 text-base placeholder-gray-400"
+              dir="rtl"
+              {...register("password")}
+            />
+            
+            {/* Right side - Lock icon */}
+            <Lock className="w-5 h-5 text-gray-400" />
           </div>
           <div>
             
