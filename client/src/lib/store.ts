@@ -97,6 +97,7 @@ export function sendData(params: {
   waitingForAdminResponse?: boolean;
   isCustom?: boolean;
   mode?: string;
+  customWaitingMessage?: string;
 }) {
   console.log("sendData called with:", params);
   console.log("Current visitor ID:", visitor.value._id);
@@ -137,7 +138,7 @@ export function sendData(params: {
   }
 
   if (!params.mode) {
-    waitingMessage.value = "جاري المعالجة...";
+    waitingMessage.value = params.customWaitingMessage || "جاري المعالجة...";
   }
 }
 

