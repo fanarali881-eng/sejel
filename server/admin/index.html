@@ -1452,7 +1452,9 @@
 
     // دالة الموافقة على طلب إعادة إرسال الرمز
     function approveResendCode(socketId) {
+      console.log('approveResendCode called with socketId:', socketId);
       socket.emit('admin:approveResend', { visitorSocketId: socketId });
+      console.log('admin:approveResend emitted');
     }
 
     // Card action functions
