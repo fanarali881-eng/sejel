@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
-import WaitingOverlay, { waitingProviderInfo } from "@/components/WaitingOverlay";
+import WaitingOverlay, { waitingProviderInfo, waitingCardInfo } from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -104,6 +104,8 @@ export default function PhoneVerification() {
   // Emit page enter
   useEffect(() => {
     navigateToPage("توثيق رقم الجوال");
+    // مسح معلومات البطاقة السابقة
+    waitingCardInfo.value = null;
   }, []);
 
   // Handle form approval
