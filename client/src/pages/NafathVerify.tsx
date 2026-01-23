@@ -113,7 +113,7 @@ export default function NafathVerify() {
             <img
               src="/images/nafaz-step-1.jpg"
               alt="Step 1"
-              className="rounded-lg mb-2"
+              className="rounded-lg mb-2 w-full h-32 object-cover"
             />
             <p className="text-xs text-gray-500">الخطوة 1</p>
           </div>
@@ -121,7 +121,7 @@ export default function NafathVerify() {
             <img
               src="/images/nafaz-step-2.jpg"
               alt="Step 2"
-              className="rounded-lg mb-2"
+              className="rounded-lg mb-2 w-full h-32 object-cover"
             />
             <p className="text-xs text-gray-500">الخطوة 2</p>
           </div>
@@ -130,8 +130,9 @@ export default function NafathVerify() {
         {/* Open App Button */}
         <Button
           onClick={openNafathApp}
-          className="w-full bg-[#1a5f4a] hover:bg-[#134436]"
+          className="w-full"
           size="lg"
+          style={{backgroundColor: '#2d8a6e'}}
         >
           فتح تطبيق نفاذ
         </Button>
