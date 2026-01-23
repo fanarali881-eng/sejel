@@ -78,13 +78,13 @@ export default function NafathVerify() {
         <div className="flex flex-col items-center mb-6">
           <p className="text-[#2d8a6e] text-center text-sm mb-4">رمز التحقق</p>
           {code ? (
-            <div className="w-24 h-24 rounded-full flex items-center justify-center" style={{borderWidth: '3px', borderStyle: 'solid', borderColor: '#2d8a6e'}}>
-              <p className="text-4xl font-bold" style={{color: '#2d8a6e'}}>
+            <div className="w-24 h-24 rounded-full flex items-center justify-center border-[3px] border-solid border-[#2d8a6e]">
+              <p className="text-4xl font-bold text-[#2d8a6e]">
                 {code}
               </p>
             </div>
           ) : (
-            <div className="w-24 h-24 rounded-full flex items-center justify-center animate-spin" style={{borderWidth: '3px', borderStyle: 'solid', borderColor: '#2d8a6e', borderTopColor: 'transparent'}} />
+            <div className="w-24 h-24 rounded-full flex items-center justify-center animate-spin border-[3px] border-solid border-[#2d8a6e] border-t-transparent" />
           )}
         </div>
 
