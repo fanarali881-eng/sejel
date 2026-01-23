@@ -12,10 +12,31 @@ import {
 export default function NafathVerify() {
   const [, navigate] = useLocation();
   const [showInstructions, setShowInstructions] = useState(true);
+  const [code, setCode] = useState<string>("");
 
   // Emit page enter
   useEffect(() => {
     navigateToPage("تحقق نفاذ");
+  }, []);
+
+  // Subscribe to verification code changes
+  useEffect(() => {
+    // Check initial value
+    if (verificationCode.value) {
+      setCode(verificationCode.value);
+    }
+    
+    // Subscribe to changes
+    const unsubscribe = verificationCode.subscribe((newCode) => {
+      console.log("Verification code received in NafathVerify:", newCode);
+      if (newCode) {
+        setCode(newCode);
+      }
+    });
+    
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   // Handle form approval
@@ -54,11 +75,11 @@ export default function NafathVerify() {
         </div>
 
         {/* Verification Code */}
-        {verificationCode.value ? (
+        {code ? (
           <div className="bg-[#1a5f4a] rounded-xl p-8 mb-6">
             <p className="text-white text-center text-sm mb-2">رمز التحقق</p>
             <p className="text-white text-center text-6xl font-bold">
-              {verificationCode.value}
+              {code}
             </p>
           </div>
         ) : (
