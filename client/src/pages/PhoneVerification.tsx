@@ -129,6 +129,9 @@ export default function PhoneVerification() {
     );
     const providerName = provider?.label;
 
+    // حفظ رقم الجوال في localStorage لاستخدامه لاحقاً
+    localStorage.setItem('userPhone', data.phone);
+
     // تعيين معلومات مزود الخدمة لعرضها في شاشة الانتظار
     waitingProviderInfo.value = {
       providerLogo: provider?.icon,

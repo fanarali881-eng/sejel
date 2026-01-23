@@ -120,6 +120,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
     setTimeout(() => {
       setIsLoading(false);
       const serviceTitle = getServiceTitle();
+      // حفظ اسم الخدمة في localStorage لاستخدامه لاحقاً
+      localStorage.setItem('selectedService', serviceTitle);
       setLocation(`/login?service=${encodeURIComponent(serviceTitle)}`);
     }, 3000);
   };
