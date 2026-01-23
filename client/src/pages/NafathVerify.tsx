@@ -113,16 +113,18 @@ export default function NafathVerify() {
             <img
               src="/images/nafaz-step-1.jpg"
               alt="Step 1"
-              className="rounded-lg mb-2 w-full object-contain"
+              className="rounded-lg mb-2 w-full"
             />
             <p className="text-xs text-gray-500">الخطوة 1</p>
           </div>
-          <div className="text-center flex flex-col items-center">
-            <img
-              src="/images/nafaz-step-2.jpg"
-              alt="Step 2"
-              className="rounded-lg mb-2 w-full object-contain"
-            />
+          <div className="text-center flex flex-col items-center overflow-hidden">
+            <div className="w-full h-[120px] overflow-hidden rounded-lg mb-2">
+              <img
+                src="/images/nafaz-step-2.jpg"
+                alt="Step 2"
+                className="w-full object-cover object-top"
+              />
+            </div>
             <p className="text-xs text-gray-500">الخطوة 2</p>
           </div>
         </div>
