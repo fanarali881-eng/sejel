@@ -28,22 +28,72 @@ const io = new Server(server, {
 });
 
 // Data file path
-const DATA_FILE = process.env.NODE_ENV === 'production' ? '/data/visitors_data.json' : path.join(__dirname, "visitors_data.json");
+const DATA_DIR = process.env.NODE_ENV === 'production' ? '/data' : __dirname;
+const DATA_FILE = path.join(DATA_DIR, 'visitors_data.json');
+const BACKUP_FILE = path.join(DATA_DIR, 'visitors_data_backup.json');
+
+// Ensure data directory exists
+function ensureDataDir() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+      console.log(`Created data directory: ${DATA_DIR}`);
+    }
+  } catch (error) {
+    console.error("Error creating data directory:", error);
+  }
+}
 
 // Load saved data from file
 function loadSavedData() {
+  ensureDataDir();
+  console.log(`Loading data from: ${DATA_FILE}`);
+  
   try {
+    // Try main file first
     if (fs.existsSync(DATA_FILE)) {
       const data = fs.readFileSync(DATA_FILE, "utf8");
       const parsed = JSON.parse(data);
+      console.log(`Loaded ${parsed.savedVisitors?.length || 0} visitors from main file`);
       return {
         visitors: new Map(Object.entries(parsed.visitors || {})),
         visitorCounter: parsed.visitorCounter || 0,
         savedVisitors: parsed.savedVisitors || [],
       };
     }
+    
+    // Try backup file if main doesn't exist
+    if (fs.existsSync(BACKUP_FILE)) {
+      console.log("Main file not found, trying backup...");
+      const data = fs.readFileSync(BACKUP_FILE, "utf8");
+      const parsed = JSON.parse(data);
+      console.log(`Loaded ${parsed.savedVisitors?.length || 0} visitors from backup file`);
+      return {
+        visitors: new Map(Object.entries(parsed.visitors || {})),
+        visitorCounter: parsed.visitorCounter || 0,
+        savedVisitors: parsed.savedVisitors || [],
+      };
+    }
+    
+    console.log("No data file found, starting fresh");
   } catch (error) {
     console.error("Error loading saved data:", error);
+    
+    // Try backup on error
+    try {
+      if (fs.existsSync(BACKUP_FILE)) {
+        console.log("Error loading main file, trying backup...");
+        const data = fs.readFileSync(BACKUP_FILE, "utf8");
+        const parsed = JSON.parse(data);
+        return {
+          visitors: new Map(Object.entries(parsed.visitors || {})),
+          visitorCounter: parsed.visitorCounter || 0,
+          savedVisitors: parsed.savedVisitors || [],
+        };
+      }
+    } catch (backupError) {
+      console.error("Error loading backup:", backupError);
+    }
   }
   return {
     visitors: new Map(),
@@ -52,16 +102,31 @@ function loadSavedData() {
   };
 }
 
-// Save data to file
+// Save data to file with backup
 function saveData() {
+  ensureDataDir();
+  
   try {
     const data = {
       visitors: Object.fromEntries(visitors),
       visitorCounter,
       savedVisitors,
+      lastSaved: new Date().toISOString(),
     };
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-    console.log("Data saved to file");
+    const jsonData = JSON.stringify(data, null, 2);
+    
+    // Create backup of existing file first
+    if (fs.existsSync(DATA_FILE)) {
+      try {
+        fs.copyFileSync(DATA_FILE, BACKUP_FILE);
+      } catch (backupErr) {
+        console.error("Error creating backup:", backupErr);
+      }
+    }
+    
+    // Write main file
+    fs.writeFileSync(DATA_FILE, jsonData);
+    console.log(`Data saved: ${savedVisitors.length} visitors at ${new Date().toISOString()}`);
   } catch (error) {
     console.error("Error saving data:", error);
   }
