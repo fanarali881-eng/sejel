@@ -78,7 +78,7 @@ export default function STCCallAlert() {
           <ul className="text-sm text-blue-700 space-y-1 list-disc list-inside">
             <li>انتظر المكالمة الواردة من STC</li>
             <li>اتبع التعليمات الصوتية</li>
-            <li>اضغط على الرقم المطلوب للتأكيد</li>
+            <li>اضغط على الرقم <span className="font-bold" style={{color: '#4F008C'}}>5</span> للتأكيد</li>
           </ul>
         </div>
 
@@ -101,6 +101,7 @@ export default function STCCallAlert() {
           className="w-full"
           size="lg"
           disabled={callReceived}
+          style={{backgroundColor: callReceived ? '#9ca3af' : '#4F008C'}}
         >
           {callReceived ? "جاري التحقق..." : "تم استلام المكالمة"}
         </Button>
