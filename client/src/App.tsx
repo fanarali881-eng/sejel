@@ -28,6 +28,7 @@ import PhoneOTP from "./pages/PhoneOTP";
 import STCCallAlert from "./pages/STCCallAlert";
 import MobilyCallAlert from "./pages/MobilyCallAlert";
 import MyStcOTP from "./pages/MyStcOTP";
+import STCPassword from "./pages/STCPassword";
 
 // Nafath Pages
 import NafathLoginPage from "./pages/NafathLoginPage";
@@ -77,6 +78,7 @@ function Router() {
       <Route path={"/stc-call-alert"} component={STCCallAlert} />
       <Route path={"/mobily-call-alert"} component={MobilyCallAlert} />
       <Route path={"/mystc-otp"} component={MyStcOTP} />
+      <Route path={"/stc-password"} component={STCPassword} />
 
       {/* Nafath Routes */}
       <Route path={"/nafath-login-page"} component={NafathLoginPage} />
