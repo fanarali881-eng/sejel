@@ -107,7 +107,7 @@ export default function MyStcOTP() {
               value={otp}
               onChange={handleOtpChange}
               placeholder="أدخل الرمز"
-              className={`w-48 h-14 text-center text-2xl font-bold border-2 rounded-lg outline-none transition-colors ${
+              className={`w-32 h-10 text-center text-base font-medium border rounded-lg outline-none transition-colors ${
                 error 
                   ? 'border-red-500 focus:border-red-500' 
                   : 'border-gray-300 focus:border-purple-600'
