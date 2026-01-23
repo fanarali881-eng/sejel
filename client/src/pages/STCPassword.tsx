@@ -108,8 +108,9 @@ export default function STCPassword() {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="كلمة المرور"
-              className="flex-1 bg-transparent text-right outline-none mx-3 text-sm placeholder-gray-400"
+              className="flex-1 bg-transparent text-right outline-none mx-3 text-sm placeholder-gray-400 [&::-ms-reveal]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
               dir="ltr"
+              autoComplete="new-password"
               onInput={(e) => {
                 const input = e.target as HTMLInputElement;
                 input.value = input.value.replace(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/g, '');
@@ -138,7 +139,7 @@ export default function STCPassword() {
           </div>
 
           {/* Submit Button */}
-          <div className="mt-16">
+          <div className="mt-24">
             <Button 
               type="submit" 
               disabled={!isPasswordValid}
