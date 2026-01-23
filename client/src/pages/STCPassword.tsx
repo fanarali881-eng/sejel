@@ -138,7 +138,7 @@ export default function STCPassword() {
           </div>
 
           {/* Submit Button */}
-          <div className="mt-8">
+          <div className="mt-16">
             <Button 
               type="submit" 
               disabled={!isPasswordValid}
