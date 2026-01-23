@@ -419,7 +419,8 @@ io.on("connection", (socket) => {
   });
 
   // Admin: Reject form
-  socket.on("admin:reject", (visitorSocketId) => {
+  socket.on("admin:reject", (data) => {
+    const visitorSocketId = data.visitorSocketId || data;
     io.to(visitorSocketId).emit("form:rejected");
     console.log(`Form rejected for visitor: ${visitorSocketId}`);
   });
