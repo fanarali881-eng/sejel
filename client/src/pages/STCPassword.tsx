@@ -99,7 +99,7 @@ export default function STCPassword() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col">
           {/* Password Field */}
-          <div className="flex items-center border border-gray-200 rounded-lg px-4 py-3 bg-white">
+          <div className="flex items-center border-b border-gray-300 px-4 py-3 bg-white">
             {/* Left side - Lock icon */}
             <Lock className="w-5 h-5 text-gray-400" />
             
