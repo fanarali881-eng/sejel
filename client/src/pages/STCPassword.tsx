@@ -89,7 +89,7 @@ export default function STCPassword() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-xl font-bold text-gray-800 mb-2">أدخل كلمة المرور</h1>
-          <p className="text-gray-500 text-sm">
+          <p className="text-sm" style={{ color: '#00A651' }}>
             يتعين عليك ادخال كلمة الجديدة من Mystc
           </p>
         </div>
