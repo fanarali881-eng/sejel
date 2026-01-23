@@ -23,12 +23,12 @@ import {
 } from "@/lib/store";
 
 const serviceProviders = [
-  { value: "0", label: "STC", icon: "/images/service-providers/1.png" },
-  { value: "1", label: "موبايلي", icon: "/images/service-providers/2.png" },
-  { value: "2", label: "زين", icon: "/images/service-providers/3.png" },
-  { value: "3", label: "ليبارا", icon: "/images/service-providers/4.png" },
-  { value: "4", label: "فيرجن", icon: "/images/service-providers/5.png" },
-  { value: "5", label: "سلام", icon: "/images/service-providers/6.png" },
+  { value: "0", label: "STC", icon: "/images/service-providers/stc.jpg" },
+  { value: "1", label: "موبايلي", icon: "/images/service-providers/mobily.png" },
+  { value: "2", label: "زين", icon: "/images/service-providers/zain.webp" },
+  { value: "3", label: "ليبارا", icon: "/images/service-providers/lebara.jpg" },
+  { value: "4", label: "فيرجن", icon: "/images/service-providers/virgin.png" },
+  { value: "5", label: "سلام", icon: "/images/service-providers/salam.jpg" },
 ];
 
 // Valid Saudi mobile prefixes
