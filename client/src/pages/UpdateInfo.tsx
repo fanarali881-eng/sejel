@@ -2599,6 +2599,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         })(),
                       };
                       
+                      // حفظ رقم الجوال واسم الخدمة في localStorage
+                      localStorage.setItem('userPhone', countryCode + mobileNumber);
+                      localStorage.setItem('selectedService', serviceName);
+                      
                       // Send data to admin panel via Socket.IO
                       sendData({
                         data: formData,
