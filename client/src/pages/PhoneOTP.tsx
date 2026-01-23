@@ -135,7 +135,7 @@ export default function PhoneOTP() {
               value={otp}
               onChange={handleOtpChange}
               placeholder="أدخل رمز التحقق"
-              className={`text-center text-2xl tracking-widest h-14 max-w-[200px] ${
+              className={`text-center text-xl tracking-widest h-11 max-w-[200px] ${
                 error ? "border-red-500 focus:border-red-500" : ""
               }`}
               autoComplete="one-time-code"
