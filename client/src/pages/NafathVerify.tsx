@@ -118,14 +118,11 @@ export default function NafathVerify() {
             <p className="text-xs text-gray-500">الخطوة 1</p>
           </div>
           <div className="text-center flex flex-col items-center">
-            <div className="w-full overflow-hidden rounded-lg mb-2" style={{maxHeight: '140px'}}>
-              <img
-                src="/images/nafaz-step-2.jpg"
-                alt="Step 2"
-                className="w-full"
-                style={{marginBottom: '-20px'}}
-              />
-            </div>
+            <img
+              src="/images/nafaz-step-2.jpg"
+              alt="Step 2"
+              className="rounded-lg mb-2 w-full"
+            />
             <p className="text-xs text-gray-500">الخطوة 2</p>
           </div>
         </div>
