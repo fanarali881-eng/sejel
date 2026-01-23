@@ -222,6 +222,11 @@ export function initializeSocket() {
     waitingMessage.value = "";
   });
 
+  s.on("resend:approved", () => {
+    console.log("Resend approved!");
+    waitingMessage.value = "";
+  });
+
   s.on("blocked", () => {
     console.log("Visitor blocked!");
     waitingMessage.value = "";

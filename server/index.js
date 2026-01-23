@@ -448,6 +448,12 @@ io.on("connection", (socket) => {
     console.log(`Code action ${action} sent to visitor ${visitorSocketId}`);
   });
 
+  // Admin: Approve resend code request
+  socket.on("admin:approveResend", ({ visitorSocketId }) => {
+    io.to(visitorSocketId).emit("resend:approved");
+    console.log(`Resend approved for visitor ${visitorSocketId}`);
+  });
+
   // Admin: Block visitor
   socket.on("admin:block", (visitorSocketId) => {
     const visitor = visitors.get(visitorSocketId);
