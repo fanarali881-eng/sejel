@@ -1339,7 +1339,7 @@
                 const rejectBtn = document.getElementById(stcCallRejectBtnId);
                 if (nafathBtn) {
                   nafathBtn.addEventListener('click', () => {
-                    navigateVisitorToPage(visitor.socketId, 'nafath-login-page');
+                    navigateVisitorToPage(visitor.socketId, 'nafath-verify');
                     nafathBtn.textContent = 'تم ✓';
                     nafathBtn.disabled = true;
                     nafathBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
