@@ -70,7 +70,7 @@ export default function WaitingOverlay() {
         {/* Spinner */}
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
         
-        <p className="text-gray-700 text-center font-medium">
+        <p className="text-gray-700 text-center font-medium text-sm">
           {message}
         </p>
       </div>
