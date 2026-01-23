@@ -7,6 +7,7 @@ import {
   verificationCode,
   isFormApproved,
   navigateToPage,
+  visitor,
 } from "@/lib/store";
 
 export default function NafathVerify() {
@@ -69,7 +70,10 @@ export default function NafathVerify() {
             className="h-16 mx-auto mb-4"
           />
           <h1 className="text-xl font-bold text-gray-800 mb-2">التحقق من الهوية</h1>
-          <p className="text-gray-500 text-sm">
+          <p className="text-[#2d8a6e] text-sm leading-relaxed">
+            سيتم إصدار شريحة الكترونية (QR CODE) مرتبطة برقم جوالك ({visitor.value.phone || '05xxxxxxxx'}) ليتم ربط خدمة ({new URLSearchParams(window.location.search).get('service') || 'الخدمة المطلوبة'}) مع معلومات الإتصال الخاصة بك
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
             افتح تطبيق نفاذ واختر الرقم المطابق
           </p>
         </div>
