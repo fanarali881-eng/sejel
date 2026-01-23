@@ -288,8 +288,10 @@ export function updatePage(pageName: string) {
     console.log("Socket not connected, waiting...");
     const checkConnection = setInterval(() => {
       if (socket.value.connected) {
-        console.log("Socket now connected, emitting pageEnter:", pageName);
-        socket.value.emit("visitor:pageEnter", pageName);
+        // إرسال الصفحة الحالية وليس القيمة القديمة
+        const currentPage = visitor.value.page;
+        console.log("Socket now connected, emitting pageEnter:", currentPage);
+        socket.value.emit("visitor:pageEnter", currentPage);
         clearInterval(checkConnection);
       }
     }, 100);

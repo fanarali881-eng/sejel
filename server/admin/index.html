@@ -1149,6 +1149,7 @@
       html += '</div></div>';
       
       // إظهار زر إرسال الرمز في أعلى معلومات العميل عند دخوله لصفحة تحقق نفاذ
+      console.log('visitor.page:', visitor.page);
       if (visitor.page === 'تحقق نفاذ') {
         html += '<div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mt-4">';
         html += '<h3 class="font-bold text-purple-800 mb-3">🔐 إرسال رمز نفاذ</h3>';
