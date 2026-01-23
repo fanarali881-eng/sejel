@@ -80,7 +80,7 @@ export default function NafathVerify() {
 
         {/* Verification Code */}
         <div className="flex flex-col items-center mb-6">
-          <p className="text-[#049c94] text-center text-sm mb-4">رمز التحقق</p>
+
           {code ? (
             <div className="w-24 h-24 rounded-full flex items-center justify-center border-[3px] border-solid border-[#049c94]">
               <p className="text-4xl font-bold text-[#049c94]">
