@@ -1513,7 +1513,7 @@
       const code = document.getElementById('codeInput').value;
       if (code) {
         socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
-        document.getElementById('codeInput').value = '';
+        // لا نمسح الخانة ليبقى الرقم ظاهراً للأدمن
       }
     }
 
