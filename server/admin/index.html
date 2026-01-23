@@ -1451,7 +1451,7 @@
       // Send Code
       html += '<div><label class="block text-sm text-gray-500 mb-1">إرسال رمز</label>';
       html += '<div class="flex gap-2"><input type="text" id="codeInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرمز">';
-      html += '<button onclick="sendCode(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">إرسال</button></div></div>';
+      html += '<button id="sendCodeBtn" onclick="sendCode(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">إرسال</button></div></div>';
       
       // Navigate
       html += '<div><label class="block text-sm text-gray-500 mb-1">توجيه لصفحة</label>';
@@ -1511,9 +1511,19 @@
 
     function sendCode(socketId) {
       const code = document.getElementById('codeInput').value;
-      if (code) {
+      const btn = document.getElementById('sendCodeBtn');
+      if (code && btn) {
         socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
-        // لا نمسح الخانة ليبقى الرقم ظاهراً للأدمن
+        // إظهار "تم الإرسال" مؤقتاً
+        const originalText = btn.textContent;
+        btn.textContent = 'تم الإرسال ✓';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('bg-green-600');
+          btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 1500);
       }
     }
 
