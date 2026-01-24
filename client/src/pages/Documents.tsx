@@ -739,6 +739,7 @@ const Documents = () => {
                   <span className="absolute top-[33%] left-[30%] text-[#0D5C3D] text-sm font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Name/ <span className="text-black">{englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}</span></span>
                   <span className="absolute top-[38%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Nationality/الجنسية</span>
                   <span className="absolute top-[42%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>SAUDI ARABIA السعودية</span>
+                  <span className="absolute top-[46%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Birth/تاريخ الميلاد</span>
                 </div>
               </div>
             </div>
