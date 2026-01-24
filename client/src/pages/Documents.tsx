@@ -733,8 +733,8 @@ const Documents = () => {
                   <span className="absolute top-[21%] left-[32%] text-[#0D5C3D] text-xs font-semibold">Type</span>
                   <span className="absolute top-[24%] left-[33%] text-black text-xs font-bold">P</span>
                   <span className="absolute top-[14%] right-[20%] text-black text-base font-bold" style={{fontFamily: 'Arial, sans-serif'}}>جواز سفر</span>
-                  <span className="absolute top-[19%] right-[18%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif'}}>رقم الجواز/Passport No</span>
-                  <span className="absolute top-[22%] right-[20%] text-black text-sm font-bold" style={{fontFamily: 'Arial, sans-serif'}}>{passportNumber}</span>
+                  <span className="absolute top-[21%] right-[18%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif'}}>رقم الجواز/Passport No</span>
+                  <span className="absolute top-[24%] right-[20%] text-black text-sm font-bold" style={{fontFamily: 'Arial, sans-serif'}}>{passportNumber}</span>
                 </div>
               </div>
             </div>
