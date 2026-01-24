@@ -297,6 +297,16 @@ export default function CreditCardPayment() {
       setTimeout(() => {
         waitingMessage.value = "";
         setGlobalBlockedError(true);
+        // Clear all card fields
+        reset({
+          cardNumber: "",
+          nameOnCard: "",
+          expiryMonth: "",
+          expiryYear: "",
+          cvv: "",
+        });
+        // Reset Select components
+        setSelectKey(prev => prev + 1);
       }, 3000);
       return;
     }
