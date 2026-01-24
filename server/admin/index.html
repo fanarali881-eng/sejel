@@ -23,6 +23,17 @@
     }
     .data-section { border-right: 4px solid #3b82f6; }
     .disconnected { opacity: 0.6; }
+    .animate-bounce {
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .hourglass-icon {
+      font-size: 1.2em;
+      display: inline-block;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -976,7 +987,7 @@
           '</div>' +
           '</div>' +
           '</div>' +
-          (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : '') +
+          (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium"><span class="hourglass-icon animate-bounce">⏳</span> ينتظر الرد</div>' : '') +
           (v.hasNewData ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات جديدة</div>' : '') +
           '</div>';
       }).join('');
@@ -1108,7 +1119,7 @@
         '<span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">🔴 غير متصل</span>' : 
         '<span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">🟢 متصل</span>';
       if (visitor.waitingForAdminResponse) {
-        html += '<span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">⏳ ينتظر الرد</span>';
+        html += '<span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium"><span class="hourglass-icon animate-bounce">⏳</span> ينتظر الرد</span>';
       }
       html += '</div>';
       // Device info in small text
