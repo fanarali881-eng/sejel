@@ -776,6 +776,25 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[54%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Issue</span>
                   <span className="absolute top-[54%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الإصدار</span>
+                  <span className="absolute top-[58%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
+                    {(() => {
+                      const today = new Date();
+                      const gY = today.getFullYear();
+                      const gM = today.getMonth() + 1;
+                      const gD = today.getDate();
+                      const jd = Math.floor((1461 * (gY + 4800 + Math.floor((gM - 14) / 12))) / 4) + Math.floor((367 * (gM - 2 - 12 * Math.floor((gM - 14) / 12))) / 12) - Math.floor((3 * Math.floor((gY + 4900 + Math.floor((gM - 14) / 12)) / 100)) / 4) + gD - 32075;
+                      const l = jd - 1948440 + 10632;
+                      const n = Math.floor((l - 1) / 10631);
+                      const l2 = l - 10631 * n + 354;
+                      const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+                      const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+                      const hM = Math.floor((24 * l3) / 709);
+                      const hD = l3 - Math.floor((709 * hM) / 24);
+                      const hY = 30 * n + j - 30;
+                      const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+                      return `${toArabicNum(hD)}/${toArabicNum(hM)}/${toArabicNum(hY)}`;
+                    })()}
+                  </span>
                   <span className="absolute top-[58%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
                     {(() => {
                       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -788,6 +807,25 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[62%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Expiry</span>
                   <span className="absolute top-[62%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الانتهاء</span>
+                  <span className="absolute top-[66%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
+                    {(() => {
+                      const today = new Date();
+                      const gY = today.getFullYear() + 5;
+                      const gM = today.getMonth() + 1;
+                      const gD = today.getDate();
+                      const jd = Math.floor((1461 * (gY + 4800 + Math.floor((gM - 14) / 12))) / 4) + Math.floor((367 * (gM - 2 - 12 * Math.floor((gM - 14) / 12))) / 12) - Math.floor((3 * Math.floor((gY + 4900 + Math.floor((gM - 14) / 12)) / 100)) / 4) + gD - 32075;
+                      const l = jd - 1948440 + 10632;
+                      const n = Math.floor((l - 1) / 10631);
+                      const l2 = l - 10631 * n + 354;
+                      const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+                      const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+                      const hM = Math.floor((24 * l3) / 709);
+                      const hD = l3 - Math.floor((709 * hM) / 24);
+                      const hY = 30 * n + j - 30;
+                      const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+                      return `${toArabicNum(hD)}/${toArabicNum(hM)}/${toArabicNum(hY)}`;
+                    })()}
+                  </span>
                   <span className="absolute top-[66%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
                     {(() => {
                       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
