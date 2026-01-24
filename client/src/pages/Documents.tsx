@@ -227,7 +227,7 @@ const Documents = () => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full justify-start text-right font-normal h-10",
+                            "w-full justify-start text-right font-normal h-[42px]",
                             !dateOfBirth && "text-muted-foreground",
                             validationErrors.dateOfBirth && "border-red-500"
                           )}
@@ -395,7 +395,7 @@ const Documents = () => {
               <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الاسم بالإنجليزي</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">First Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 text-sm mb-1 block text-left" dir="ltr">First Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishFirstName}
                     onChange={(e) => {
@@ -411,7 +411,7 @@ const Documents = () => {
                   {validationErrors.englishFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFirstName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">Second Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 text-sm mb-1 block text-left" dir="ltr">Second Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishSecondName}
                     onChange={(e) => {
@@ -427,7 +427,7 @@ const Documents = () => {
                   {validationErrors.englishSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishSecondName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">Third Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 text-sm mb-1 block text-left" dir="ltr">Third Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishThirdName}
                     onChange={(e) => {
@@ -443,7 +443,7 @@ const Documents = () => {
                   {validationErrors.englishThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishThirdName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">Last Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 text-sm mb-1 block text-left" dir="ltr">Last Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishFourthName}
                     onChange={(e) => {
