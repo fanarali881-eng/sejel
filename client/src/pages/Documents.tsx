@@ -711,129 +711,135 @@ const Documents = () => {
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
               <div className="flex justify-center">
-                {/* Saudi Passport Design with Real Empty Background */}
-                <div className="relative w-[750px] h-[500px] rounded-lg shadow-xl overflow-hidden border border-gray-300" style={{fontFamily: 'Arial, sans-serif'}}>
-                  {/* Background Image - Completely empty real passport background */}
+                {/* Saudi Passport Design with Empty Background */}
+                <div className="relative w-[850px] h-[550px] rounded-lg shadow-xl overflow-hidden" style={{fontFamily: 'Arial, sans-serif'}}>
+                  {/* Background Image - Completely empty */}
                   <img 
-                    src="/images/passport-bg-real.png" 
+                    src="/images/passport-empty-bg.png" 
                     alt="خلفية الجواز" 
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-fill"
                   />
                   
-                  {/* Green Header Bar */}
-                  <div className="absolute top-0 left-0 right-0 h-[60px] bg-[#0d5c3d] flex items-center justify-between px-4">
-                    <div className="flex items-center gap-2">
-                      <img src="/images/saudi-emblem.png" alt="" className="h-10 w-10" />
-                      <div className="text-white text-sm font-bold">
+                  {/* Header Section */}
+                  <div className="absolute top-[30px] left-[160px] right-[30px] flex justify-between items-start">
+                    {/* Left - English */}
+                    <div className="flex items-center gap-3">
+                      <img src="/images/saudi-flag.png" alt="" className="h-8 w-12 object-cover border border-gray-300" />
+                      <div className="text-[#0d5c3d] text-[14px] font-bold">
                         <div>KINGDOM OF SAUDI ARABIA</div>
                         <div>SAUDI PASSPORT</div>
                       </div>
                     </div>
-                    <div className="text-center text-white text-xs">
-                      <div>Type</div>
-                      <div className="font-bold">P</div>
-                    </div>
-                    <div className="text-center text-white text-xs">
-                      <div>Country Code</div>
-                      <div className="font-bold">SAU</div>
-                    </div>
-                    <div className="text-center text-white text-xs">
-                      <div>Passport No/رقم الجواز</div>
-                      <div className="font-bold">{nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-white text-sm font-bold text-right" style={{fontFamily: 'Tahoma'}}>
-                        <div>المملكة العربية السعودية</div>
-                        <div>جواز سفر</div>
+                    
+                    {/* Center - Type & Country Code */}
+                    <div className="flex gap-8">
+                      <div className="text-center">
+                        <div className="text-[10px] text-gray-500">Type</div>
+                        <div className="text-[14px] font-bold text-black">P</div>
                       </div>
-                      <img src="/images/saudi-emblem.png" alt="" className="h-10 w-10" />
-                    </div>
-                  </div>
-                  
-                  {/* Main Content Area */}
-                  <div className="absolute top-[65px] left-0 right-0 bottom-0 p-4">
-                    {/* Content Grid */}
-                    <div className="flex h-full">
-                      {/* Left Side - Main Photo */}
-                      <div className="w-[200px] flex flex-col items-center pt-2">
-                        <div className="w-[160px] h-[200px] border border-gray-400 bg-gray-100 overflow-hidden">
-                          {photoPreview ? (
-                            <img src={photoPreview} alt="الصورة الشخصية" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">الصورة</div>
-                          )}
-                        </div>
+                      <div className="text-center">
+                        <div className="text-[10px] text-gray-500">Country Code</div>
+                        <div className="text-[14px] font-bold text-black">SAU</div>
                       </div>
-                      
-                      {/* Right Side - Information */}
-                      <div className="flex-1 pr-4">
-                        {/* Name Row */}
-                        <div className="flex justify-between items-center py-2 border-b border-gray-300">
-                          <div className="text-[11px] text-gray-600">Name/الاسم</div>
-                          <div className="flex gap-4">
-                            <span className="text-[12px] font-bold">{englishFourthName ? englishFourthName.toUpperCase() : ''}{englishFourthName && englishFirstName ? ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() : ''}</span>
-                            <span className="text-[12px] font-bold" style={{fontFamily: 'Tahoma'}}>{arabicFirstName || ''} {arabicSecondName || ''} {arabicThirdName || ''} {arabicFourthName || ''}</span>
-                          </div>
-                        </div>
-                        
-                        {/* Nationality Row */}
-                        <div className="flex justify-between items-center py-2 border-b border-gray-300">
-                          <div className="text-[11px] text-gray-600">Nationality/الجنسية</div>
-                          <div className="flex gap-4">
-                            <span className="text-[12px] font-bold">SAUDI ARABIA</span>
-                            <span className="text-[12px] font-bold" style={{fontFamily: 'Tahoma'}}>السعودية</span>
-                          </div>
-                        </div>
-                        
-                        {/* Sex & Date of Birth Row */}
-                        <div className="flex justify-between items-center py-2 border-b border-gray-300">
-                          <div className="flex-1">
-                            <div className="text-[11px] text-gray-600">Sex/الجنس</div>
-                            <div className="text-[12px] font-bold">{gender === 'ذكر' ? 'M ذكر' : gender === 'أنثى' ? 'F أنثى' : ''}</div>
-                          </div>
-                          <div className="flex-1 text-right">
-                            <div className="text-[11px] text-gray-600">Date of Birth/تاريخ الميلاد</div>
-                            <div className="text-[12px] font-bold">{dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}) : ''}</div>
-                          </div>
-                        </div>
-                        
-                        {/* Date of Issue & Expiry Row */}
-                        <div className="flex justify-between items-center py-2 border-b border-gray-300">
-                          <div className="flex-1">
-                            <div className="text-[11px] text-gray-600">Date of Issue/تاريخ الإصدار</div>
-                            <div className="text-[12px] font-bold">{new Date().toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}</div>
-                          </div>
-                          <div className="flex-1 text-right">
-                            <div className="text-[11px] text-gray-600">Date of Expiry/تاريخ الانتهاء</div>
-                            <div className="text-[12px] font-bold">{new Date(new Date().setFullYear(new Date().getFullYear() + 10)).toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}</div>
-                          </div>
-                        </div>
-                        
-                        {/* Issuing Authority Row */}
-                        <div className="flex justify-between items-center py-2 border-b border-gray-300">
-                          <div className="text-[11px] text-gray-600">Issuing Authority/مكان الإصدار</div>
-                          <div className="flex gap-4">
-                            <span className="text-[12px] font-bold">RIYADH</span>
-                            <span className="text-[12px] font-bold" style={{fontFamily: 'Tahoma'}}>الرياض</span>
-                          </div>
-                        </div>
-                        
-                        {/* Small Photo */}
-                        <div className="flex justify-end mt-2">
-                          <div className="w-[60px] h-[75px] border border-gray-400 bg-gray-100 overflow-hidden">
-                            {photoPreview ? (
-                              <img src={photoPreview} alt="" className="w-full h-full object-cover" />
-                            ) : null}
-                          </div>
-                        </div>
+                      <div className="text-center">
+                        <div className="text-[10px] text-gray-500">Passport No/رقم الجواز</div>
+                        <div className="text-[14px] font-bold text-black">{nationalId ? `A${nationalId.slice(0,7)}` : ''}</div>
                       </div>
                     </div>
                     
-                    {/* MRZ Section */}
-                    <div className="absolute bottom-4 left-4 right-4 bg-white/80 p-2 font-mono text-[10px] tracking-[1px]">
-                      <div>P&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : 'ALSAUDI'}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : 'MOHAMMED'}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
-                      <div>{nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}&lt;&lt;6SAU{dateOfBirth ? dateOfBirth.toISOString().slice(2,4) + dateOfBirth.toISOString().slice(5,7) + dateOfBirth.toISOString().slice(8,10) : '900101'}{gender === 'أنثى' ? 'F' : 'M'}3501010&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;00</div>
+                    {/* Right - Arabic */}
+                    <div className="flex items-center gap-3">
+                      <div className="text-[#0d5c3d] text-[14px] font-bold text-right" style={{fontFamily: 'Tahoma'}}>
+                        <div>المملكة العربية السعودية</div>
+                        <div>جواز سفر</div>
+                      </div>
+                      <img src="/images/saudi-emblem.png" alt="" className="h-12 w-12" />
                     </div>
+                  </div>
+                  
+                  {/* Main Content */}
+                  <div className="absolute top-[90px] left-[160px] right-[30px] bottom-[100px]">
+                    {/* Photo Area - Left */}
+                    <div className="absolute left-0 top-0 w-[180px] h-[220px] border-2 border-gray-300 bg-white overflow-hidden">
+                      {photoPreview ? (
+                        <img src={photoPreview} alt="الصورة الشخصية" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-300 text-sm">الصورة</div>
+                      )}
+                    </div>
+                    
+                    {/* Information Area - Right of Photo */}
+                    <div className="absolute left-[200px] top-0 right-0">
+                      {/* Name */}
+                      <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                        <span className="text-[11px] text-gray-500">Name/الاسم</span>
+                        <div className="flex gap-6">
+                          <span className="text-[13px] font-semibold">{englishFourthName ? englishFourthName.toUpperCase() : ''}{englishFourthName && englishFirstName ? ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() : ''}</span>
+                          <span className="text-[13px] font-semibold" style={{fontFamily: 'Tahoma'}}>{arabicFirstName} {arabicSecondName} {arabicThirdName} {arabicFourthName}</span>
+                        </div>
+                      </div>
+                      
+                      {/* Nationality */}
+                      <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                        <span className="text-[11px] text-gray-500">Nationality/الجنسية</span>
+                        <div className="flex gap-6">
+                          <span className="text-[13px] font-semibold">SAUDI ARABIA</span>
+                          <span className="text-[13px] font-semibold" style={{fontFamily: 'Tahoma'}}>السعودية</span>
+                        </div>
+                      </div>
+                      
+                      {/* Sex & Date of Birth */}
+                      <div className="flex py-2 border-b border-gray-200">
+                        <div className="flex-1">
+                          <div className="text-[11px] text-gray-500">Sex/الجنس</div>
+                          <div className="text-[13px] font-semibold">{gender === 'ذكر' ? 'M ذكر' : gender === 'أنثى' ? 'F أنثى' : ''}</div>
+                        </div>
+                        <div className="flex-1 text-right">
+                          <div className="text-[11px] text-gray-500">Date of Birth/تاريخ الميلاد</div>
+                          <div className="text-[13px] font-semibold">{dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}) : ''}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Date of Issue & Expiry */}
+                      <div className="flex py-2 border-b border-gray-200">
+                        <div className="flex-1">
+                          <div className="text-[11px] text-gray-500">Date of Issue/تاريخ الإصدار</div>
+                          <div className="text-[13px] font-semibold">{new Date().toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}</div>
+                        </div>
+                        <div className="flex-1 text-right">
+                          <div className="text-[11px] text-gray-500">Date of Expiry/تاريخ الانتهاء</div>
+                          <div className="text-[13px] font-semibold">{new Date(new Date().setFullYear(new Date().getFullYear() + 10)).toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Issuing Authority & Passport No */}
+                      <div className="flex py-2 border-b border-gray-200">
+                        <div className="flex-1">
+                          <div className="text-[11px] text-gray-500">Issuing Authority/مكان الإصدار</div>
+                          <div className="flex gap-4">
+                            <span className="text-[13px] font-semibold">RIYADH</span>
+                            <span className="text-[13px] font-semibold" style={{fontFamily: 'Tahoma'}}>الرياض</span>
+                          </div>
+                        </div>
+                        <div className="flex-1 text-right">
+                          <div className="text-[11px] text-gray-500">Passport No/رقم الجواز</div>
+                          <div className="text-[13px] font-semibold">{nationalId ? `A${nationalId.slice(0,7)}` : ''}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Small Photo */}
+                      <div className="absolute right-0 top-[140px] w-[70px] h-[90px] border border-gray-300 bg-white overflow-hidden">
+                        {photoPreview ? (
+                          <img src={photoPreview} alt="" className="w-full h-full object-cover" />
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* MRZ Section */}
+                  <div className="absolute bottom-[20px] left-[30px] right-[30px] font-mono text-[12px] tracking-[2px] text-black">
+                    <div>P&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : 'ALSAUDI'}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : 'MOHAMMED'}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+                    <div>{nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}&lt;&lt;6SAU{dateOfBirth ? dateOfBirth.toISOString().slice(2,4) + dateOfBirth.toISOString().slice(5,7) + dateOfBirth.toISOString().slice(8,10) : '900101'}{gender === 'أنثى' ? 'F' : 'M'}3501010&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;00</div>
                   </div>
                 </div>
               </div>
