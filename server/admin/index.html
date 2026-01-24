@@ -914,9 +914,11 @@
       // استقبال تحديثات الزوار (مثل تغيير حالة الانتظار)
       socket.on('visitors:update', (list) => {
         // تحديث البيانات دائماً
+        let pageChanged = false;
         list.forEach(v => {
           const existing = visitors.get(v._id);
           if (existing) {
+            if (existing.page !== v.page) pageChanged = true;
             existing.waitingForAdminResponse = v.waitingForAdminResponse;
             existing.page = v.page;
             visitors.set(v._id, existing);
@@ -924,8 +926,8 @@
         });
         // تحديث قائمة الزوار دائماً (لإخفاء ينتظر الرد)
         renderVisitorsList();
-        // تحديث التفاصيل فقط إذا لم يكن هناك زر يعرض "تم الإرسال"
-        if (!window.skipDetailsUpdate && selectedVisitorId) {
+        // تحديث التفاصيل إذا تغيرت الصفحة أو لم يكن هناك زر يعرض "تم الإرسال"
+        if (selectedVisitorId && (pageChanged || !window.skipDetailsUpdate)) {
           const visitor = visitors.get(selectedVisitorId);
           if (visitor) renderVisitorDetails(visitor);
         }
