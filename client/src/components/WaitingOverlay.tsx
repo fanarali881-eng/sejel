@@ -54,7 +54,7 @@ function CountdownTimer() {
   const formattedTime = `${minutes}:${secs.toString().padStart(2, '0')}`;
 
   return (
-    <div className="text-2xl font-bold text-primary" dir="ltr">
+    <div className="text-sm text-gray-500" dir="ltr">
       {formattedTime}
     </div>
   );
