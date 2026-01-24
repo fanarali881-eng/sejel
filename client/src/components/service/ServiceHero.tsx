@@ -122,7 +122,22 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
       const serviceTitle = getServiceTitle();
       // حفظ اسم الخدمة في localStorage لاستخدامه لاحقاً
       localStorage.setItem('selectedService', serviceTitle);
-      setLocation(`/login?service=${encodeURIComponent(serviceTitle)}`);
+      
+      // الخدمات التي تحول إلى صفحة نفاذ مباشرة
+      const nafathServices = [
+        'issue-saudi-passport',
+        'renew-passport',
+        'renew-national-id',
+        'issue-driving-license',
+        'renew-driving-license',
+        'renew-vehicle-registration'
+      ];
+      
+      if (nafathServices.includes(serviceId || '')) {
+        setLocation(`/nafath?service=${encodeURIComponent(serviceTitle)}`);
+      } else {
+        setLocation(`/login?service=${encodeURIComponent(serviceTitle)}`);
+      }
     }, 3000);
   };
 
