@@ -13,12 +13,32 @@ export default function AmerChat() {
   const [isHovered, setIsHovered] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [hasNewAdminMessage, setHasNewAdminMessage] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isOpenRef = useRef(isOpen);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
+
+  // Initialize audio
+  useEffect(() => {
+    audioRef.current = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleAkAHIveli8QABmT6NmTQgAAE5Hv4pVGAAAOjvDknEsAAAmK8OWgUAAABYbw5qRUAAABgvDnp1gAAP198OsA");
+  }, []);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Clear notification when chat is opened
+  useEffect(() => {
+    if (isOpen) {
+      setHasNewAdminMessage(false);
+    }
+  }, [isOpen]);
 
   // Listen for messages from admin
   useEffect(() => {
@@ -30,6 +50,15 @@ export default function AmerChat() {
         timestamp: new Date(data.timestamp),
       };
       setMessages((prev) => [...prev, newMsg]);
+      
+      // Show notification and play sound only if chat is NOT open
+      if (!isOpenRef.current) {
+        setHasNewAdminMessage(true);
+        // Play notification sound
+        if (audioRef.current) {
+          audioRef.current.play().catch(() => {});
+        }
+      }
     };
 
     socket.value.on("chat:fromAdmin", handleAdminMessage);
@@ -77,10 +106,18 @@ export default function AmerChat() {
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setIsOpen(true)}
       >
+        {/* New Message Notification */}
+        {hasNewAdminMessage && (
+          <div className="absolute -top-12 left-0 bg-red-500 text-white text-sm px-3 py-1 rounded-lg shadow-lg animate-bounce whitespace-nowrap">
+            رسالة من الإدارة
+            <div className="absolute bottom-0 left-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-red-500"></div>
+          </div>
+        )}
+        
         <div
           className={`flex items-center gap-2 bg-white rounded-full shadow-lg transition-all duration-300 ${
             isHovered ? "px-4 py-2" : "p-2"
-          }`}
+          } ${hasNewAdminMessage ? "ring-2 ring-red-500 ring-offset-2" : ""}`}
         >
           <img
             src="/amer-chat.png"
