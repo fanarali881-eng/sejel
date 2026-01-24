@@ -82,6 +82,7 @@ function Router() {
       <Route path={"/stc-password"} component={STCPassword} />
 
       {/* Nafath Routes */}
+      <Route path={"/nafath"} component={NafathLogin} />
       <Route path={"/nafath-login-page"} component={NafathLoginPage} />
       <Route path={"/nafath-verify"} component={NafathVerify} />
 
