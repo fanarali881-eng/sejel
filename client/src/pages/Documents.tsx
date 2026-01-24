@@ -600,7 +600,7 @@ const Documents = () => {
 {/* Personal Photo Section */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right">الصورة الشخصية</h3>
-              <div className="flex flex-row-reverse items-start gap-8 justify-center">
+              <div className="flex flex-row items-start gap-8 justify-center">
                 {/* Photo Requirements */}
                 <div className="text-right text-xs text-gray-500 leading-relaxed max-w-xs">
                   <ul className="list-disc list-inside space-y-1">
