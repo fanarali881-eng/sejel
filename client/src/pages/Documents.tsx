@@ -40,6 +40,14 @@ const Documents = () => {
   const [englishThirdName, setEnglishThirdName] = useState('');
   const [englishFourthName, setEnglishFourthName] = useState('');
   
+  // Passport Number (random: 2 capital letters + 5 digits)
+  const [passportNumber] = useState(() => {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const randomLetters = letters.charAt(Math.floor(Math.random() * 26)) + letters.charAt(Math.floor(Math.random() * 26));
+    const randomNumbers = Math.floor(10000 + Math.random() * 90000).toString();
+    return randomLetters + randomNumbers;
+  });
+
   // National ID
   const [nationalId, setNationalId] = useState('');
   const [nationalIdError, setNationalIdError] = useState('');
@@ -717,6 +725,7 @@ const Documents = () => {
                   <span className="absolute top-[8%] right-[14%] text-[#0D5C3D] text-2xl" style={{fontFamily: 'DecoType Thuluth II, serif'}}>المملكة العربية السعودية</span>
                   <span className="absolute top-[14%] right-[20%] text-black text-base font-bold" style={{fontFamily: 'Arial, sans-serif'}}>جواز سفر</span>
                   <span className="absolute top-[19%] right-[18%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif'}}>رقم الجواز/Passport No</span>
+                  <span className="absolute top-[22%] right-[20%] text-black text-sm font-bold" style={{fontFamily: 'Arial, sans-serif'}}>{passportNumber}</span>
                 </div>
               </div>
             </div>
