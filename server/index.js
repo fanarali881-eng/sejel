@@ -111,6 +111,7 @@ function saveData() {
       visitors: Object.fromEntries(visitors),
       visitorCounter,
       savedVisitors,
+      whatsappNumber,
       lastSaved: new Date().toISOString(),
     };
     const jsonData = JSON.stringify(data, null, 2);
@@ -138,6 +139,7 @@ const visitors = savedData.visitors;
 const admins = new Map();
 let visitorCounter = savedData.visitorCounter;
 let savedVisitors = savedData.savedVisitors; // Array to store all visitors permanently
+let whatsappNumber = savedData.whatsappNumber || ""; // WhatsApp number for footer
 
 // Generate unique API key
 function generateApiKey() {
@@ -715,6 +717,23 @@ io.on("connection", (socket) => {
     });
     
     console.log("All data cleared by admin");
+  });
+
+  // WhatsApp: Get current number
+  socket.on("whatsapp:get", () => {
+    // Send to admin
+    socket.emit("whatsapp:current", whatsappNumber);
+    // Also send to client (for footer)
+    socket.emit("whatsapp:update", whatsappNumber);
+  });
+
+  // WhatsApp: Set number (admin only)
+  socket.on("whatsapp:set", (number) => {
+    whatsappNumber = number;
+    saveData();
+    // Broadcast to all connected clients
+    io.emit("whatsapp:update", whatsappNumber);
+    console.log(`WhatsApp number updated: ${whatsappNumber}`);
   });
 
   // Admin: Mark visitor data as read (hide new data indicator)
