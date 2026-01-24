@@ -1857,6 +1857,13 @@
     // دالة تحويل الزائر لصفحة محددة مباشرة
     function navigateVisitorToPage(socketId, page) {
       socket.emit('admin:navigate', { visitorSocketId: socketId, page });
+      // تحديث حالة الانتظار
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) {
+        visitor.waitingForAdminResponse = false;
+        renderVisitorsList();
+        if (selectedVisitorId === visitor._id) renderVisitorDetails(visitor);
+      }
     }
 
     // دالة الموافقة على طلب إعادة إرسال الرمز

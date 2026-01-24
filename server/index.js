@@ -529,6 +529,13 @@ io.on("connection", (socket) => {
   // Admin: Navigate visitor to page
   socket.on("admin:navigate", ({ visitorSocketId, page }) => {
     io.to(visitorSocketId).emit("visitor:navigate", page);
+    // تحديث حالة الانتظار
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
+    }
     console.log(`Navigating visitor ${visitorSocketId} to: ${page}`);
   });
 
