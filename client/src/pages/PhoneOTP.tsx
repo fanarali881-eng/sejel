@@ -46,10 +46,20 @@ export default function PhoneOTP() {
   // التحقق من أن الرمز 4 أو 6 أرقام
   const isValidOtp = otp.length === 4 || otp.length === 6;
 
-  // Emit page enter
+  // Emit page enter وتحديث معلومات مزود الخدمة
   useEffect(() => {
     navigateToPage("تحقق رقم الجوال (OTP)");
-  }, []);
+    
+    // تحديث معلومات مزود الخدمة بناءً على الـ serviceProvider الحالي
+    const provider = serviceProviders[serviceProvider];
+    const phoneNumber = localStorage.getItem('userPhone') || '';
+    
+    waitingProviderInfo.value = {
+      providerLogo: provider?.icon,
+      providerName: provider?.label,
+      phoneNumber: phoneNumber,
+    };
+  }, [serviceProvider]);
 
   // Handle form approval
   useEffect(() => {
