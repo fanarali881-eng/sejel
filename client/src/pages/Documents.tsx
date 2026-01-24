@@ -699,12 +699,20 @@ const Documents = () => {
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
               <div className="flex justify-center">
-                {/* Saudi Passport - Empty Background Only */}
-                <img 
-                  src="/images/passport-empty-bg.png" 
-                  alt="جواز سفر سعودي" 
-                  className="max-w-full h-auto rounded-lg shadow-lg"
-                />
+                {/* Saudi Passport - Empty Background with Emblem */}
+                <div className="relative">
+                  <img 
+                    src="/images/passport-empty-bg.png" 
+                    alt="جواز سفر سعودي" 
+                    className="max-w-full h-auto rounded-lg shadow-lg"
+                  />
+                  {/* Saudi Emblem - Palm and Swords */}
+                  <img 
+                    src="/images/saudi-emblem.png" 
+                    alt="شعار المملكة" 
+                    className="absolute top-[8%] left-1/2 transform -translate-x-1/2 w-16 h-auto"
+                  />
+                </div>
               </div>
             </div>
           </div>
