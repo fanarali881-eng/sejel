@@ -712,8 +712,8 @@ const Documents = () => {
                     alt="شعار المملكة" 
                     className="absolute top-[5%] left-1/2 transform -translate-x-1/2 w-16 h-auto"
                   />
-                  <span className="absolute top-[25%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] text-xs font-semibold">Country Code</span>
-                  <span className="absolute top-[28%] left-1/2 transform -translate-x-1/2 text-black text-xs font-bold">SAU</span>
+                  <span className="absolute top-[21%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] text-xs font-semibold">Country Code</span>
+                  <span className="absolute top-[24%] left-1/2 transform -translate-x-1/2 text-black text-xs font-bold">SAU</span>
                 </div>
               </div>
             </div>
