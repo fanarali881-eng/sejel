@@ -782,6 +782,7 @@ const Documents = () => {
                       return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
                     })()}
                   </span>
+                  <span className="absolute top-[62%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Expiry</span>
                 </div>
               </div>
             </div>
