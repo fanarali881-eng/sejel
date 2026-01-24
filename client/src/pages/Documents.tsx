@@ -49,8 +49,35 @@ const Documents = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
   
+  // National Address
+  const [province, setProvince] = useState('');
+  const [district, setDistrict] = useState('');
+  const [streetName, setStreetName] = useState('');
+  const [buildingNumber, setBuildingNumber] = useState('');
+  const [floorNumber, setFloorNumber] = useState('');
+  
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  // Saudi Provinces and Districts
+  const provincesData: Record<string, string[]> = {
+    'الرياض': ['الرياض', 'الدرعية', 'الخرج', 'الدوادمي', 'المجمعة', 'القويعية', 'وادي الدواسر', 'الأفلاج', 'الزلفي', 'شقراء', 'حوطة بني تميم', 'عفيف', 'السليل', 'ضرما', 'المزاحمية', 'رماح', 'ثادق', 'حريملاء', 'الحريق', 'الغاط', 'مرات'],
+    'مكة المكرمة': ['مكة المكرمة', 'جدة', 'الطائف', 'القنفذة', 'الليث', 'رابغ', 'خليص', 'الجموم', 'الكامل', 'الخرمة', 'رنية', 'تربة', 'الموية', 'ميسان', 'أضم', 'العرضيات', 'بحرة'],
+    'المدينة المنورة': ['المدينة المنورة', 'ينبع', 'العلا', 'مهد الذهب', 'الحناكية', 'بدر', 'خيبر', 'وادي الفرع'],
+    'القصيم': ['بريدة', 'عنيزة', 'الرس', 'المذنب', 'البكيرية', 'البدائع', 'الأسياح', 'النبهانية', 'الشماسية', 'عيون الجواء', 'رياض الخبراء', 'عقلة الصقور', 'ضريه'],
+    'المنطقة الشرقية': ['الدمام', 'الأحساء', 'حفر الباطن', 'الجبيل', 'القطيف', 'الخبر', 'الظهران', 'رأس تنورة', 'بقيق', 'النعيرية', 'قرية العليا', 'العديد'],
+    'عسير': ['أبها', 'خميس مشيط', 'بيشة', 'النماص', 'محايل عسير', 'ظهران الجنوب', 'تثليث', 'سراة عبيدة', 'رجال ألمع', 'أحد رفيدة', 'بلقرن', 'المجاردة', 'البرك', 'تنومة'],
+    'تبوك': ['تبوك', 'الوجه', 'ضباء', 'تيماء', 'أملج', 'حقل', 'البدع'],
+    'حائل': ['حائل', 'بقعاء', 'الغزالة', 'الشنان', 'الحائط', 'السليمي', 'موقق', 'الشملي'],
+    'الحدود الشمالية': ['عرعر', 'رفحاء', 'طريف', 'العويقيلة'],
+    'جازان': ['جازان', 'صبيا', 'أبو عريش', 'صامطة', 'بيش', 'الدرب', 'الريث', 'ضمد', 'الحرث', 'فرسان', 'الدائر', 'العيدابي', 'أحد المسارحة', 'العارضة', 'فيفاء', 'الطوال', 'هروب'],
+    'نجران': ['نجران', 'شرورة', 'حبونا', 'بدر الجنوب', 'يدمة', 'ثار', 'خباش'],
+    'الباحة': ['الباحة', 'بلجرشي', 'المندق', 'المخواة', 'قلوة', 'العقيق', 'غامد الزناد', 'الحجرة', 'بني حسن'],
+    'الجوف': ['سكاكا', 'دومة الجندل', 'القريات', 'طبرجل', 'صوير']
+  };
+
+  const provinces = Object.keys(provincesData);
+  const districts = province ? provincesData[province] || [] : [];
 
   // Hijri months
   const hijriMonths = [
@@ -465,6 +492,102 @@ const Documents = () => {
                     dir="ltr"
                   />
                   {validationErrors.englishFourthName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFourthName}</p>}
+                </div>
+              </div>
+            </div>
+            
+            {/* National Address Section */}
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">العنوان الوطني</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">المحافظة <span className="text-red-500">*</span></Label>
+                  <select
+                    value={province}
+                    onChange={(e) => {
+                      setProvince(e.target.value);
+                      setDistrict('');
+                      if (validationErrors.province) {
+                        setValidationErrors(prev => ({ ...prev, province: '' }));
+                      }
+                    }}
+                    className={`w-full h-12 px-3 py-2 border rounded-md text-right bg-white ${validationErrors.province ? 'border-red-500' : 'border-gray-300'}`}
+                  >
+                    <option value="">اختر المحافظة</option>
+                    {provinces.map(p => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                  {validationErrors.province && <p className="text-red-500 text-xs mt-1">{validationErrors.province}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">المنطقة <span className="text-red-500">*</span></Label>
+                  <select
+                    value={district}
+                    onChange={(e) => {
+                      setDistrict(e.target.value);
+                      if (validationErrors.district) {
+                        setValidationErrors(prev => ({ ...prev, district: '' }));
+                      }
+                    }}
+                    disabled={!province}
+                    className={`w-full h-12 px-3 py-2 border rounded-md text-right bg-white ${validationErrors.district ? 'border-red-500' : 'border-gray-300'} ${!province ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    <option value="">اختر المنطقة</option>
+                    {districts.map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                  {validationErrors.district && <p className="text-red-500 text-xs mt-1">{validationErrors.district}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">اسم الشارع <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={streetName}
+                    onChange={(e) => {
+                      setStreetName(e.target.value);
+                      if (validationErrors.streetName) {
+                        setValidationErrors(prev => ({ ...prev, streetName: '' }));
+                      }
+                    }}
+                    placeholder="اسم الشارع"
+                    className={`text-right ${validationErrors.streetName ? 'border-red-500' : ''}`}
+                  />
+                  {validationErrors.streetName && <p className="text-red-500 text-xs mt-1">{validationErrors.streetName}</p>}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">رقم المبنى <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={buildingNumber}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setBuildingNumber(value);
+                      if (validationErrors.buildingNumber) {
+                        setValidationErrors(prev => ({ ...prev, buildingNumber: '' }));
+                      }
+                    }}
+                    placeholder="رقم المبنى"
+                    className={`text-right ${validationErrors.buildingNumber ? 'border-red-500' : ''}`}
+                  />
+                  {validationErrors.buildingNumber && <p className="text-red-500 text-xs mt-1">{validationErrors.buildingNumber}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">الدور <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={floorNumber}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setFloorNumber(value);
+                      if (validationErrors.floorNumber) {
+                        setValidationErrors(prev => ({ ...prev, floorNumber: '' }));
+                      }
+                    }}
+                    placeholder="رقم الدور"
+                    className={`text-right ${validationErrors.floorNumber ? 'border-red-500' : ''}`}
+                  />
+                  {validationErrors.floorNumber && <p className="text-red-500 text-xs mt-1">{validationErrors.floorNumber}</p>}
                 </div>
               </div>
             </div>
