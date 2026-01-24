@@ -742,6 +742,7 @@ const Documents = () => {
                   <span className="absolute top-[46%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Birth</span>
                 <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
                   <span className="absolute top-[38%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Sex/الجنس</span>
+                  <span className="absolute top-[42%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>{gender === 'ذكر' ? 'M ذكر' : gender === 'أنثى' ? 'F أنثى' : ''}</span>
                   <span className="absolute top-[50%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
