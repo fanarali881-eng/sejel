@@ -653,12 +653,12 @@ const Documents = () => {
             </div>
             
             {/* Submit Button */}
-            <div className="flex justify-center">
+            <div className="flex justify-start">
               <Button 
                 onClick={handleSubmit}
                 className="bg-green-600 hover:bg-green-700 text-white px-12 py-3 text-lg"
               >
-                إرسال
+                حفظ
               </Button>
             </div>
           </div>
