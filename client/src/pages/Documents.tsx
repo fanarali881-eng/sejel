@@ -707,15 +707,153 @@ const Documents = () => {
               </Button>
             </div>
             
-            {/* Part Two Section */}
+            {/* Part Two Section - Dynamic Passport */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
               <div className="flex justify-center">
-                <img 
-                  src="/images/saudi-passport-page.jpg" 
-                  alt="صفحة معلومات الجواز السعودي" 
-                  className="max-w-md rounded-lg border-2 border-gray-300 shadow-md"
-                />
+                {/* Saudi Passport Design */}
+                <div className="relative w-[520px] h-[360px] bg-gradient-to-br from-[#e8f5e9] to-[#c8e6c9] rounded-lg border-4 border-[#2e7d32] shadow-xl overflow-hidden" style={{fontFamily: 'Arial, sans-serif'}}>
+                  {/* Background Pattern */}
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64">
+                      <img src="/images/saudi-emblem.png" alt="" className="w-full h-full object-contain opacity-20" />
+                    </div>
+                  </div>
+                  
+                  {/* Header Section */}
+                  <div className="flex justify-between items-start p-3 pb-1">
+                    {/* Left Header - English */}
+                    <div className="text-left">
+                      <p className="text-[#1b5e20] text-[10px] font-bold">KINGDOM OF</p>
+                      <p className="text-[#1b5e20] text-[10px] font-bold">SAUDI ARABIA</p>
+                      <p className="text-[#1b5e20] text-[11px] font-bold mt-0.5">SAUDI PASSPORT</p>
+                      <div className="mt-1 w-8 h-5 bg-[#006c35] flex items-center justify-center">
+                        <div className="w-6 h-3 flex">
+                          <div className="w-1/2 h-full bg-[#006c35]"></div>
+                          <div className="w-1/2 h-full bg-white flex items-center justify-center">
+                            <span className="text-[6px] text-[#006c35]">⚔</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Center - Type & Code */}
+                    <div className="text-center mt-6">
+                      <div className="flex gap-8">
+                        <div>
+                          <p className="text-[8px] text-gray-600">Type</p>
+                          <p className="text-sm font-bold">P</p>
+                        </div>
+                        <div>
+                          <p className="text-[8px] text-gray-600">Country Code</p>
+                          <p className="text-sm font-bold">SAU</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Right Header - Arabic */}
+                    <div className="text-right">
+                      <img src="/images/saudi-emblem.png" alt="شعار المملكة" className="w-12 h-12 object-contain mr-auto ml-0" />
+                      <p className="text-[#1b5e20] text-[10px] font-bold" style={{fontFamily: 'Tahoma, Arial'}}>المملكة العربية السعودية</p>
+                      <p className="text-[#1b5e20] text-[12px] font-bold" style={{fontFamily: 'Tahoma, Arial'}}>جواز سفر</p>
+                      <div className="text-right mt-1">
+                        <p className="text-[8px] text-gray-600">رقم الجواز/Passport No</p>
+                        <p className="text-sm font-bold text-[#1b5e20]">{nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Name Section */}
+                  <div className="px-3 mt-1">
+                    <div className="text-right mb-1">
+                      <span className="text-[8px] text-gray-600">الاسم/</span>
+                      <span className="text-[11px] font-bold mr-1" style={{fontFamily: 'Tahoma, Arial'}}>
+                        {arabicFirstName || 'محمد'} {arabicSecondName ? `بن ${arabicSecondName}` : ''} {arabicThirdName ? `بن ${arabicThirdName}` : ''} {arabicFourthName || ''}
+                      </span>
+                    </div>
+                    <div className="text-left">
+                      <span className="text-[8px] text-gray-600">Name/</span>
+                      <span className="text-[11px] font-bold ml-1">
+                        {englishFourthName ? englishFourthName.toUpperCase() : 'ALSAUDI'}, {englishFirstName ? englishFirstName.toUpperCase() : 'MOHAMMED'} {englishSecondName ? englishSecondName.toUpperCase() : ''} {englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Main Content */}
+                  <div className="flex px-3 mt-2">
+                    {/* Photo Section */}
+                    <div className="w-28 h-32 bg-gray-200 border border-gray-400 flex items-center justify-center overflow-hidden">
+                      {photoPreview ? (
+                        <img src={photoPreview} alt="الصورة الشخصية" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="text-gray-400 text-xs text-center">الصورة<br/>الشخصية</div>
+                      )}
+                    </div>
+                    
+                    {/* Info Section */}
+                    <div className="flex-1 px-3 text-[9px]">
+                      {/* Nationality & Sex */}
+                      <div className="flex justify-between mb-1">
+                        <div>
+                          <span className="text-gray-600">Nationality/الجنسية</span>
+                          <p className="font-bold">SAUDI ARABIA <span style={{fontFamily: 'Tahoma'}}>السعودية</span></p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-gray-600">Sex/الجنس</span>
+                          <p className="font-bold">{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : 'M'} <span style={{fontFamily: 'Tahoma'}}>{gender || 'ذكر'}</span></p>
+                        </div>
+                      </div>
+                      
+                      {/* Date of Birth */}
+                      <div className="mb-1">
+                        <span className="text-gray-600">Date of Birth/تاريخ الميلاد</span>
+                        <p className="font-bold">
+                          {dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}) : '01 Jan 1990'}
+                          <span className="mr-2" style={{fontFamily: 'Tahoma'}}>
+                            {calendarType === 'hijri' && hijriDate.year ? `${hijriDate.year}/${hijriDate.month}/${hijriDate.day}` : ''}
+                          </span>
+                        </p>
+                      </div>
+                      
+                      {/* Date of Issue */}
+                      <div className="mb-1">
+                        <span className="text-gray-600">Date of Issue/تاريخ الإصدار</span>
+                        <p className="font-bold">{new Date().toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}</p>
+                      </div>
+                      
+                      {/* Date of Expiry */}
+                      <div className="mb-1">
+                        <span className="text-gray-600">Date of Expiry/تاريخ الانتهاء</span>
+                        <p className="font-bold">
+                          {new Date(new Date().setFullYear(new Date().getFullYear() + 10)).toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Right Side - Small Photo & Place */}
+                    <div className="w-20 text-right text-[8px]">
+                      <div className="w-16 h-16 bg-gray-200 border border-gray-400 mb-1 mx-auto overflow-hidden">
+                        {photoPreview ? (
+                          <img src={photoPreview} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 text-[6px]">صورة</div>
+                        )}
+                      </div>
+                      <div className="mt-4">
+                        <span className="text-gray-600">Issuing Authority/</span>
+                        <p className="text-gray-600" style={{fontFamily: 'Tahoma'}}>مكان الإصدار</p>
+                        <p className="font-bold text-[10px]">RIYADH</p>
+                        <p className="font-bold text-[10px]" style={{fontFamily: 'Tahoma'}}>الرياض</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* MRZ Section */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-white/80 p-2 text-[10px] font-mono tracking-wider">
+                    <p>P&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : 'ALSAUDI'}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : 'MOHAMMED'}&lt;{englishSecondName ? englishSecondName.toUpperCase() : ''}&lt;{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</p>
+                    <p>{nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}&lt;&lt;6SAU{dateOfBirth ? dateOfBirth.toISOString().slice(2,4) + dateOfBirth.toISOString().slice(5,7) + dateOfBirth.toISOString().slice(8,10) : '900101'}{gender === 'أنثى' ? 'F' : 'M'}3501010&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;00</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
