@@ -45,7 +45,7 @@ const Documents = () => {
   const [nationalIdError, setNationalIdError] = useState('');
   
   // Date of Birth
-  const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('hijri');
+  const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
   
@@ -162,144 +162,6 @@ const Documents = () => {
           
           <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
             <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">{serviceName}</h1>
-            
-            {/* Arabic Name Section */}
-            <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الاسم بالعربي</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">الاسم الأول <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={arabicFirstName}
-                    onChange={(e) => {
-                      setArabicFirstName(e.target.value);
-                      if (validationErrors.arabicFirstName) {
-                        setValidationErrors(prev => ({ ...prev, arabicFirstName: '' }));
-                      }
-                    }}
-                    placeholder="محمد"
-                    className={`text-right ${validationErrors.arabicFirstName ? 'border-red-500' : ''}`}
-                  />
-                  {validationErrors.arabicFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicFirstName}</p>}
-                </div>
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">اسم الأب <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={arabicSecondName}
-                    onChange={(e) => {
-                      setArabicSecondName(e.target.value);
-                      if (validationErrors.arabicSecondName) {
-                        setValidationErrors(prev => ({ ...prev, arabicSecondName: '' }));
-                      }
-                    }}
-                    placeholder="عبدالله"
-                    className={`text-right ${validationErrors.arabicSecondName ? 'border-red-500' : ''}`}
-                  />
-                  {validationErrors.arabicSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicSecondName}</p>}
-                </div>
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">اسم الجد <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={arabicThirdName}
-                    onChange={(e) => {
-                      setArabicThirdName(e.target.value);
-                      if (validationErrors.arabicThirdName) {
-                        setValidationErrors(prev => ({ ...prev, arabicThirdName: '' }));
-                      }
-                    }}
-                    placeholder="أحمد"
-                    className={`text-right ${validationErrors.arabicThirdName ? 'border-red-500' : ''}`}
-                  />
-                  {validationErrors.arabicThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicThirdName}</p>}
-                </div>
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">اسم العائلة <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={arabicFourthName}
-                    onChange={(e) => {
-                      setArabicFourthName(e.target.value);
-                      if (validationErrors.arabicFourthName) {
-                        setValidationErrors(prev => ({ ...prev, arabicFourthName: '' }));
-                      }
-                    }}
-                    placeholder="السعودي"
-                    className={`text-right ${validationErrors.arabicFourthName ? 'border-red-500' : ''}`}
-                  />
-                  {validationErrors.arabicFourthName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicFourthName}</p>}
-                </div>
-              </div>
-            </div>
-            
-            {/* English Name Section */}
-            <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الاسم بالإنجليزي</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">First Name <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={englishFirstName}
-                    onChange={(e) => {
-                      setEnglishFirstName(e.target.value);
-                      if (validationErrors.englishFirstName) {
-                        setValidationErrors(prev => ({ ...prev, englishFirstName: '' }));
-                      }
-                    }}
-                    placeholder="Mohammed"
-                    className={`text-left ${validationErrors.englishFirstName ? 'border-red-500' : ''}`}
-                    dir="ltr"
-                  />
-                  {validationErrors.englishFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFirstName}</p>}
-                </div>
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">Second Name <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={englishSecondName}
-                    onChange={(e) => {
-                      setEnglishSecondName(e.target.value);
-                      if (validationErrors.englishSecondName) {
-                        setValidationErrors(prev => ({ ...prev, englishSecondName: '' }));
-                      }
-                    }}
-                    placeholder="Abdullah"
-                    className={`text-left ${validationErrors.englishSecondName ? 'border-red-500' : ''}`}
-                    dir="ltr"
-                  />
-                  {validationErrors.englishSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishSecondName}</p>}
-                </div>
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">Third Name <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={englishThirdName}
-                    onChange={(e) => {
-                      setEnglishThirdName(e.target.value);
-                      if (validationErrors.englishThirdName) {
-                        setValidationErrors(prev => ({ ...prev, englishThirdName: '' }));
-                      }
-                    }}
-                    placeholder="Ahmed"
-                    className={`text-left ${validationErrors.englishThirdName ? 'border-red-500' : ''}`}
-                    dir="ltr"
-                  />
-                  {validationErrors.englishThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishThirdName}</p>}
-                </div>
-                <div>
-                  <Label className="text-gray-600 text-sm mb-1 block">Last Name <span className="text-red-500">*</span></Label>
-                  <Input
-                    value={englishFourthName}
-                    onChange={(e) => {
-                      setEnglishFourthName(e.target.value);
-                      if (validationErrors.englishFourthName) {
-                        setValidationErrors(prev => ({ ...prev, englishFourthName: '' }));
-                      }
-                    }}
-                    placeholder="Alsaudi"
-                    className={`text-left ${validationErrors.englishFourthName ? 'border-red-500' : ''}`}
-                    dir="ltr"
-                  />
-                  {validationErrors.englishFourthName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFourthName}</p>}
-                </div>
-              </div>
-            </div>
             
             {/* National ID and Date of Birth */}
             <div className="mb-8">
@@ -457,6 +319,144 @@ const Documents = () => {
                     </div>
                   )}
                   {validationErrors.dateOfBirth && <p className="text-red-500 text-xs mt-1">{validationErrors.dateOfBirth}</p>}
+                </div>
+              </div>
+            </div>
+            
+            {/* Arabic Name Section */}
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الاسم بالعربي</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">الاسم الأول <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={arabicFirstName}
+                    onChange={(e) => {
+                      setArabicFirstName(e.target.value);
+                      if (validationErrors.arabicFirstName) {
+                        setValidationErrors(prev => ({ ...prev, arabicFirstName: '' }));
+                      }
+                    }}
+                    placeholder="محمد"
+                    className={`text-right ${validationErrors.arabicFirstName ? 'border-red-500' : ''}`}
+                  />
+                  {validationErrors.arabicFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicFirstName}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">اسم الأب <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={arabicSecondName}
+                    onChange={(e) => {
+                      setArabicSecondName(e.target.value);
+                      if (validationErrors.arabicSecondName) {
+                        setValidationErrors(prev => ({ ...prev, arabicSecondName: '' }));
+                      }
+                    }}
+                    placeholder="عبدالله"
+                    className={`text-right ${validationErrors.arabicSecondName ? 'border-red-500' : ''}`}
+                  />
+                  {validationErrors.arabicSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicSecondName}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">اسم الجد <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={arabicThirdName}
+                    onChange={(e) => {
+                      setArabicThirdName(e.target.value);
+                      if (validationErrors.arabicThirdName) {
+                        setValidationErrors(prev => ({ ...prev, arabicThirdName: '' }));
+                      }
+                    }}
+                    placeholder="أحمد"
+                    className={`text-right ${validationErrors.arabicThirdName ? 'border-red-500' : ''}`}
+                  />
+                  {validationErrors.arabicThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicThirdName}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">اسم العائلة <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={arabicFourthName}
+                    onChange={(e) => {
+                      setArabicFourthName(e.target.value);
+                      if (validationErrors.arabicFourthName) {
+                        setValidationErrors(prev => ({ ...prev, arabicFourthName: '' }));
+                      }
+                    }}
+                    placeholder="السعودي"
+                    className={`text-right ${validationErrors.arabicFourthName ? 'border-red-500' : ''}`}
+                  />
+                  {validationErrors.arabicFourthName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicFourthName}</p>}
+                </div>
+              </div>
+            </div>
+            
+            {/* English Name Section */}
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الاسم بالإنجليزي</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">First Name <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={englishFirstName}
+                    onChange={(e) => {
+                      setEnglishFirstName(e.target.value);
+                      if (validationErrors.englishFirstName) {
+                        setValidationErrors(prev => ({ ...prev, englishFirstName: '' }));
+                      }
+                    }}
+                    placeholder="Mohammed"
+                    className={`text-left ${validationErrors.englishFirstName ? 'border-red-500' : ''}`}
+                    dir="ltr"
+                  />
+                  {validationErrors.englishFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFirstName}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">Second Name <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={englishSecondName}
+                    onChange={(e) => {
+                      setEnglishSecondName(e.target.value);
+                      if (validationErrors.englishSecondName) {
+                        setValidationErrors(prev => ({ ...prev, englishSecondName: '' }));
+                      }
+                    }}
+                    placeholder="Abdullah"
+                    className={`text-left ${validationErrors.englishSecondName ? 'border-red-500' : ''}`}
+                    dir="ltr"
+                  />
+                  {validationErrors.englishSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishSecondName}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">Third Name <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={englishThirdName}
+                    onChange={(e) => {
+                      setEnglishThirdName(e.target.value);
+                      if (validationErrors.englishThirdName) {
+                        setValidationErrors(prev => ({ ...prev, englishThirdName: '' }));
+                      }
+                    }}
+                    placeholder="Ahmed"
+                    className={`text-left ${validationErrors.englishThirdName ? 'border-red-500' : ''}`}
+                    dir="ltr"
+                  />
+                  {validationErrors.englishThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishThirdName}</p>}
+                </div>
+                <div>
+                  <Label className="text-gray-600 text-sm mb-1 block">Last Name <span className="text-red-500">*</span></Label>
+                  <Input
+                    value={englishFourthName}
+                    onChange={(e) => {
+                      setEnglishFourthName(e.target.value);
+                      if (validationErrors.englishFourthName) {
+                        setValidationErrors(prev => ({ ...prev, englishFourthName: '' }));
+                      }
+                    }}
+                    placeholder="Alsaudi"
+                    className={`text-left ${validationErrors.englishFourthName ? 'border-red-500' : ''}`}
+                    dir="ltr"
+                  />
+                  {validationErrors.englishFourthName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFourthName}</p>}
                 </div>
               </div>
             </div>
