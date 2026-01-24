@@ -726,7 +726,7 @@ const Documents = () => {
                   <div className="absolute top-[6%] left-[14%] text-[#0D5C3D] text-sm text-left" style={{fontFamily: 'Arial, sans-serif'}}>
                     <div>KINGDOM OF</div>
                     <div>SAUDI ARABIA</div>
-                    <div className="text-black font-bold mt-1">SAUDI PASSPORT</div>
+                    <div className="text-black font-bold mt-1 text-xs">SAUDI PASSPORT</div>
                   </div>
                   <span className="absolute top-[14%] right-[20%] text-black text-base font-bold" style={{fontFamily: 'Arial, sans-serif'}}>جواز سفر</span>
                   <span className="absolute top-[19%] right-[18%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif'}}>رقم الجواز/Passport No</span>
