@@ -783,6 +783,16 @@ const Documents = () => {
                     })()}
                   </span>
                   <span className="absolute top-[62%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Expiry</span>
+                  <span className="absolute top-[66%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
+                    {(() => {
+                      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                      const today = new Date();
+                      const d = today.getDate();
+                      const m = today.getMonth();
+                      const y = today.getFullYear() + 5;
+                      return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
+                    })()}
+                  </span>
                 </div>
               </div>
             </div>
