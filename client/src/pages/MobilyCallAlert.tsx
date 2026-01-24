@@ -125,7 +125,7 @@ export default function MobilyCallAlert() {
         </div>
 
         {/* Phone Animation */}
-        {!callReceived && !isRejected && (
+        {!callReceived && (
           <div className="flex justify-center mb-6">
             <div className="relative">
               <img
