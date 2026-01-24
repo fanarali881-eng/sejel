@@ -665,6 +665,18 @@ const Documents = () => {
               </div>
             </div>
             
+            {/* Part Two Section */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
+              <div className="flex justify-end">
+                <img 
+                  src="/images/saudi-passport-page.jpg" 
+                  alt="صفحة معلومات الجواز السعودي" 
+                  className="max-w-md rounded-lg border-2 border-gray-300 shadow-md"
+                />
+              </div>
+            </div>
+            
             {/* Submit Button */}
             <div className="flex justify-end">
               <Button 
