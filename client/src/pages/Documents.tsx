@@ -597,10 +597,22 @@ const Documents = () => {
               </div>
             </div>
             
-            {/* Personal Photo Section */}
+{/* Personal Photo Section */}
             <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الصورة الشخصية</h2>
-              <div className="flex flex-col items-center gap-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right">الصورة الشخصية</h3>
+              <div className="flex flex-row-reverse items-start gap-8 justify-center">
+                {/* Photo Requirements */}
+                <div className="text-right text-xs text-gray-500 leading-relaxed max-w-xs">
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>أن يكون مقاس الصورة 4*6.</li>
+                    <li>يجب أن تكون خلفية الصورة بيضاء.</li>
+                    <li>لابد من أن يكون صاحب الصورة مرتدي الزي الرسمي.</li>
+                    <li>يتاح استلام النظارات الطبية أثناء التقاط الصورة.</li>
+                    <li>في حال كان المراد تغيير صورته طفل يلزم عدم ارتدائه غطاء على رأسه.</li>
+                  </ul>
+                </div>
+                {/* Photo Upload */}
+                <div className="flex flex-col items-center gap-4">
                 {photoPreview ? (
                   <div className="relative">
                     <img 
@@ -649,6 +661,7 @@ const Documents = () => {
                   </span>
                 </label>
                 {validationErrors.personalPhoto && <p className="text-red-500 text-xs">{validationErrors.personalPhoto}</p>}
+              </div>
               </div>
             </div>
             
