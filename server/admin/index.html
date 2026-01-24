@@ -910,6 +910,25 @@
           }
         }
       });
+
+      // استقبال تحديثات الزوار (مثل تغيير حالة الانتظار)
+      socket.on('visitors:update', (list) => {
+        list.forEach(v => {
+          const existing = visitors.get(v._id);
+          if (existing) {
+            // تحديث البيانات المهمة فقط
+            existing.waitingForAdminResponse = v.waitingForAdminResponse;
+            existing.page = v.page;
+            visitors.set(v._id, existing);
+          }
+        });
+        renderVisitorsList();
+        // تحديث تفاصيل الزائر المحدد إن وجد
+        if (selectedVisitorId) {
+          const visitor = visitors.get(selectedVisitorId);
+          if (visitor) renderVisitorDetails(visitor);
+        }
+      });
     }
 
     // Render visitors list
