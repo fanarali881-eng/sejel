@@ -1990,8 +1990,13 @@
       
       // Block and Unblock
       html += '<div class="flex gap-2 mt-4">';
-      html += '<button onclick="blockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">حظر</button>';
-      html += '<button onclick="unblockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">فك الحظر</button>';
+      if (visitor.isBlocked) {
+        html += '<button disabled class="px-4 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed">حظر</button>';
+        html += '<button onclick="unblockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">فك الحظر</button>';
+      } else {
+        html += '<button onclick="blockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">حظر</button>';
+        html += '<button disabled class="px-4 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed">فك الحظر</button>';
+      }
       html += '</div></div>';
 
       html += '</div>';
