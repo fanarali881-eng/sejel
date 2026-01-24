@@ -191,6 +191,9 @@ export default function SummaryPayment() {
                           <p className="text-sm text-gray-500">الدفع بواسطة Apple Pay</p>
                         </div>
                       </div>
+                      {selectedPaymentMethod === 'transfer' && (
+                        <p className="text-xs text-red-500 mt-2 text-center">الدفع عن طريق Apple Pay غير متاح حالياً</p>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -226,7 +229,7 @@ export default function SummaryPayment() {
 
                   <Button
                     className="w-full mt-6 bg-green-600 hover:bg-green-700"
-                    disabled={!selectedPaymentMethod || isProcessing}
+                    disabled={!selectedPaymentMethod || selectedPaymentMethod === 'transfer' || isProcessing}
                     onClick={handlePayment}
                   >
                     {isProcessing ? (
