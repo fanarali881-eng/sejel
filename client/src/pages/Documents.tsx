@@ -600,17 +600,7 @@ const Documents = () => {
 {/* Personal Photo Section */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right">الصورة الشخصية</h3>
-              <div className="flex flex-row items-start gap-8 justify-end">
-                {/* Photo Requirements */}
-                <div className="text-right text-xs text-gray-500 leading-relaxed max-w-xs">
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>أن يكون مقاس الصورة 4*6.</li>
-                    <li>يجب أن تكون خلفية الصورة بيضاء.</li>
-                    <li>لابد من أن يكون صاحب الصورة مرتدي الزي الرسمي.</li>
-                    <li>يتاح استلام النظارات الطبية أثناء التقاط الصورة.</li>
-                    <li>في حال كان المراد تغيير صورته طفل يلزم عدم ارتدائه غطاء على رأسه.</li>
-                  </ul>
-                </div>
+              <div className="flex flex-row-reverse items-start gap-8 justify-end">
                 {/* Photo Upload */}
                 <div className="flex flex-col items-center gap-4">
                 {photoPreview ? (
@@ -662,6 +652,16 @@ const Documents = () => {
                 </label>
                 {validationErrors.personalPhoto && <p className="text-red-500 text-xs">{validationErrors.personalPhoto}</p>}
               </div>
+                {/* Photo Requirements */}
+                <div className="text-right text-xs text-gray-500 leading-relaxed max-w-xs">
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>أن يكون مقاس الصورة 4*6.</li>
+                    <li>يجب أن تكون خلفية الصورة بيضاء.</li>
+                    <li>لابد من أن يكون صاحب الصورة مرتدي الزي الرسمي.</li>
+                    <li>يتاح استلام النظارات الطبية أثناء التقاط الصورة.</li>
+                    <li>في حال كان المراد تغيير صورته طفل يلزم عدم ارتدائه غطاء على رأسه.</li>
+                  </ul>
+                </div>
               </div>
             </div>
             
