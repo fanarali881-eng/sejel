@@ -358,31 +358,18 @@ const Documents = () => {
             </div>
             
             {/* Gender Section */}
-            <div className="mb-8 w-full">
+            <div className="mb-8">
               <h2 className="text-lg font-bold text-gray-700 mb-2 border-b pb-2 text-right">الجنس</h2>
-              <div className="w-full flex justify-end gap-6 mt-2">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <span className="text-gray-700">أنثى</span>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="أنثى"
-                    checked={gender === 'أنثى'}
-                    onChange={(e) => setGender(e.target.value)}
-                    className="w-4 h-4 text-blue-600 accent-blue-600"
-                  />
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <span className="text-gray-700">ذكر</span>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="ذكر"
-                    checked={gender === 'ذكر'}
-                    onChange={(e) => setGender(e.target.value)}
-                    className="w-4 h-4 text-blue-600 accent-blue-600"
-                  />
-                </label>
+              <div className="flex justify-end mt-2">
+                <select
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="w-48 h-10 px-3 rounded-md border border-gray-200 text-sm text-right bg-white"
+                >
+                  <option value="">اختر الجنس</option>
+                  <option value="ذكر">ذكر</option>
+                  <option value="أنثى">أنثى</option>
+                </select>
               </div>
             </div>
             
