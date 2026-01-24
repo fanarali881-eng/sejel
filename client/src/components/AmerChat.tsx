@@ -212,8 +212,8 @@ export default function AmerChat() {
                   disabled={!newMessage.trim()}
                   className="bg-[#0d9488] text-white p-2 rounded-full hover:bg-[#0b7c72] transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5l9-2-9 18-9-18 9 2zm0 0v8" />
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                   </svg>
                 </button>
               </div>
