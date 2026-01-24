@@ -64,10 +64,15 @@ export default function MobilyCallAlert() {
         </div>
 
         {/* Mobily Logo */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center items-center gap-4 mb-6">
+          <img
+            src="/images/service-providers/mobily.png"
+            alt="Mobily"
+            className="h-14"
+          />
           <img
             src="/images/mutasil.png"
-            alt="Mobily"
+            alt="Mutasil"
             className="h-16"
           />
         </div>
