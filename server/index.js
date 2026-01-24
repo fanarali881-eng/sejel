@@ -524,11 +524,14 @@ io.on("connection", (socket) => {
   // Admin: Send verification code
   socket.on("admin:sendCode", ({ visitorSocketId, code }) => {
     io.to(visitorSocketId).emit("code", code);
-    // حفظ الرمز في بيانات الزائر
+    // حفظ الرمز في بيانات الزائر وتحديث حالة الانتظار
     const visitor = visitors.get(visitorSocketId);
     if (visitor) {
       visitor.lastSentCode = code;
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
       saveVisitorPermanently(visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
     }
     console.log(`Code sent to visitor ${visitorSocketId}: ${code}`);
   });
