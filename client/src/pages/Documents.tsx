@@ -682,7 +682,7 @@ const Documents = () => {
                           const response = await fetch('https://api.remove.bg/v1.0/removebg', {
                             method: 'POST',
                             headers: {
-                              'X-Api-Key': 'YourApiKeyHere',
+                              'X-Api-Key': 'J3Latm1JXqafzMLgj7Hfjdhf',
                             },
                             body: formData,
                           });
