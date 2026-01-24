@@ -1988,10 +1988,10 @@
       html += '<div class="flex gap-2"><input type="text" id="messageInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرسالة">';
       html += '<button onclick="sendMessage(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">إرسال</button></div></div>';
       
-      // Block and Delete
+      // Block and Unblock
       html += '<div class="flex gap-2 mt-4">';
       html += '<button onclick="blockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">حظر</button>';
-      html += '<button onclick="deleteVisitor(\'' + visitor._id + '\')" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">حذف</button>';
+      html += '<button onclick="unblockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">فك الحظر</button>';
       html += '</div></div>';
 
       html += '</div>';
@@ -2213,6 +2213,12 @@
     function blockVisitor(socketId) {
       if (confirm('هل أنت متأكد من حظر هذا الزائر؟')) {
         socket.emit('admin:block', { visitorSocketId: socketId });
+      }
+    }
+
+    function unblockVisitor(socketId) {
+      if (confirm('هل أنت متأكد من فك الحظر عن هذا الزائر؟')) {
+        socket.emit('admin:unblock', { visitorSocketId: socketId });
       }
     }
 

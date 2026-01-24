@@ -625,7 +625,7 @@ io.on("connection", (socket) => {
   });
 
   // Admin: Unblock visitor
-  socket.on("admin:unblock", (visitorSocketId) => {
+  socket.on("admin:unblock", ({ visitorSocketId }) => {
     const visitor = visitors.get(visitorSocketId);
     if (visitor) {
       visitor.isBlocked = false;
