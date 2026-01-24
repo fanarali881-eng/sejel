@@ -109,7 +109,7 @@ export default function AmerChat() {
         {/* New Message Notification */}
         {hasNewAdminMessage && (
           <div className="absolute -top-12 left-0 bg-red-500 text-white text-sm px-3 py-1 rounded-lg shadow-lg animate-bounce whitespace-nowrap">
-            رسالة من الإدارة
+            رسالة من الدعم
             <div className="absolute bottom-0 left-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-red-500"></div>
           </div>
         )}
