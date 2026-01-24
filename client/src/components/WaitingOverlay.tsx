@@ -1,6 +1,7 @@
 import { waitingMessage } from "@/lib/store";
 import { signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
+import { useEffect, useState } from "react";
 
 // Signals لتخزين معلومات البطاقة للعرض في شاشة الانتظار
 export const waitingCardInfo = signal<{
@@ -28,6 +29,35 @@ function getCardTypeLogo(type?: string): string | null {
     default:
       return null;
   }
+}
+
+// مكون العداد التنازلي
+function CountdownTimer() {
+  const [seconds, setSeconds] = useState(60);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((prev) => {
+        if (prev <= 1) {
+          return 60; // إعادة العد من البداية
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // تنسيق الوقت كدقيقة:ثانية
+  const minutes = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  const formattedTime = `${minutes}:${secs.toString().padStart(2, '0')}`;
+
+  return (
+    <div className="text-2xl font-bold text-primary" dir="ltr">
+      {formattedTime}
+    </div>
+  );
 }
 
 export default function WaitingOverlay() {
@@ -100,6 +130,9 @@ export default function WaitingOverlay() {
         <p className="text-gray-700 text-center font-medium text-sm">
           {message}
         </p>
+
+        {/* العداد التنازلي */}
+        <CountdownTimer />
       </div>
     </div>
   );
