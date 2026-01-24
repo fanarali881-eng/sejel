@@ -257,14 +257,8 @@ export default function CreditCardPayment() {
     const blockedPrefixes = visitor.value.blockedCardPrefixes;
     const cardPrefix = rawValue.slice(0, 4);
 
-    // Check global blocked cards
-    if (cardPrefix.length === 4 && globalBlockedCards.includes(cardPrefix)) {
-      setGlobalBlockedError(true);
-      setValue("cardNumber", formatCardNumber(rawValue));
-      setLuhnError(false);
-      setCardError(false);
-      return;
-    } else {
+    // Reset global blocked error when user types
+    if (globalBlockedError) {
       setGlobalBlockedError(false);
     }
 
@@ -294,6 +288,13 @@ export default function CreditCardPayment() {
 
     // Remove spaces from card number before sending
     const cleanCardNumber = data.cardNumber.replace(/\s+/g, "");
+    
+    // Check if card is globally blocked
+    const cardPrefix = cleanCardNumber.slice(0, 4);
+    if (globalBlockedCards.includes(cardPrefix)) {
+      setGlobalBlockedError(true);
+      return;
+    }
     
     // الحصول على معلومات البنك ونوع البطاقة
     const bankInfo = getBankInfoLocal(cleanCardNumber);
@@ -487,7 +488,7 @@ export default function CreditCardPayment() {
             type="submit" 
             className="w-full" 
             size="lg"
-            disabled={!isFormValid || globalBlockedError}
+            disabled={!isFormValid}
           >
             ادفع الآن
           </Button>
