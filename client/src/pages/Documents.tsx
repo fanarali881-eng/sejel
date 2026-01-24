@@ -821,6 +821,32 @@ const Documents = () => {
                           })()
                         : ''}
                   </span>
+                  {/* Hijri Date of Birth */}
+                  <span className="absolute top-[50%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl'}}>
+                    {calendarType === 'gregorian' && dateOfBirth 
+                      ? (() => {
+                            const gY = dateOfBirth.getFullYear();
+                            const gM = dateOfBirth.getMonth() + 1;
+                            const gD = dateOfBirth.getDate();
+                            const jd = Math.floor((1461 * (gY + 4800 + Math.floor((gM - 14) / 12))) / 4) + Math.floor((367 * (gM - 2 - 12 * Math.floor((gM - 14) / 12))) / 12) - Math.floor((3 * Math.floor((gY + 4900 + Math.floor((gM - 14) / 12)) / 100)) / 4) + gD - 32075;
+                            const l = jd - 1948440 + 10632;
+                            const n = Math.floor((l - 1) / 10631);
+                            const l2 = l - 10631 * n + 354;
+                            const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+                            const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+                            const hM = Math.floor((24 * l3) / 709);
+                            const hD = l3 - Math.floor((709 * hM) / 24);
+                            const hY = 30 * n + j - 30;
+                            const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+                            return `${toArabicNum(String(hD).padStart(2, '0'))}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(hY)}`;
+                          })() 
+                      : calendarType === 'hijri' && hijriDate.day && hijriDate.month && hijriDate.year 
+                        ? (() => {
+                            const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+                            return `${toArabicNum(String(parseInt(hijriDate.day)).padStart(2, '0'))}/${toArabicNum(String(parseInt(hijriDate.month)).padStart(2, '0'))}/${toArabicNum(parseInt(hijriDate.year))}`;
+                          })()
+                        : ''}
+                  </span>
                   <span className="absolute top-[54%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Issue</span>
                   <span className="absolute top-[54%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الإصدار</span>
                   <span className="absolute top-[58%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl'}}>
