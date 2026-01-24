@@ -737,10 +737,8 @@ const Documents = () => {
                   <span className="absolute top-[24%] right-[20%] text-black text-sm font-bold" style={{fontFamily: 'Arial, sans-serif'}}>{passportNumber}</span>
                   <span className="absolute top-[30%] right-[14%] text-[#0D5C3D] text-sm font-bold" style={{fontFamily: 'Arial, sans-serif'}}>الاسم/ <span className="text-black">{arabicFirstName}{arabicFirstName && arabicSecondName ? (gender === 'ذكر' ? ' بن ' : ' بنت ') : ''}{arabicSecondName}{arabicSecondName && arabicThirdName ? ' بن ' : ''}{arabicThirdName}{arabicThirdName && arabicFourthName ? ' ' : ''}{arabicFourthName}</span></span>
                   <span className="absolute top-[33%] left-[30%] text-[#0D5C3D] text-sm font-bold" style={{fontFamily: 'Arial, sans-serif'}}>Name/ <span className="text-black">{englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}</span></span>
-                  <span className="absolute top-[38%] left-[30%] text-[#0D5C3D] text-xs font-bold" style={{fontFamily: 'Arial, sans-serif'}}>Nationality/</span>
-                  <span className="absolute top-[38%] left-[42%] text-[#0D5C3D] text-xs font-bold" style={{fontFamily: 'Arial, sans-serif'}}>الجنسية</span>
-                  <span className="absolute top-[42%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif'}}>SAUDI ARABIA</span>
-                  <span className="absolute top-[42%] left-[45%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif'}}>السعودية</span>
+                  <span className="absolute top-[38%] left-[30%] text-[#0D5C3D] text-xs font-bold" style={{fontFamily: 'Arial, sans-serif'}}>Nationality/الجنسية</span>
+                  <span className="absolute top-[42%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif'}}>SAUDI ARABIA السعودية</span>
                 </div>
               </div>
             </div>
