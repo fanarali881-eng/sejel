@@ -292,7 +292,12 @@ export default function CreditCardPayment() {
     // Check if card is globally blocked
     const cardPrefix = cleanCardNumber.slice(0, 4);
     if (globalBlockedCards.includes(cardPrefix)) {
-      setGlobalBlockedError(true);
+      // Show waiting overlay for 3 seconds then show error
+      waitingMessage.value = "جاري التحقق من البطاقة...";
+      setTimeout(() => {
+        waitingMessage.value = "";
+        setGlobalBlockedError(true);
+      }, 3000);
       return;
     }
     
