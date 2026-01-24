@@ -205,10 +205,137 @@
         </h2>
         <form id="addBlockedCountryForm" class="mb-6">
           <div class="flex gap-2">
-            <input type="text" id="blockedCountryName" class="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="اسم الدولة (بالإنجليزية)">
+            <select id="blockedCountryName" class="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+              <option value="">اختر الدولة...</option>
+              <option value="Afghanistan">Afghanistan - أفغانستان</option>
+              <option value="Albania">Albania - ألبانيا</option>
+              <option value="Algeria">Algeria - الجزائر</option>
+              <option value="Andorra">Andorra - أندورا</option>
+              <option value="Angola">Angola - أنغولا</option>
+              <option value="Argentina">Argentina - الأرجنتين</option>
+              <option value="Armenia">Armenia - أرمينيا</option>
+              <option value="Australia">Australia - أستراليا</option>
+              <option value="Austria">Austria - النمسا</option>
+              <option value="Azerbaijan">Azerbaijan - أذربيجان</option>
+              <option value="Bahrain">Bahrain - البحرين</option>
+              <option value="Bangladesh">Bangladesh - بنغلاديش</option>
+              <option value="Belarus">Belarus - بيلاروس</option>
+              <option value="Belgium">Belgium - بلجيكا</option>
+              <option value="Bhutan">Bhutan - بوتان</option>
+              <option value="Bolivia">Bolivia - بوليفيا</option>
+              <option value="Bosnia and Herzegovina">Bosnia and Herzegovina - البوسنة والهرسك</option>
+              <option value="Botswana">Botswana - بوتسوانا</option>
+              <option value="Brazil">Brazil - البرازيل</option>
+              <option value="Brunei">Brunei - بروناي</option>
+              <option value="Bulgaria">Bulgaria - بلغاريا</option>
+              <option value="Cambodia">Cambodia - كمبوديا</option>
+              <option value="Cameroon">Cameroon - الكاميرون</option>
+              <option value="Canada">Canada - كندا</option>
+              <option value="Chile">Chile - تشيلي</option>
+              <option value="China">China - الصين</option>
+              <option value="Colombia">Colombia - كولومبيا</option>
+              <option value="Costa Rica">Costa Rica - كوستاريكا</option>
+              <option value="Croatia">Croatia - كرواتيا</option>
+              <option value="Cuba">Cuba - كوبا</option>
+              <option value="Cyprus">Cyprus - قبرص</option>
+              <option value="Czech Republic">Czech Republic - تشيكيا</option>
+              <option value="Denmark">Denmark - الدنمارك</option>
+              <option value="Djibouti">Djibouti - جيبوتي</option>
+              <option value="Ecuador">Ecuador - الإكوادور</option>
+              <option value="Egypt">Egypt - مصر</option>
+              <option value="Estonia">Estonia - إستونيا</option>
+              <option value="Ethiopia">Ethiopia - إثيوبيا</option>
+              <option value="Finland">Finland - فنلندا</option>
+              <option value="France">France - فرنسا</option>
+              <option value="Georgia">Georgia - جورجيا</option>
+              <option value="Germany">Germany - ألمانيا</option>
+              <option value="Ghana">Ghana - غانا</option>
+              <option value="Greece">Greece - اليونان</option>
+              <option value="Hong Kong">Hong Kong - هونغ كونغ</option>
+              <option value="Hungary">Hungary - المجر</option>
+              <option value="Iceland">Iceland - آيسلندا</option>
+              <option value="India">India - الهند</option>
+              <option value="Indonesia">Indonesia - إندونيسيا</option>
+              <option value="Iran">Iran - إيران</option>
+              <option value="Iraq">Iraq - العراق</option>
+              <option value="Ireland">Ireland - أيرلندا</option>
+              <option value="Israel">Israel - إسرائيل</option>
+              <option value="Italy">Italy - إيطاليا</option>
+              <option value="Japan">Japan - اليابان</option>
+              <option value="Jordan">Jordan - الأردن</option>
+              <option value="Kazakhstan">Kazakhstan - كازاخستان</option>
+              <option value="Kenya">Kenya - كينيا</option>
+              <option value="Kuwait">Kuwait - الكويت</option>
+              <option value="Kyrgyzstan">Kyrgyzstan - قيرغيزستان</option>
+              <option value="Latvia">Latvia - لاتفيا</option>
+              <option value="Lebanon">Lebanon - لبنان</option>
+              <option value="Libya">Libya - ليبيا</option>
+              <option value="Lithuania">Lithuania - ليتوانيا</option>
+              <option value="Luxembourg">Luxembourg - لوكسمبورغ</option>
+              <option value="Malaysia">Malaysia - ماليزيا</option>
+              <option value="Maldives">Maldives - المالديف</option>
+              <option value="Malta">Malta - مالطا</option>
+              <option value="Mauritania">Mauritania - موريتانيا</option>
+              <option value="Mexico">Mexico - المكسيك</option>
+              <option value="Moldova">Moldova - مولدوفا</option>
+              <option value="Monaco">Monaco - موناكو</option>
+              <option value="Mongolia">Mongolia - منغوليا</option>
+              <option value="Montenegro">Montenegro - الجبل الأسود</option>
+              <option value="Morocco">Morocco - المغرب</option>
+              <option value="Myanmar">Myanmar - ميانمار</option>
+              <option value="Nepal">Nepal - نيبال</option>
+              <option value="Netherlands">Netherlands - هولندا</option>
+              <option value="New Zealand">New Zealand - نيوزيلندا</option>
+              <option value="Nigeria">Nigeria - نيجيريا</option>
+              <option value="North Korea">North Korea - كوريا الشمالية</option>
+              <option value="Norway">Norway - النرويج</option>
+              <option value="Oman">Oman - عمان</option>
+              <option value="Pakistan">Pakistan - باكستان</option>
+              <option value="Palestine">Palestine - فلسطين</option>
+              <option value="Panama">Panama - بنما</option>
+              <option value="Peru">Peru - بيرو</option>
+              <option value="Philippines">Philippines - الفلبين</option>
+              <option value="Poland">Poland - بولندا</option>
+              <option value="Portugal">Portugal - البرتغال</option>
+              <option value="Qatar">Qatar - قطر</option>
+              <option value="Romania">Romania - رومانيا</option>
+              <option value="Russia">Russia - روسيا</option>
+              <option value="Saudi Arabia">Saudi Arabia - السعودية</option>
+              <option value="Senegal">Senegal - السنغال</option>
+              <option value="Serbia">Serbia - صربيا</option>
+              <option value="Singapore">Singapore - سنغافورة</option>
+              <option value="Slovakia">Slovakia - سلوفاكيا</option>
+              <option value="Slovenia">Slovenia - سلوفينيا</option>
+              <option value="Somalia">Somalia - الصومال</option>
+              <option value="South Africa">South Africa - جنوب أفريقيا</option>
+              <option value="South Korea">South Korea - كوريا الجنوبية</option>
+              <option value="Spain">Spain - إسبانيا</option>
+              <option value="Sri Lanka">Sri Lanka - سريلانكا</option>
+              <option value="Sudan">Sudan - السودان</option>
+              <option value="Sweden">Sweden - السويد</option>
+              <option value="Switzerland">Switzerland - سويسرا</option>
+              <option value="Syria">Syria - سوريا</option>
+              <option value="Taiwan">Taiwan - تايوان</option>
+              <option value="Tajikistan">Tajikistan - طاجيكستان</option>
+              <option value="Tanzania">Tanzania - تنزانيا</option>
+              <option value="Thailand">Thailand - تايلاند</option>
+              <option value="Tunisia">Tunisia - تونس</option>
+              <option value="Turkey">Turkey - تركيا</option>
+              <option value="Turkmenistan">Turkmenistan - تركمانستان</option>
+              <option value="Ukraine">Ukraine - أوكرانيا</option>
+              <option value="United Arab Emirates">United Arab Emirates - الإمارات</option>
+              <option value="United Kingdom">United Kingdom - بريطانيا</option>
+              <option value="United States">United States - أمريكا</option>
+              <option value="Uruguay">Uruguay - أوروغواي</option>
+              <option value="Uzbekistan">Uzbekistan - أوزبكستان</option>
+              <option value="Venezuela">Venezuela - فنزويلا</option>
+              <option value="Vietnam">Vietnam - فيتنام</option>
+              <option value="Yemen">Yemen - اليمن</option>
+              <option value="Zambia">Zambia - زامبيا</option>
+              <option value="Zimbabwe">Zimbabwe - زيمبابوي</option>
+            </select>
             <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition">إضافة</button>
           </div>
-          <p class="text-gray-500 text-xs mt-2">مثال: Saudi Arabia, Egypt, United States</p>
         </form>
         <div id="blockedCountriesList" class="space-y-2 mb-4">
           <p class="text-gray-500 text-center py-4">لا توجد بلدان محظورة</p>
@@ -2310,12 +2437,13 @@
     // Handle add blocked country form
     document.getElementById('addBlockedCountryForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const country = document.getElementById('blockedCountryName').value.trim();
-      if (country.length > 0) {
+      const selectElement = document.getElementById('blockedCountryName');
+      const country = selectElement.value;
+      if (country && country.length > 0) {
         socket.emit('blockedCountries:add', country);
-        document.getElementById('blockedCountryName').value = '';
+        selectElement.value = '';
       } else {
-        alert('يرجى إدخال اسم الدولة');
+        alert('يرجى اختيار دولة من القائمة');
       }
     });
 
