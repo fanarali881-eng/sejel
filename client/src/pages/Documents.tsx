@@ -360,11 +360,12 @@ const Documents = () => {
             {/* Gender Section */}
             <div className="mb-8">
               <h2 className="text-lg font-bold text-gray-700 mb-2 border-b pb-2 text-right">الجنس</h2>
-              <div className="flex justify-end mt-2">
+              <div className="text-right mt-2">
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                   className="w-48 h-10 px-3 rounded-md border border-gray-200 text-sm text-right bg-white"
+                  style={{ direction: 'rtl' }}
                 >
                   <option value="">اختر الجنس</option>
                   <option value="ذكر">ذكر</option>
