@@ -360,7 +360,7 @@ const Documents = () => {
             {/* Gender Section */}
             <div className="mb-8">
               <h2 className="text-lg font-bold text-gray-700 mb-2 border-b pb-2 text-right">الجنس</h2>
-              <div className="flex gap-6 flex-row-reverse mt-2">
+              <div className="flex gap-6 justify-end mt-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
