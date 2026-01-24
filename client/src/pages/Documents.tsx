@@ -248,7 +248,7 @@ const Documents = () => {
                           }}
                           disabled={(date) => date > new Date() || date < new Date("1940-01-01")}
                           initialFocus
-                          captionLayout="dropdown-buttons"
+                          captionLayout="dropdown"
                           fromYear={1940}
                           toYear={new Date().getFullYear()}
                         />
