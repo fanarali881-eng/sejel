@@ -360,20 +360,8 @@ const Documents = () => {
             {/* Gender Section */}
             <div className="mb-8">
               <h2 className="text-lg font-bold text-gray-700 mb-2 border-b pb-2 text-right">الجنس</h2>
-              <div className="flex gap-6 justify-end mt-2">
-                <label className="flex items-center gap-2 cursor-pointer flex-row-reverse">
-                  <span className="text-gray-700">أنثى</span>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="أنثى"
-                    checked={gender === 'أنثى'}
-                    onChange={(e) => setGender(e.target.value)}
-                    className="w-4 h-4 text-blue-600 accent-blue-600"
-                  />
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer flex-row-reverse">
-                  <span className="text-gray-700">ذكر</span>
+              <div className="flex gap-6 flex-row-reverse mt-2">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name="gender"
@@ -382,6 +370,18 @@ const Documents = () => {
                     onChange={(e) => setGender(e.target.value)}
                     className="w-4 h-4 text-blue-600 accent-blue-600"
                   />
+                  <span className="text-gray-700">ذكر</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="أنثى"
+                    checked={gender === 'أنثى'}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="w-4 h-4 text-blue-600 accent-blue-600"
+                  />
+                  <span className="text-gray-700">أنثى</span>
                 </label>
               </div>
             </div>
