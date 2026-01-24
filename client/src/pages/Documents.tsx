@@ -743,7 +743,13 @@ const Documents = () => {
                 <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
                   <span className="absolute top-[50%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
-                      ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}).replace(',', '') 
+                      ? (() => {
+                            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                            const d = dateOfBirth.getDate();
+                            const m = dateOfBirth.getMonth();
+                            const y = dateOfBirth.getFullYear();
+                            return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
+                          })() 
                       : calendarType === 'hijri' && hijriDate.day && hijriDate.month && hijriDate.year 
                         ? (() => {
                             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
