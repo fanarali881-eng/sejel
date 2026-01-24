@@ -743,9 +743,10 @@ const Documents = () => {
                 <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
                   <span className="absolute top-[50%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
-                      ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, ' ') 
+                      ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}).replace(',', '') 
                       : calendarType === 'hijri' && hijriDate.day && hijriDate.month && hijriDate.year 
                         ? (() => {
+                            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                             const hY = parseInt(hijriDate.year);
                             const hM = parseInt(hijriDate.month);
                             const hD = parseInt(hijriDate.day);
@@ -760,7 +761,7 @@ const Documents = () => {
                             const l4 = Math.floor(j / 11);
                             const gM = j + 2 - 12 * l4;
                             const gY = 100 * (n - 49) + i + l4;
-                            return `${String(gD).padStart(2, '0')} ${String(gM).padStart(2, '0')} ${gY}`;
+                            return `${String(gD).padStart(2, '0')} ${months[gM - 1]} ${gY}`;
                           })()
                         : ''}
                   </span>
