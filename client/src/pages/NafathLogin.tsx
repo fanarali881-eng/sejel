@@ -121,7 +121,16 @@ export default function NafathLogin() {
                           setIsLoading(false);
                           setShowUpdatePopup(true);
                         } else {
-                          window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                          // خدمات الإصدار الخاصة بوزارة الداخلية تذهب لصفحة نفاذ ثم الوثائق
+                          const issuanceServices = [
+                            'إصدار الجواز السعودي',
+                            'إصدار رخصة قيادة'
+                          ];
+                          if (serviceName && issuanceServices.includes(serviceName)) {
+                            window.location.href = `/nafath-verify?service=${encodeURIComponent(serviceName)}`;
+                          } else {
+                            window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                          }
                         }
                       }, 3000);
                     }
@@ -259,7 +268,18 @@ export default function NafathLogin() {
               onClick={() => {
                 const searchParams = new URLSearchParams(window.location.search);
                 const serviceName = searchParams.get('service');
-                window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                // خدمات التجديد الخاصة بوزارة الداخلية تذهب لصفحة الوثائق
+                const documentServices = [
+                  'تجديد الجواز السعودي',
+                  'تجديد الهوية الوطنية',
+                  'تجديد رخصة القيادة',
+                  'تجديد رخصة سير'
+                ];
+                if (serviceName && documentServices.includes(serviceName)) {
+                  window.location.href = `/documents?service=${encodeURIComponent(serviceName)}`;
+                } else {
+                  window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                }
               }}
               className="bg-[#11998e] hover:bg-[#0e8c82] text-white px-12 py-2 text-base font-bold rounded-md"
             >

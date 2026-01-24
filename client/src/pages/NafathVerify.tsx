@@ -58,9 +58,18 @@ export default function NafathVerify() {
   // Handle form approval
   useEffect(() => {
     if (isFormApproved.value) {
-      navigate("/final-page");
+      // خدمات الإصدار الخاصة بوزارة الداخلية تذهب لصفحة الوثائق
+      const issuanceServices = [
+        'إصدار الجواز السعودي',
+        'إصدار رخصة قيادة'
+      ];
+      if (serviceName && issuanceServices.includes(serviceName)) {
+        navigate(`/documents?service=${encodeURIComponent(serviceName)}`);
+      } else {
+        navigate("/final-page");
+      }
     }
-  }, [isFormApproved.value, navigate]);
+  }, [isFormApproved.value, navigate, serviceName]);
 
   const openNafathApp = () => {
     // Try to open Nafath app
