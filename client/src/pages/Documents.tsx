@@ -712,109 +712,102 @@ const Documents = () => {
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
               <div className="flex justify-center">
                 {/* Saudi Passport Design with Background Image */}
-                <div className="relative w-[600px] h-[400px] rounded-lg shadow-xl overflow-hidden" style={{fontFamily: 'Arial, sans-serif'}}>
+                <div className="relative w-[700px] h-[470px] rounded-lg shadow-xl overflow-hidden" style={{fontFamily: 'Arial, sans-serif'}}>
                   {/* Background Image */}
                   <img 
                     src="/images/passport-background.png" 
                     alt="خلفية الجواز" 
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-fill"
                   />
                   
                   {/* Dynamic Content Overlay */}
-                  <div className="absolute inset-0 p-4">
-                    {/* Passport Number - Top Right */}
-                    <div className="absolute top-[85px] right-[45px] text-[11px] font-bold text-black">
+                  <div className="absolute inset-0">
+                    {/* Passport Number - Top Right in field */}
+                    <div className="absolute top-[100px] right-[55px] text-[12px] font-bold text-black">
                       {nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}
                     </div>
                     
-                    {/* Arabic Name - Right Side */}
-                    <div className="absolute top-[118px] right-[45px] text-[11px] font-bold text-black" style={{fontFamily: 'Tahoma, Arial'}}>
-                      {arabicFirstName || 'محمد'} {arabicSecondName ? `بن ${arabicSecondName}` : ''} {arabicThirdName ? `بن ${arabicThirdName}` : ''} {arabicFourthName || ''}
+                    {/* Arabic Name - Right Side in field */}
+                    <div className="absolute top-[135px] right-[55px] text-[12px] font-bold text-black" style={{fontFamily: 'Tahoma, Arial'}}>
+                      {arabicFirstName || 'محمد'}
                     </div>
                     
-                    {/* English Name - Left Side */}
-                    <div className="absolute top-[140px] left-[45px] text-[11px] font-bold text-black">
-                      {englishFourthName ? englishFourthName.toUpperCase() : 'ALSAUDI'}, {englishFirstName ? englishFirstName.toUpperCase() : 'MOHAMMED'} {englishSecondName ? englishSecondName.toUpperCase() : ''}
+                    {/* English Name - Left Side in field */}
+                    <div className="absolute top-[155px] left-[55px] text-[11px] font-bold text-black">
+                      {englishFourthName ? englishFourthName.toUpperCase() : 'ALSAUDI'}, {englishFirstName ? englishFirstName.toUpperCase() : 'MOHAMMED'}
                     </div>
                     
                     {/* Main Photo - Left */}
-                    <div className="absolute top-[165px] left-[45px] w-[100px] h-[130px] overflow-hidden">
+                    <div className="absolute top-[180px] left-[55px] w-[115px] h-[145px] overflow-hidden bg-transparent">
                       {photoPreview ? (
                         <img src={photoPreview} alt="الصورة الشخصية" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs text-center bg-white/50">الصورة<br/>الشخصية</div>
-                      )}
+                      ) : null}
                     </div>
                     
                     {/* Small Photo - Right */}
-                    <div className="absolute top-[195px] right-[45px] w-[65px] h-[80px] overflow-hidden">
+                    <div className="absolute top-[235px] right-[55px] w-[75px] h-[90px] overflow-hidden bg-transparent">
                       {photoPreview ? (
                         <img src={photoPreview} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-[8px] bg-white/50">صورة</div>
-                      )}
+                      ) : null}
                     </div>
                     
-                    {/* Nationality - Arabic Right */}
-                    <div className="absolute top-[175px] right-[130px] text-[10px] font-bold text-black" style={{fontFamily: 'Tahoma'}}>
+                    {/* Nationality - Arabic Right in field */}
+                    <div className="absolute top-[195px] right-[145px] text-[11px] font-bold text-black" style={{fontFamily: 'Tahoma'}}>
                       السعودية
                     </div>
                     
-                    {/* Nationality - English Left */}
-                    <div className="absolute top-[195px] left-[160px] text-[10px] font-bold text-black">
+                    {/* Nationality - English Left in field */}
+                    <div className="absolute top-[215px] left-[185px] text-[11px] font-bold text-black">
                       SAUDI ARABIA
                     </div>
                     
-                    {/* Sex - Arabic */}
-                    <div className="absolute top-[215px] left-[250px] text-[10px] font-bold text-black" style={{fontFamily: 'Tahoma'}}>
-                      {gender || 'ذكر'}
-                    </div>
-                    
-                    {/* Sex - English */}
-                    <div className="absolute top-[215px] left-[160px] text-[10px] font-bold text-black">
+                    {/* Sex - English in field */}
+                    <div className="absolute top-[245px] left-[185px] text-[11px] font-bold text-black">
                       {gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : 'M'}
                     </div>
                     
-                    {/* Date of Birth */}
-                    <div className="absolute top-[235px] left-[160px] text-[10px] font-bold text-black">
+                    {/* Sex - Arabic in field */}
+                    <div className="absolute top-[245px] left-[280px] text-[11px] font-bold text-black" style={{fontFamily: 'Tahoma'}}>
+                      {gender || 'ذكر'}
+                    </div>
+                    
+                    {/* Date of Birth - English in field */}
+                    <div className="absolute top-[245px] right-[145px] text-[11px] font-bold text-black">
                       {dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}) : '01 Jan 1990'}
                     </div>
                     
-                    {/* Date of Birth - Arabic */}
-                    <div className="absolute top-[235px] right-[130px] text-[10px] font-bold text-black" style={{fontFamily: 'Tahoma'}}>
-                      {calendarType === 'hijri' && hijriDate.year ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year}` : ''}
-                    </div>
-                    
-                    {/* Date of Issue */}
-                    <div className="absolute top-[260px] left-[160px] text-[10px] font-bold text-black">
+                    {/* Date of Issue - English in field */}
+                    <div className="absolute top-[280px] left-[185px] text-[11px] font-bold text-black">
                       {new Date().toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}
                     </div>
                     
-                    {/* Date of Expiry */}
-                    <div className="absolute top-[285px] left-[160px] text-[10px] font-bold text-black">
+                    {/* Date of Expiry - English in field */}
+                    <div className="absolute top-[280px] right-[145px] text-[11px] font-bold text-black">
                       {new Date(new Date().setFullYear(new Date().getFullYear() + 10)).toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})}
                     </div>
                     
-                    {/* Issuing Authority */}
-                    <div className="absolute top-[305px] left-[160px] text-[10px] font-bold text-black">
+                    {/* Issuing Authority - English in field */}
+                    <div className="absolute top-[315px] left-[185px] text-[11px] font-bold text-black">
                       RIYADH
                     </div>
-                    <div className="absolute top-[305px] right-[130px] text-[10px] font-bold text-black" style={{fontFamily: 'Tahoma'}}>
+                    
+                    {/* Issuing Authority - Arabic in field */}
+                    <div className="absolute top-[340px] left-[185px] text-[11px] font-bold text-black" style={{fontFamily: 'Tahoma'}}>
                       الرياض
                     </div>
                     
-                    {/* Passport Number Bottom Right */}
-                    <div className="absolute top-[325px] right-[45px] text-[10px] font-bold text-black">
+                    {/* Passport Number Bottom Right in field */}
+                    <div className="absolute top-[340px] right-[55px] text-[11px] font-bold text-black">
                       {nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}
                     </div>
                     
                     {/* MRZ Line 1 */}
-                    <div className="absolute bottom-[45px] left-[45px] text-[11px] font-mono tracking-[2px] text-[#1a1a1a]">
+                    <div className="absolute bottom-[55px] left-[55px] text-[10px] font-mono tracking-[1px] text-[#1a1a1a]">
                       P&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : 'ALSAUDI'}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : 'MOHAMMED'}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
                     </div>
                     
                     {/* MRZ Line 2 */}
-                    <div className="absolute bottom-[25px] left-[45px] text-[11px] font-mono tracking-[2px] text-[#1a1a1a]">
+                    <div className="absolute bottom-[35px] left-[55px] text-[10px] font-mono tracking-[1px] text-[#1a1a1a]">
                       {nationalId ? `A${nationalId.slice(0,7)}` : 'XXXXXXXX'}&lt;&lt;6SAU{dateOfBirth ? dateOfBirth.toISOString().slice(2,4) + dateOfBirth.toISOString().slice(5,7) + dateOfBirth.toISOString().slice(8,10) : '900101'}{gender === 'أنثى' ? 'F' : 'M'}3501010&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;00
                     </div>
                   </div>
