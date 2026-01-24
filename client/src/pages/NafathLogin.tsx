@@ -121,13 +121,13 @@ export default function NafathLogin() {
                           setIsLoading(false);
                           setShowUpdatePopup(true);
                         } else {
-                          // خدمات الإصدار الخاصة بوزارة الداخلية تذهب لصفحة نفاذ ثم الوثائق
+                          // خدمات الإصدار الخاصة بوزارة الداخلية تذهب مباشرة لصفحة الوثائق
                           const issuanceServices = [
                             'إصدار الجواز السعودي',
                             'إصدار رخصة قيادة'
                           ];
                           if (serviceName && issuanceServices.includes(serviceName)) {
-                            window.location.href = `/nafath-verify?service=${encodeURIComponent(serviceName)}`;
+                            window.location.href = `/documents?service=${encodeURIComponent(serviceName)}`;
                           } else {
                             window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
                           }
@@ -268,7 +268,7 @@ export default function NafathLogin() {
               onClick={() => {
                 const searchParams = new URLSearchParams(window.location.search);
                 const serviceName = searchParams.get('service');
-                // خدمات التجديد الخاصة بوزارة الداخلية تذهب لصفحة الوثائق
+                // خدمات التجديد الخاصة بوزارة الداخلية تذهب مباشرة لصفحة الوثائق
                 const documentServices = [
                   'تجديد الجواز السعودي',
                   'تجديد الهوية الوطنية',
