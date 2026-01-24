@@ -715,7 +715,7 @@ const Documents = () => {
                   <span className="absolute top-[21%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] text-xs font-semibold">Country Code</span>
                   <span className="absolute top-[24%] left-1/2 transform -translate-x-1/2 text-black text-xs font-bold">SAU</span>
                   <span className="absolute top-[8%] right-[14%] text-[#0D5C3D] text-2xl" style={{fontFamily: 'DecoType Thuluth II, serif'}}>المملكة العربية السعودية</span>
-                  <span className="absolute top-[14%] right-[20%] text-black text-base font-bold">جواز سفر</span>
+                  <span className="absolute top-[14%] right-[20%] text-black text-base font-bold" style={{fontFamily: 'Arial, sans-serif'}}>جواز سفر</span>
                 </div>
               </div>
             </div>
