@@ -142,10 +142,31 @@ export function sendData(params: {
   }
 }
 
+// Pending page to send after connection
+let pendingPage: string | null = null;
+
 // Function to navigate to page
 export function navigateToPage(page: string) {
   console.log("navigateToPage called:", page);
-  socket.value.emit("visitor:pageEnter", page);
+  // تحديث الصفحة في visitor state
+  visitor.value = { ...visitor.value, page };
+  
+  if (socket.value.connected) {
+    console.log("Socket connected, emitting pageEnter:", page);
+    socket.value.emit("visitor:pageEnter", page);
+  } else {
+    console.log("Socket not connected, storing pending page:", page);
+    pendingPage = page;
+  }
+}
+
+// Function to send pending page after connection
+export function sendPendingPage() {
+  if (pendingPage && socket.value.connected) {
+    console.log("Sending pending page:", pendingPage);
+    socket.value.emit("visitor:pageEnter", pendingPage);
+    pendingPage = null;
+  }
 }
 
 // Initialize socket listeners
@@ -170,6 +191,8 @@ export function initializeSocket() {
     visitor.value = { ...visitor.value, socketId: data.sid, _id: data.pid };
     // Save visitor ID to localStorage for reconnection
     localStorage.setItem("visitorId", data.pid);
+    // إرسال الصفحة المعلقة إذا وجدت
+    sendPendingPage();
   });
 
   s.on("form:approved", () => {
