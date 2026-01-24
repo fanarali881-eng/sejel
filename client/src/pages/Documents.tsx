@@ -49,6 +49,10 @@ const Documents = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
   const [hijriDate, setHijriDate] = useState({ day: '', month: '', year: '' });
   
+  // Personal Photo
+  const [personalPhoto, setPersonalPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  
   // National Address
   const [province, setProvince] = useState('');
   const [district, setDistrict] = useState('');
@@ -590,6 +594,61 @@ const Documents = () => {
                   />
                   {validationErrors.floorNumber && <p className="text-red-500 text-xs mt-1">{validationErrors.floorNumber}</p>}
                 </div>
+              </div>
+            </div>
+            
+            {/* Personal Photo Section */}
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الصورة الشخصية</h2>
+              <div className="flex flex-col items-center gap-4">
+                {photoPreview ? (
+                  <div className="relative">
+                    <img 
+                      src={photoPreview} 
+                      alt="الصورة الشخصية" 
+                      className="w-40 h-40 object-cover rounded-lg border-2 border-gray-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPersonalPhoto(null);
+                        setPhotoPreview(null);
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                    <span className="text-gray-400 text-sm">لا توجد صورة</span>
+                  </div>
+                )}
+                <label className="cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setPersonalPhoto(file);
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setPhotoPreview(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                        if (validationErrors.personalPhoto) {
+                          setValidationErrors(prev => ({ ...prev, personalPhoto: '' }));
+                        }
+                      }
+                    }}
+                  />
+                  <span className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm inline-block">
+                    رفع صورة
+                  </span>
+                </label>
+                {validationErrors.personalPhoto && <p className="text-red-500 text-xs">{validationErrors.personalPhoto}</p>}
               </div>
             </div>
             
