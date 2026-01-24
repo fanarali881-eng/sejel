@@ -63,6 +63,8 @@ const Documents = () => {
   // Personal Photo
   const [personalPhoto, setPersonalPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoNoBg, setPhotoNoBg] = useState<string | null>(null);
+  const [isRemovingBg, setIsRemovingBg] = useState(false);
   
   // National Address
   const [province, setProvince] = useState('');
@@ -659,7 +661,7 @@ const Documents = () => {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (file) {
                         setPersonalPhoto(file);
@@ -670,6 +672,29 @@ const Documents = () => {
                         reader.readAsDataURL(file);
                         if (validationErrors.personalPhoto) {
                           setValidationErrors(prev => ({ ...prev, personalPhoto: '' }));
+                        }
+                        // Remove background using remove.bg API
+                        setIsRemovingBg(true);
+                        try {
+                          const formData = new FormData();
+                          formData.append('image_file', file);
+                          formData.append('size', 'auto');
+                          const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+                            method: 'POST',
+                            headers: {
+                              'X-Api-Key': 'YourApiKeyHere',
+                            },
+                            body: formData,
+                          });
+                          if (response.ok) {
+                            const blob = await response.blob();
+                            const noBgUrl = URL.createObjectURL(blob);
+                            setPhotoNoBg(noBgUrl);
+                          }
+                        } catch (error) {
+                          console.error('Error removing background:', error);
+                        } finally {
+                          setIsRemovingBg(false);
                         }
                       }
                     }}
@@ -731,13 +756,12 @@ const Documents = () => {
                   </div>
                   <img src="/images/chip.png" alt="Chip" className="absolute top-[6%] left-[32%] w-10 h-6" />
                   {/* Personal Photo */}
-                  {photoPreview && (
-                    <div className="absolute top-[28%] left-[14%] w-[18%] h-[45%] overflow-hidden">
+                  {(photoNoBg || photoPreview) && (
+                    <div className="absolute top-[32%] left-[14%] w-[16%] h-[38%] overflow-hidden">
                       <img 
-                        src={photoPreview} 
+                        src={photoNoBg || photoPreview} 
                         alt="الصورة الشخصية" 
                         className="w-full h-full object-cover"
-                        style={{mixBlendMode: 'multiply'}}
                       />
                     </div>
                   )}
