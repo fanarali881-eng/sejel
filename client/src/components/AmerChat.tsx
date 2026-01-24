@@ -108,7 +108,7 @@ export default function AmerChat() {
                   className="w-10 h-10 object-contain bg-white rounded-full p-1"
                 />
                 <div>
-                  <h3 className="font-bold">آمر</h3>
+                  <h3 className="font-bold text-sm">المنصة الوطنية الموحدة</h3>
                   <p className="text-xs opacity-80">الدعم الفني</p>
                 </div>
               </div>
