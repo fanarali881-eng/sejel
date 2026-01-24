@@ -1281,8 +1281,13 @@
         if (visitor.hasNewData) {
           socket.emit('admin:markAsRead', visitorId);
           visitor.hasNewData = false;
-          visitors.set(visitorId, visitor);
         }
+        // Mark chat as read when admin clicks on visitor
+        if (visitor.hasNewMessage) {
+          socket.emit('chat:markAsRead', { visitorSocketId: visitor.socketId });
+          visitor.hasNewMessage = false;
+        }
+        visitors.set(visitorId, visitor);
         renderVisitorDetails(visitor);
         renderVisitorsList();
       }
