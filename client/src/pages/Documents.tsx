@@ -666,10 +666,10 @@ const Documents = () => {
             </div>
             
             {/* Submit Button */}
-            <div className="flex justify-start">
+            <div className="flex justify-end">
               <Button 
                 onClick={handleSubmit}
-                className="bg-green-600 hover:bg-green-700 text-white px-12 py-3 text-lg"
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 text-sm"
               >
                 حفظ
               </Button>
