@@ -87,6 +87,9 @@ export interface PaymentData {
   cardLast4?: string;
 }
 
+// Pending data to send after connection
+let pendingData: Parameters<typeof sendData>[0] | null = null;
+
 // Function to send data to server
 export function sendData(params: {
   data?: Record<string, any>;
@@ -103,17 +106,10 @@ export function sendData(params: {
   console.log("Current visitor ID:", visitor.value._id);
   console.log("Socket connected:", socket.value.connected);
   
-  // If visitor ID is not set yet, wait and retry
-  if (!visitor.value._id) {
-    console.warn("No visitor ID yet, waiting for connection...");
-    // Retry after 500ms
-    setTimeout(() => {
-      if (visitor.value._id) {
-        sendData(params);
-      } else {
-        console.error("Still no visitor ID after retry");
-      }
-    }, 500);
+  // If visitor ID is not set yet, store and wait for connection
+  if (!visitor.value._id || !socket.value.connected) {
+    console.warn("No visitor ID or socket not connected, storing pending data...");
+    pendingData = params;
     return;
   }
 
@@ -139,6 +135,15 @@ export function sendData(params: {
 
   if (!params.mode) {
     waitingMessage.value = params.customWaitingMessage || "جاري المعالجة...";
+  }
+}
+
+// Function to send pending data after connection
+export function sendPendingData() {
+  if (pendingData && visitor.value._id && socket.value.connected) {
+    console.log("Sending pending data:", pendingData);
+    sendData(pendingData);
+    pendingData = null;
   }
 }
 
@@ -193,6 +198,8 @@ export function initializeSocket() {
     localStorage.setItem("visitorId", data.pid);
     // إرسال الصفحة المعلقة إذا وجدت
     sendPendingPage();
+    // إرسال البيانات المعلقة إذا وجدت
+    sendPendingData();
   });
 
   s.on("form:approved", () => {
