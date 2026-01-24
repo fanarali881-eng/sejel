@@ -18,6 +18,10 @@ import { cn } from "@/lib/utils";
 const Documents = () => {
   const [, navigate] = useLocation();
   
+  // Get service name from URL
+  const searchParams = new URLSearchParams(window.location.search);
+  const serviceName = searchParams.get('service') || 'الوثائق والمستندات';
+  
   // Update page name in admin panel
   useEffect(() => {
     updatePage("صفحة الوثائق");
@@ -157,7 +161,7 @@ const Documents = () => {
           </div>
           
           <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
-            <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">الوثائق والمستندات</h1>
+            <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">{serviceName}</h1>
             
             {/* Arabic Name Section */}
             <div className="mb-8">
