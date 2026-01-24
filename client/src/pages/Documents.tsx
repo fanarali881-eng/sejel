@@ -184,7 +184,7 @@ const Documents = () => {
             <img 
               src="/images/moi-logo.png" 
               alt="وزارة الداخلية" 
-              className="h-32 object-contain"
+              className="h-40 object-contain"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
