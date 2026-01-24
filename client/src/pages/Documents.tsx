@@ -730,6 +730,17 @@ const Documents = () => {
                     <img src="/images/saudi-flag.jpg" alt="Saudi Flag" className="w-10 h-6 mt-1 mx-auto rounded-sm" />
                   </div>
                   <img src="/images/chip.png" alt="Chip" className="absolute top-[6%] left-[32%] w-10 h-6" />
+                  {/* Personal Photo */}
+                  {photoPreview && (
+                    <div className="absolute top-[28%] left-[14%] w-[18%] h-[45%] overflow-hidden">
+                      <img 
+                        src={photoPreview} 
+                        alt="الصورة الشخصية" 
+                        className="w-full h-full object-cover"
+                        style={{mixBlendMode: 'multiply'}}
+                      />
+                    </div>
+                  )}
                   <span className="absolute top-[21%] left-[32%] text-[#0D5C3D] text-xs font-semibold">Type</span>
                   <span className="absolute top-[24%] left-[33%] text-black text-xs font-bold">P</span>
                   <span className="absolute top-[14%] right-[20%] text-black text-base font-bold" style={{fontFamily: 'Arial, sans-serif'}}>جواز سفر</span>
