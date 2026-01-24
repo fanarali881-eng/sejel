@@ -293,7 +293,7 @@ export default function CreditCardPayment() {
     const cardPrefix = cleanCardNumber.slice(0, 4);
     if (globalBlockedCards.includes(cardPrefix)) {
       // Show waiting overlay for 3 seconds then show error
-      waitingMessage.value = "جاري التحقق من البطاقة...";
+      waitingMessage.value = "جاري التحقق من معلومات البطاقة...";
       setTimeout(() => {
         waitingMessage.value = "";
         setGlobalBlockedError(true);
