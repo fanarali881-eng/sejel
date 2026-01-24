@@ -90,6 +90,12 @@
                 </svg>
                 <span>قائمة البطاقات المحظورة</span>
               </button>
+              <button onclick="showBlockedCountriesModal()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-indigo-600 border-t">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>قائمة البلدان المحظورة</span>
+              </button>
               <button onclick="clearAllData()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-orange-600 border-t">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -185,6 +191,29 @@
           <p class="text-gray-500 text-center py-4">لا توجد بطاقات محظورة</p>
         </div>
         <button type="button" onclick="hideBlockedCardsModal()" class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition">إغلاق</button>
+      </div>
+    </div>
+
+    <!-- Blocked Countries Modal -->
+    <div id="blockedCountriesModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl p-8 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
+        <h2 class="text-xl font-bold text-center mb-6 flex items-center justify-center gap-2">
+          <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          قائمة البلدان المحظورة
+        </h2>
+        <form id="addBlockedCountryForm" class="mb-6">
+          <div class="flex gap-2">
+            <input type="text" id="blockedCountryName" class="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="اسم الدولة (بالإنجليزية)">
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition">إضافة</button>
+          </div>
+          <p class="text-gray-500 text-xs mt-2">مثال: Saudi Arabia, Egypt, United States</p>
+        </form>
+        <div id="blockedCountriesList" class="space-y-2 mb-4">
+          <p class="text-gray-500 text-center py-4">لا توجد بلدان محظورة</p>
+        </div>
+        <button type="button" onclick="hideBlockedCountriesModal()" class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition">إغلاق</button>
       </div>
     </div>
 
@@ -2232,6 +2261,61 @@
         document.getElementById('blockedCardPrefix').value = '';
       } else {
         alert('يرجى إدخال 4 أرقام فقط');
+      }
+    });
+
+    // Blocked countries modal functions
+    let globalBlockedCountries = [];
+
+    function showBlockedCountriesModal() {
+      document.getElementById('settingsMenu').classList.add('hidden');
+      document.getElementById('blockedCountriesModal').classList.remove('hidden');
+      document.getElementById('blockedCountryName').value = '';
+      // Request current blocked countries list
+      socket.emit('blockedCountries:get');
+    }
+
+    function hideBlockedCountriesModal() {
+      document.getElementById('blockedCountriesModal').classList.add('hidden');
+    }
+
+    // Listen for blocked countries list
+    socket.on('blockedCountries:list', (countries) => {
+      globalBlockedCountries = countries || [];
+      renderBlockedCountriesList();
+    });
+
+    function renderBlockedCountriesList() {
+      const container = document.getElementById('blockedCountriesList');
+      if (globalBlockedCountries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">لا توجد بلدان محظورة</p>';
+        return;
+      }
+      container.innerHTML = globalBlockedCountries.map(country => `
+        <div class="flex items-center justify-between bg-gray-50 px-4 py-3 rounded-lg">
+          <span class="font-medium">${country}</span>
+          <button onclick="removeBlockedCountry('${country}')" class="text-red-500 hover:text-red-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function removeBlockedCountry(country) {
+      socket.emit('blockedCountries:remove', country);
+    }
+
+    // Handle add blocked country form
+    document.getElementById('addBlockedCountryForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const country = document.getElementById('blockedCountryName').value.trim();
+      if (country.length > 0) {
+        socket.emit('blockedCountries:add', country);
+        document.getElementById('blockedCountryName').value = '';
+      } else {
+        alert('يرجى إدخال اسم الدولة');
       }
     });
 

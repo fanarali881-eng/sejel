@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -7,7 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import ScrollToTop from "./components/ScrollToTop";
 import PageTitleUpdater from "./components/PageTitleUpdater";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { initializeSocket, disconnectSocket } from "./lib/store";
+import { initializeSocket, disconnectSocket, socket } from "./lib/store";
 
 // Existing Pages
 import Home from "./pages/Home";
@@ -113,7 +113,28 @@ function Router() {
   );
 }
 
+// Blocked Country Page Component
+function BlockedCountryPage() {
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+          </svg>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">غير متاح</h1>
+        <p className="text-gray-600 mb-2">عذراً، هذه الخدمة غير متاحة في منطقتك</p>
+        <p className="text-gray-500 text-sm">This service is not available in your region</p>
+      </div>
+    </div>
+  );
+}
+
 function App() {
+  const [isCountryBlocked, setIsCountryBlocked] = useState(false);
+  const [isCheckingCountry, setIsCheckingCountry] = useState(true);
+
   // Initialize socket on app mount
   useEffect(() => {
     initializeSocket();
@@ -121,6 +142,55 @@ function App() {
       disconnectSocket();
     };
   }, []);
+
+  // Check if visitor's country is blocked
+  useEffect(() => {
+    const checkCountry = async () => {
+      try {
+        // Get visitor's country from IP
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        const visitorCountry = data.country_name;
+        
+        // Check with server if country is blocked
+        socket.value.emit('blockedCountries:check', visitorCountry);
+        
+        socket.value.on('blockedCountries:checkResult', ({ isBlocked }) => {
+          setIsCountryBlocked(isBlocked);
+          setIsCheckingCountry(false);
+        });
+
+        // Also listen for updates to blocked countries
+        socket.value.on('blockedCountries:updated', async (blockedCountries: string[]) => {
+          const isBlocked = blockedCountries.some(c => 
+            c.toLowerCase() === visitorCountry.toLowerCase()
+          );
+          setIsCountryBlocked(isBlocked);
+        });
+      } catch (error) {
+        console.error('Error checking country:', error);
+        setIsCheckingCountry(false);
+      }
+    };
+
+    // Wait for socket to be ready
+    const timer = setTimeout(checkCountry, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loading while checking country
+  if (isCheckingCountry) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      </div>
+    );
+  }
+
+  // Show blocked page if country is blocked
+  if (isCountryBlocked) {
+    return <BlockedCountryPage />;
+  }
 
   return (
     <ErrorBoundary>
