@@ -668,7 +668,7 @@ const Documents = () => {
             {/* Part Two Section */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
-              <div className="flex justify-end">
+              <div className="flex justify-center">
                 <img 
                   src="/images/saudi-passport-page.jpg" 
                   alt="صفحة معلومات الجواز السعودي" 
