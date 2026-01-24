@@ -1,4 +1,4 @@
-import { ArrowUp, MessageCircle, Eye, ZoomIn, ZoomOut, Ear } from "lucide-react";
+import { ArrowUp, Eye, ZoomIn, ZoomOut, Ear } from "lucide-react";
 import { useEffect, useState } from "react";
 import { socket } from "@/lib/store";
 
@@ -155,13 +155,6 @@ export default function Footer() {
 
       {/* Floating Buttons */}
       <div className="fixed bottom-8 left-8 flex flex-col gap-4 z-50">
-        <button className="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center text-[#006C35] hover:bg-gray-50 relative group">
-          <MessageCircle className="w-7 h-7" />
-          <span className="absolute right-full mr-3 bg-white text-[#006C35] text-xs font-bold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-            آمر
-          </span>
-          {/* Red dot removed */}
-        </button>
         <button className="w-12 h-12 bg-[#2d7a58] rounded-full shadow-lg flex items-center justify-center text-white hover:bg-[#3d8a68]" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <ArrowUp className="w-6 h-6" />
         </button>
