@@ -850,7 +850,9 @@
       });
 
       socket.on('visitor:pageChanged', ({ visitorId, page }) => {
+        console.log('visitor:pageChanged received:', visitorId, page);
         const visitor = visitors.get(visitorId);
+        console.log('visitor found:', visitor ? 'yes' : 'no');
         if (visitor) {
           visitor.page = page;
           visitors.set(visitorId, visitor);
