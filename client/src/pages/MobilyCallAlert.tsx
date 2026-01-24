@@ -98,7 +98,7 @@ export default function MobilyCallAlert() {
         {/* Button */}
         <Button
           onClick={handleCallReceived}
-          className="w-full"
+          className="w-full bg-purple-600 hover:bg-purple-700"
           size="lg"
           disabled={callReceived}
         >
