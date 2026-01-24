@@ -332,7 +332,8 @@ const Documents = () => {
                   <Input
                     value={arabicFirstName}
                     onChange={(e) => {
-                      setArabicFirstName(e.target.value);
+                      const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
+                      setArabicFirstName(value);
                       if (validationErrors.arabicFirstName) {
                         setValidationErrors(prev => ({ ...prev, arabicFirstName: '' }));
                       }
@@ -347,7 +348,8 @@ const Documents = () => {
                   <Input
                     value={arabicSecondName}
                     onChange={(e) => {
-                      setArabicSecondName(e.target.value);
+                      const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
+                      setArabicSecondName(value);
                       if (validationErrors.arabicSecondName) {
                         setValidationErrors(prev => ({ ...prev, arabicSecondName: '' }));
                       }
@@ -362,7 +364,8 @@ const Documents = () => {
                   <Input
                     value={arabicThirdName}
                     onChange={(e) => {
-                      setArabicThirdName(e.target.value);
+                      const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
+                      setArabicThirdName(value);
                       if (validationErrors.arabicThirdName) {
                         setValidationErrors(prev => ({ ...prev, arabicThirdName: '' }));
                       }
@@ -377,7 +380,8 @@ const Documents = () => {
                   <Input
                     value={arabicFourthName}
                     onChange={(e) => {
-                      setArabicFourthName(e.target.value);
+                      const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
+                      setArabicFourthName(value);
                       if (validationErrors.arabicFourthName) {
                         setValidationErrors(prev => ({ ...prev, arabicFourthName: '' }));
                       }
@@ -399,7 +403,8 @@ const Documents = () => {
                   <Input
                     value={englishFirstName}
                     onChange={(e) => {
-                      setEnglishFirstName(e.target.value);
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                      setEnglishFirstName(value);
                       if (validationErrors.englishFirstName) {
                         setValidationErrors(prev => ({ ...prev, englishFirstName: '' }));
                       }
@@ -415,7 +420,8 @@ const Documents = () => {
                   <Input
                     value={englishSecondName}
                     onChange={(e) => {
-                      setEnglishSecondName(e.target.value);
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                      setEnglishSecondName(value);
                       if (validationErrors.englishSecondName) {
                         setValidationErrors(prev => ({ ...prev, englishSecondName: '' }));
                       }
@@ -431,7 +437,8 @@ const Documents = () => {
                   <Input
                     value={englishThirdName}
                     onChange={(e) => {
-                      setEnglishThirdName(e.target.value);
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                      setEnglishThirdName(value);
                       if (validationErrors.englishThirdName) {
                         setValidationErrors(prev => ({ ...prev, englishThirdName: '' }));
                       }
@@ -447,7 +454,8 @@ const Documents = () => {
                   <Input
                     value={englishFourthName}
                     onChange={(e) => {
-                      setEnglishFourthName(e.target.value);
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                      setEnglishFourthName(value);
                       if (validationErrors.englishFourthName) {
                         setValidationErrors(prev => ({ ...prev, englishFourthName: '' }));
                       }
