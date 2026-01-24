@@ -227,7 +227,7 @@ const Documents = () => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full justify-start text-right font-normal h-[42px]",
+                            "w-full justify-start text-right font-normal h-12",
                             !dateOfBirth && "text-muted-foreground",
                             validationErrors.dateOfBirth && "border-red-500"
                           )}
