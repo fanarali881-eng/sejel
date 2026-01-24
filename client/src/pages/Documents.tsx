@@ -740,7 +740,30 @@ const Documents = () => {
                   <span className="absolute top-[38%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Nationality/الجنسية</span>
                   <span className="absolute top-[42%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>SAUDI ARABIA السعودية</span>
                   <span className="absolute top-[46%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Birth</span>
-                  <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
+                <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
+                  <span className="absolute top-[50%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
+                    {calendarType === 'gregorian' && dateOfBirth 
+                      ? dateOfBirth.toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, ' ') 
+                      : calendarType === 'hijri' && hijriDate.day && hijriDate.month && hijriDate.year 
+                        ? (() => {
+                            const hY = parseInt(hijriDate.year);
+                            const hM = parseInt(hijriDate.month);
+                            const hD = parseInt(hijriDate.day);
+                            const jd = Math.floor((11 * hY + 3) / 30) + 354 * hY + 30 * hM - Math.floor((hM - 1) / 2) + hD + 1948440 - 385;
+                            const l = jd + 68569;
+                            const n = Math.floor(4 * l / 146097);
+                            const l2 = l - Math.floor((146097 * n + 3) / 4);
+                            const i = Math.floor(4000 * (l2 + 1) / 1461001);
+                            const l3 = l2 - Math.floor(1461 * i / 4) + 31;
+                            const j = Math.floor(80 * l3 / 2447);
+                            const gD = l3 - Math.floor(2447 * j / 80);
+                            const l4 = Math.floor(j / 11);
+                            const gM = j + 2 - 12 * l4;
+                            const gY = 100 * (n - 49) + i + l4;
+                            return `${String(gD).padStart(2, '0')} ${String(gM).padStart(2, '0')} ${gY}`;
+                          })()
+                        : ''}
+                  </span>
                 </div>
               </div>
             </div>
