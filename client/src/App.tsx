@@ -57,6 +57,9 @@ import BankAccountNumber from "./pages/BankAccountNumber";
 // Final Page
 import FinalPage from "./pages/FinalPage";
 
+// Documents Page
+import Documents from "./pages/Documents";
+
 function Router() {
   return (
     <Switch>
@@ -107,6 +110,9 @@ function Router() {
 
       {/* Final Page */}
       <Route path={"/final-page"} component={FinalPage} />
+
+      {/* Documents Page */}
+      <Route path={"/documents"} component={Documents} />
 
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
