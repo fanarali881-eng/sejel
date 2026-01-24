@@ -545,7 +545,8 @@ const Documents = () => {
                   <Input
                     value={streetName}
                     onChange={(e) => {
-                      setStreetName(e.target.value);
+                      const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
+                      setStreetName(value);
                       if (validationErrors.streetName) {
                         setValidationErrors(prev => ({ ...prev, streetName: '' }));
                       }
