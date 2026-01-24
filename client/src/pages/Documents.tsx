@@ -710,7 +710,7 @@ const Documents = () => {
                   <img 
                     src="/images/saudi-emblem.png" 
                     alt="شعار المملكة" 
-                    className="absolute top-[8%] left-1/2 transform -translate-x-1/2 w-16 h-auto"
+                    className="absolute top-[3%] left-1/2 transform -translate-x-1/2 w-16 h-auto"
                   />
                 </div>
               </div>
