@@ -771,6 +771,7 @@ const Documents = () => {
                           })()
                         : ''}
                   </span>
+                  <span className="absolute top-[54%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Issue</span>
                 </div>
               </div>
             </div>
