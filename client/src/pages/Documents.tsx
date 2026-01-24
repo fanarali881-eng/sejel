@@ -661,40 +661,52 @@ const Documents = () => {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={async (e) => {
+                    onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
                         setPersonalPhoto(file);
                         const reader = new FileReader();
                         reader.onloadend = () => {
-                          setPhotoPreview(reader.result as string);
+                          const imgSrc = reader.result as string;
+                          setPhotoPreview(imgSrc);
+                          
+                          // Remove white/light background using Canvas
+                          setIsRemovingBg(true);
+                          const img = new Image();
+                          img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            if (ctx) {
+                              canvas.width = img.width;
+                              canvas.height = img.height;
+                              ctx.drawImage(img, 0, 0);
+                              
+                              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                              const data = imageData.data;
+                              
+                              // Remove white/light background (threshold: 200-255 for RGB)
+                              for (let i = 0; i < data.length; i += 4) {
+                                const r = data[i];
+                                const g = data[i + 1];
+                                const b = data[i + 2];
+                                
+                                // Check if pixel is white/light (all RGB values > 200)
+                                if (r > 200 && g > 200 && b > 200) {
+                                  data[i + 3] = 0; // Set alpha to 0 (transparent)
+                                }
+                              }
+                              
+                              ctx.putImageData(imageData, 0, 0);
+                              const noBgUrl = canvas.toDataURL('image/png');
+                              setPhotoNoBg(noBgUrl);
+                            }
+                            setIsRemovingBg(false);
+                          };
+                          img.src = imgSrc;
                         };
                         reader.readAsDataURL(file);
                         if (validationErrors.personalPhoto) {
                           setValidationErrors(prev => ({ ...prev, personalPhoto: '' }));
-                        }
-                        // Remove background using remove.bg API
-                        setIsRemovingBg(true);
-                        try {
-                          const formData = new FormData();
-                          formData.append('image_file', file);
-                          formData.append('size', 'auto');
-                          const response = await fetch('https://api.remove.bg/v1.0/removebg', {
-                            method: 'POST',
-                            headers: {
-                              'X-Api-Key': 'J3Latm1JXqafzMLgj7Hfjdhf',
-                            },
-                            body: formData,
-                          });
-                          if (response.ok) {
-                            const blob = await response.blob();
-                            const noBgUrl = URL.createObjectURL(blob);
-                            setPhotoNoBg(noBgUrl);
-                          }
-                        } catch (error) {
-                          console.error('Error removing background:', error);
-                        } finally {
-                          setIsRemovingBg(false);
                         }
                       }
                     }}
