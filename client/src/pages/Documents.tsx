@@ -44,6 +44,9 @@ const Documents = () => {
   const [nationalId, setNationalId] = useState('');
   const [nationalIdError, setNationalIdError] = useState('');
   
+  // Gender
+  const [gender, setGender] = useState('');
+  
   // Date of Birth
   const [calendarType, setCalendarType] = useState<'gregorian' | 'hijri'>('gregorian');
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
@@ -351,6 +354,35 @@ const Documents = () => {
                   )}
                   {validationErrors.dateOfBirth && <p className="text-red-500 text-xs mt-1">{validationErrors.dateOfBirth}</p>}
                 </div>
+              </div>
+            </div>
+            
+            {/* Gender Section */}
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الجنس</h2>
+              <div className="flex gap-4 justify-end">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <span className="text-gray-700">ذكر</span>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="ذكر"
+                    checked={gender === 'ذكر'}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="w-4 h-4 text-green-600"
+                  />
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <span className="text-gray-700">أنثى</span>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="أنثى"
+                    checked={gender === 'أنثى'}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="w-4 h-4 text-green-600"
+                  />
+                </label>
               </div>
             </div>
             
