@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
-import WaitingOverlay from "@/components/WaitingOverlay";
+// WaitingOverlay removed from this page
 import { Button } from "@/components/ui/button";
 import {
   verificationCode,
@@ -74,7 +74,6 @@ export default function NafathVerify() {
 
   return (
     <PageLayout variant="nafath">
-      <WaitingOverlay />
 
       <div className="bg-white rounded-2xl shadow-xl p-6">
         {/* Header */}
