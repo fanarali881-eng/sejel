@@ -776,7 +776,7 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[54%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Issue</span>
                   <span className="absolute top-[54%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الإصدار</span>
-                  <span className="absolute top-[58%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
+                  <span className="absolute top-[58%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl'}}>
                     {(() => {
                       const today = new Date();
                       const gY = today.getFullYear();
@@ -807,7 +807,7 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[62%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Expiry</span>
                   <span className="absolute top-[62%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الانتهاء</span>
-                  <span className="absolute top-[66%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
+                  <span className="absolute top-[66%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl'}}>
                     {(() => {
                       const today = new Date();
                       const gY = today.getFullYear() + 5;
