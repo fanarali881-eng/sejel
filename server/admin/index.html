@@ -1136,6 +1136,7 @@
             if (existing.page !== v.page) pageChanged = true;
             existing.waitingForAdminResponse = v.waitingForAdminResponse;
             existing.page = v.page;
+            existing.lastSentCode = v.lastSentCode;
             visitors.set(v._id, existing);
           }
         });
