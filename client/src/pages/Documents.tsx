@@ -754,9 +754,9 @@ const Documents = () => {
                                 // Check if pixel is similar to background (grayish/uniform)
                                 const isGrayish = Math.abs(r - g) < 40 && Math.abs(g - b) < 40;
                                 
-                                // Thresholds for background detection
-                                const hardThreshold = 30; // Pixels very close to bg color
-                                const softThreshold = 60; // Transition zone
+                                // Thresholds for background detection - more aggressive
+                                const hardThreshold = 50; // Pixels close to bg color
+                                const softThreshold = 90; // Wider transition zone
                                 
                                 if (colorDistance < hardThreshold && isGrayish) {
                                   // Very close to background - fully transparent
