@@ -670,18 +670,15 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // Professional background removal - detects any light/uniform background
+                          // Simple white background removal with validation
                           setIsRemovingBg(true);
                           const img = new Image();
                           img.onload = () => {
                             const canvas = document.createElement('canvas');
                             const ctx = canvas.getContext('2d', { willReadFrequently: true });
                             if (ctx) {
-                              // Keep original dimensions for quality
                               canvas.width = img.naturalWidth;
                               canvas.height = img.naturalHeight;
-                              
-                              // Enable high quality rendering
                               ctx.imageSmoothingEnabled = true;
                               ctx.imageSmoothingQuality = 'high';
                               ctx.drawImage(img, 0, 0);
@@ -691,82 +688,53 @@ const Documents = () => {
                               const width = canvas.width;
                               const height = canvas.height;
                               
-                              // Sample background color from corners and edges (larger sample area)
-                              const samples: {r: number, g: number, b: number}[] = [];
-                              const sampleSize = 20;
+                              // Check if background is white by sampling corners
+                              const cornerSamples: number[] = [];
+                              const sampleSize = 15;
                               
-                              // Sample all four corners
                               for (let y = 0; y < sampleSize; y++) {
                                 for (let x = 0; x < sampleSize; x++) {
-                                  // Top-left
+                                  // Top-left corner
                                   let idx = (y * width + x) * 4;
-                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
-                                  // Top-right
+                                  cornerSamples.push((data[idx] + data[idx+1] + data[idx+2]) / 3);
+                                  // Top-right corner
                                   idx = (y * width + (width - 1 - x)) * 4;
-                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
-                                  // Bottom-left
-                                  idx = ((height - 1 - y) * width + x) * 4;
-                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
-                                  // Bottom-right
-                                  idx = ((height - 1 - y) * width + (width - 1 - x)) * 4;
-                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                                  cornerSamples.push((data[idx] + data[idx+1] + data[idx+2]) / 3);
                                 }
                               }
                               
-                              // Sample top and bottom edges
-                              for (let x = 0; x < width; x += 5) {
-                                // Top edge
-                                let idx = x * 4;
-                                samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
-                                // Bottom edge
-                                idx = ((height - 1) * width + x) * 4;
-                                samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                              const avgBrightness = cornerSamples.reduce((a, b) => a + b, 0) / cornerSamples.length;
+                              
+                              // Check if background is white (brightness > 230)
+                              if (avgBrightness < 230) {
+                                // Background is not white - show error
+                                alert('يجب أن تكون خلفية الصورة بيضاء. يرجى رفع صورة بخلفية بيضاء.');
+                                setPhotoPreview('');
+                                setPhotoNoBg('');
+                                setPersonalPhoto(null);
+                                setIsRemovingBg(false);
+                                return;
                               }
                               
-                              // Filter for uniform/grayish background pixels (any brightness)
-                              const bgSamples = samples.filter(s => {
-                                const isGrayish = Math.abs(s.r - s.g) < 40 && Math.abs(s.g - s.b) < 40 && Math.abs(s.r - s.b) < 40;
-                                return isGrayish;
-                              });
-                              
-                              // Calculate average background color from samples
-                              let bgR = 255, bgG = 255, bgB = 255;
-                              if (bgSamples.length > 20) {
-                                bgR = Math.round(bgSamples.reduce((s, p) => s + p.r, 0) / bgSamples.length);
-                                bgG = Math.round(bgSamples.reduce((s, p) => s + p.g, 0) / bgSamples.length);
-                                bgB = Math.round(bgSamples.reduce((s, p) => s + p.b, 0) / bgSamples.length);
-                              }
-                              
-                              console.log('Detected background color:', bgR, bgG, bgB);
-                              
-                              // Process each pixel
+                              // Remove white background
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
                                 const b = data[i + 2];
+                                const brightness = (r + g + b) / 3;
                                 
-                                // Calculate color distance from detected background
-                                const diffR = Math.abs(r - bgR);
-                                const diffG = Math.abs(g - bgG);
-                                const diffB = Math.abs(b - bgB);
-                                const colorDistance = Math.sqrt(diffR*diffR + diffG*diffG + diffB*diffB);
+                                // Check if pixel is white/near-white
+                                const isWhite = r > 220 && g > 220 && b > 220;
+                                const isGrayish = Math.abs(r - g) < 20 && Math.abs(g - b) < 20;
                                 
-                                // Check if pixel is similar to background (grayish/uniform)
-                                const isGrayish = Math.abs(r - g) < 40 && Math.abs(g - b) < 40;
-                                
-                                // Thresholds for background detection - more aggressive
-                                const hardThreshold = 50; // Pixels close to bg color
-                                const softThreshold = 90; // Wider transition zone
-                                
-                                if (colorDistance < hardThreshold && isGrayish) {
-                                  // Very close to background - fully transparent
+                                if (brightness > 245 && isGrayish) {
+                                  // Pure white - fully transparent
                                   data[i + 3] = 0;
-                                } else if (colorDistance < softThreshold && isGrayish) {
-                                  // Transition zone - smooth alpha for anti-aliasing
-                                  const alpha = Math.round(((colorDistance - hardThreshold) / (softThreshold - hardThreshold)) * 255);
+                                } else if (brightness > 230 && isWhite && isGrayish) {
+                                  // Near white - smooth transition
+                                  const alpha = Math.round((255 - brightness) * 10);
                                   data[i + 3] = Math.min(255, Math.max(0, alpha));
                                 }
-                                // Else: keep original alpha (255) - this is part of the subject
                               }
                               
                               ctx.putImageData(imageData, 0, 0);
