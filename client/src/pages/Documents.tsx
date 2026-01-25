@@ -807,7 +807,7 @@ const Documents = () => {
                 <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
                   {/* Oval photo on the right side */}
                   {(photoNoBg || photoPreview) && (
-                    <div className="absolute top-[38%] right-[26%] w-[12%] h-[28%] overflow-hidden" style={{borderRadius: '50%', border: '2px solid #8B4513', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <div className="absolute top-[38%] right-[26%] w-[12%] h-[28%] overflow-hidden" style={{borderRadius: '50%', border: '2px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                       <img 
                         src={photoNoBg || photoPreview} 
                         alt="" 
