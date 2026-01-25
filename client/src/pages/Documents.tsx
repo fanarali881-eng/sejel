@@ -755,17 +755,29 @@ const Documents = () => {
                                   const db = (b - bgB) * 0.114;
                                   const colorDist = Math.sqrt(dr * dr + dg * dg + db * db);
                                   
-                                  // Check if pixel is similar to background
-                                  const isWhitish = r > 220 && g > 220 && b > 220;
-                                  const threshold = isWhitish ? 25 : 20;
+                                  // Check if pixel is similar to background - using simple RGB distance
+                                  const diffR = Math.abs(r - bgR);
+                                  const diffG = Math.abs(g - bgG);
+                                  const diffB = Math.abs(b - bgB);
+                                  const maxDiff = Math.max(diffR, diffG, diffB);
+                                  const avgDiff = (diffR + diffG + diffB) / 3;
                                   
-                                  if (colorDist < threshold) {
-                                    alphaMap[y * width + x] = 0; // Background
-                                  } else if (colorDist < threshold + 15) {
-                                    // Transition zone
-                                    alphaMap[y * width + x] = Math.round(((colorDist - threshold) / 15) * 255);
+                                  // Check if pixel is white/light background
+                                  const isWhitish = r > 200 && g > 200 && b > 200;
+                                  const isPureWhite = r > 240 && g > 240 && b > 240;
+                                  
+                                  // Thresholds for background detection
+                                  const hardThreshold = 40;
+                                  const softThreshold = 55;
+                                  
+                                  if (isPureWhite || (isWhitish && maxDiff < hardThreshold && avgDiff < 30)) {
+                                    alphaMap[y * width + x] = 0; // Fully transparent
+                                  } else if (isWhitish && maxDiff < softThreshold) {
+                                    // Soft edge transition
+                                    const alpha = Math.round(((maxDiff - hardThreshold) / (softThreshold - hardThreshold)) * 255);
+                                    alphaMap[y * width + x] = Math.max(0, Math.min(255, alpha));
                                   } else {
-                                    alphaMap[y * width + x] = 255; // Foreground
+                                    alphaMap[y * width + x] = 255; // Fully opaque (keep pixel)
                                   }
                                 }
                               }
