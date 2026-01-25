@@ -1218,7 +1218,37 @@ const Documents = () => {
                   direction: 'rtl',
                 }}
               >
-                {hijriDate.day && hijriDate.month && hijriDate.year ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ` : ''}
+                {hijriDate.day && hijriDate.month && hijriDate.year 
+                  ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ` 
+                  : calendarType === 'gregorian' && dateOfBirth 
+                    ? (() => {
+                        // Convert Gregorian to Hijri
+                        const gDate = new Date(dateOfBirth);
+                        const gY = gDate.getFullYear();
+                        const gM = gDate.getMonth() + 1;
+                        const gD = gDate.getDate();
+                        
+                        // Julian Day calculation
+                        const jd = Math.floor((1461 * (gY + 4800 + Math.floor((gM - 14) / 12))) / 4) +
+                                   Math.floor((367 * (gM - 2 - 12 * Math.floor((gM - 14) / 12))) / 12) -
+                                   Math.floor((3 * Math.floor((gY + 4900 + Math.floor((gM - 14) / 12)) / 100)) / 4) +
+                                   gD - 32075;
+                        
+                        // Hijri calculation
+                        const l = jd - 1948440 + 10632;
+                        const n = Math.floor((l - 1) / 10631);
+                        const l2 = l - 10631 * n + 354;
+                        const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) +
+                                  Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+                        const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) -
+                                   Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+                        const hM = Math.floor((24 * l3) / 709);
+                        const hD = l3 - Math.floor((709 * hM) / 24);
+                        const hY = 30 * n + j - 30;
+                        
+                        return `${hD}/${hM}/${hY} هـ`;
+                      })()
+                    : ''}
               </span>
             </div>
           </div>
