@@ -1138,7 +1138,28 @@ const Documents = () => {
         {/* Declaration Section - Only show when form is locked */}
         {isFormLocked && (
           <div className="max-w-4xl mx-auto mt-8">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-row-reverse">
+              {/* Declaration on the right */}
+              <div className="bg-white border border-gray-200 rounded-lg px-4 py-4 flex items-start gap-3 flex-grow">
+                <div className="pt-1">
+                  <input 
+                    type="checkbox" 
+                    id="declaration" 
+                    checked={declarationChecked}
+                    onChange={(e) => setDeclarationChecked(e.target.checked)}
+                    className="w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="declaration" className="text-sm text-gray-800 cursor-pointer select-none block mb-1">
+                    أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
+                  </label>
+                  <p className="text-xs text-gray-500">
+                    بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
+                  </p>
+                </div>
+              </div>
+              
               {/* Button on the left */}
               <div className="flex-shrink-0">
               <Button 
@@ -1181,27 +1202,6 @@ const Documents = () => {
                   </div>
                 ) : 'اعتماد ومتابعة'}
               </Button>
-              </div>
-              
-              {/* Declaration on the right */}
-              <div className="bg-white border border-gray-200 rounded-lg px-4 py-4 flex items-start gap-3 flex-grow">
-                <div className="pt-1">
-                  <input 
-                    type="checkbox" 
-                    id="declaration" 
-                    checked={declarationChecked}
-                    onChange={(e) => setDeclarationChecked(e.target.checked)}
-                    className="w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="declaration" className="text-sm text-gray-800 cursor-pointer select-none block mb-1">
-                    أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
-                  </label>
-                  <p className="text-xs text-gray-500">
-                    بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
