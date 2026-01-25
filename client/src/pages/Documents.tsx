@@ -1215,7 +1215,7 @@ const Documents = () => {
                   right: '18%',
                   fontSize: '11px',
                   fontFamily: 'Arial, sans-serif',
-                  direction: 'ltr',
+                  direction: 'rtl',
                 }}
               >
                 {(() => {
@@ -1255,7 +1255,7 @@ const Documents = () => {
                   right: '18%',
                   fontSize: '12px',
                   fontFamily: 'Arial, sans-serif',
-                  direction: 'ltr',
+                  direction: 'rtl',
                 }}
               >
                 {hijriDate.day && hijriDate.month && hijriDate.year 
