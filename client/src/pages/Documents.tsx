@@ -1164,6 +1164,33 @@ const Documents = () => {
                   />
                 </div>
               )}
+              {/* Arabic Name */}
+              <span 
+                className="absolute text-black font-bold"
+                style={{
+                  top: '14%',
+                  left: '30%',
+                  fontSize: '10px',
+                  fontFamily: 'Arial, sans-serif',
+                  direction: 'rtl',
+                }}
+              >
+                {`${firstNameAr} ${fatherNameAr} ${grandfatherNameAr} ${familyNameAr}`}
+              </span>
+              {/* English Name */}
+              <span 
+                className="absolute text-black font-bold"
+                style={{
+                  top: '18%',
+                  left: '30%',
+                  fontSize: '9px',
+                  fontFamily: 'Arial, sans-serif',
+                  direction: 'ltr',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {`${firstNameEn} ${secondNameEn} ${thirdNameEn} ${lastNameEn}`}
+              </span>
             </div>
           </div>
         </div>
