@@ -686,7 +686,7 @@ const Documents = () => {
                               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                               const data = imageData.data;
                               
-                              // Remove white/light background
+                              // Remove white/light background - more aggressive
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
@@ -694,15 +694,15 @@ const Documents = () => {
                                 const brightness = (r + g + b) / 3;
                                 
                                 // Check if pixel is white/near-white and grayish
-                                const isGrayish = Math.abs(r - g) < 25 && Math.abs(g - b) < 25;
+                                const isGrayish = Math.abs(r - g) < 30 && Math.abs(g - b) < 30;
                                 
-                                if (brightness > 240 && isGrayish) {
-                                  // Pure white - fully transparent
+                                if (brightness > 230 && isGrayish) {
+                                  // White - fully transparent
                                   data[i + 3] = 0;
-                                } else if (brightness > 220 && isGrayish) {
+                                } else if (brightness > 200 && isGrayish) {
                                   // Near white - smooth transition
-                                  const alpha = Math.round((brightness - 220) / (240 - 220) * 255);
-                                  data[i + 3] = 255 - alpha;
+                                  const alpha = Math.round((230 - brightness) / 30 * 255);
+                                  data[i + 3] = Math.max(0, 255 - alpha);
                                 }
                               }
                               
