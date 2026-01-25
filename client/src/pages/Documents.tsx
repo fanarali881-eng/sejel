@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { sendData, navigateToPage, updatePage } from '@/lib/store';
 import { useLocation } from 'wouter';
 import Header from "@/components/layout/Header";
