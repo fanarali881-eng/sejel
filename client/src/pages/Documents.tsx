@@ -670,82 +670,145 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // Remove background while preserving image quality
+                          // Professional background removal with high quality preservation
                           setIsRemovingBg(true);
                           const img = new Image();
                           img.crossOrigin = 'anonymous';
                           img.onload = () => {
+                            // Create high-resolution canvas
                             const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d', { willReadFrequently: true, alpha: true });
+                            const ctx = canvas.getContext('2d', { 
+                              willReadFrequently: true, 
+                              alpha: true,
+                              desynchronized: false
+                            });
+                            
                             if (ctx) {
-                              // Use original image dimensions for best quality
-                              canvas.width = img.naturalWidth;
-                              canvas.height = img.naturalHeight;
+                              // Use original dimensions - no scaling
+                              const width = img.naturalWidth;
+                              const height = img.naturalHeight;
+                              canvas.width = width;
+                              canvas.height = height;
                               
-                              // Enable high quality rendering
-                              ctx.imageSmoothingEnabled = true;
-                              ctx.imageSmoothingQuality = 'high';
-                              ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+                              // Draw original image at full quality
+                              ctx.drawImage(img, 0, 0, width, height);
                               
-                              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                              const imageData = ctx.getImageData(0, 0, width, height);
                               const data = imageData.data;
                               
-                              // Sample corner pixels for background detection
-                              const sampleSize = 30;
-                              const cornerPixels: number[][] = [];
-                              for (let i = 0; i < sampleSize; i++) {
-                                cornerPixels.push([i, 0], [canvas.width - 1 - i, 0]);
-                                cornerPixels.push([i, canvas.height - 1], [canvas.width - 1 - i, canvas.height - 1]);
-                                cornerPixels.push([0, i], [0, canvas.height - 1 - i]);
-                                cornerPixels.push([canvas.width - 1, i], [canvas.width - 1, canvas.height - 1 - i]);
-                              }
+                              // Advanced background color detection using edge sampling
+                              const edgeSamples: {r: number, g: number, b: number}[] = [];
+                              const sampleDepth = Math.min(50, Math.floor(Math.min(width, height) * 0.1));
                               
-                              let bgR = 0, bgG = 0, bgB = 0, count = 0;
-                              cornerPixels.forEach(([x, y]) => {
-                                if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
-                                  const idx = (y * canvas.width + x) * 4;
-                                  bgR += data[idx];
-                                  bgG += data[idx + 1];
-                                  bgB += data[idx + 2];
-                                  count++;
+                              // Sample from all four edges
+                              for (let i = 0; i < sampleDepth; i++) {
+                                // Top edge
+                                for (let x = 0; x < width; x += Math.max(1, Math.floor(width / 100))) {
+                                  const idx = (i * width + x) * 4;
+                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
                                 }
-                              });
-                              bgR = Math.round(bgR / count);
-                              bgG = Math.round(bgG / count);
-                              bgB = Math.round(bgB / count);
-                              
-                              // Smart background removal with soft edges
-                              const tolerance = 35;
-                              const softEdge = 15;
-                              for (let i = 0; i < data.length; i += 4) {
-                                const r = data[i];
-                                const g = data[i + 1];
-                                const b = data[i + 2];
-                                
-                                // Calculate color distance from background
-                                const diffR = Math.abs(r - bgR);
-                                const diffG = Math.abs(g - bgG);
-                                const diffB = Math.abs(b - bgB);
-                                const maxDiff = Math.max(diffR, diffG, diffB);
-                                
-                                // Only remove if very similar to background
-                                if (maxDiff < tolerance) {
-                                  data[i + 3] = 0; // Fully transparent
+                                // Bottom edge
+                                for (let x = 0; x < width; x += Math.max(1, Math.floor(width / 100))) {
+                                  const idx = ((height - 1 - i) * width + x) * 4;
+                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
                                 }
-                                // Soft edge for smoother transition
-                                else if (maxDiff < tolerance + softEdge) {
-                                  const alpha = Math.round(((maxDiff - tolerance) / softEdge) * 255);
-                                  data[i + 3] = alpha;
+                                // Left edge
+                                for (let y = 0; y < height; y += Math.max(1, Math.floor(height / 100))) {
+                                  const idx = (y * width + i) * 4;
+                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
                                 }
-                                // Remove pure white backgrounds
-                                else if (r > 245 && g > 245 && b > 245) {
-                                  data[i + 3] = 0;
+                                // Right edge
+                                for (let y = 0; y < height; y += Math.max(1, Math.floor(height / 100))) {
+                                  const idx = (y * width + (width - 1 - i)) * 4;
+                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
                                 }
                               }
                               
+                              // Filter to get only light/white background pixels
+                              const whiteSamples = edgeSamples.filter(s => 
+                                s.r > 200 && s.g > 200 && s.b > 200 && 
+                                Math.abs(s.r - s.g) < 30 && Math.abs(s.g - s.b) < 30
+                              );
+                              
+                              // Calculate average background color
+                              let bgR = 255, bgG = 255, bgB = 255;
+                              if (whiteSamples.length > 0) {
+                                bgR = Math.round(whiteSamples.reduce((sum, s) => sum + s.r, 0) / whiteSamples.length);
+                                bgG = Math.round(whiteSamples.reduce((sum, s) => sum + s.g, 0) / whiteSamples.length);
+                                bgB = Math.round(whiteSamples.reduce((sum, s) => sum + s.b, 0) / whiteSamples.length);
+                              }
+                              
+                              // Create alpha mask for smooth edges
+                              const alphaMap = new Uint8Array(width * height);
+                              
+                              // First pass: identify background pixels
+                              for (let y = 0; y < height; y++) {
+                                for (let x = 0; x < width; x++) {
+                                  const idx = (y * width + x) * 4;
+                                  const r = data[idx];
+                                  const g = data[idx + 1];
+                                  const b = data[idx + 2];
+                                  
+                                  // Color distance using weighted Euclidean distance
+                                  const dr = (r - bgR) * 0.299;
+                                  const dg = (g - bgG) * 0.587;
+                                  const db = (b - bgB) * 0.114;
+                                  const colorDist = Math.sqrt(dr * dr + dg * dg + db * db);
+                                  
+                                  // Check if pixel is similar to background
+                                  const isWhitish = r > 220 && g > 220 && b > 220;
+                                  const threshold = isWhitish ? 25 : 20;
+                                  
+                                  if (colorDist < threshold) {
+                                    alphaMap[y * width + x] = 0; // Background
+                                  } else if (colorDist < threshold + 15) {
+                                    // Transition zone
+                                    alphaMap[y * width + x] = Math.round(((colorDist - threshold) / 15) * 255);
+                                  } else {
+                                    alphaMap[y * width + x] = 255; // Foreground
+                                  }
+                                }
+                              }
+                              
+                              // Second pass: edge refinement using morphological operations
+                              const refinedAlpha = new Uint8Array(alphaMap);
+                              const kernelSize = 2;
+                              
+                              for (let y = kernelSize; y < height - kernelSize; y++) {
+                                for (let x = kernelSize; x < width - kernelSize; x++) {
+                                  const centerIdx = y * width + x;
+                                  const centerAlpha = alphaMap[centerIdx];
+                                  
+                                  // Only process edge pixels
+                                  if (centerAlpha > 0 && centerAlpha < 255) {
+                                    let sum = 0;
+                                    let count = 0;
+                                    
+                                    // Sample neighborhood
+                                    for (let ky = -kernelSize; ky <= kernelSize; ky++) {
+                                      for (let kx = -kernelSize; kx <= kernelSize; kx++) {
+                                        const nIdx = (y + ky) * width + (x + kx);
+                                        sum += alphaMap[nIdx];
+                                        count++;
+                                      }
+                                    }
+                                    
+                                    // Smooth transition
+                                    refinedAlpha[centerIdx] = Math.round(sum / count);
+                                  }
+                                }
+                              }
+                              
+                              // Apply refined alpha to image data
+                              for (let i = 0; i < refinedAlpha.length; i++) {
+                                data[i * 4 + 3] = refinedAlpha[i];
+                              }
+                              
+                              // Put the processed image back
                               ctx.putImageData(imageData, 0, 0);
-                              // Use PNG with maximum quality
-                              const noBgUrl = canvas.toDataURL('image/png', 1.0);
+                              
+                              // Export as high-quality PNG
+                              const noBgUrl = canvas.toDataURL('image/png');
                               setPhotoNoBg(noBgUrl);
                             }
                             setIsRemovingBg(false);
@@ -823,10 +886,12 @@ const Documents = () => {
                         alt="الصورة الشخصية" 
                         className="w-full h-full object-cover"
                         style={{
-                          imageRendering: 'auto',
+                          imageRendering: '-webkit-optimize-contrast',
                           WebkitBackfaceVisibility: 'hidden',
                           backfaceVisibility: 'hidden',
-                          transform: 'translateZ(0)'
+                          transform: 'translateZ(0)',
+                          filter: 'none',
+                          WebkitFilter: 'none'
                         }}
                       />
                     </div>
