@@ -811,7 +811,7 @@ const Documents = () => {
                       <img 
                         src={photoNoBg || photoPreview} 
                         alt="" 
-                        className="object-cover" style={{width: '90%', height: '90%', objectPosition: 'center center'}}
+                        className="object-cover" style={{width: '90%', height: '90%', objectPosition: 'center center', opacity: 0.5}}
                       />
                     </div>
                   )}
