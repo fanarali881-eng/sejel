@@ -1199,7 +1199,7 @@ const Documents = () => {
                 className="absolute text-black font-bold"
                 style={{
                   top: '38%',
-                  right: '15%',
+                  right: '18%',
                   fontSize: '11px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
@@ -1212,7 +1212,7 @@ const Documents = () => {
                 className="absolute text-black font-bold"
                 style={{
                   top: '69%',
-                  right: '15%',
+                  right: '18%',
                   fontSize: '12px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
