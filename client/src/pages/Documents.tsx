@@ -963,10 +963,10 @@ const Documents = () => {
                     })()}
                   </span>
                   {/* MRZ Lines */}
-                  <div className="absolute top-[86%] left-[5%] right-[5%] text-black text-sm font-mono" style={{fontFamily: 'Courier New, monospace', letterSpacing: '0.15em', direction: 'ltr'}}>
-                    P&lt;&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : ''}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : ''}&lt;{englishSecondName ? englishSecondName.toUpperCase() : ''}&lt;{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                  <div className="absolute top-[86%] left-[5%] right-[5%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.05em', direction: 'ltr'}}>
+                    P&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : ''}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : ''}&lt;{englishSecondName ? englishSecondName.toUpperCase() : ''}&lt;{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
                   </div>
-                  <div className="absolute top-[91%] left-[5%] right-[5%] text-black text-sm font-mono" style={{fontFamily: 'Courier New, monospace', letterSpacing: '0.15em', direction: 'ltr'}}>
+                  <div className="absolute top-[92%] left-[5%] right-[5%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.05em', direction: 'ltr'}}>
                     {passportNumber}&lt;&lt;0SAU{(() => {
                       let birthDate: Date | null = null;
                       if (calendarType === 'gregorian' && dateOfBirth) {
@@ -1002,7 +1002,7 @@ const Documents = () => {
                       const mm = String(expiry.getMonth() + 1).padStart(2, '0');
                       const dd = String(expiry.getDate()).padStart(2, '0');
                       return `${yy}${mm}${dd}`;
-                    })()}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;{gender === 'ذكر' ? '1' : '0'}
+                    })()}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;{gender === 'ذكر' ? '2' : '2'}
                   </div>
                 </div>
               </div>
