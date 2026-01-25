@@ -1142,7 +1142,7 @@ const Documents = () => {
             <img 
               src="/national-id-template.png" 
               alt="الهوية الوطنية" 
-              className="max-w-full h-auto rounded-lg shadow-lg"
+              className="w-[500px] h-auto rounded-lg shadow-lg"
             />
           </div>
         </div>
