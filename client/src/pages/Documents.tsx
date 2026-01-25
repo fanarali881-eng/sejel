@@ -686,24 +686,26 @@ const Documents = () => {
                               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                               const data = imageData.data;
                               
-                              // Remove white/light background - more aggressive
+                              // Remove white background completely while preserving image quality
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
                                 const b = data[i + 2];
-                                const brightness = (r + g + b) / 3;
                                 
-                                // Check if pixel is white/near-white and grayish
-                                const isGrayish = Math.abs(r - g) < 30 && Math.abs(g - b) < 30;
+                                // Check if pixel is white/near-white (all channels high and similar)
+                                const minChannel = Math.min(r, g, b);
+                                const maxChannel = Math.max(r, g, b);
+                                const isUniform = (maxChannel - minChannel) < 35; // Low color variation
                                 
-                                if (brightness > 230 && isGrayish) {
-                                  // White - fully transparent
+                                if (minChannel > 200 && isUniform) {
+                                  // White/near-white background - make fully transparent
                                   data[i + 3] = 0;
-                                } else if (brightness > 200 && isGrayish) {
-                                  // Near white - smooth transition
-                                  const alpha = Math.round((230 - brightness) / 30 * 255);
-                                  data[i + 3] = Math.max(0, 255 - alpha);
+                                } else if (minChannel > 180 && isUniform) {
+                                  // Transition zone for smooth edges
+                                  const alpha = Math.round((200 - minChannel) / 20 * 255);
+                                  data[i + 3] = Math.min(255, Math.max(0, 255 - alpha));
                                 }
+                                // Keep all other pixels unchanged (full quality)
                               }
                               
                               ctx.putImageData(imageData, 0, 0);
