@@ -1,10 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { sendData, navigateToPage, updatePage } from '@/lib/store';
-import { pipeline, env } from '@huggingface/transformers';
 import { useLocation } from 'wouter';
-
-// Configure transformers.js to not use local models
-env.allowLocalModels = false;
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from '@/components/ui/button';
@@ -674,74 +670,103 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // AI-powered background removal using Transformers.js (free & unlimited)
+                          // Professional white background removal with high quality preservation
                           setIsRemovingBg(true);
-                          
-                          const removeBackgroundAI = async () => {
-                            try {
-                              // Load the segmentation model
-                              const segmenter = await pipeline('image-segmentation', 'briaai/RMBG-1.4', {
-                                device: 'webgpu',
-                              }).catch(() => {
-                                // Fallback to CPU if WebGPU not available
-                                return pipeline('image-segmentation', 'briaai/RMBG-1.4');
+                          const img = new Image();
+                          img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                            if (ctx) {
+                              // Keep original dimensions for quality
+                              canvas.width = img.naturalWidth;
+                              canvas.height = img.naturalHeight;
+                              
+                              // Enable high quality rendering
+                              ctx.imageSmoothingEnabled = true;
+                              ctx.imageSmoothingQuality = 'high';
+                              ctx.drawImage(img, 0, 0);
+                              
+                              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                              const data = imageData.data;
+                              const width = canvas.width;
+                              const height = canvas.height;
+                              
+                              // Sample background color from corners and edges
+                              const samples: {r: number, g: number, b: number}[] = [];
+                              const sampleSize = 10;
+                              
+                              // Sample corners
+                              for (let y = 0; y < sampleSize; y++) {
+                                for (let x = 0; x < sampleSize; x++) {
+                                  // Top-left
+                                  let idx = (y * width + x) * 4;
+                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                                  // Top-right
+                                  idx = (y * width + (width - 1 - x)) * 4;
+                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                                  // Bottom-left
+                                  idx = ((height - 1 - y) * width + x) * 4;
+                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                                  // Bottom-right
+                                  idx = ((height - 1 - y) * width + (width - 1 - x)) * 4;
+                                  samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                                }
+                              }
+                              
+                              // Filter for white/light background pixels only
+                              const whiteSamples = samples.filter(s => {
+                                const brightness = (s.r + s.g + s.b) / 3;
+                                const isLight = brightness > 200;
+                                const isGrayish = Math.abs(s.r - s.g) < 30 && Math.abs(s.g - s.b) < 30;
+                                return isLight && isGrayish;
                               });
                               
-                              // Process the image
-                              const result = await segmenter(imgSrc);
-                              
-                              if (result && result[0] && result[0].mask) {
-                                // Create canvas to apply mask
-                                const img = new Image();
-                                img.onload = async () => {
-                                  const canvas = document.createElement('canvas');
-                                  const ctx = canvas.getContext('2d');
-                                  if (ctx) {
-                                    canvas.width = img.naturalWidth;
-                                    canvas.height = img.naturalHeight;
-                                    ctx.drawImage(img, 0, 0);
-                                    
-                                    // Get the mask as image
-                                    const maskImg = new Image();
-                                    maskImg.onload = () => {
-                                      // Apply mask
-                                      const maskCanvas = document.createElement('canvas');
-                                      const maskCtx = maskCanvas.getContext('2d');
-                                      if (maskCtx) {
-                                        maskCanvas.width = canvas.width;
-                                        maskCanvas.height = canvas.height;
-                                        maskCtx.drawImage(maskImg, 0, 0, canvas.width, canvas.height);
-                                        
-                                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                                        const maskData = maskCtx.getImageData(0, 0, canvas.width, canvas.height);
-                                        
-                                        // Apply mask to alpha channel
-                                        for (let i = 0; i < imageData.data.length; i += 4) {
-                                          imageData.data[i + 3] = maskData.data[i]; // Use red channel as alpha
-                                        }
-                                        
-                                        ctx.putImageData(imageData, 0, 0);
-                                        setPhotoNoBg(canvas.toDataURL('image/png'));
-                                      }
-                                      setIsRemovingBg(false);
-                                    };
-                                    maskImg.src = result[0].mask;
-                                  }
-                                };
-                                img.src = imgSrc;
-                              } else {
-                                // Fallback: use original image
-                                setPhotoNoBg(imgSrc);
-                                setIsRemovingBg(false);
+                              // Calculate average background color
+                              let bgR = 255, bgG = 255, bgB = 255;
+                              if (whiteSamples.length > 10) {
+                                bgR = Math.round(whiteSamples.reduce((s, p) => s + p.r, 0) / whiteSamples.length);
+                                bgG = Math.round(whiteSamples.reduce((s, p) => s + p.g, 0) / whiteSamples.length);
+                                bgB = Math.round(whiteSamples.reduce((s, p) => s + p.b, 0) / whiteSamples.length);
                               }
-                            } catch (error) {
-                              console.error('Background removal failed:', error);
-                              setPhotoNoBg(imgSrc);
-                              setIsRemovingBg(false);
+                              
+                              // Process each pixel
+                              for (let i = 0; i < data.length; i += 4) {
+                                const r = data[i];
+                                const g = data[i + 1];
+                                const b = data[i + 2];
+                                
+                                // Calculate color distance from background
+                                const diffR = Math.abs(r - bgR);
+                                const diffG = Math.abs(g - bgG);
+                                const diffB = Math.abs(b - bgB);
+                                const maxDiff = Math.max(diffR, diffG, diffB);
+                                const avgDiff = (diffR + diffG + diffB) / 3;
+                                
+                                // Check brightness
+                                const brightness = (r + g + b) / 3;
+                                const isGrayish = Math.abs(r - g) < 30 && Math.abs(g - b) < 30;
+                                
+                                // Thresholds
+                                const hardThreshold = 25;
+                                const softThreshold = 50;
+                                
+                                if (brightness > 235 && isGrayish && maxDiff < hardThreshold) {
+                                  // Pure white/very light - fully transparent
+                                  data[i + 3] = 0;
+                                } else if (brightness > 210 && isGrayish && maxDiff < softThreshold) {
+                                  // Transition zone - smooth alpha
+                                  const factor = (maxDiff - hardThreshold) / (softThreshold - hardThreshold);
+                                  data[i + 3] = Math.round(factor * 255);
+                                }
+                                // Else: keep original alpha (255)
+                              }
+                              
+                              ctx.putImageData(imageData, 0, 0);
+                              setPhotoNoBg(canvas.toDataURL('image/png', 1.0));
                             }
+                            setIsRemovingBg(false);
                           };
-                          
-                          removeBackgroundAI();
+                          img.src = imgSrc;
                         };
                         reader.readAsDataURL(file);
                         if (validationErrors.personalPhoto) {
