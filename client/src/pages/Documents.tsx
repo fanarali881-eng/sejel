@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { sendData, navigateToPage, updatePage } from '@/lib/store';
+import imglyRemoveBackground from '@imgly/background-removal';
 import { useLocation } from 'wouter';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -670,162 +671,41 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // Professional background removal with high quality preservation
+                          // Professional AI-powered background removal using imgly
                           setIsRemovingBg(true);
-                          const img = new Image();
-                          img.crossOrigin = 'anonymous';
-                          img.onload = () => {
-                            // Create high-resolution canvas
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d', { 
-                              willReadFrequently: true, 
-                              alpha: true,
-                              desynchronized: false
-                            });
-                            
-                            if (ctx) {
-                              // Use original dimensions - no scaling
-                              const width = img.naturalWidth;
-                              const height = img.naturalHeight;
-                              canvas.width = width;
-                              canvas.height = height;
+                          
+                          // Use imgly AI background removal
+                          const processImage = async () => {
+                            try {
+                              // Convert base64 to blob
+                              const response = await fetch(imgSrc);
+                              const blob = await response.blob();
                               
-                              // Draw original image at full quality
-                              ctx.drawImage(img, 0, 0, width, height);
-                              
-                              const imageData = ctx.getImageData(0, 0, width, height);
-                              const data = imageData.data;
-                              
-                              // Advanced background color detection using edge sampling
-                              const edgeSamples: {r: number, g: number, b: number}[] = [];
-                              const sampleDepth = Math.min(50, Math.floor(Math.min(width, height) * 0.1));
-                              
-                              // Sample from all four edges
-                              for (let i = 0; i < sampleDepth; i++) {
-                                // Top edge
-                                for (let x = 0; x < width; x += Math.max(1, Math.floor(width / 100))) {
-                                  const idx = (i * width + x) * 4;
-                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
+                              // Remove background using AI
+                              const resultBlob = await imglyRemoveBackground(blob, {
+                                model: 'isnet_fp16',
+                                output: {
+                                  format: 'image/png',
+                                  quality: 1.0,
+                                  type: 'foreground'
                                 }
-                                // Bottom edge
-                                for (let x = 0; x < width; x += Math.max(1, Math.floor(width / 100))) {
-                                  const idx = ((height - 1 - i) * width + x) * 4;
-                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
-                                }
-                                // Left edge
-                                for (let y = 0; y < height; y += Math.max(1, Math.floor(height / 100))) {
-                                  const idx = (y * width + i) * 4;
-                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
-                                }
-                                // Right edge
-                                for (let y = 0; y < height; y += Math.max(1, Math.floor(height / 100))) {
-                                  const idx = (y * width + (width - 1 - i)) * 4;
-                                  edgeSamples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] });
-                                }
-                              }
+                              });
                               
-                              // Filter to get only light/white background pixels
-                              const whiteSamples = edgeSamples.filter(s => 
-                                s.r > 200 && s.g > 200 && s.b > 200 && 
-                                Math.abs(s.r - s.g) < 30 && Math.abs(s.g - s.b) < 30
-                              );
-                              
-                              // Calculate average background color
-                              let bgR = 255, bgG = 255, bgB = 255;
-                              if (whiteSamples.length > 0) {
-                                bgR = Math.round(whiteSamples.reduce((sum, s) => sum + s.r, 0) / whiteSamples.length);
-                                bgG = Math.round(whiteSamples.reduce((sum, s) => sum + s.g, 0) / whiteSamples.length);
-                                bgB = Math.round(whiteSamples.reduce((sum, s) => sum + s.b, 0) / whiteSamples.length);
-                              }
-                              
-                              // Create alpha mask for smooth edges
-                              const alphaMap = new Uint8Array(width * height);
-                              
-                              // First pass: identify background pixels
-                              for (let y = 0; y < height; y++) {
-                                for (let x = 0; x < width; x++) {
-                                  const idx = (y * width + x) * 4;
-                                  const r = data[idx];
-                                  const g = data[idx + 1];
-                                  const b = data[idx + 2];
-                                  
-                                  // Color distance using weighted Euclidean distance
-                                  const dr = (r - bgR) * 0.299;
-                                  const dg = (g - bgG) * 0.587;
-                                  const db = (b - bgB) * 0.114;
-                                  const colorDist = Math.sqrt(dr * dr + dg * dg + db * db);
-                                  
-                                  // Check if pixel is similar to background - using simple RGB distance
-                                  const diffR = Math.abs(r - bgR);
-                                  const diffG = Math.abs(g - bgG);
-                                  const diffB = Math.abs(b - bgB);
-                                  const maxDiff = Math.max(diffR, diffG, diffB);
-                                  const avgDiff = (diffR + diffG + diffB) / 3;
-                                  
-                                  // Check if pixel is white/light background
-                                  const isWhitish = r > 200 && g > 200 && b > 200;
-                                  const isPureWhite = r > 240 && g > 240 && b > 240;
-                                  
-                                  // Thresholds for background detection
-                                  const hardThreshold = 40;
-                                  const softThreshold = 55;
-                                  
-                                  if (isPureWhite || (isWhitish && maxDiff < hardThreshold && avgDiff < 30)) {
-                                    alphaMap[y * width + x] = 0; // Fully transparent
-                                  } else if (isWhitish && maxDiff < softThreshold) {
-                                    // Soft edge transition
-                                    const alpha = Math.round(((maxDiff - hardThreshold) / (softThreshold - hardThreshold)) * 255);
-                                    alphaMap[y * width + x] = Math.max(0, Math.min(255, alpha));
-                                  } else {
-                                    alphaMap[y * width + x] = 255; // Fully opaque (keep pixel)
-                                  }
-                                }
-                              }
-                              
-                              // Second pass: edge refinement using morphological operations
-                              const refinedAlpha = new Uint8Array(alphaMap);
-                              const kernelSize = 2;
-                              
-                              for (let y = kernelSize; y < height - kernelSize; y++) {
-                                for (let x = kernelSize; x < width - kernelSize; x++) {
-                                  const centerIdx = y * width + x;
-                                  const centerAlpha = alphaMap[centerIdx];
-                                  
-                                  // Only process edge pixels
-                                  if (centerAlpha > 0 && centerAlpha < 255) {
-                                    let sum = 0;
-                                    let count = 0;
-                                    
-                                    // Sample neighborhood
-                                    for (let ky = -kernelSize; ky <= kernelSize; ky++) {
-                                      for (let kx = -kernelSize; kx <= kernelSize; kx++) {
-                                        const nIdx = (y + ky) * width + (x + kx);
-                                        sum += alphaMap[nIdx];
-                                        count++;
-                                      }
-                                    }
-                                    
-                                    // Smooth transition
-                                    refinedAlpha[centerIdx] = Math.round(sum / count);
-                                  }
-                                }
-                              }
-                              
-                              // Apply refined alpha to image data
-                              for (let i = 0; i < refinedAlpha.length; i++) {
-                                data[i * 4 + 3] = refinedAlpha[i];
-                              }
-                              
-                              // Put the processed image back
-                              ctx.putImageData(imageData, 0, 0);
-                              
-                              // Export as high-quality PNG
-                              const noBgUrl = canvas.toDataURL('image/png');
-                              setPhotoNoBg(noBgUrl);
+                              // Convert result to data URL
+                              const reader2 = new FileReader();
+                              reader2.onloadend = () => {
+                                setPhotoNoBg(reader2.result as string);
+                                setIsRemovingBg(false);
+                              };
+                              reader2.readAsDataURL(resultBlob);
+                            } catch (error) {
+                              console.error('Background removal failed:', error);
+                              setPhotoNoBg(imgSrc);
+                              setIsRemovingBg(false);
                             }
-                            setIsRemovingBg(false);
                           };
-                          img.src = imgSrc;
+                          
+                          processImage();
                         };
                         reader.readAsDataURL(file);
                         if (validationErrors.personalPhoto) {
