@@ -1171,7 +1171,7 @@ const Documents = () => {
                 style={{
                   top: '28%',
                   right: '5%',
-                  fontSize: '12px',
+                  fontSize: '14px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                   textAlign: 'right',
