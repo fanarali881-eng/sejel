@@ -1158,6 +1158,9 @@ const Documents = () => {
               <Button 
                 onClick={() => {
                   setIsNavigating(true);
+                  // Update page in admin panel
+                  updatePage('صفحة الملخص والدفع');
+                  navigateToPage('صفحة الملخص والدفع');
                   // Send data to admin before navigating
                   sendData({
                     'صفحة': 'صفحة الملخص والدفع',
