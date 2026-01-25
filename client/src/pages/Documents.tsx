@@ -1135,8 +1135,8 @@ const Documents = () => {
           </div>
         </div>
         
-        {/* Declaration Section - Only show when form is locked */}
-        {isFormLocked && (
+        {/* Declaration Section - Always visible */}
+        {
           <div className="max-w-4xl mx-auto mt-8">
             <div className="flex items-center gap-4" dir="ltr">
               {/* Button on the left (far left in LTR) */}
@@ -1208,7 +1208,7 @@ const Documents = () => {
               </div>
             </div>
           </div>
-        )}
+        }
       </main>
       
       {/* Confirmation Popup */}
