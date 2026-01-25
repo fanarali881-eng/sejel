@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 
 const Documents = () => {
   const [, navigate] = useLocation();
@@ -202,19 +202,19 @@ const Documents = () => {
       
       // Capture passport as image
       if (passportRef.current) {
-        // Create a temporary canvas to composite the image properly
-        html2canvas(passportRef.current, {
-          scale: 2,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: null,
-          logging: false,
-          imageTimeout: 0,
-          removeContainer: true,
-          foreignObjectRendering: false
-        }).then((canvas) => {
-          const imageData = canvas.toDataURL('image/png', 1.0);
-          setPassportImage(imageData);
+        toPng(passportRef.current, {
+          quality: 1.0,
+          pixelRatio: 2,
+          cacheBust: true,
+          skipAutoScale: true,
+          style: {
+            transform: 'scale(1)',
+            transformOrigin: 'top left'
+          }
+        }).then((dataUrl) => {
+          setPassportImage(dataUrl);
+        }).catch((error) => {
+          console.error('Error capturing passport:', error);
         });
       }
       
