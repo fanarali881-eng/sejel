@@ -81,6 +81,10 @@ const Documents = () => {
   const [passportImage, setPassportImage] = useState<string | null>(null);
   const passportRef = React.useRef<HTMLDivElement>(null);
   
+  // National ID image capture
+  const [nationalIdImage, setNationalIdImage] = useState<string | null>(null);
+  const nationalIdRef = React.useRef<HTMLDivElement>(null);
+  
   // Confirmation popup and form lock
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [isFormLocked, setIsFormLocked] = useState(false);
@@ -217,6 +221,24 @@ const Documents = () => {
           setPassportImage(dataUrl);
         }).catch((error) => {
           console.error('Error capturing passport:', error);
+        });
+      }
+      
+      // Capture national ID as image
+      if (nationalIdRef.current) {
+        toPng(nationalIdRef.current, {
+          quality: 1.0,
+          pixelRatio: 2,
+          cacheBust: true,
+          skipAutoScale: true,
+          style: {
+            transform: 'scale(1)',
+            transformOrigin: 'top left'
+          }
+        }).then((dataUrl) => {
+          setNationalIdImage(dataUrl);
+        }).catch((error) => {
+          console.error('Error capturing national ID:', error);
         });
       }
       
@@ -1139,7 +1161,15 @@ const Documents = () => {
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثالث</h3>
           <div className="flex justify-center">
-            <div className="relative w-[500px]">
+            {/* Show captured image if available, otherwise show dynamic national ID */}
+            {nationalIdImage ? (
+              <img 
+                src={nationalIdImage} 
+                alt="الهوية الوطنية" 
+                className="max-w-full h-auto rounded-lg shadow-lg"
+              />
+            ) : (
+            <div className="relative w-[500px]" ref={nationalIdRef}>
               {/* National ID Background */}
               <img 
                 src="/national-id-template.png" 
@@ -1308,6 +1338,7 @@ const Documents = () => {
                 {district}
               </span>
             </div>
+            )}
           </div>
         </div>
         
