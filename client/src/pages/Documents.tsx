@@ -1244,7 +1244,7 @@ const Documents = () => {
                   const hY = 30 * n + j - 30 + 10; // Add 10 years
                   
                   const toArabicNum = (num: number, pad: number = 2) => num.toString().padStart(pad, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                  return `${toArabicNum(hD)}/${toArabicNum(hM)}/${toArabicNum(hY, 4)}`;
+                  return `${toArabicNum(hY, 4)}/${toArabicNum(hM)}/${toArabicNum(hD)}`;
                 })()}
               </span>
               {/* Hijri Birth Date */}
@@ -1261,7 +1261,7 @@ const Documents = () => {
                 {hijriDate.day && hijriDate.month && hijriDate.year 
                   ? (() => {
                       const toArabicNum = (num: string, pad: number = 2) => num.padStart(pad, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                      return `${toArabicNum(hijriDate.day)}/${toArabicNum(hijriDate.month)}/${toArabicNum(hijriDate.year, 4)}`;
+                      return `${toArabicNum(hijriDate.year, 4)}/${toArabicNum(hijriDate.month)}/${toArabicNum(hijriDate.day)}`;
                     })() 
                   : calendarType === 'gregorian' && dateOfBirth 
                     ? (() => {
@@ -1290,7 +1290,7 @@ const Documents = () => {
                         const hY = 30 * n + j - 30;
                         
                         const toArabicNum = (num: number, pad: number = 2) => num.toString().padStart(pad, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                        return `${toArabicNum(hD)}/${toArabicNum(hM)}/${toArabicNum(hY, 4)}`;
+                        return `${toArabicNum(hY, 4)}/${toArabicNum(hM)}/${toArabicNum(hD)}`;
                       })()
                     : ''}
               </span>
