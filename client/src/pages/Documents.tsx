@@ -684,15 +684,45 @@ const Documents = () => {
                               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                               const data = imageData.data;
                               
-                              // Remove white/light background (threshold: 200-255 for RGB)
+                              // Improved background removal - detect and remove light backgrounds
+                              // First pass: find the most common background color (usually corners)
+                              const cornerPixels = [
+                                [0, 0], [canvas.width - 1, 0], 
+                                [0, canvas.height - 1], [canvas.width - 1, canvas.height - 1],
+                                [10, 10], [canvas.width - 10, 10],
+                                [10, canvas.height - 10], [canvas.width - 10, canvas.height - 10]
+                              ];
+                              
+                              let bgR = 0, bgG = 0, bgB = 0, count = 0;
+                              cornerPixels.forEach(([x, y]) => {
+                                const idx = (y * canvas.width + x) * 4;
+                                bgR += data[idx];
+                                bgG += data[idx + 1];
+                                bgB += data[idx + 2];
+                                count++;
+                              });
+                              bgR = Math.round(bgR / count);
+                              bgG = Math.round(bgG / count);
+                              bgB = Math.round(bgB / count);
+                              
+                              // Remove pixels similar to background color
+                              const tolerance = 60; // Increased tolerance for better removal
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
                                 const b = data[i + 2];
                                 
-                                // Check if pixel is white/light (all RGB values > 200)
-                                if (r > 200 && g > 200 && b > 200) {
+                                // Check if pixel is similar to background color
+                                const diffR = Math.abs(r - bgR);
+                                const diffG = Math.abs(g - bgG);
+                                const diffB = Math.abs(b - bgB);
+                                
+                                if (diffR < tolerance && diffG < tolerance && diffB < tolerance) {
                                   data[i + 3] = 0; // Set alpha to 0 (transparent)
+                                }
+                                // Also remove pure white/very light backgrounds
+                                else if (r > 230 && g > 230 && b > 230) {
+                                  data[i + 3] = 0;
                                 }
                               }
                               
