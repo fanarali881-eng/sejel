@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { sendData, navigateToPage, updatePage } from '@/lib/store';
-import imglyRemoveBackground from '@imgly/background-removal';
+import { removeBackground } from '@imgly/background-removal';
 import { useLocation } from 'wouter';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -682,7 +682,7 @@ const Documents = () => {
                               const blob = await response.blob();
                               
                               // Remove background using AI
-                              const resultBlob = await imglyRemoveBackground(blob, {
+                              const resultBlob = await removeBackground(blob, {
                                 model: 'isnet_fp16',
                                 output: {
                                   format: 'image/png',
