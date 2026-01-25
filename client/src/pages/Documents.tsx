@@ -878,12 +878,12 @@ const Documents = () => {
                             const hD = l3 - Math.floor((709 * hM) / 24);
                             const hY = 30 * n + j - 30;
                             const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                            return `${toArabicNum(String(hD).padStart(2, '0'))}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(hY)}`;
+                            return `${toArabicNum(hY)}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(String(hD).padStart(2, '0'))}`;
                           })() 
                       : calendarType === 'hijri' && hijriDate.day && hijriDate.month && hijriDate.year 
                         ? (() => {
                             const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                            return `${toArabicNum(String(parseInt(hijriDate.day)).padStart(2, '0'))}/${toArabicNum(String(parseInt(hijriDate.month)).padStart(2, '0'))}/${toArabicNum(parseInt(hijriDate.year))}`;
+                            return `${toArabicNum(parseInt(hijriDate.year))}/${toArabicNum(String(parseInt(hijriDate.month)).padStart(2, '0'))}/${toArabicNum(String(parseInt(hijriDate.day)).padStart(2, '0'))}`;
                           })()
                         : ''}
                   </span>
@@ -905,7 +905,7 @@ const Documents = () => {
                       const hD = l3 - Math.floor((709 * hM) / 24);
                       const hY = 30 * n + j - 30;
                       const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                      return `${toArabicNum(String(hD).padStart(2, '0'))}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(hY)}`;
+                      return `${toArabicNum(hY)}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(String(hD).padStart(2, '0'))}`;
                     })()}
                   </span>
                   <span className="absolute top-[58%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
@@ -936,7 +936,7 @@ const Documents = () => {
                       const hD = l3 - Math.floor((709 * hM) / 24);
                       const hY = 30 * n + j - 30;
                       const toArabicNum = (num: number) => num.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                      return `${toArabicNum(String(hD).padStart(2, '0'))}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(hY)}`;
+                      return `${toArabicNum(hY)}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(String(hD).padStart(2, '0'))}`;
                     })()}
                   </span>
                   <span className="absolute top-[66%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
