@@ -693,15 +693,15 @@ const Documents = () => {
                                 const b = data[i + 2];
                                 const brightness = (r + g + b) / 3;
                                 
-                                // Remove white background
-                                const isGrayish = Math.abs(r - g) < 15 && Math.abs(g - b) < 15;
+                                // Remove white/light gray background
+                                const isGrayish = Math.abs(r - g) < 20 && Math.abs(g - b) < 20;
                                 
-                                if (brightness > 245 && isGrayish) {
-                                  // White - fully transparent
+                                if (brightness > 230 && isGrayish) {
+                                  // White/light gray - fully transparent
                                   data[i + 3] = 0;
-                                } else if (brightness > 235 && isGrayish) {
+                                } else if (brightness > 210 && isGrayish) {
                                   // Near white - smooth transition
-                                  const alpha = Math.round((245 - brightness) / 10 * 255);
+                                  const alpha = Math.round((230 - brightness) / 20 * 255);
                                   data[i + 3] = 255 - alpha;
                                 }
                               }
