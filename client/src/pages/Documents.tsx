@@ -1149,18 +1149,19 @@ const Documents = () => {
               {/* Client Photo Overlay */}
               {(photoNoBg || photoPreview) && (
                 <div 
-                  className="absolute overflow-hidden bg-white"
+                  className="absolute overflow-hidden"
                   style={{
                     top: '24%',
-                    left: '4%',
-                    width: '23%',
-                    height: '52%',
+                    left: '6%',
+                    width: '25%',
+                    height: '54%',
+                    backgroundColor: 'transparent',
                   }}
                 >
                   <img 
                     src={photoNoBg || photoPreview} 
                     alt="صورة العميل" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               )}
