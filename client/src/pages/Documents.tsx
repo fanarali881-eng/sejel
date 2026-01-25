@@ -815,6 +815,12 @@ const Documents = () => {
                       />
                     </div>
                   )}
+                  {/* Vertical passport number next to oval photo */}
+                  <div className="absolute top-[38%] right-[14%] h-[28%] flex flex-col justify-center items-center" style={{writingMode: 'vertical-rl', textOrientation: 'mixed'}}>
+                    <span className="text-[#8B4513] text-xs font-bold tracking-widest" style={{letterSpacing: '0.2em'}}>
+                      {passportNumber.split('').join('\n')}
+                    </span>
+                  </div>
                   <span className="absolute top-[38%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Sex/الجنس</span>
                   <span className="absolute top-[42%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : ''}</span>
                   <span className="absolute top-[42%] left-[52%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>{gender}</span>
