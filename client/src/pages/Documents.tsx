@@ -826,11 +826,11 @@ const Documents = () => {
                   </div>
                   {/* Second photo - no border, 30% opacity */}
                   {(photoNoBg || photoPreview) && (
-                    <div className="absolute top-[42%] right-[18%] w-[7%] h-[18%] overflow-hidden" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <div className="absolute top-[42%] right-[18%] w-[5%] h-[14%] overflow-hidden" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                       <img 
                         src={photoNoBg || photoPreview} 
                         alt="" 
-                        className="object-cover" style={{width: '100%', height: '100%', objectPosition: 'center center', opacity: 0.3}}
+                        className="object-cover" style={{width: '100%', height: '100%', objectPosition: 'center center', opacity: 0.2}}
                       />
                     </div>
                   )}
