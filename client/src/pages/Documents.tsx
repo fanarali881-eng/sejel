@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import html2canvas from 'html2canvas';
 
 const Documents = () => {
   const [, navigate] = useLocation();
@@ -75,6 +76,10 @@ const Documents = () => {
   
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  
+  // Passport image capture
+  const [passportImage, setPassportImage] = useState<string | null>(null);
+  const passportRef = React.useRef<HTMLDivElement>(null);
 
   // Saudi Provinces and Districts
   const provincesData: Record<string, string[]> = {
@@ -160,6 +165,19 @@ const Documents = () => {
     setValidationErrors(errors);
     
     if (Object.keys(errors).length === 0) {
+      // Capture passport as image
+      if (passportRef.current) {
+        html2canvas(passportRef.current, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null,
+        }).then((canvas) => {
+          const imageData = canvas.toDataURL('image/png');
+          setPassportImage(imageData);
+        });
+      }
+      
       // Send data to admin
       const formData = {
         'الاسم بالعربي': `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`,
@@ -753,8 +771,16 @@ const Documents = () => {
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
               <div className="flex justify-center">
+                {/* Show captured image if available, otherwise show dynamic passport */}
+                {passportImage ? (
+                  <img 
+                    src={passportImage} 
+                    alt="جواز السفر" 
+                    className="max-w-full h-auto rounded-lg shadow-lg"
+                  />
+                ) : (
                 {/* Saudi Passport - Empty Background with Emblem */}
-                <div className="relative">
+                <div className="relative" ref={passportRef}>
                   <img 
                     src="/images/passport-empty-bg.png" 
                     alt="جواز سفر سعودي" 
@@ -1018,6 +1044,7 @@ const Documents = () => {
                     })()}
                   </div>
                 </div>
+                )}
               </div>
             </div>
           </div>
