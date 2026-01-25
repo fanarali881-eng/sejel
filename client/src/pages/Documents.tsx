@@ -202,6 +202,7 @@ const Documents = () => {
       
       // Capture passport as image
       if (passportRef.current) {
+        // Create a temporary canvas to composite the image properly
         html2canvas(passportRef.current, {
           scale: 2,
           useCORS: true,
@@ -209,15 +210,10 @@ const Documents = () => {
           backgroundColor: null,
           logging: false,
           imageTimeout: 0,
-          onclone: (clonedDoc) => {
-            // Ensure transparent backgrounds are preserved
-            const images = clonedDoc.querySelectorAll('img');
-            images.forEach((img: HTMLImageElement) => {
-              img.style.backgroundColor = 'transparent';
-            });
-          }
+          removeContainer: true,
+          foreignObjectRendering: false
         }).then((canvas) => {
-          const imageData = canvas.toDataURL('image/png');
+          const imageData = canvas.toDataURL('image/png', 1.0);
           setPassportImage(imageData);
         });
       }
