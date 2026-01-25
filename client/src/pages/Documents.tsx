@@ -162,6 +162,33 @@ const Documents = () => {
       errors.dateOfBirth = 'تاريخ الميلاد مطلوب';
     }
     
+    // Validate Gender
+    if (!gender) {
+      errors.gender = 'الجنس مطلوب';
+    }
+    
+    // Validate Personal Photo
+    if (!photoPreview && !photoNoBg) {
+      errors.photo = 'الصورة الشخصية مطلوبة';
+    }
+    
+    // Validate National Address
+    if (!province) {
+      errors.province = 'المحافظة مطلوبة';
+    }
+    if (!district) {
+      errors.district = 'المنطقة مطلوبة';
+    }
+    if (!streetName) {
+      errors.streetName = 'اسم الشارع مطلوب';
+    }
+    if (!buildingNumber) {
+      errors.buildingNumber = 'رقم المبنى مطلوب';
+    }
+    if (!floorNumber) {
+      errors.floorNumber = 'رقم الدور مطلوب';
+    }
+    
     setValidationErrors(errors);
     
     if (Object.keys(errors).length === 0) {
