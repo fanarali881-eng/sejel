@@ -1198,11 +1198,11 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '34%',
+                  top: '36%',
                   right: '22%',
                   fontSize: '11px',
                   fontFamily: 'Arial, sans-serif',
-                  direction: 'ltr',
+                  direction: 'rtl',
                 }}
               >
                 {nationalId.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)])}
@@ -1211,7 +1211,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '70%',
+                  top: '69%',
                   right: '22%',
                   fontSize: '12px',
                   fontFamily: 'Arial, sans-serif',
