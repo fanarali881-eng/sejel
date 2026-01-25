@@ -1176,7 +1176,7 @@ const Documents = () => {
                   textAlign: 'right',
                 }}
               >
-                {`${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`}
+                {arabicFirstName}{arabicFirstName && arabicSecondName ? (gender === 'ذكر' ? ' بن ' : ' بنت ') : ''}{arabicSecondName}{arabicSecondName && arabicThirdName ? ' بن ' : ''}{arabicThirdName}{arabicThirdName && arabicFourthName ? ' ' : ''}{arabicFourthName}
               </span>
               {/* English Name */}
               <span 
