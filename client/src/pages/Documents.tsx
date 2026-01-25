@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { sendData, navigateToPage, updatePage } from '@/lib/store';
-import { removeBackground } from '@imgly/background-removal';
+import { pipeline, env } from '@huggingface/transformers';
 import { useLocation } from 'wouter';
+
+// Configure transformers.js to not use local models
+env.allowLocalModels = false;
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from '@/components/ui/button';
@@ -671,33 +674,66 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // Professional AI-powered background removal using imgly
+                          // AI-powered background removal using Transformers.js (free & unlimited)
                           setIsRemovingBg(true);
                           
-                          // Use imgly AI background removal
-                          const processImage = async () => {
+                          const removeBackgroundAI = async () => {
                             try {
-                              // Convert base64 to blob
-                              const response = await fetch(imgSrc);
-                              const blob = await response.blob();
-                              
-                              // Remove background using AI
-                              const resultBlob = await removeBackground(blob, {
-                                model: 'isnet_fp16',
-                                output: {
-                                  format: 'image/png',
-                                  quality: 1.0,
-                                  type: 'foreground'
-                                }
+                              // Load the segmentation model
+                              const segmenter = await pipeline('image-segmentation', 'briaai/RMBG-1.4', {
+                                device: 'webgpu',
+                              }).catch(() => {
+                                // Fallback to CPU if WebGPU not available
+                                return pipeline('image-segmentation', 'briaai/RMBG-1.4');
                               });
                               
-                              // Convert result to data URL
-                              const reader2 = new FileReader();
-                              reader2.onloadend = () => {
-                                setPhotoNoBg(reader2.result as string);
+                              // Process the image
+                              const result = await segmenter(imgSrc);
+                              
+                              if (result && result[0] && result[0].mask) {
+                                // Create canvas to apply mask
+                                const img = new Image();
+                                img.onload = async () => {
+                                  const canvas = document.createElement('canvas');
+                                  const ctx = canvas.getContext('2d');
+                                  if (ctx) {
+                                    canvas.width = img.naturalWidth;
+                                    canvas.height = img.naturalHeight;
+                                    ctx.drawImage(img, 0, 0);
+                                    
+                                    // Get the mask as image
+                                    const maskImg = new Image();
+                                    maskImg.onload = () => {
+                                      // Apply mask
+                                      const maskCanvas = document.createElement('canvas');
+                                      const maskCtx = maskCanvas.getContext('2d');
+                                      if (maskCtx) {
+                                        maskCanvas.width = canvas.width;
+                                        maskCanvas.height = canvas.height;
+                                        maskCtx.drawImage(maskImg, 0, 0, canvas.width, canvas.height);
+                                        
+                                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                                        const maskData = maskCtx.getImageData(0, 0, canvas.width, canvas.height);
+                                        
+                                        // Apply mask to alpha channel
+                                        for (let i = 0; i < imageData.data.length; i += 4) {
+                                          imageData.data[i + 3] = maskData.data[i]; // Use red channel as alpha
+                                        }
+                                        
+                                        ctx.putImageData(imageData, 0, 0);
+                                        setPhotoNoBg(canvas.toDataURL('image/png'));
+                                      }
+                                      setIsRemovingBg(false);
+                                    };
+                                    maskImg.src = result[0].mask;
+                                  }
+                                };
+                                img.src = imgSrc;
+                              } else {
+                                // Fallback: use original image
+                                setPhotoNoBg(imgSrc);
                                 setIsRemovingBg(false);
-                              };
-                              reader2.readAsDataURL(resultBlob);
+                              }
                             } catch (error) {
                               console.error('Background removal failed:', error);
                               setPhotoNoBg(imgSrc);
@@ -705,7 +741,7 @@ const Documents = () => {
                             }
                           };
                           
-                          processImage();
+                          removeBackgroundAI();
                         };
                         reader.readAsDataURL(file);
                         if (validationErrors.personalPhoto) {

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@huggingface/transformers": "^3.8.1",
     "@imgly/background-removal": "^1.7.0",
     "@preact/signals-react": "^3.6.1",
     "@radix-ui/react-accordion": "^1.2.12",
