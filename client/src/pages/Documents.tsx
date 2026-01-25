@@ -964,10 +964,22 @@ const Documents = () => {
                   </span>
                   {/* MRZ Lines */}
                   <div className="absolute top-[80%] left-[14%] right-[4%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.2em', direction: 'ltr'}}>
-                    P&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : ''}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : ''}&lt;{englishSecondName ? englishSecondName.toUpperCase() : ''}&lt;{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                    {(() => {
+                      const MRZ_LENGTH = 44;
+                      const surname = englishFourthName ? englishFourthName.toUpperCase() : '';
+                      const firstName = englishFirstName ? englishFirstName.toUpperCase() : '';
+                      const secondName = englishSecondName ? englishSecondName.toUpperCase() : '';
+                      const thirdInitial = englishThirdName ? englishThirdName.charAt(0).toUpperCase() : '';
+                      const namesPart = `P<SAU${surname}<<${firstName}<${secondName}<${thirdInitial}`;
+                      const fillersNeeded = MRZ_LENGTH - namesPart.length;
+                      const fillers = fillersNeeded > 0 ? '<'.repeat(fillersNeeded) : '';
+                      return namesPart + fillers;
+                    })()}
                   </div>
                   <div className="absolute top-[86%] left-[14%] right-[4%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.2em', direction: 'ltr'}}>
-                    {passportNumber}&lt;&lt;0SAU{(() => {
+                    {(() => {
+                      const MRZ_LENGTH = 44;
+                      let birthDateStr = '';
                       let birthDate: Date | null = null;
                       if (calendarType === 'gregorian' && dateOfBirth) {
                         birthDate = dateOfBirth;
@@ -992,17 +1004,18 @@ const Documents = () => {
                         const yy = String(birthDate.getFullYear()).slice(-2);
                         const mm = String(birthDate.getMonth() + 1).padStart(2, '0');
                         const dd = String(birthDate.getDate()).padStart(2, '0');
-                        return `${yy}${mm}${dd}`;
+                        birthDateStr = `${yy}${mm}${dd}`;
                       }
-                      return '';
-                    })()}{gender === 'ذكر' ? 'M' : 'F'}{(() => {
+                      const genderCode = gender === 'ذكر' ? 'M' : 'F';
                       const today = new Date();
                       const expiry = new Date(today.getFullYear() + 5, today.getMonth(), today.getDate());
-                      const yy = String(expiry.getFullYear()).slice(-2);
-                      const mm = String(expiry.getMonth() + 1).padStart(2, '0');
-                      const dd = String(expiry.getDate()).padStart(2, '0');
-                      return `${yy}${mm}${dd}`;
-                    })()}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;{gender === 'ذكر' ? '2' : '2'}
+                      const expiryStr = String(expiry.getFullYear()).slice(-2) + String(expiry.getMonth() + 1).padStart(2, '0') + String(expiry.getDate()).padStart(2, '0');
+                      const lastDigit = gender === 'ذكر' ? '2' : '2';
+                      const dataPart = `${passportNumber}<<0SAU${birthDateStr}${genderCode}${expiryStr}`;
+                      const fillersNeeded = MRZ_LENGTH - dataPart.length - 1;
+                      const fillers = fillersNeeded > 0 ? '<'.repeat(fillersNeeded) : '';
+                      return dataPart + fillers + lastDigit;
+                    })()}
                   </div>
                 </div>
               </div>
