@@ -1170,7 +1170,7 @@ const Documents = () => {
                 style={{
                   top: '28%',
                   right: '5%',
-                  fontSize: '9px',
+                  fontSize: '12px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                   textAlign: 'right',
@@ -1182,9 +1182,9 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '33%',
+                  top: '34%',
                   right: '5%',
-                  fontSize: '8px',
+                  fontSize: '11px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
                   textTransform: 'uppercase',
