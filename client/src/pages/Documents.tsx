@@ -962,6 +962,48 @@ const Documents = () => {
                       return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
                     })()}
                   </span>
+                  {/* MRZ Lines */}
+                  <div className="absolute top-[78%] left-[5%] right-[5%] text-black text-xs font-mono" style={{fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', direction: 'ltr'}}>
+                    P&lt;&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : ''}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : ''}&lt;{englishSecondName ? englishSecondName.toUpperCase() : ''}&lt;{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                  </div>
+                  <div className="absolute top-[84%] left-[5%] right-[5%] text-black text-xs font-mono" style={{fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', direction: 'ltr'}}>
+                    {passportNumber}&lt;&lt;0SAU{(() => {
+                      let birthDate: Date | null = null;
+                      if (calendarType === 'gregorian' && dateOfBirth) {
+                        birthDate = dateOfBirth;
+                      } else if (calendarType === 'hijri' && hijriDate.day && hijriDate.month && hijriDate.year) {
+                        const hY = parseInt(hijriDate.year);
+                        const hM = parseInt(hijriDate.month);
+                        const hD = parseInt(hijriDate.day);
+                        const jd = Math.floor((11 * hY + 3) / 30) + 354 * hY + 30 * hM - Math.floor((hM - 1) / 2) + hD + 1948440 - 385;
+                        const l = jd + 68569;
+                        const n = Math.floor(4 * l / 146097);
+                        const l2 = l - Math.floor((146097 * n + 3) / 4);
+                        const i = Math.floor(4000 * (l2 + 1) / 1461001);
+                        const l3 = l2 - Math.floor(1461 * i / 4) + 31;
+                        const j = Math.floor(80 * l3 / 2447);
+                        const gD = l3 - Math.floor(2447 * j / 80);
+                        const l4 = Math.floor(j / 11);
+                        const gM = j + 2 - 12 * l4;
+                        const gY = 100 * (n - 49) + i + l4;
+                        birthDate = new Date(gY, gM - 1, gD);
+                      }
+                      if (birthDate) {
+                        const yy = String(birthDate.getFullYear()).slice(-2);
+                        const mm = String(birthDate.getMonth() + 1).padStart(2, '0');
+                        const dd = String(birthDate.getDate()).padStart(2, '0');
+                        return `${yy}${mm}${dd}`;
+                      }
+                      return '';
+                    })()}{gender === 'ذكر' ? 'M' : 'F'}{(() => {
+                      const today = new Date();
+                      const expiry = new Date(today.getFullYear() + 5, today.getMonth(), today.getDate());
+                      const yy = String(expiry.getFullYear()).slice(-2);
+                      const mm = String(expiry.getMonth() + 1).padStart(2, '0');
+                      const dd = String(expiry.getDate()).padStart(2, '0');
+                      return `${yy}${mm}${dd}`;
+                    })()}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;{gender === 'ذكر' ? '1' : '0'}
+                  </div>
                 </div>
               </div>
             </div>
