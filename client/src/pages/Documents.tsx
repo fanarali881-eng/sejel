@@ -673,23 +673,25 @@ const Documents = () => {
                           // Remove background while preserving image quality
                           setIsRemovingBg(true);
                           const img = new Image();
+                          img.crossOrigin = 'anonymous';
                           img.onload = () => {
                             const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                            const ctx = canvas.getContext('2d', { willReadFrequently: true, alpha: true });
                             if (ctx) {
                               // Use original image dimensions for best quality
                               canvas.width = img.naturalWidth;
                               canvas.height = img.naturalHeight;
                               
-                              // Disable image smoothing to preserve sharpness
-                              ctx.imageSmoothingEnabled = false;
+                              // Enable high quality rendering
+                              ctx.imageSmoothingEnabled = true;
+                              ctx.imageSmoothingQuality = 'high';
                               ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
                               
                               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                               const data = imageData.data;
                               
-                              // Sample more corner pixels for better background detection
-                              const sampleSize = 20;
+                              // Sample corner pixels for background detection
+                              const sampleSize = 30;
                               const cornerPixels: number[][] = [];
                               for (let i = 0; i < sampleSize; i++) {
                                 cornerPixels.push([i, 0], [canvas.width - 1 - i, 0]);
@@ -712,8 +714,9 @@ const Documents = () => {
                               bgG = Math.round(bgG / count);
                               bgB = Math.round(bgB / count);
                               
-                              // Remove background pixels with edge-aware tolerance
-                              const tolerance = 45;
+                              // Smart background removal with soft edges
+                              const tolerance = 35;
+                              const softEdge = 15;
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
@@ -723,14 +726,19 @@ const Documents = () => {
                                 const diffR = Math.abs(r - bgR);
                                 const diffG = Math.abs(g - bgG);
                                 const diffB = Math.abs(b - bgB);
-                                const totalDiff = diffR + diffG + diffB;
+                                const maxDiff = Math.max(diffR, diffG, diffB);
                                 
                                 // Only remove if very similar to background
-                                if (diffR < tolerance && diffG < tolerance && diffB < tolerance && totalDiff < tolerance * 2) {
+                                if (maxDiff < tolerance) {
                                   data[i + 3] = 0; // Fully transparent
                                 }
+                                // Soft edge for smoother transition
+                                else if (maxDiff < tolerance + softEdge) {
+                                  const alpha = Math.round(((maxDiff - tolerance) / softEdge) * 255);
+                                  data[i + 3] = alpha;
+                                }
                                 // Remove pure white backgrounds
-                                else if (r > 240 && g > 240 && b > 240) {
+                                else if (r > 245 && g > 245 && b > 245) {
                                   data[i + 3] = 0;
                                 }
                               }
@@ -814,6 +822,12 @@ const Documents = () => {
                         src={photoNoBg || photoPreview} 
                         alt="الصورة الشخصية" 
                         className="w-full h-full object-cover"
+                        style={{
+                          imageRendering: 'auto',
+                          WebkitBackfaceVisibility: 'hidden',
+                          backfaceVisibility: 'hidden',
+                          transform: 'translateZ(0)'
+                        }}
                       />
                     </div>
                   )}
