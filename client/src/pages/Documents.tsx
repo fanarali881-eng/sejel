@@ -1138,8 +1138,8 @@ const Documents = () => {
         {/* Declaration Section - Only show when form is locked */}
         {isFormLocked && (
           <div className="max-w-4xl mx-auto mt-8">
-            <div className="flex items-center gap-4">
-              {/* Button on the left */}
+            <div className="flex items-center gap-4" dir="ltr">
+              {/* Button on the left (far left in LTR) */}
               <div className="flex-shrink-0">
               <Button 
                 onClick={() => {
