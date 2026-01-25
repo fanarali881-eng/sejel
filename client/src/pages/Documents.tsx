@@ -818,7 +818,7 @@ const Documents = () => {
                   {/* Vertical passport number next to oval photo */}
                   <div className="absolute top-[35%] right-[24%] h-[32%] flex flex-col justify-start items-center">
                     {passportNumber.split('').map((char, index) => (
-                      <span key={index} className="text-black text-xs font-bold" style={{lineHeight: '1.4'}}>
+                      <span key={index} className="text-black text-xs font-bold" style={{lineHeight: '1'}}>
                         {char}
                       </span>
                     ))}
