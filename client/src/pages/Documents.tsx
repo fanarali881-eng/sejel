@@ -1148,17 +1148,19 @@ const Documents = () => {
               />
               {/* Client Photo Overlay */}
               {(photoNoBg || photoPreview) && (
-                <div className="absolute top-[24%] left-[3%] w-[26%] h-[52%] overflow-hidden">
+                <div className="absolute top-[24%] left-[4%] w-[22%] h-[50%] overflow-hidden">
                   <img 
                     src={photoNoBg || photoPreview} 
                     alt="صورة العميل" 
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                     crossOrigin="anonymous"
                     style={{
                       imageRendering: '-webkit-optimize-contrast',
                       WebkitBackfaceVisibility: 'hidden',
                       backfaceVisibility: 'hidden',
                       transform: 'translateZ(0)',
+                      filter: 'none',
+                      WebkitFilter: 'none'
                     }}
                   />
                 </div>
