@@ -1175,7 +1175,7 @@ const Documents = () => {
                   direction: 'rtl',
                 }}
               >
-                {`${firstNameAr} ${fatherNameAr} ${grandfatherNameAr} ${familyNameAr}`}
+                {`${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`}
               </span>
               {/* English Name */}
               <span 
@@ -1189,7 +1189,7 @@ const Documents = () => {
                   textTransform: 'uppercase',
                 }}
               >
-                {`${firstNameEn} ${secondNameEn} ${thirdNameEn} ${lastNameEn}`}
+                {`${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`}
               </span>
             </div>
           </div>
