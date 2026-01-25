@@ -1205,7 +1205,7 @@ const Documents = () => {
                   direction: 'ltr',
                 }}
               >
-                {nationalId}
+                {nationalId.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)])}
               </span>
               {/* Hijri Birth Date */}
               <span 
@@ -1219,7 +1219,10 @@ const Documents = () => {
                 }}
               >
                 {hijriDate.day && hijriDate.month && hijriDate.year 
-                  ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ` 
+                  ? (() => {
+                      const toArabicNum = (num: string, pad: number = 2) => num.padStart(pad, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+                      return `${toArabicNum(hijriDate.day)}/${toArabicNum(hijriDate.month)}/${toArabicNum(hijriDate.year, 4)} هـ`;
+                    })() 
                   : calendarType === 'gregorian' && dateOfBirth 
                     ? (() => {
                         // Convert Gregorian to Hijri
@@ -1246,7 +1249,8 @@ const Documents = () => {
                         const hD = l3 - Math.floor((709 * hM) / 24);
                         const hY = 30 * n + j - 30;
                         
-                        return `${hD}/${hM}/${hY} هـ`;
+                        const toArabicNum = (num: number, pad: number = 2) => num.toString().padStart(pad, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+                        return `${toArabicNum(hD)}/${toArabicNum(hM)}/${toArabicNum(hY, 4)} هـ`;
                       })()
                     : ''}
               </span>
