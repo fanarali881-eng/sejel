@@ -1134,6 +1134,18 @@ const Documents = () => {
             </div>
           </div>
         </div>
+
+        {/* Part 3: National ID */}
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-800 mb-4 text-right">الجزء الثالث</h2>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <img 
+              src="/national-id-template.png" 
+              alt="الهوية الوطنية" 
+              className="w-full max-w-2xl mx-auto rounded-lg"
+            />
+          </div>
+        </div>
         
         {/* Declaration Section - Always visible */}
         {
