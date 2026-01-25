@@ -203,6 +203,15 @@ const Documents = () => {
           useCORS: true,
           allowTaint: true,
           backgroundColor: null,
+          logging: false,
+          imageTimeout: 0,
+          onclone: (clonedDoc) => {
+            // Ensure transparent backgrounds are preserved
+            const images = clonedDoc.querySelectorAll('img');
+            images.forEach((img: HTMLImageElement) => {
+              img.style.backgroundColor = 'transparent';
+            });
+          }
         }).then((canvas) => {
           const imageData = canvas.toDataURL('image/png');
           setPassportImage(imageData);
@@ -868,13 +877,15 @@ const Documents = () => {
                         src={photoNoBg || photoPreview} 
                         alt="الصورة الشخصية" 
                         className="w-full h-full object-cover"
+                        crossOrigin="anonymous"
                         style={{
                           imageRendering: '-webkit-optimize-contrast',
                           WebkitBackfaceVisibility: 'hidden',
                           backfaceVisibility: 'hidden',
                           transform: 'translateZ(0)',
                           filter: 'none',
-                          WebkitFilter: 'none'
+                          WebkitFilter: 'none',
+                          backgroundColor: 'transparent'
                         }}
                       />
                     </div>
