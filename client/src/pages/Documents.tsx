@@ -1139,11 +1139,32 @@ const Documents = () => {
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثالث</h3>
           <div className="flex justify-center">
-            <img 
-              src="/national-id-template.png" 
-              alt="الهوية الوطنية" 
-              className="w-[500px] h-auto rounded-lg shadow-lg"
-            />
+            <div className="relative w-[500px]">
+              {/* National ID Background */}
+              <img 
+                src="/national-id-template.png" 
+                alt="الهوية الوطنية" 
+                className="w-full h-auto rounded-lg shadow-lg"
+              />
+              {/* Client Photo Overlay */}
+              {uploadedPhoto && (
+                <div 
+                  className="absolute overflow-hidden bg-white"
+                  style={{
+                    top: '22%',
+                    left: '5%',
+                    width: '22%',
+                    height: '45%',
+                  }}
+                >
+                  <img 
+                    src={uploadedPhoto} 
+                    alt="صورة العميل" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
         
