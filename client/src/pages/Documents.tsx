@@ -824,6 +824,16 @@ const Documents = () => {
                       </span>
                     ))}
                   </div>
+                  {/* Second photo - no border, 30% opacity */}
+                  {(photoNoBg || photoPreview) && (
+                    <div className="absolute top-[38%] right-[14%] w-[10%] h-[24%] overflow-hidden" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                      <img 
+                        src={photoNoBg || photoPreview} 
+                        alt="" 
+                        className="object-cover" style={{width: '100%', height: '100%', objectPosition: 'center center', opacity: 0.3}}
+                      />
+                    </div>
+                  )}
                   {/* Issuing Authority */}
                   <span className="absolute top-[64%] right-[14%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Issuing Authority/ مكان الإصدار</span>
                   {/* District Display - Arabic and English */}
