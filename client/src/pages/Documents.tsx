@@ -1191,7 +1191,7 @@ const Documents = () => {
                   textAlign: 'right',
                 }}
               >
-                {`${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`}
+                {englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}
               </span>
             </div>
           </div>
