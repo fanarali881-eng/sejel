@@ -1151,10 +1151,10 @@ const Documents = () => {
                 <div 
                   className="absolute overflow-hidden bg-white"
                   style={{
-                    top: '28%',
-                    left: '5%',
-                    width: '20%',
-                    height: '50%',
+                    top: '24%',
+                    left: '4%',
+                    width: '23%',
+                    height: '52%',
                   }}
                 >
                   <img 
