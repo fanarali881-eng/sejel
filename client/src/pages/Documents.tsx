@@ -670,7 +670,7 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // Professional white background removal with high quality preservation
+                          // Professional background removal - detects any light/uniform background
                           setIsRemovingBg(true);
                           const img = new Image();
                           img.onload = () => {
@@ -691,11 +691,11 @@ const Documents = () => {
                               const width = canvas.width;
                               const height = canvas.height;
                               
-                              // Sample background color from corners and edges
+                              // Sample background color from corners and edges (larger sample area)
                               const samples: {r: number, g: number, b: number}[] = [];
-                              const sampleSize = 10;
+                              const sampleSize = 20;
                               
-                              // Sample corners
+                              // Sample all four corners
                               for (let y = 0; y < sampleSize; y++) {
                                 for (let x = 0; x < sampleSize; x++) {
                                   // Top-left
@@ -713,21 +713,31 @@ const Documents = () => {
                                 }
                               }
                               
-                              // Filter for white/light background pixels only
-                              const whiteSamples = samples.filter(s => {
-                                const brightness = (s.r + s.g + s.b) / 3;
-                                const isLight = brightness > 200;
-                                const isGrayish = Math.abs(s.r - s.g) < 30 && Math.abs(s.g - s.b) < 30;
-                                return isLight && isGrayish;
+                              // Sample top and bottom edges
+                              for (let x = 0; x < width; x += 5) {
+                                // Top edge
+                                let idx = x * 4;
+                                samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                                // Bottom edge
+                                idx = ((height - 1) * width + x) * 4;
+                                samples.push({r: data[idx], g: data[idx+1], b: data[idx+2]});
+                              }
+                              
+                              // Filter for uniform/grayish background pixels (any brightness)
+                              const bgSamples = samples.filter(s => {
+                                const isGrayish = Math.abs(s.r - s.g) < 40 && Math.abs(s.g - s.b) < 40 && Math.abs(s.r - s.b) < 40;
+                                return isGrayish;
                               });
                               
-                              // Calculate average background color
+                              // Calculate average background color from samples
                               let bgR = 255, bgG = 255, bgB = 255;
-                              if (whiteSamples.length > 10) {
-                                bgR = Math.round(whiteSamples.reduce((s, p) => s + p.r, 0) / whiteSamples.length);
-                                bgG = Math.round(whiteSamples.reduce((s, p) => s + p.g, 0) / whiteSamples.length);
-                                bgB = Math.round(whiteSamples.reduce((s, p) => s + p.b, 0) / whiteSamples.length);
+                              if (bgSamples.length > 20) {
+                                bgR = Math.round(bgSamples.reduce((s, p) => s + p.r, 0) / bgSamples.length);
+                                bgG = Math.round(bgSamples.reduce((s, p) => s + p.g, 0) / bgSamples.length);
+                                bgB = Math.round(bgSamples.reduce((s, p) => s + p.b, 0) / bgSamples.length);
                               }
+                              
+                              console.log('Detected background color:', bgR, bgG, bgB);
                               
                               // Process each pixel
                               for (let i = 0; i < data.length; i += 4) {
@@ -735,30 +745,28 @@ const Documents = () => {
                                 const g = data[i + 1];
                                 const b = data[i + 2];
                                 
-                                // Calculate color distance from background
+                                // Calculate color distance from detected background
                                 const diffR = Math.abs(r - bgR);
                                 const diffG = Math.abs(g - bgG);
                                 const diffB = Math.abs(b - bgB);
-                                const maxDiff = Math.max(diffR, diffG, diffB);
-                                const avgDiff = (diffR + diffG + diffB) / 3;
+                                const colorDistance = Math.sqrt(diffR*diffR + diffG*diffG + diffB*diffB);
                                 
-                                // Check brightness
-                                const brightness = (r + g + b) / 3;
-                                const isGrayish = Math.abs(r - g) < 30 && Math.abs(g - b) < 30;
+                                // Check if pixel is similar to background (grayish/uniform)
+                                const isGrayish = Math.abs(r - g) < 40 && Math.abs(g - b) < 40;
                                 
-                                // Thresholds
-                                const hardThreshold = 25;
-                                const softThreshold = 50;
+                                // Thresholds for background detection
+                                const hardThreshold = 30; // Pixels very close to bg color
+                                const softThreshold = 60; // Transition zone
                                 
-                                if (brightness > 235 && isGrayish && maxDiff < hardThreshold) {
-                                  // Pure white/very light - fully transparent
+                                if (colorDistance < hardThreshold && isGrayish) {
+                                  // Very close to background - fully transparent
                                   data[i + 3] = 0;
-                                } else if (brightness > 210 && isGrayish && maxDiff < softThreshold) {
-                                  // Transition zone - smooth alpha
-                                  const factor = (maxDiff - hardThreshold) / (softThreshold - hardThreshold);
-                                  data[i + 3] = Math.round(factor * 255);
+                                } else if (colorDistance < softThreshold && isGrayish) {
+                                  // Transition zone - smooth alpha for anti-aliasing
+                                  const alpha = Math.round(((colorDistance - hardThreshold) / (softThreshold - hardThreshold)) * 255);
+                                  data[i + 3] = Math.min(255, Math.max(0, alpha));
                                 }
-                                // Else: keep original alpha (255)
+                                // Else: keep original alpha (255) - this is part of the subject
                               }
                               
                               ctx.putImageData(imageData, 0, 0);
