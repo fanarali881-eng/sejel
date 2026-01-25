@@ -1192,6 +1192,32 @@ const Documents = () => {
               >
                 {englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}
               </span>
+              {/* National ID Number */}
+              <span 
+                className="absolute text-black font-bold"
+                style={{
+                  top: '40%',
+                  right: '5%',
+                  fontSize: '12px',
+                  fontFamily: 'Arial, sans-serif',
+                  direction: 'ltr',
+                }}
+              >
+                {nationalId}
+              </span>
+              {/* Hijri Birth Date */}
+              <span 
+                className="absolute text-black font-bold"
+                style={{
+                  top: '72%',
+                  right: '5%',
+                  fontSize: '12px',
+                  fontFamily: 'Arial, sans-serif',
+                  direction: 'rtl',
+                }}
+              >
+                {hijriDate.day && hijriDate.month && hijriDate.year ? `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ` : ''}
+              </span>
             </div>
           </div>
         </div>
