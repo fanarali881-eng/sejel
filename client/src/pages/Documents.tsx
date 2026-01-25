@@ -360,11 +360,15 @@ const Documents = () => {
                               setValidationErrors(prev => ({ ...prev, dateOfBirth: '' }));
                             }
                           }}
-                          disabled={(date) => date > new Date() || date < new Date("1940-01-01")}
+                          disabled={(date) => {
+                            const today = new Date();
+                            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                            return date > maxDate || date < new Date("1940-01-01");
+                          }}
                           initialFocus
                           captionLayout="dropdown"
                           fromYear={1940}
-                          toYear={new Date().getFullYear()}
+                          toYear={new Date().getFullYear() - 18}
                         />
                       </PopoverContent>
                     </Popover>
@@ -428,7 +432,7 @@ const Documents = () => {
                           disabled={isFormLocked}
                         >
                           <option value="">السنة</option>
-                          {Array.from({ length: 60 }, (_, i) => 1446 - i).map(year => (
+                          {Array.from({ length: 60 }, (_, i) => 1428 - i).map(year => (
                             <option key={year} value={year}>{year}</option>
                           ))}
                         </select>
