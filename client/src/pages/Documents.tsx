@@ -807,7 +807,7 @@ const Documents = () => {
                 <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
                   {/* Oval photo on the right side */}
                   {(photoNoBg || photoPreview) && (
-                    <div className="absolute top-[38%] right-[26%] w-[12%] h-[28%] overflow-hidden" style={{borderRadius: '50%', border: '2px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <div className="absolute top-[38%] right-[30%] w-[12%] h-[28%] overflow-hidden" style={{borderRadius: '50%', border: '2px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                       <img 
                         src={photoNoBg || photoPreview} 
                         alt="" 
@@ -816,7 +816,7 @@ const Documents = () => {
                     </div>
                   )}
                   {/* Vertical passport number next to oval photo */}
-                  <div className="absolute top-[38%] right-[24%] h-[32%] flex flex-col justify-start items-center">
+                  <div className="absolute top-[38%] right-[28%] h-[32%] flex flex-col justify-start items-center">
                     {passportNumber.split('').map((char, index) => (
                       <span key={index} className="text-black text-xs font-bold" style={{lineHeight: '1'}}>
                         {char}
