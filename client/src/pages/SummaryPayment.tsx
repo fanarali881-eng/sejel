@@ -17,15 +17,22 @@ export default function SummaryPayment() {
   const searchParams = new URLSearchParams(window.location.search);
   const serviceName = searchParams.get('service') || 'قيد سجل تجاري لمؤسسة فردية';
 
-  // Service prices
+  // Service prices - matching ServiceHero.tsx getServiceFee()
   const servicePrices: Record<string, number> = {
     'قيد سجل تجاري لمؤسسة فردية': 500,
-    'تجديد سجل تجاري': 300,
-    'حجز اسم تجاري': 200,
-    'إصدار رخصة فورية': 400,
-    'تجديد رخصة تجارية': 350,
-    'إصدار رخصة تجارية': 450,
-    'تسجيل علامة تجارية': 1000,
+    'تجديد سجل تجاري': 200,
+    'حجز اسم تجاري': 100,
+    'تعديل سجل تجاري': 200,
+    'مستخرج سجل تجاري / الإفادة التجارية': 100,
+    'إصدار رخصة تجارية': 5000,
+    'تجديد رخصة تجارية': 800,
+    'تسجيل علامة تجارية': 7500,
+    'إصدار الجواز السعودي': 300,
+    'تجديد الجواز السعودي': 300,
+    'تجديد الهوية الوطنية': 39,
+    'إصدار رخصة قيادة': 100,
+    'تجديد رخصة القيادة': 100,
+    'تجديد رخصة سير': 100,
   };
 
   const servicePrice = servicePrices[serviceName] || 500;
