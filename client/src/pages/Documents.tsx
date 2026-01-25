@@ -963,10 +963,10 @@ const Documents = () => {
                     })()}
                   </span>
                   {/* MRZ Lines */}
-                  <div className="absolute top-[76%] left-[4%] right-[4%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.2em', direction: 'ltr'}}>
+                  <div className="absolute top-[80%] left-[8%] right-[4%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.2em', direction: 'ltr'}}>
                     P&lt;SAU{englishFourthName ? englishFourthName.toUpperCase() : ''}&lt;&lt;{englishFirstName ? englishFirstName.toUpperCase() : ''}&lt;{englishSecondName ? englishSecondName.toUpperCase() : ''}&lt;{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
                   </div>
-                  <div className="absolute top-[82%] left-[4%] right-[4%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.2em', direction: 'ltr'}}>
+                  <div className="absolute top-[86%] left-[8%] right-[4%] text-black text-base font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.2em', direction: 'ltr'}}>
                     {passportNumber}&lt;&lt;0SAU{(() => {
                       let birthDate: Date | null = null;
                       if (calendarType === 'gregorian' && dateOfBirth) {
