@@ -1168,11 +1168,12 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '17%',
-                  left: '28%',
+                  top: '28%',
+                  right: '5%',
                   fontSize: '9px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
+                  textAlign: 'right',
                 }}
               >
                 {`${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`}
@@ -1181,12 +1182,13 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '21%',
-                  left: '28%',
+                  top: '33%',
+                  right: '5%',
                   fontSize: '8px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
                   textTransform: 'uppercase',
+                  textAlign: 'right',
                 }}
               >
                 {`${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`}
