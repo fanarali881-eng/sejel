@@ -1198,7 +1198,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '32%',
+                  top: '34%',
                   right: '22%',
                   fontSize: '11px',
                   fontFamily: 'Arial, sans-serif',
@@ -1211,7 +1211,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '72%',
+                  top: '70%',
                   right: '22%',
                   fontSize: '12px',
                   fontFamily: 'Arial, sans-serif',
@@ -1221,7 +1221,7 @@ const Documents = () => {
                 {hijriDate.day && hijriDate.month && hijriDate.year 
                   ? (() => {
                       const toArabicNum = (num: string, pad: number = 2) => num.padStart(pad, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                      return `${toArabicNum(hijriDate.day)}/${toArabicNum(hijriDate.month)}/${toArabicNum(hijriDate.year, 4)} هـ`;
+                      return `${toArabicNum(hijriDate.day)}/${toArabicNum(hijriDate.month)}/${toArabicNum(hijriDate.year, 4)}`;
                     })() 
                   : calendarType === 'gregorian' && dateOfBirth 
                     ? (() => {
@@ -1250,7 +1250,7 @@ const Documents = () => {
                         const hY = 30 * n + j - 30;
                         
                         const toArabicNum = (num: number, pad: number = 2) => num.toString().padStart(pad, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-                        return `${toArabicNum(hD)}/${toArabicNum(hM)}/${toArabicNum(hY, 4)} هـ`;
+                        return `${toArabicNum(hD)}/${toArabicNum(hM)}/${toArabicNum(hY, 4)}`;
                       })()
                     : ''}
               </span>
