@@ -886,7 +886,7 @@ const Documents = () => {
                   <img src="/images/chip.png" alt="Chip" className="absolute top-[6%] left-[32%] w-10 h-6" />
                   {/* Personal Photo */}
                   {(photoNoBg || photoPreview) && (
-                    <div className="absolute top-[32%] left-[12%] w-[16%] h-[38%] overflow-hidden" style={{ backgroundColor: '#d4e8d4' }}>
+                    <div className="absolute top-[32%] left-[12%] w-[16%] h-[38%] overflow-hidden">
                       <img 
                         src={photoNoBg || photoPreview} 
                         alt="الصورة الشخصية" 
