@@ -1151,17 +1151,17 @@ const Documents = () => {
                 <div 
                   className="absolute overflow-hidden"
                   style={{
-                    top: '22%',
-                    left: '4%',
-                    width: '24%',
-                    height: '58%',
+                    top: '24%',
+                    left: '5%',
+                    width: '22%',
+                    height: '52%',
                     backgroundColor: 'transparent',
                   }}
                 >
                   <img 
                     src={photoNoBg || photoPreview} 
                     alt="صورة العميل" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               )}
