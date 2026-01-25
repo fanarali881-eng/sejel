@@ -838,8 +838,8 @@ const Documents = () => {
                     className="max-w-full h-auto rounded-lg shadow-lg"
                   />
                 ) : (
-                {/* Saudi Passport - Empty Background with Emblem */}
-                <div className="relative" ref={passportRef}>
+                  <div className="relative" ref={passportRef}>
+                    {/* Saudi Passport - Empty Background with Emblem */}
                   <img 
                     src="/images/passport-empty-bg.png" 
                     alt="جواز سفر سعودي" 
