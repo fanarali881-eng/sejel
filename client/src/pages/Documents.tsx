@@ -670,64 +670,74 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // Remove white/light background using Canvas
+                          // Remove background while preserving image quality
                           setIsRemovingBg(true);
                           const img = new Image();
                           img.onload = () => {
                             const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
+                            const ctx = canvas.getContext('2d', { willReadFrequently: true });
                             if (ctx) {
-                              canvas.width = img.width;
-                              canvas.height = img.height;
-                              ctx.drawImage(img, 0, 0);
+                              // Use original image dimensions for best quality
+                              canvas.width = img.naturalWidth;
+                              canvas.height = img.naturalHeight;
+                              
+                              // Disable image smoothing to preserve sharpness
+                              ctx.imageSmoothingEnabled = false;
+                              ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
                               
                               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                               const data = imageData.data;
                               
-                              // Improved background removal - detect and remove light backgrounds
-                              // First pass: find the most common background color (usually corners)
-                              const cornerPixels = [
-                                [0, 0], [canvas.width - 1, 0], 
-                                [0, canvas.height - 1], [canvas.width - 1, canvas.height - 1],
-                                [10, 10], [canvas.width - 10, 10],
-                                [10, canvas.height - 10], [canvas.width - 10, canvas.height - 10]
-                              ];
+                              // Sample more corner pixels for better background detection
+                              const sampleSize = 20;
+                              const cornerPixels: number[][] = [];
+                              for (let i = 0; i < sampleSize; i++) {
+                                cornerPixels.push([i, 0], [canvas.width - 1 - i, 0]);
+                                cornerPixels.push([i, canvas.height - 1], [canvas.width - 1 - i, canvas.height - 1]);
+                                cornerPixels.push([0, i], [0, canvas.height - 1 - i]);
+                                cornerPixels.push([canvas.width - 1, i], [canvas.width - 1, canvas.height - 1 - i]);
+                              }
                               
                               let bgR = 0, bgG = 0, bgB = 0, count = 0;
                               cornerPixels.forEach(([x, y]) => {
-                                const idx = (y * canvas.width + x) * 4;
-                                bgR += data[idx];
-                                bgG += data[idx + 1];
-                                bgB += data[idx + 2];
-                                count++;
+                                if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
+                                  const idx = (y * canvas.width + x) * 4;
+                                  bgR += data[idx];
+                                  bgG += data[idx + 1];
+                                  bgB += data[idx + 2];
+                                  count++;
+                                }
                               });
                               bgR = Math.round(bgR / count);
                               bgG = Math.round(bgG / count);
                               bgB = Math.round(bgB / count);
                               
-                              // Remove pixels similar to background color
-                              const tolerance = 60; // Increased tolerance for better removal
+                              // Remove background pixels with edge-aware tolerance
+                              const tolerance = 45;
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
                                 const b = data[i + 2];
                                 
-                                // Check if pixel is similar to background color
+                                // Calculate color distance from background
                                 const diffR = Math.abs(r - bgR);
                                 const diffG = Math.abs(g - bgG);
                                 const diffB = Math.abs(b - bgB);
+                                const totalDiff = diffR + diffG + diffB;
                                 
-                                if (diffR < tolerance && diffG < tolerance && diffB < tolerance) {
-                                  data[i + 3] = 0; // Set alpha to 0 (transparent)
+                                // Only remove if very similar to background
+                                if (diffR < tolerance && diffG < tolerance && diffB < tolerance && totalDiff < tolerance * 2) {
+                                  data[i + 3] = 0; // Fully transparent
                                 }
-                                // Also remove pure white/very light backgrounds
-                                else if (r > 230 && g > 230 && b > 230) {
+                                // Remove pure white backgrounds
+                                else if (r > 240 && g > 240 && b > 240) {
                                   data[i + 3] = 0;
                                 }
                               }
                               
                               ctx.putImageData(imageData, 0, 0);
-                              const noBgUrl = canvas.toDataURL('image/png');
+                              // Use PNG with maximum quality
+                              const noBgUrl = canvas.toDataURL('image/png', 1.0);
                               setPhotoNoBg(noBgUrl);
                             }
                             setIsRemovingBg(false);
