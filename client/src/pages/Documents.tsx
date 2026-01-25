@@ -686,26 +686,24 @@ const Documents = () => {
                               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                               const data = imageData.data;
                               
-                              // Remove white background completely while preserving image quality
+                              // Remove white background only
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
                                 const b = data[i + 2];
+                                const brightness = (r + g + b) / 3;
                                 
-                                // Check if pixel is white/near-white (all channels high and similar)
-                                const minChannel = Math.min(r, g, b);
-                                const maxChannel = Math.max(r, g, b);
-                                const isUniform = (maxChannel - minChannel) < 35; // Low color variation
+                                // Only remove very white pixels
+                                const isGrayish = Math.abs(r - g) < 15 && Math.abs(g - b) < 15;
                                 
-                                if (minChannel > 200 && isUniform) {
-                                  // White/near-white background - make fully transparent
+                                if (brightness > 248 && isGrayish) {
+                                  // Pure white - fully transparent
                                   data[i + 3] = 0;
-                                } else if (minChannel > 180 && isUniform) {
-                                  // Transition zone for smooth edges
-                                  const alpha = Math.round((200 - minChannel) / 20 * 255);
-                                  data[i + 3] = Math.min(255, Math.max(0, 255 - alpha));
+                                } else if (brightness > 240 && isGrayish) {
+                                  // Near white - smooth transition
+                                  const alpha = Math.round((248 - brightness) / 8 * 255);
+                                  data[i + 3] = 255 - alpha;
                                 }
-                                // Keep all other pixels unchanged (full quality)
                               }
                               
                               ctx.putImageData(imageData, 0, 0);
