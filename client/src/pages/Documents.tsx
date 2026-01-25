@@ -1294,6 +1294,19 @@ const Documents = () => {
                       })()
                     : ''}
               </span>
+              {/* Birth Place */}
+              <span 
+                className="absolute text-black font-bold"
+                style={{
+                  top: '61%',
+                  right: '18%',
+                  fontSize: '11px',
+                  fontFamily: 'Arial, sans-serif',
+                  direction: 'rtl',
+                }}
+              >
+                {district}
+              </span>
             </div>
           </div>
         </div>
