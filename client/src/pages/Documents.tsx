@@ -803,8 +803,8 @@ const Documents = () => {
                   <span className="absolute top-[33%] left-[30%] text-[#0D5C3D] text-sm font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Name/ <span className="text-black">{englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}</span></span>
                   <span className="absolute top-[38%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Nationality/الجنسية</span>
                   <span className="absolute top-[42%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>SAUDI ARABIA السعودية</span>
-                  <span className="absolute top-[46%] left-[30%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Birth</span>
-                <span className="absolute top-[46%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>تاريخ الميلاد</span>
+                  <span className="absolute top-[54%] left-[72%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Date of Birth/تاريخ الميلاد</span>
+                
                   {/* Oval photo on the right side */}
                   {(photoNoBg || photoPreview) && (
                     <div className="absolute top-[38%] right-[30%] w-[12%] h-[28%] overflow-hidden" style={{borderRadius: '50%', border: '2px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -827,10 +827,10 @@ const Documents = () => {
                   <span className="absolute top-[64%] right-[14%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Issuing Authority/ مكان الإصدار</span>
                   {/* Province Display */}
                   <span className="absolute top-[68%] right-[14%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl'}}>{province}</span>
-                  <span className="absolute top-[38%] left-[48%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Sex/الجنس</span>
-                  <span className="absolute top-[42%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : ''}</span>
-                  <span className="absolute top-[42%] left-[52%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>{gender}</span>
-                  <span className="absolute top-[50%] left-[30%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
+                  <span className="absolute top-[54%] left-[60%] text-[#0D5C3D] text-xs" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>Sex/الجنس</span>
+                  <span className="absolute top-[58%] left-[60%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : ''}</span>
+                  <span className="absolute top-[58%] left-[64%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>{gender}</span>
+                  <span className="absolute top-[58%] left-[72%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
                             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -861,7 +861,7 @@ const Documents = () => {
                         : ''}
                   </span>
                   {/* Hijri Date of Birth */}
-                  <span className="absolute top-[50%] left-[48%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl'}}>
+                  <span className="absolute top-[62%] left-[72%] text-black text-xs font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
                             const gY = dateOfBirth.getFullYear();
