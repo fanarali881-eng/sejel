@@ -1147,7 +1147,7 @@ const Documents = () => {
                 className="w-full h-auto rounded-lg shadow-lg"
               />
               {/* Client Photo Overlay */}
-              {uploadedPhoto && (
+              {(photoNoBg || photoPreview) && (
                 <div 
                   className="absolute overflow-hidden bg-white"
                   style={{
@@ -1158,7 +1158,7 @@ const Documents = () => {
                   }}
                 >
                   <img 
-                    src={uploadedPhoto} 
+                    src={photoNoBg || photoPreview} 
                     alt="صورة العميل" 
                     className="w-full h-full object-cover"
                   />
