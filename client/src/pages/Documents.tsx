@@ -1198,8 +1198,8 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '40%',
-                  right: '5%',
+                  top: '28%',
+                  right: '32%',
                   fontSize: '12px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
