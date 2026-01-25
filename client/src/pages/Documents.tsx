@@ -885,7 +885,7 @@ const Documents = () => {
             {/* Part Two Section - Dynamic Passport */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
-              <div className="flex justify-center">
+              <div className="flex justify-center overflow-x-auto">
                 {/* Show captured image if available, otherwise show dynamic passport */}
                 {passportImage ? (
                   <img 
@@ -894,7 +894,7 @@ const Documents = () => {
                     className="max-w-full h-auto rounded-lg shadow-lg"
                   />
                 ) : (
-                  <div className="relative" ref={passportRef}>
+                  <div className="relative" ref={passportRef} style={{minWidth: '600px', width: '600px'}}>
                     {/* Saudi Passport - Empty Background with Emblem */}
                   <img 
                     src="/images/passport-empty-bg.png" 
@@ -1169,7 +1169,7 @@ const Documents = () => {
         {/* Part 3: National ID */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثالث</h3>
-          <div className="flex justify-center">
+          <div className="flex justify-center overflow-x-auto">
             {/* Show captured image if available, otherwise show dynamic national ID */}
             {nationalIdImage ? (
               <img 
@@ -1178,7 +1178,7 @@ const Documents = () => {
                 className="max-w-full h-auto rounded-lg shadow-lg"
               />
             ) : (
-            <div className="relative w-[500px]" ref={nationalIdRef}>
+            <div className="relative" ref={nationalIdRef} style={{minWidth: '500px', width: '500px'}}>
               {/* National ID Background */}
               <img 
                 src="/national-id-template.png" 
