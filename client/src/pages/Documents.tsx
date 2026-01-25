@@ -670,7 +670,7 @@ const Documents = () => {
                           const imgSrc = reader.result as string;
                           setPhotoPreview(imgSrc);
                           
-                          // Simple white background removal with validation
+                          // Simple white background removal
                           setIsRemovingBg(true);
                           const img = new Image();
                           img.onload = () => {
@@ -685,55 +685,24 @@ const Documents = () => {
                               
                               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                               const data = imageData.data;
-                              const width = canvas.width;
-                              const height = canvas.height;
                               
-                              // Check if background is white by sampling corners
-                              const cornerSamples: number[] = [];
-                              const sampleSize = 15;
-                              
-                              for (let y = 0; y < sampleSize; y++) {
-                                for (let x = 0; x < sampleSize; x++) {
-                                  // Top-left corner
-                                  let idx = (y * width + x) * 4;
-                                  cornerSamples.push((data[idx] + data[idx+1] + data[idx+2]) / 3);
-                                  // Top-right corner
-                                  idx = (y * width + (width - 1 - x)) * 4;
-                                  cornerSamples.push((data[idx] + data[idx+1] + data[idx+2]) / 3);
-                                }
-                              }
-                              
-                              const avgBrightness = cornerSamples.reduce((a, b) => a + b, 0) / cornerSamples.length;
-                              
-                              // Check if background is white (brightness > 230)
-                              if (avgBrightness < 230) {
-                                // Background is not white - show error
-                                alert('يجب أن تكون خلفية الصورة بيضاء. يرجى رفع صورة بخلفية بيضاء.');
-                                setPhotoPreview('');
-                                setPhotoNoBg('');
-                                setPersonalPhoto(null);
-                                setIsRemovingBg(false);
-                                return;
-                              }
-                              
-                              // Remove white background
+                              // Remove white/light background
                               for (let i = 0; i < data.length; i += 4) {
                                 const r = data[i];
                                 const g = data[i + 1];
                                 const b = data[i + 2];
                                 const brightness = (r + g + b) / 3;
                                 
-                                // Check if pixel is white/near-white
-                                const isWhite = r > 220 && g > 220 && b > 220;
-                                const isGrayish = Math.abs(r - g) < 20 && Math.abs(g - b) < 20;
+                                // Check if pixel is white/near-white and grayish
+                                const isGrayish = Math.abs(r - g) < 25 && Math.abs(g - b) < 25;
                                 
-                                if (brightness > 245 && isGrayish) {
+                                if (brightness > 240 && isGrayish) {
                                   // Pure white - fully transparent
                                   data[i + 3] = 0;
-                                } else if (brightness > 230 && isWhite && isGrayish) {
+                                } else if (brightness > 220 && isGrayish) {
                                   // Near white - smooth transition
-                                  const alpha = Math.round((255 - brightness) * 10);
-                                  data[i + 3] = Math.min(255, Math.max(0, alpha));
+                                  const alpha = Math.round((brightness - 220) / (240 - 220) * 255);
+                                  data[i + 3] = 255 - alpha;
                                 }
                               }
                               
