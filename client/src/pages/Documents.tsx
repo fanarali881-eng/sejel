@@ -1112,8 +1112,8 @@ const Documents = () => {
       
       {/* Confirmation Popup */}
       {showConfirmPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md mx-4 text-center">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md mx-4 text-center border border-gray-200">
             <h3 className="text-xl font-bold text-gray-800 mb-4">تأكيد البيانات</h3>
             <p className="text-gray-600 mb-6">هل أنت متأكد من صحة البيانات المدخلة؟ لن تتمكن من التعديل بعد التأكيد.</p>
             <div className="flex gap-4 justify-center">
