@@ -1151,10 +1151,10 @@ const Documents = () => {
                 <div 
                   className="absolute overflow-hidden bg-white"
                   style={{
-                    top: '22%',
+                    top: '28%',
                     left: '5%',
-                    width: '22%',
-                    height: '45%',
+                    width: '20%',
+                    height: '50%',
                   }}
                 >
                   <img 
@@ -1168,9 +1168,9 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '14%',
-                  left: '30%',
-                  fontSize: '10px',
+                  top: '17%',
+                  left: '28%',
+                  fontSize: '9px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1181,9 +1181,9 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '18%',
-                  left: '30%',
-                  fontSize: '9px',
+                  top: '21%',
+                  left: '28%',
+                  fontSize: '8px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
                   textTransform: 'uppercase',
