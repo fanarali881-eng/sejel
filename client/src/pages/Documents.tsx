@@ -1136,13 +1136,13 @@ const Documents = () => {
         </div>
 
         {/* Part 3: National ID */}
-        <div className="mt-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 text-right">الجزء الثالث</h2>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثالث</h3>
+          <div className="flex justify-center">
             <img 
               src="/national-id-template.png" 
               alt="الهوية الوطنية" 
-              className="w-full max-w-2xl mx-auto rounded-lg"
+              className="max-w-full h-auto rounded-lg shadow-lg"
             />
           </div>
         </div>
