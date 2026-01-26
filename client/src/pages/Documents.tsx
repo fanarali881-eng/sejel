@@ -1483,12 +1483,12 @@ const Documents = () => {
                     const hY = 30 * n + j - 30;
                     return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`;
                   })()}</span>
-                  <span style={{direction: 'ltr'}}>فصيلة الدم B+</span>
+                  <span style={{direction: 'ltr'}}>B+ فصيلة الدم</span>
                 </div>
                 {/* Row 5: القيود / النوع */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
                   <span style={{direction: 'rtl'}}>النوع</span>
-                  <span>القيود ٣</span>
+                  <span>بلا قيود</span>
                 </div>
                 {/* Row 6: الجنسية */}
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
