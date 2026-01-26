@@ -952,12 +952,12 @@ const Documents = () => {
               {/* License Plate Number - Full Width Row */}
               <div className="mb-4">
                 <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">رقم اللوحة <span className="text-red-500">*</span></Label>
-                <div className="flex flex-row gap-2 items-center" dir="ltr">
+                <div className="flex flex-row gap-1 md:gap-2 items-center" dir="ltr">
                   {/* Letter 1 */}
                   <select
                     value={vehiclePlateLetter1}
                     onChange={(e) => setVehiclePlateLetter1(e.target.value)}
-                    className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
+                    className="flex-1 h-8 md:h-12 px-1 md:px-2 border border-gray-300 rounded-md text-center bg-white text-[10px] md:text-sm"
                     disabled={isFormLocked}
                   >
                     <option value="">اختر حرف</option>
@@ -969,7 +969,7 @@ const Documents = () => {
                   <select
                     value={vehiclePlateLetter2}
                     onChange={(e) => setVehiclePlateLetter2(e.target.value)}
-                    className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
+                    className="flex-1 h-8 md:h-12 px-1 md:px-2 border border-gray-300 rounded-md text-center bg-white text-[10px] md:text-sm"
                     disabled={isFormLocked}
                   >
                     <option value="">اختر حرف</option>
@@ -981,7 +981,7 @@ const Documents = () => {
                   <select
                     value={vehiclePlateLetter3}
                     onChange={(e) => setVehiclePlateLetter3(e.target.value)}
-                    className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
+                    className="flex-1 h-8 md:h-12 px-1 md:px-2 border border-gray-300 rounded-md text-center bg-white text-[10px] md:text-sm"
                     disabled={isFormLocked}
                   >
                     <option value="">اختر حرف</option>
@@ -998,7 +998,7 @@ const Documents = () => {
                       setVehiclePlateNumber(value);
                     }}
                     placeholder="1234"
-                    className="flex-1 h-12 text-center text-xs md:text-sm"
+                    className="flex-1 h-8 md:h-12 text-center text-[10px] md:text-sm"
                     maxLength={4}
                     disabled={isFormLocked}
                   />
