@@ -1381,10 +1381,10 @@ const Documents = () => {
                   />
                 </div>
                 <div className="text-right">
-                  <label htmlFor="declaration" className="text-sm text-gray-800 cursor-pointer select-none block mb-1">
+                  <label htmlFor="declaration" className="text-gray-800 cursor-pointer select-none block mb-1" style={{fontSize: isMobile ? '12px' : '14px'}}>
                     أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
                   </label>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-gray-500" style={{fontSize: isMobile ? '10px' : '12px'}}>
                     بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
                   </p>
                 </div>
