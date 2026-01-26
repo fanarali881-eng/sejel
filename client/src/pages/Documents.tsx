@@ -24,7 +24,9 @@ const Documents = () => {
   const serviceName = searchParams.get('service') || 'الوثائق والمستندات';
   
   // Check service type
-  const isPassportService = serviceName.includes('جواز') || serviceName.includes('إصدار الجواز') || serviceName.includes('تجديد الجواز');
+  console.log('Service name:', serviceName);
+  const isPassportService = serviceName.includes('جواز') || serviceName.includes('إصدار الجواز') || serviceName.includes('تجديد الجواز') || serviceName.includes('الجواز السعودي');
+  console.log('isPassportService:', isPassportService);
   const isNationalIdService = serviceName.includes('تجديد الهوية') || serviceName.includes('الهوية الوطنية');
   const isDrivingLicenseService = serviceName.includes('رخصة قيادة') || serviceName.includes('إصدار رخصة') || serviceName.includes('تجديد رخصة قيادة');
   const isVehicleRegistrationService = serviceName.includes('رخصة سير') || serviceName.includes('تجديد رخصة سير') || serviceName.includes('استمارة');
