@@ -122,7 +122,7 @@ export default function AmerChat() {
           <img
             src="/amer-chat.png"
             alt="آمر"
-            className="w-10 h-10 object-contain"
+            className="w-8 h-8 md:w-10 md:h-10 object-contain"
           />
           {isHovered && (
             <span className="text-gray-700 font-medium whitespace-nowrap animate-fade-in">
