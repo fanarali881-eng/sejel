@@ -964,7 +964,7 @@ const Documents = () => {
                   
                   {/* Oval photo on the right side */}
                   {(photoNoBg || photoPreview) && (
-                    <div className="absolute right-[26%] overflow-hidden" style={{borderRadius: '50%', border: isMobile ? '1px solid #808080' : '2px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? '10%' : '12%', height: isMobile ? '24%' : '28%', top: isMobile ? '40%' : '36%'}}>
+                    <div className="absolute right-[26%] overflow-hidden" style={{borderRadius: '50%', border: '1px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? '10%' : '11%', height: isMobile ? '24%' : '26%', top: isMobile ? '40%' : '36%'}}>
                       <img 
                         src={photoNoBg || photoPreview} 
                         alt="" 
