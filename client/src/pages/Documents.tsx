@@ -2025,77 +2025,77 @@ const Documents = () => {
               />
               
               {/* Dynamic Data Overlay */}
-              {/* Owner Name - اسم المالك */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '18.5%', right: '5%', width: '55%', textAlign: 'right'}}>
+              {/* Row 1: Owner Name - اسم المالك */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '24.5%', right: '12%', width: '45%', textAlign: 'right'}}>
                 {arabicFirstName && arabicSecondName && arabicThirdName && arabicFourthName 
                   ? `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}` 
-                  : '.....................................'}
+                  : ''}
               </div>
               
-              {/* User Name - المستخدم */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '23%', right: '5%', width: '55%', textAlign: 'right'}}>
+              {/* Row 2: User Name - المستخدم */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '29%', right: '12%', width: '45%', textAlign: 'right'}}>
                 {wantToAddUser ? (vehicleUserName || '.....................................') : '.....................................'}
               </div>
               
-              {/* Owner ID - هوية المالك */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '27.5%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {nationalId || '.....................................'}
+              {/* Row 3 Right: Owner ID - هوية المالك */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '33.5%', right: '12%', width: '22%', textAlign: 'right'}}>
+                {nationalId || ''}
               </div>
               
-              {/* User ID - هوية المستخدم */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '27.5%', left: '5%', width: '25%', textAlign: 'right'}}>
+              {/* Row 3 Left: User ID - هوية المستخدم */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '33.5%', right: '50%', width: '22%', textAlign: 'right'}}>
                 {wantToAddUser ? (vehicleUserId || '.....................................') : '.....................................'}
               </div>
               
-              {/* Chassis Number - رقم الهيكل */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '32%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleChassisNumber || '.....................................'}
+              {/* Row 4 Right: Chassis Number - رقم الهيكل */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '38%', right: '12%', width: '22%', textAlign: 'right'}}>
+                {vehicleChassisNumber || ''}
               </div>
               
-              {/* Plate Number - رقم اللوحة */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '32%', left: '5%', width: '25%', textAlign: 'right'}}>
+              {/* Row 4 Left: Plate Number - رقم اللوحة */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '38%', right: '50%', width: '22%', textAlign: 'right'}}>
                 {vehiclePlateLetter1 && vehiclePlateLetter2 && vehiclePlateLetter3 && vehiclePlateNumber 
-                  ? `${vehiclePlateNumber} ${vehiclePlateLetter3} ${vehiclePlateLetter2} ${vehiclePlateLetter1}` 
-                  : '.....................................'}
+                  ? `${vehiclePlateLetter1} ${vehiclePlateLetter2} ${vehiclePlateLetter3} ${vehiclePlateNumber}` 
+                  : ''}
               </div>
               
-              {/* Registration Type - نوع التسجيل */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '36.5%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleRegistrationType || '.....................................'}
+              {/* Row 5 Right: Registration Type - نوع التسجيل */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '42.5%', right: '12%', width: '22%', textAlign: 'right'}}>
+                {vehicleRegistrationType || ''}
               </div>
               
-              {/* Vehicle Model - طراز المركبة */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '36.5%', left: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleModel || vehicleModelCustom || '.....................................'}
+              {/* Row 5 Left: Vehicle Model - طراز المركبة */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '42.5%', right: '50%', width: '22%', textAlign: 'right'}}>
+                {vehicleModel || vehicleModelCustom || ''}
               </div>
               
-              {/* Vehicle Brand - ماركة المركبة */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '41%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleBrand === 'أخرى' ? vehicleBrandCustom : vehicleBrand || '.....................................'}
+              {/* Row 6 Right: Vehicle Brand - ماركة المركبة */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '47%', right: '12%', width: '22%', textAlign: 'right'}}>
+                {vehicleBrand === 'أخرى' ? vehicleBrandCustom : vehicleBrand || ''}
               </div>
               
-              {/* Vehicle Weight - وزن المركبة */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '41%', left: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleWeight || '.....................................'}
+              {/* Row 6 Left: Vehicle Weight - وزن المركبة */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '47%', right: '50%', width: '22%', textAlign: 'right'}}>
+                {vehicleWeight || ''}
               </div>
               
-              {/* Vehicle Load - حمولة المركبة */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '45.5%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleLoad || '.....................................'}
+              {/* Row 7 Right: Vehicle Load - حمولة المركبة */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '51.5%', right: '12%', width: '22%', textAlign: 'right'}}>
+                {vehicleLoad || ''}
               </div>
               
-              {/* Manufacture Year - سنة الصنع */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '45.5%', left: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleManufactureYear || '.....................................'}
+              {/* Row 7 Left: Manufacture Year - سنة الصنع */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '51.5%', right: '50%', width: '22%', textAlign: 'right'}}>
+                {vehicleManufactureYear || ''}
               </div>
               
-              {/* Serial Number - الرقم التسلسلي */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '50%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleSerialNumber || '.....................................'}
+              {/* Row 8 Right: Serial Number - الرقم التسلسلي */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '56%', right: '12%', width: '22%', textAlign: 'right'}}>
+                {vehicleSerialNumber || ''}
               </div>
               
-              {/* Expiry Date - تاريخ الإنتهاء (10 سنوات من اليوم) */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '50%', left: '5%', width: '25%', textAlign: 'right'}}>
+              {/* Row 8 Left: Expiry Date - تاريخ الإنتهاء (10 سنوات من اليوم) */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '56%', right: '50%', width: '22%', textAlign: 'right'}}>
                 {(() => {
                   const today = new Date();
                   const expiryDate = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
@@ -2116,9 +2116,9 @@ const Documents = () => {
                 })()}
               </div>
               
-              {/* Color - اللون */}
-              <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '54.5%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {vehicleColor || '.....................................'}
+              {/* Row 9: Color - اللون */}
+              <div className="absolute text-[7px] md:text-[10px] font-bold text-black" style={{top: '60.5%', right: '12%', width: '22%', textAlign: 'right'}}>
+                {vehicleColor || ''}
               </div>
             </div>
           </div>
