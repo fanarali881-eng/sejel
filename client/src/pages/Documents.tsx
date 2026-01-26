@@ -650,7 +650,7 @@ const Documents = () => {
             </div>
             
             {/* Gender Section */}
-            <div className="mb-8">
+            <div className={`mb-8 ${confirmedService ? 'hidden' : ''}`}>
               <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-2 border-b pb-2 text-right">الجنس</h2>
               <div className="text-right mt-2">
                   <select
