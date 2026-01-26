@@ -440,16 +440,16 @@ const Documents = () => {
           {/* Logos */}
           <div className="flex justify-center items-center gap-8 mb-8">
             <img 
-              src="/traffic-logo.png" 
-              alt="إدارة المرور" 
-              className="h-32 md:h-40 object-contain"
+              src="/images/moi-logo.png" 
+              alt="وزارة الداخلية" 
+              className="h-40 md:h-52 object-contain"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
             />
             <img 
-              src="/images/moi-logo.png" 
-              alt="وزارة الداخلية" 
+              src="/traffic-logo.png" 
+              alt="إدارة المرور" 
               className="h-32 md:h-40 object-contain"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
