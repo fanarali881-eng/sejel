@@ -1222,7 +1222,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: isMobile ? '24%' : '28%',
+                  top: isMobile ? '25%' : '28%',
                   right: '5%',
                   fontSize: isMobile ? '3.5vw' : '18px',
                   fontFamily: 'Arial, sans-serif',
