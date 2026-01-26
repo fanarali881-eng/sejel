@@ -751,7 +751,7 @@ const Documents = () => {
 {/* Personal Photo Section */}
             <div className="mb-8">
               <h3 className="text-base md:text-lg font-semibold text-gray-700 mb-3 text-right">الصورة الشخصية</h3>
-              <div className="flex flex-row-reverse items-start gap-8 justify-end">
+              <div className="flex flex-row-reverse items-start gap-4 md:gap-8 justify-end">
                 {/* Photo Upload */}
                 <div className="flex flex-col items-center gap-4">
                 {photoPreview ? (
@@ -759,7 +759,7 @@ const Documents = () => {
                     <img 
                       src={photoPreview} 
                       alt="الصورة الشخصية" 
-                      className="w-40 h-40 object-cover rounded-lg border-2 border-gray-300"
+                      className="w-24 h-24 md:w-40 md:h-40 object-cover rounded-lg border-2 border-gray-300"
                     />
                     {!isFormLocked && (
                       <button
@@ -775,7 +775,7 @@ const Documents = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                  <div className="w-24 h-24 md:w-40 md:h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
                     <span className="text-gray-400 text-sm">لا توجد صورة</span>
                   </div>
                 )}
@@ -844,14 +844,14 @@ const Documents = () => {
                       }
                     }}
                   />
-                  <span className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm inline-block">
+                  <span className="bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-6 py-1.5 md:py-2 rounded-md text-xs md:text-sm inline-block">
                     رفع صورة
                   </span>
                 </label>
                 {validationErrors.personalPhoto && <p className="text-red-500 text-xs">{validationErrors.personalPhoto}</p>}
               </div>
                 {/* Photo Requirements */}
-                <div className="text-right text-xs text-gray-500 leading-relaxed max-w-xs">
+                <div className="text-right text-[10px] md:text-xs text-gray-500 leading-relaxed max-w-[150px] md:max-w-xs">
                   <ul className="list-disc list-inside space-y-1">
                     <li>أن يكون مقاس الصورة 4*6.</li>
                     <li>يجب أن تكون خلفية الصورة بيضاء.</li>
