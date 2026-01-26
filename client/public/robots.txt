@@ -1,5 +1,31 @@
-# Block ALL robots, crawlers, spiders, and bots
+# Block ALL robots, crawlers, spiders, bots, and cloning tools
+# This website cannot be copied, mirrored, or archived
 User-agent: *
+Disallow: /
+
+# Block website copying/cloning tools
+User-agent: HTTrack
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: WebZIP
+Disallow: /
+
+User-agent: Offline Explorer
+Disallow: /
+
+User-agent: SiteSucker
+Disallow: /
+
+User-agent: Teleport
+Disallow: /
+
+User-agent: wget
+Disallow: /
+
+User-agent: curl
 Disallow: /
 
 # Block specific bots explicitly
