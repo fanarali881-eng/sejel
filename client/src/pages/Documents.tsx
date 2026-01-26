@@ -2106,7 +2106,7 @@ const Documents = () => {
               </div>
               
               {/* Row 9: اللون (يمين فقط) */}
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '89%', right: '15%', width: '35%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '89%', right: '25%', width: '25%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleColor || ''}
               </div>
             </div>
