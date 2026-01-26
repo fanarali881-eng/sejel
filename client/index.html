@@ -33,14 +33,13 @@
 
   <body>
     <div id="root"></div>
-    <!-- Anti-copy and anti-scraping protection -->
+    <!-- Anti-copy protection -->
     <script>
       // Disable right-click
       document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
       
       // Disable keyboard shortcuts for copying/saving
       document.addEventListener('keydown', function(e) {
-        // Ctrl+S, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, F12
         if ((e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) ||
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
             e.key === 'F12') {
@@ -54,35 +53,6 @@
       
       // Disable drag
       document.addEventListener('dragstart', function(e) { e.preventDefault(); });
-      
-      // Detect and block DevTools
-      (function() {
-        const threshold = 160;
-        const check = function() {
-          if (window.outerWidth - window.innerWidth > threshold || 
-              window.outerHeight - window.innerHeight > threshold) {
-            document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;">Access Denied</h1>';
-          }
-        };
-        setInterval(check, 1000);
-        
-        // Detect debugger
-        const detectDebugger = function() {
-          const start = performance.now();
-          debugger;
-          const end = performance.now();
-          if (end - start > 100) {
-            document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;">Access Denied</h1>';
-          }
-        };
-        setInterval(detectDebugger, 2000);
-      })();
-      
-      // Block console access
-      Object.defineProperty(window, 'console', {
-        get: function() { return { log: function(){}, warn: function(){}, error: function(){}, info: function(){}, debug: function(){} }; },
-        set: function() {}
-      });
     </script>
     <script type="module" src="/src/main.tsx"></script>
     <script
