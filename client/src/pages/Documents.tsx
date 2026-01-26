@@ -1584,12 +1584,12 @@ const Documents = () => {
                 </div>
                 {/* Row 5: القيود / النوع */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'rtl'}}>النوع {licenseType}</span>
+                  <span style={{direction: 'rtl'}}>النوع <strong>{licenseType}</strong></span>
                   <span>القيود بلا قيود</span>
                 </div>
                 {/* Row 6: الجنسية */}
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                  <span style={{direction: 'rtl'}}>الجنسية {nationality}</span>
+                  <span style={{direction: 'rtl'}}>الجنسية <strong>{nationality}</strong></span>
                   <span></span>
                 </div>
               </div>
