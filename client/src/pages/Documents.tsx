@@ -2101,7 +2101,7 @@ const Documents = () => {
                   const hM = Math.floor((24 * l3) / 709);
                   const hD = l3 - Math.floor((709 * hM) / 24);
                   const hY = 30 * n + j - 30;
-                  return `${hD}/${hM}/${hY} هـ`;
+                  return `${hD}/${hM}/${hY}`;
                 })()}
               </div>
               
