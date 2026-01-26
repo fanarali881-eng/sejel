@@ -1180,7 +1180,7 @@ const Documents = () => {
                 className="max-w-full h-auto rounded-lg shadow-lg"
               />
             ) : (
-            <div className="relative" ref={nationalIdRef} style={{minWidth: '500px', width: '500px'}}>
+            <div className="relative" ref={nationalIdRef} style={{width: '600px', maxWidth: '100%'}}>
               {/* National ID Background */}
               <img 
                 src="/national-id-template.png" 
@@ -1212,7 +1212,7 @@ const Documents = () => {
                 style={{
                   top: '28%',
                   right: '5%',
-                  fontSize: '14px',
+                  fontSize: '2.3%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                   textAlign: 'right',
@@ -1226,7 +1226,7 @@ const Documents = () => {
                 style={{
                   top: '34%',
                   right: '5%',
-                  fontSize: '11px',
+                  fontSize: '1.8%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
                   textTransform: 'uppercase',
@@ -1241,7 +1241,7 @@ const Documents = () => {
                 style={{
                   top: '42%',
                   right: '18%',
-                  fontSize: '11px',
+                  fontSize: '1.8%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1254,7 +1254,7 @@ const Documents = () => {
                 style={{
                   top: '52%',
                   right: '18%',
-                  fontSize: '11px',
+                  fontSize: '1.8%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1294,7 +1294,7 @@ const Documents = () => {
                 style={{
                   top: '69%',
                   right: '18%',
-                  fontSize: '12px',
+                  fontSize: '2%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1341,7 +1341,7 @@ const Documents = () => {
                 style={{
                   top: '61%',
                   right: '18%',
-                  fontSize: '11px',
+                  fontSize: '1.8%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
