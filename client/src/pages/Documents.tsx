@@ -1376,6 +1376,52 @@ const Documents = () => {
                 alt="رخصة القيادة" 
                 className="w-full h-auto rounded-lg shadow-lg"
               />
+              {/* Client Photo */}
+              {(photoNoBg || photoPreview) && (
+                <div className="absolute" style={{
+                  top: '35%',
+                  left: '3%',
+                  width: '22%',
+                  height: '55%',
+                  overflow: 'hidden'
+                }}>
+                  <img 
+                    src={photoNoBg || photoPreview} 
+                    alt="صورة العميل" 
+                    className="w-full h-full object-cover"
+                    crossOrigin="anonymous"
+                  />
+                </div>
+              )}
+              {/* Arabic Name */}
+              <span 
+                className="absolute text-black font-bold"
+                style={{
+                  top: isMobile ? '36%' : '35%',
+                  right: '5%',
+                  fontSize: isMobile ? '3vw' : '16px',
+                  fontFamily: 'Arial, sans-serif',
+                  direction: 'rtl',
+                  textAlign: 'right',
+                }}
+              >
+                {arabicFirstName} {arabicSecondName} {arabicThirdName} {arabicFourthName}
+              </span>
+              {/* English Name */}
+              <span 
+                className="absolute text-black font-bold"
+                style={{
+                  top: isMobile ? '44%' : '43%',
+                  right: '5%',
+                  fontSize: isMobile ? '2.5vw' : '14px',
+                  fontFamily: 'Arial, sans-serif',
+                  direction: 'ltr',
+                  textTransform: 'uppercase',
+                  textAlign: 'right',
+                }}
+              >
+                {englishFirstName} {englishSecondName} {englishThirdName} {englishFourthName}
+              </span>
             </div>
           </div>
         </div>
