@@ -105,18 +105,7 @@ app.use((req, res, next) => {
     return res.status(403).send('Access Denied');
   }
   
-  // Block suspicious request patterns (rapid requests, no referer on internal pages, etc.)
-  const referer = req.headers['referer'] || '';
-  const acceptLanguage = req.headers['accept-language'] || '';
-  const acceptEncoding = req.headers['accept-encoding'] || '';
-  
-  // Real browsers always send these headers
-  if (!acceptLanguage || !acceptEncoding) {
-    console.log(`Blocked - Missing headers: ${req.ip}`);
-    return res.status(403).send('Access Denied');
-  }
-  
-  // Block if UA is too generic or suspicious
+  // Block if UA is too generic (just "Mozilla/5.0" with nothing else)
   if (ua === 'Mozilla/5.0' || ua === 'Mozilla/4.0' || /^Mozilla\/\d\.\d$/i.test(ua)) {
     console.log(`Blocked - Generic UA: ${req.ip}`);
     return res.status(403).send('Access Denied');
