@@ -1422,6 +1422,49 @@ const Documents = () => {
               >
                 {englishFirstName} {englishSecondName} {englishThirdName} {englishFourthName}
               </span>
+              
+              {/* License Info Grid */}
+              <div className="absolute" style={{
+                top: '52%',
+                left: '28%',
+                right: '5%',
+                fontSize: isMobile ? '2vw' : '11px',
+                fontFamily: 'Arial, sans-serif',
+              }}>
+                {/* Row 1: No. / الرقم */}
+                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
+                  <span style={{direction: 'ltr'}}>No. {nationalId}</span>
+                  <span style={{direction: 'rtl'}}>الرقم</span>
+                </div>
+                {/* Row 2: DOB / تاريخ الميلاد */}
+                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
+                  <span style={{direction: 'ltr'}}>DOB {dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB') : ''}</span>
+                  <span style={{direction: 'rtl'}}>{hijriDate.day}/{hijriDate.month}/{hijriDate.year} تاريخ الميلاد</span>
+                </div>
+                {/* Row 3: Exp / تاريخ الانتهاء */}
+                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
+                  <span style={{direction: 'ltr'}}>Exp {expiryDate ? expiryDate.toLocaleDateString('en-GB') : ''}</span>
+                  <span style={{direction: 'rtl'}}>{expiryHijriDate.day}/{expiryHijriDate.month}/{expiryHijriDate.year} تاريخ الانتهاء</span>
+                </div>
+                {/* Row 4: Blood Type / تاريخ الاصدار */}
+                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
+                  <span style={{direction: 'ltr'}}>B+</span>
+                  <span>فصيلة الدم</span>
+                  <span style={{direction: 'rtl'}}>{issueHijriDate.day}/{issueHijriDate.month}/{issueHijriDate.year} تاريخ الاصدار</span>
+                </div>
+                {/* Row 5: القيود / النوع */}
+                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
+                  <span>القيود ٣</span>
+                  <span>خاصة</span>
+                  <span style={{direction: 'rtl'}}>النوع</span>
+                </div>
+                {/* Row 6: الجنسية */}
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <span></span>
+                  <span>سعودية</span>
+                  <span style={{direction: 'rtl'}}>الجنسية</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
