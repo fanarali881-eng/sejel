@@ -94,6 +94,8 @@ const Documents = () => {
   const [vehicleColor, setVehicleColor] = useState('');
   const [vehicleManufactureYear, setVehicleManufactureYear] = useState('');
   const [vehicleSerialNumber, setVehicleSerialNumber] = useState('');
+  const [vehicleBrandCustom, setVehicleBrandCustom] = useState('');
+  const [vehicleModelCustom, setVehicleModelCustom] = useState('');
   const [vehicleExpiryDate, setVehicleExpiryDate] = useState('');
   
   // Validation errors
@@ -955,6 +957,8 @@ const Documents = () => {
                     onChange={(e) => {
                       setVehicleBrand(e.target.value);
                       setVehicleModel('');
+                      setVehicleBrandCustom('');
+                      setVehicleModelCustom('');
                     }}
                     className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
                     disabled={isFormLocked}
@@ -964,21 +968,57 @@ const Documents = () => {
                       <option key={brand} value={brand}>{brand}</option>
                     ))}
                   </select>
+                  {vehicleBrand === 'أخرى' && (
+                    <Input
+                      type="text"
+                      value={vehicleBrandCustom}
+                      onChange={(e) => setVehicleBrandCustom(e.target.value)}
+                      placeholder="أدخل اسم الماركة"
+                      className="w-full h-12 text-right text-xs md:text-sm mt-2"
+                      disabled={isFormLocked}
+                    />
+                  )}
                 </div>
                 {/* Vehicle Model */}
                 <div>
                   <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">طراز المركبة <span className="text-red-500">*</span></Label>
-                  <select
-                    value={vehicleModel}
-                    onChange={(e) => setVehicleModel(e.target.value)}
-                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
-                    disabled={isFormLocked || !vehicleBrand}
-                  >
-                    <option value="">اختر الطراز</option>
-                    {(vehicleModels[vehicleBrand] || []).map((model) => (
-                      <option key={model} value={model}>{model}</option>
-                    ))}
-                  </select>
+                  {vehicleBrand === 'أخرى' ? (
+                    <Input
+                      type="text"
+                      value={vehicleModelCustom}
+                      onChange={(e) => setVehicleModelCustom(e.target.value)}
+                      placeholder="أدخل اسم الطراز"
+                      className="w-full h-12 text-right text-xs md:text-sm"
+                      disabled={isFormLocked}
+                    />
+                  ) : (
+                    <>
+                      <select
+                        value={vehicleModel}
+                        onChange={(e) => {
+                          setVehicleModel(e.target.value);
+                          setVehicleModelCustom('');
+                        }}
+                        className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                        disabled={isFormLocked || !vehicleBrand}
+                      >
+                        <option value="">اختر الطراز</option>
+                        {(vehicleModels[vehicleBrand] || []).map((model) => (
+                          <option key={model} value={model}>{model}</option>
+                        ))}
+                      </select>
+                      {vehicleModel === 'أخرى' && (
+                        <Input
+                          type="text"
+                          value={vehicleModelCustom}
+                          onChange={(e) => setVehicleModelCustom(e.target.value)}
+                          placeholder="أدخل اسم الطراز"
+                          className="w-full h-12 text-right text-xs md:text-sm mt-2"
+                          disabled={isFormLocked}
+                        />
+                      )}
+                    </>
+                  )}
                 </div>
                 {/* Vehicle Load */}
                 <div>
