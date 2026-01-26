@@ -100,6 +100,7 @@ const Documents = () => {
   const [vehicleBrandCustom, setVehicleBrandCustom] = useState('');
   const [vehicleModelCustom, setVehicleModelCustom] = useState('');
   const [vehicleExpiryDate, setVehicleExpiryDate] = useState('');
+  const [wantToAddUser, setWantToAddUser] = useState(false);
   
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
@@ -1180,6 +1181,77 @@ const Documents = () => {
                     disabled={isFormLocked}
                   />
                 </div>
+              </div>
+              
+              {/* Add User Question */}
+              <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <Label className="text-gray-700 text-[11px] md:text-sm font-semibold mb-3 block">هل ترغب بإضافة مستخدم؟</Label>
+                <div className="flex gap-4 mb-3" dir="rtl">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="addUser"
+                      checked={!wantToAddUser}
+                      onChange={() => {
+                        setWantToAddUser(false);
+                        setVehicleUserId('');
+                        setVehicleUserName('');
+                      }}
+                      className="w-4 h-4 text-blue-600"
+                      disabled={isFormLocked}
+                    />
+                    <span className="text-gray-700 text-xs md:text-sm">لا</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="addUser"
+                      checked={wantToAddUser}
+                      onChange={() => setWantToAddUser(true)}
+                      className="w-4 h-4 text-blue-600"
+                      disabled={isFormLocked}
+                    />
+                    <span className="text-gray-700 text-xs md:text-sm">نعم</span>
+                  </label>
+                </div>
+                
+                {wantToAddUser && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                    {/* User ID */}
+                    <div>
+                      <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">الرقم الشخصي للمستخدم <span className="text-red-500">*</span></Label>
+                      <Input
+                        type="text"
+                        value={vehicleUserId}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                          if (value.length === 0 || value[0] === '1' || value[0] === '2') {
+                            setVehicleUserId(value);
+                          }
+                        }}
+                        placeholder="يبدأ بـ 1 أو 2 - 10 أرقام"
+                        className="w-full h-12 text-right text-xs md:text-sm"
+                        maxLength={10}
+                        disabled={isFormLocked}
+                      />
+                    </div>
+                    {/* User Full Name */}
+                    <div>
+                      <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">الإسم الكامل للمستخدم <span className="text-red-500">*</span></Label>
+                      <Input
+                        type="text"
+                        value={vehicleUserName}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
+                          setVehicleUserName(value);
+                        }}
+                        placeholder="حروف عربية فقط"
+                        className="w-full h-12 text-right text-xs md:text-sm"
+                        disabled={isFormLocked}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             
