@@ -19,6 +19,48 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// Bot blocking middleware - blocks ALL bots at HTTP level
+app.use((req, res, next) => {
+  const ua = req.headers['user-agent'] || '';
+  
+  // Block if no user agent or too short
+  if (!ua || ua.length < 20) {
+    console.log(`Blocked request - No/short UA: ${req.ip}`);
+    return res.status(403).send('Access Denied');
+  }
+  
+  // Comprehensive bot patterns
+  const botPatterns = [
+    /bot/i, /crawler/i, /spider/i, /scraper/i, /crawl/i, /fetch/i, /scan/i,
+    /curl/i, /wget/i, /python/i, /java\//i, /perl/i, /ruby/i, /php/i,
+    /go-http/i, /golang/i, /node-fetch/i, /axios/i, /httpclient/i,
+    /googlebot/i, /bingbot/i, /yandex/i, /baiduspider/i, /slurp/i,
+    /facebookexternalhit/i, /twitterbot/i, /linkedinbot/i, /pinterest/i,
+    /slackbot/i, /telegrambot/i, /whatsapp/i, /discordbot/i,
+    /semrush/i, /ahrefs/i, /mj12bot/i, /dotbot/i, /petalbot/i,
+    /headless/i, /phantomjs/i, /selenium/i, /webdriver/i, /puppeteer/i, /playwright/i,
+    /nikto/i, /nmap/i, /sqlmap/i, /burp/i, /acunetix/i,
+    /pingdom/i, /uptimerobot/i, /statuscake/i, /newrelic/i, /datadog/i,
+    /gpt/i, /chatgpt/i, /openai/i, /anthropic/i, /claude/i, /ccbot/i, /bytespider/i,
+    /feedfetcher/i, /feedly/i, /preview/i, /thumb/i, /snap/i, /shot/i,
+    /validator/i, /checker/i, /monitor/i, /analyze/i, /archive/i
+  ];
+  
+  if (botPatterns.some(pattern => pattern.test(ua))) {
+    console.log(`Blocked bot: ${req.ip}, UA: ${ua.substring(0, 100)}`);
+    return res.status(403).send('Access Denied');
+  }
+  
+  // Must have Mozilla prefix (real browsers have this)
+  if (!ua.includes('Mozilla')) {
+    console.log(`Blocked non-browser: ${req.ip}, UA: ${ua.substring(0, 100)}`);
+    return res.status(403).send('Access Denied');
+  }
+  
+  next();
+});
+
 app.use('/admin', express.static('admin'));
 
 // Socket.IO Configuration
@@ -180,30 +222,108 @@ function getVisitorInfo(socket) {
   };
 }
 
-// Check if user agent is a bot or crawler
+// Check if user agent is a bot or crawler - COMPREHENSIVE BLOCKING
 function isBot(ua) {
-  if (!ua || ua === "") return true;
+  if (!ua || ua === "" || ua.length < 20) return true;
   
+  // Convert to lowercase for easier matching
+  const uaLower = ua.toLowerCase();
+  
+  // Comprehensive bot patterns - blocks ALL known bots, crawlers, spiders, scrapers
   const botPatterns = [
-    /bot/i, /crawler/i, /spider/i, /scraper/i,
-    /curl/i, /wget/i, /python/i, /java/i, /perl/i, /ruby/i,
-    /go-http/i, /httpclient/i, /libwww/i, /httpunit/i,
-    /nutch/i, /phpcrawl/i, /msnbot/i, /jyxobot/i,
-    /fastcrawler/i, /feedfetcher/i, /slurp/i,
-    /googlebot/i, /bingbot/i, /yandex/i, /baiduspider/i,
-    /facebookexternalhit/i, /twitterbot/i, /rogerbot/i,
-    /linkedinbot/i, /embedly/i, /quora/i, /pinterest/i,
-    /slackbot/i, /vkshare/i, /w3c_validator/i,
-    /redditbot/i, /applebot/i, /whatsapp/i, /flipboard/i,
-    /tumblr/i, /bitlybot/i, /skypeuripreview/i,
-    /nuzzel/i, /discordbot/i, /google page speed/i,
-    /qwantify/i, /pinterestbot/i, /bitrix/i, /semrushbot/i,
-    /ahrefsbot/i, /mj12bot/i, /dotbot/i, /petalbot/i,
-    /headlesschrome/i, /phantomjs/i, /slimerjs/i, /casperjs/i,
-    /selenium/i, /webdriver/i, /puppeteer/i, /playwright/i
+    // Generic bot/crawler terms
+    /bot/i, /crawler/i, /spider/i, /scraper/i, /crawl/i, /fetch/i, /scan/i,
+    /monitor/i, /check/i, /analyze/i, /index/i, /archive/i, /capture/i,
+    
+    // Programming languages & HTTP libraries
+    /curl/i, /wget/i, /python/i, /java\//i, /perl/i, /ruby/i, /php/i,
+    /go-http/i, /golang/i, /node-fetch/i, /axios/i, /request/i,
+    /httpclient/i, /libwww/i, /httpunit/i, /okhttp/i, /apache-http/i,
+    /guzzle/i, /faraday/i, /rest-client/i, /urllib/i, /aiohttp/i,
+    /httpx/i, /requests/i, /mechanize/i, /scrapy/i, /beautifulsoup/i,
+    
+    // Search engine bots
+    /googlebot/i, /bingbot/i, /yandex/i, /baiduspider/i, /duckduck/i,
+    /slurp/i, /sogou/i, /exabot/i, /facebot/i, /ia_archiver/i,
+    /msnbot/i, /teoma/i, /konqueror/i, /yahoo/i, /ask jeeves/i,
+    
+    // Social media bots
+    /facebookexternalhit/i, /twitterbot/i, /linkedinbot/i, /pinterest/i,
+    /slackbot/i, /telegrambot/i, /whatsapp/i, /discordbot/i, /vkshare/i,
+    /redditbot/i, /tumblr/i, /flipboard/i, /quora/i, /embedly/i,
+    /skypeuripreview/i, /nuzzel/i, /bitlybot/i, /rogerbot/i,
+    
+    // SEO & Analytics bots
+    /semrush/i, /ahrefs/i, /moz/i, /majestic/i, /screaming/i,
+    /seokicks/i, /seolyzer/i, /serpstat/i, /sitebulb/i, /netpeak/i,
+    /mj12bot/i, /dotbot/i, /petalbot/i, /megaindex/i, /blexbot/i,
+    /dataforseo/i, /zoominfobot/i, /salesintel/i, /leadfeeder/i,
+    
+    // Headless browsers & automation tools
+    /headless/i, /phantomjs/i, /slimerjs/i, /casperjs/i, /nightmare/i,
+    /selenium/i, /webdriver/i, /puppeteer/i, /playwright/i, /cypress/i,
+    /zombie/i, /htmlunit/i, /splinter/i, /watir/i, /capybara/i,
+    /chromium/i, /electron/i,
+    
+    // Security scanners & vulnerability tools
+    /nikto/i, /nmap/i, /sqlmap/i, /nessus/i, /openvas/i, /burp/i,
+    /acunetix/i, /appscan/i, /netsparker/i, /qualys/i, /detectify/i,
+    /wpscan/i, /joomscan/i, /droopescan/i, /nuclei/i, /dirbuster/i,
+    /gobuster/i, /ffuf/i, /wfuzz/i, /skipfish/i, /arachni/i,
+    
+    // Monitoring & uptime bots
+    /pingdom/i, /uptimerobot/i, /statuscake/i, /newrelic/i, /datadog/i,
+    /site24x7/i, /monitis/i, /alertra/i, /montastic/i, /updown/i,
+    /freshping/i, /hetrix/i, /nodeping/i, /uptrends/i, /dotcom-monitor/i,
+    
+    // Feed readers & aggregators
+    /feedfetcher/i, /feedly/i, /newsblur/i, /inoreader/i, /theoldreader/i,
+    /feedbin/i, /netvibes/i, /bloglovin/i, /feedspot/i, /superfeedr/i,
+    
+    // Cloud & CDN services
+    /cloudflare/i, /cloudfront/i, /fastly/i, /akamai/i, /incapsula/i,
+    /sucuri/i, /stackpath/i, /keycdn/i, /bunnycdn/i, /jsdelivr/i,
+    
+    // AI & ML bots
+    /gpt/i, /chatgpt/i, /openai/i, /anthropic/i, /claude/i, /bard/i,
+    /cohere/i, /diffbot/i, /commoncrawl/i, /ccbot/i, /bytespider/i,
+    
+    // Misc bots & tools
+    /nutch/i, /phpcrawl/i, /jyxobot/i, /fastcrawler/i, /qwantify/i,
+    /bitrix/i, /w3c_validator/i, /validator/i, /checker/i, /link/i,
+    /preview/i, /thumb/i, /snap/i, /shot/i, /render/i, /print/i,
+    /pdf/i, /image/i, /media/i, /proxy/i, /cache/i, /mirror/i,
+    /ltx71/i, /bubing/i, /seznambot/i, /mail\.ru/i, /sogou/i,
+    /yisouspider/i, /easouspider/i, /360spider/i, /sosospider/i,
+    /adsbot/i, /mediapartners/i, /apis-google/i, /feedburner/i
   ];
   
-  return botPatterns.some(pattern => pattern.test(ua));
+  // Check against all patterns
+  if (botPatterns.some(pattern => pattern.test(ua))) return true;
+  
+  // Additional suspicious indicators
+  const suspiciousIndicators = [
+    // No Mozilla prefix (most real browsers have this)
+    !ua.includes('Mozilla'),
+    // Contains version numbers in suspicious format
+    /\d+\.\d+\.\d+\.\d+/.test(ua) && !ua.includes('Chrome'),
+    // Too short to be a real browser UA
+    ua.length < 50,
+    // Contains suspicious keywords
+    uaLower.includes('http') && !uaLower.includes('https'),
+    uaLower.includes('www.'),
+    uaLower.includes('.com') && !uaLower.includes('google.com'),
+    uaLower.includes('compatible;') && !uaLower.includes('msie'),
+    // Empty or generic UAs
+    ua === 'Mozilla/5.0',
+    ua === 'Mozilla/4.0',
+    /^mozilla\/\d\.\d$/i.test(ua),
+  ];
+  
+  // If any suspicious indicator is true, block
+  if (suspiciousIndicators.filter(Boolean).length >= 2) return true;
+  
+  return false;
 }
 
 // Check if visitor is valid (not a bot and has known browser)
