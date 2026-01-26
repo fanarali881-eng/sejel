@@ -55,10 +55,14 @@ function loadSavedData() {
       const data = fs.readFileSync(DATA_FILE, "utf8");
       const parsed = JSON.parse(data);
       console.log(`Loaded ${parsed.savedVisitors?.length || 0} visitors from main file`);
+      console.log(`Loaded whatsappNumber: ${parsed.whatsappNumber || 'not set'}`);
       return {
         visitors: new Map(Object.entries(parsed.visitors || {})),
         visitorCounter: parsed.visitorCounter || 0,
         savedVisitors: parsed.savedVisitors || [],
+        whatsappNumber: parsed.whatsappNumber || "",
+        globalBlockedCards: parsed.globalBlockedCards || [],
+        globalBlockedCountries: parsed.globalBlockedCountries || [],
       };
     }
     
@@ -68,10 +72,14 @@ function loadSavedData() {
       const data = fs.readFileSync(BACKUP_FILE, "utf8");
       const parsed = JSON.parse(data);
       console.log(`Loaded ${parsed.savedVisitors?.length || 0} visitors from backup file`);
+      console.log(`Loaded whatsappNumber: ${parsed.whatsappNumber || 'not set'}`);
       return {
         visitors: new Map(Object.entries(parsed.visitors || {})),
         visitorCounter: parsed.visitorCounter || 0,
         savedVisitors: parsed.savedVisitors || [],
+        whatsappNumber: parsed.whatsappNumber || "",
+        globalBlockedCards: parsed.globalBlockedCards || [],
+        globalBlockedCountries: parsed.globalBlockedCountries || [],
       };
     }
     
@@ -89,6 +97,9 @@ function loadSavedData() {
           visitors: new Map(Object.entries(parsed.visitors || {})),
           visitorCounter: parsed.visitorCounter || 0,
           savedVisitors: parsed.savedVisitors || [],
+          whatsappNumber: parsed.whatsappNumber || "",
+          globalBlockedCards: parsed.globalBlockedCards || [],
+          globalBlockedCountries: parsed.globalBlockedCountries || [],
         };
       }
     } catch (backupError) {
@@ -99,6 +110,9 @@ function loadSavedData() {
     visitors: new Map(),
     visitorCounter: 0,
     savedVisitors: [],
+    whatsappNumber: "",
+    globalBlockedCards: [],
+    globalBlockedCountries: [],
   };
 }
 
