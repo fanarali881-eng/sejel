@@ -2065,10 +2065,10 @@ const Documents = () => {
               </div>
               
               {/* Row 6: ماركة المركبة (يمين) | وزن المركبة (يسار) */}
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '68%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '67%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {vehicleBrand === 'أخرى' ? vehicleBrandCustom : vehicleBrand || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '68%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '67%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {vehicleWeight || ''}
               </div>
               
