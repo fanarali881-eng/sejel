@@ -674,7 +674,7 @@ const Documents = () => {
                         setValidationErrors(prev => ({ ...prev, province: '' }));
                       }
                     }}
-                    className={`w-full h-10 md:h-12 px-3 py-2 border rounded-md text-right bg-white text-sm ${validationErrors.province ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full h-10 md:h-12 px-3 py-2 border rounded-md text-right bg-white text-xs md:text-sm ${validationErrors.province ? 'border-red-500' : 'border-gray-300'}`}
                     disabled={isFormLocked}
                   >
                     <option value="">اختر المحافظة</option>
@@ -695,7 +695,7 @@ const Documents = () => {
                       }
                     }}
                     disabled={!province || isFormLocked}
-                    className={`w-full h-10 md:h-12 px-3 py-2 border rounded-md text-right bg-white text-sm ${validationErrors.district ? 'border-red-500' : 'border-gray-300'} ${!province ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full h-10 md:h-12 px-3 py-2 border rounded-md text-right bg-white text-xs md:text-sm ${validationErrors.district ? 'border-red-500' : 'border-gray-300'} ${!province ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <option value="">اختر المنطقة</option>
                     {districts.map(d => (
