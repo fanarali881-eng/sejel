@@ -2039,28 +2039,28 @@ const Documents = () => {
               </div>
               
               {/* Row 3: هوية المالك (يمين) | هوية المستخدم (يسار) */}
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '44%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '45%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {nationalId || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '44%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '45%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {wantToAddUser ? (vehicleUserId || '.....................................') : '.....................................'}
               </div>
               
               {/* Row 4: رقم الهيكل (يمين) | رقم اللوحة (يسار) */}
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '51%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '52%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {vehicleChassisNumber || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '51%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '52%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {vehiclePlateLetter1 && vehiclePlateLetter2 && vehiclePlateLetter3 && vehiclePlateNumber 
                   ? `${vehiclePlateLetter1} ${vehiclePlateLetter2} ${vehiclePlateLetter3} ${vehiclePlateNumber}` 
                   : ''}
               </div>
               
               {/* Row 5: نوع التسجيل (يمين) | طراز المركبة (يسار) */}
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '58%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '59%', right: '15%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {vehicleRegistrationType || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '58%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '59%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
                 {vehicleModel || vehicleModelCustom || ''}
               </div>
               
