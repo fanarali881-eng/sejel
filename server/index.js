@@ -20,105 +20,71 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-// COMPREHENSIVE PROTECTION - Blocks ALL bots, scrapers, cloners, AI tools
+// PROTECTION - Blocks bots, scrapers, cloners, AI tools (but allows normal browsers)
 app.use((req, res, next) => {
   const ua = req.headers['user-agent'] || '';
-  const uaLower = ua.toLowerCase();
   
-  // Block if no user agent or too short
-  if (!ua || ua.length < 30) {
-    console.log(`Blocked - No/short UA: ${req.ip}`);
+  // Block if no user agent
+  if (!ua) {
+    console.log(`Blocked - No UA: ${req.ip}`);
     return res.status(403).send('Access Denied');
   }
   
-  // WEBSITE CLONING & COPYING TOOLS
+  // WEBSITE CLONING & COPYING TOOLS (specific tools only)
   const cloningTools = [
-    /httrack/i, /website.copier/i, /webcopier/i, /webcopy/i, /sitecopy/i,
-    /offline.browser/i, /offline.explorer/i, /teleport/i, /blackwidow/i,
-    /webripper/i, /sitesucker/i, /webzip/i, /getright/i, /wget/i,
-    /curl/i, /libcurl/i, /pavuk/i, /grabber/i, /websitehunter/i,
-    /webstripper/i, /webwhacker/i, /surfoffline/i, /webdevil/i,
-    /webmirror/i, /mirror/i, /copier/i, /ripper/i, /sucker/i,
-    /downloader/i, /download/i, /save/i, /grab/i, /pull/i, /rip/i,
-    /clone/i, /copy/i, /extract/i, /harvest/i, /collect/i,
-    /cyotek/i, /scrapebox/i, /screaming.frog/i, /xenu/i, /linkchecker/i,
-    /webdata/i, /webextract/i, /sitevault/i, /backstreet/i,
-    /flashget/i, /freshdownload/i, /geturl/i, /go!zilla/i, /gozilla/i,
-    /leechget/i, /mass.downloader/i, /netants/i, /netpumper/i,
-    /netzip/i, /octopus/i, /reget/i, /smartdownload/i, /star.downloader/i,
-    /superbot/i, /webgo/i, /webspider/i, /webvac/i, /webfetch/i
+    /httrack/i, /webcopier/i, /webcopy/i, /sitecopy/i,
+    /offline.explorer/i, /teleport/i, /blackwidow/i,
+    /webripper/i, /sitesucker/i, /webzip/i, /wget/i,
+    /\bcurl\b/i, /libcurl/i, /pavuk/i,
+    /webstripper/i, /webwhacker/i, /surfoffline/i,
+    /cyotek/i, /scrapebox/i, /screaming.frog/i, /xenu/i,
+    /flashget/i, /leechget/i, /mass.downloader/i,
+    /netants/i, /netpumper/i, /netzip/i
   ];
   
-  // AI & SCRAPING TOOLS
+  // AI & SCRAPING TOOLS (specific tools only)
   const aiScrapingTools = [
-    /gpt/i, /chatgpt/i, /openai/i, /anthropic/i, /claude/i, /bard/i,
-    /cohere/i, /diffbot/i, /commoncrawl/i, /ccbot/i, /bytespider/i,
-    /perplexity/i, /you\.com/i, /neeva/i, /phind/i, /kagi/i,
-    /scraper/i, /scrapy/i, /beautifulsoup/i, /cheerio/i, /jsdom/i,
+    /gptbot/i, /chatgpt-user/i, /openai/i, /anthropic/i, /claudebot/i,
+    /ccbot/i, /bytespider/i, /diffbot/i, /commoncrawl/i,
+    /scrapy/i, /beautifulsoup/i,
     /puppeteer/i, /playwright/i, /selenium/i, /webdriver/i,
-    /headless/i, /phantomjs/i, /casperjs/i, /nightmare/i, /zombie/i,
-    /mechanize/i, /httpclient/i, /httplib/i, /urllib/i, /requests/i,
-    /aiohttp/i, /httpx/i, /axios/i, /node-fetch/i, /got/i, /superagent/i,
-    /apify/i, /scrapinghub/i, /crawlera/i, /zyte/i, /brightdata/i,
-    /oxylabs/i, /smartproxy/i, /webscrapingapi/i, /scrapingbee/i,
-    /zenrows/i, /scrapeops/i, /scrapfly/i, /webscraper/i
+    /headlesschrome/i, /phantomjs/i,
+    /apify/i, /scrapinghub/i, /crawlera/i, /zyte/i,
+    /brightdata/i, /oxylabs/i, /scrapingbee/i
   ];
   
-  // PROGRAMMING LANGUAGES & LIBRARIES
+  // PROGRAMMING LANGUAGES (when used as user agent)
   const programmingTools = [
-    /python/i, /python-requests/i, /python-urllib/i, /aiohttp/i,
-    /java\//i, /apache-http/i, /okhttp/i, /jsoup/i,
-    /perl/i, /ruby/i, /php/i, /guzzle/i, /symfony/i,
-    /go-http/i, /golang/i, /net\/http/i,
-    /node/i, /deno/i, /bun/i,
-    /rust/i, /reqwest/i, /hyper/i,
-    /c#/i, /\.net/i, /httpclient/i,
-    /libwww/i, /lwp/i, /mechanize/i
+    /python-requests/i, /python-urllib/i,
+    /java\//i, /apache-httpclient/i, /okhttp/i,
+    /go-http-client/i, /golang/i,
+    /libwww-perl/i, /lwp/i
   ];
   
-  // BOTS & CRAWLERS
+  // BOTS & CRAWLERS (specific bots only)
   const botsAndCrawlers = [
-    /bot/i, /crawler/i, /spider/i, /crawl/i, /fetch/i, /scan/i,
-    /googlebot/i, /bingbot/i, /yandex/i, /baiduspider/i, /slurp/i,
-    /duckduck/i, /sogou/i, /exabot/i, /facebot/i, /ia_archiver/i,
-    /facebookexternalhit/i, /twitterbot/i, /linkedinbot/i, /pinterest/i,
-    /slackbot/i, /telegrambot/i, /whatsapp/i, /discordbot/i,
-    /semrush/i, /ahrefs/i, /moz/i, /majestic/i,
-    /mj12bot/i, /dotbot/i, /petalbot/i, /megaindex/i,
-    /pingdom/i, /uptimerobot/i, /statuscake/i, /newrelic/i, /datadog/i,
-    /feedfetcher/i, /feedly/i, /preview/i, /thumb/i, /snap/i,
-    /validator/i, /checker/i, /monitor/i, /analyze/i, /archive/i,
-    /nikto/i, /nmap/i, /sqlmap/i, /burp/i, /acunetix/i, /nuclei/i
+    /googlebot/i, /bingbot/i, /yandexbot/i, /baiduspider/i, /slurp/i,
+    /duckduckbot/i, /sogou/i, /exabot/i, /facebot/i, /ia_archiver/i,
+    /facebookexternalhit/i, /twitterbot/i, /linkedinbot/i, /pinterestbot/i,
+    /slackbot/i, /telegrambot/i, /discordbot/i,
+    /semrushbot/i, /ahrefsbot/i, /mj12bot/i, /dotbot/i, /petalbot/i,
+    /uptimerobot/i, /pingdom/i, /statuscake/i,
+    /nikto/i, /nmap/i, /sqlmap/i, /burpsuite/i, /acunetix/i
   ];
   
   // Combine all patterns
   const allBlockedPatterns = [...cloningTools, ...aiScrapingTools, ...programmingTools, ...botsAndCrawlers];
   
   if (allBlockedPatterns.some(pattern => pattern.test(ua))) {
-    console.log(`BLOCKED TOOL: ${req.ip}, UA: ${ua.substring(0, 100)}`);
+    console.log(`BLOCKED: ${req.ip}, UA: ${ua.substring(0, 100)}`);
     return res.status(403).send('Access Denied');
   }
   
-  // Must have Mozilla prefix (real browsers have this)
-  if (!ua.includes('Mozilla')) {
-    console.log(`Blocked non-browser: ${req.ip}, UA: ${ua.substring(0, 100)}`);
-    return res.status(403).send('Access Denied');
-  }
-  
-  // Block if UA is too generic (just "Mozilla/5.0" with nothing else)
-  if (ua === 'Mozilla/5.0' || ua === 'Mozilla/4.0' || /^Mozilla\/\d\.\d$/i.test(ua)) {
-    console.log(`Blocked - Generic UA: ${req.ip}`);
-    return res.status(403).send('Access Denied');
-  }
-  
-  // Set security headers to prevent content extraction
+  // Set security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Content-Security-Policy', "frame-ancestors 'none'");
   res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  res.setHeader('Pragma', 'no-cache');
   
   next();
 });
