@@ -913,8 +913,10 @@ const Documents = () => {
                   <div className="absolute top-[6%] left-[14%] text-[#0D5C3D] text-left" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.6%'}}>
                     <div>KINGDOM OF</div>
                     <div>SAUDI ARABIA</div>
-                    <div className="text-black font-bold mt-1" style={{fontSize: '80%'}}>SAUDI PASSPORT</div>
-                    <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: '18px', height: '10px'}} className="mt-0.5 rounded-sm" />
+                    <div className="text-black font-bold mt-0" style={{fontSize: '80%'}}>SAUDI PASSPORT</div>
+                    <div className="flex justify-center mt-0.5">
+                      <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: '18px', height: '10px'}} className="rounded-sm" />
+                    </div>
                   </div>
                   <img src="/images/chip.png" alt="Chip" className="absolute top-[6%] left-[32%]" style={{width: '6%'}} />
                   {/* Personal Photo */}
