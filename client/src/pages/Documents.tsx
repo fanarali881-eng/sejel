@@ -1031,7 +1031,7 @@ const Documents = () => {
                         : ''}
                   </span>
                   {/* Hijri Date of Birth */}
-                  <span className="absolute top-[50%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '48%' : 'auto'}}>
+                  <span className="absolute top-[50%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', textAlign: 'right', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '48%' : 'auto'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
                             const gY = dateOfBirth.getFullYear();
@@ -1058,7 +1058,7 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[54%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px'}}>Date of Issue</span>
                   <span className="absolute top-[54%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '51%' : 'auto'}}>تاريخ الإصدار</span>
-                  <span className="absolute top-[58%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '51%' : 'auto'}}>
+                  <span className="absolute top-[58%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', textAlign: 'right', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '51%' : 'auto'}}>
                     {(() => {
                       const today = new Date();
                       const gY = today.getFullYear();
@@ -1089,7 +1089,7 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[62%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px'}}>Date of Expiry</span>
                   <span className="absolute top-[62%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '51%' : 'auto'}}>تاريخ الانتهاء</span>
-                  <span className="absolute top-[66%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '51%' : 'auto'}}>
+                  <span className="absolute top-[66%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', textAlign: 'right', fontSize: isMobile ? '1.5%' : '9px', right: isMobile ? 'auto' : '52%', left: isMobile ? '51%' : 'auto'}}>
                     {(() => {
                       const today = new Date();
                       const gY = today.getFullYear() + 5;
