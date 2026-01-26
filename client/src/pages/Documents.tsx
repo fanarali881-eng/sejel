@@ -1428,7 +1428,7 @@ const Documents = () => {
                 top: '52%',
                 left: '35%',
                 right: '5%',
-                fontSize: isMobile ? '2vw' : '11px',
+                fontSize: isMobile ? '2.5vw' : '13px',
                 fontFamily: 'Arial, sans-serif',
               }}>
                 {/* Row 1: No. / الرقم */}
