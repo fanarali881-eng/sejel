@@ -999,7 +999,7 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[38%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '52%' : '48%'}}>Sex/الجنس</span>
                   <span className="absolute top-[42%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '54%' : '48%'}}>{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : ''}</span>
-                  <span className="absolute top-[42%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '58%' : '52%'}}>{gender}</span>
+                  <span className="absolute top-[42%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '58%' : '53%'}}>{gender}</span>
                   <span className="absolute top-[50%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
@@ -1031,7 +1031,7 @@ const Documents = () => {
                         : ''}
                   </span>
                   {/* Hijri Date of Birth */}
-                  <span className="absolute top-[50%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '50%' : '46%'}}>
+                  <span className="absolute top-[50%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '50%' : '48%'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
                             const gY = dateOfBirth.getFullYear();
@@ -1057,8 +1057,8 @@ const Documents = () => {
                         : ''}
                   </span>
                   <span className="absolute top-[54%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px'}}>Date of Issue</span>
-                  <span className="absolute top-[54%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '50%' : '46%'}}>تاريخ الإصدار</span>
-                  <span className="absolute top-[58%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '50%' : '46%'}}>
+                  <span className="absolute top-[54%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '50%' : '48%'}}>تاريخ الإصدار</span>
+                  <span className="absolute top-[58%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '50%' : '48%'}}>
                     {(() => {
                       const today = new Date();
                       const gY = today.getFullYear();
