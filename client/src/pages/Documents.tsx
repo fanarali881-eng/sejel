@@ -894,7 +894,7 @@ const Documents = () => {
                     className="max-w-full h-auto rounded-lg shadow-lg"
                   />
                 ) : (
-                  <div className="relative" ref={passportRef} style={{width: '600px', maxWidth: '100%', aspectRatio: '1.4/1'}}>
+                  <div className="relative" ref={passportRef} style={{width: '600px', maxWidth: '100%'}}>
                     {/* Saudi Passport - Empty Background with Emblem */}
                   <img 
                     src="/images/passport-empty-bg.png" 
@@ -914,7 +914,7 @@ const Documents = () => {
                     <div>KINGDOM OF</div>
                     <div>SAUDI ARABIA</div>
                     <div className="text-black font-bold mt-1" style={{fontSize: '80%'}}>SAUDI PASSPORT</div>
-                    <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: '40%'}} className="h-auto mt-1 mx-auto rounded-sm" />
+                    <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: '25px', height: '15px'}} className="mt-1 rounded-sm" />
                   </div>
                   <img src="/images/chip.png" alt="Chip" className="absolute top-[6%] left-[32%]" style={{width: '6%'}} />
                   {/* Personal Photo */}
