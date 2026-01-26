@@ -1596,6 +1596,21 @@ const Documents = () => {
             </div>
           </div>
         </div>
+
+        {/* Part 5: Vehicle Registration */}
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الخامس</h3>
+          <div className="flex justify-center">
+            <div className="relative" style={{width: '600px', maxWidth: '100%'}}>
+              {/* Vehicle Registration Background */}
+              <img 
+                src="/saudi-vehicle-registration.png" 
+                alt="استمارة المركبة" 
+                className="w-full h-auto rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
+        </div>
         
         {/* Declaration Section - Always visible */}
         {
