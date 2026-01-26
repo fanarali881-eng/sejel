@@ -907,8 +907,8 @@ const Documents = () => {
                     alt="شعار المملكة" 
                     className="absolute top-[5%] left-1/2 transform -translate-x-1/2" style={{width: '10%'}}
                   />
-                  <span className="absolute top-[21%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] font-semibold" style={{fontSize: '1.5%'}}>Country Code</span>
-                  <span className="absolute top-[24%] left-1/2 transform -translate-x-1/2 text-black font-bold" style={{fontSize: '1.5%'}}>SAU</span>
+                  <span className="absolute top-[22%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] font-semibold" style={{fontSize: '1.5%'}}>Country Code</span>
+                  <span className="absolute top-[25%] left-1/2 transform -translate-x-1/2 text-black font-bold" style={{fontSize: '1.5%'}}>SAU</span>
                   <span className="absolute top-[8%] right-[14%] text-[#0D5C3D]" style={{fontFamily: 'DecoType Thuluth II, serif', fontSize: '2.8%'}}>المملكة العربية السعودية</span>
                   <div className="absolute top-[6%] left-[14%] text-[#0D5C3D] text-left" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.6%'}}>
                     <div>KINGDOM OF</div>
