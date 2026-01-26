@@ -1433,22 +1433,17 @@ const Documents = () => {
               }}>
                 {/* Row 1: No. / الرقم */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'ltr'}}>No. {nationalId}</span>
                   <span style={{direction: 'rtl'}}>الرقم</span>
+                  <span style={{direction: 'ltr'}}>No. {nationalId}</span>
                 </div>
                 {/* Row 2: DOB / تاريخ الميلاد */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
+                  <span style={{direction: 'rtl'}}>تاريخ الميلاد {hijriDate.year}/{hijriDate.month}/{hijriDate.day}</span>
                   <span style={{direction: 'ltr'}}>DOB {dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB').replace(/\//g, '/') : ''}</span>
-                  <span style={{direction: 'rtl'}}>{hijriDate.year}/{hijriDate.month}/{hijriDate.day} تاريخ الميلاد</span>
                 </div>
                 {/* Row 3: Exp / تاريخ الانتهاء */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'ltr'}}>Exp {(() => {
-                    const today = new Date();
-                    const exp = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
-                    return exp.toLocaleDateString('en-GB');
-                  })()}</span>
-                  <span style={{direction: 'rtl'}}>{(() => {
+                  <span style={{direction: 'rtl'}}>تاريخ الانتهاء {(() => {
                     const today = new Date();
                     const gY = today.getFullYear() + 10;
                     const gM = today.getMonth() + 1;
@@ -1463,13 +1458,16 @@ const Documents = () => {
                     const hD = l3 - Math.floor((709 * hM) / 24);
                     const hY = 30 * n + j - 30;
                     return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`;
-                  })()} تاريخ الانتهاء</span>
+                  })()}</span>
+                  <span style={{direction: 'ltr'}}>Exp {(() => {
+                    const today = new Date();
+                    const exp = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
+                    return exp.toLocaleDateString('en-GB');
+                  })()}</span>
                 </div>
                 {/* Row 4: Blood Type / تاريخ الاصدار */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'ltr'}}>B+</span>
-                  <span>فصيلة الدم</span>
-                  <span style={{direction: 'rtl'}}>{(() => {
+                  <span style={{direction: 'rtl'}}>تاريخ الاصدار {(() => {
                     const today = new Date();
                     const gY = today.getFullYear();
                     const gM = today.getMonth() + 1;
@@ -1484,19 +1482,21 @@ const Documents = () => {
                     const hD = l3 - Math.floor((709 * hM) / 24);
                     const hY = 30 * n + j - 30;
                     return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`;
-                  })()} تاريخ الاصدار</span>
+                  })()}</span>
+                  <span>فصيلة الدم</span>
+                  <span style={{direction: 'ltr'}}>B+</span>
                 </div>
                 {/* Row 5: القيود / النوع */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span>القيود ٣</span>
-                  <span>خاصة</span>
                   <span style={{direction: 'rtl'}}>النوع</span>
+                  <span>خاصة</span>
+                  <span>القيود ٣</span>
                 </div>
                 {/* Row 6: الجنسية */}
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                  <span></span>
-                  <span>سعودية</span>
                   <span style={{direction: 'rtl'}}>الجنسية</span>
+                  <span>سعودية</span>
+                  <span></span>
                 </div>
               </div>
             </div>
