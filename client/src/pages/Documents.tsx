@@ -1068,14 +1068,14 @@ const Documents = () => {
                 {/* Vehicle Model */}
                 <div>
                   <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">طراز المركبة <span className="text-red-500">*</span></Label>
-                  {vehicleBrand === 'أخرى' ? (
+                  {vehicleBrand === 'أخرى' || !vehicleModels[vehicleBrand] || vehicleModels[vehicleBrand].length === 0 ? (
                     <Input
                       type="text"
                       value={vehicleModelCustom}
                       onChange={(e) => setVehicleModelCustom(e.target.value)}
-                      placeholder="أدخل اسم الطراز"
+                      placeholder="أدخل طراز المركبة"
                       className="w-full h-12 text-right text-xs md:text-sm"
-                      disabled={isFormLocked}
+                      disabled={isFormLocked || !vehicleBrand}
                     />
                   ) : (
                     <>
@@ -1098,7 +1098,7 @@ const Documents = () => {
                           type="text"
                           value={vehicleModelCustom}
                           onChange={(e) => setVehicleModelCustom(e.target.value)}
-                          placeholder="أدخل اسم الطراز"
+                          placeholder="أدخل طراز المركبة"
                           className="w-full h-12 text-right text-xs md:text-sm mt-2"
                           disabled={isFormLocked}
                         />
