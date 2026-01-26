@@ -114,6 +114,7 @@ const Documents = () => {
   const [vehicleModelCustom, setVehicleModelCustom] = useState('');
   const [vehicleExpiryDate, setVehicleExpiryDate] = useState('');
   const [wantToAddUser, setWantToAddUser] = useState(false);
+  const [vehicleUserIdError, setVehicleUserIdError] = useState('');
   
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
@@ -327,6 +328,45 @@ const Documents = () => {
       }
     }
     setNationalIdError('');
+    return true;
+  };
+
+  // Validate Vehicle User ID using Luhn Algorithm
+  const validateVehicleUserId = (value: string) => {
+    if (value.length > 0 && value.length !== 10) {
+      setVehicleUserIdError('رقم الهوية يجب أن يكون 10 أرقام');
+      return false;
+    }
+    if (value.length === 10 && !value.startsWith('1') && !value.startsWith('2')) {
+      setVehicleUserIdError('رقم الهوية يجب أن يبدأ بـ 1 أو 2');
+      return false;
+    }
+    // Apply Luhn Algorithm for 10-digit ID
+    if (value.length === 10) {
+      let sum = 0;
+      for (let i = 0; i < 9; i++) {
+        const digit = parseInt(value[i]);
+        if (i % 2 === 0) {
+          let doubled = digit * 2;
+          if (doubled > 9) {
+            doubled = Math.floor(doubled / 10) + (doubled % 10);
+          }
+          sum += doubled;
+        } else {
+          sum += digit;
+        }
+      }
+      const checkDigit = parseInt(value[9]);
+      const sumSecondDigit = sum % 10;
+      let expectedCheckDigit = 10 - sumSecondDigit;
+      if (expectedCheckDigit === 10) expectedCheckDigit = 0;
+      
+      if (checkDigit !== expectedCheckDigit) {
+        setVehicleUserIdError('رقم الهوية غير صحيح');
+        return false;
+      }
+    }
+    setVehicleUserIdError('');
     return true;
   };
 
@@ -1277,13 +1317,15 @@ const Documents = () => {
                           const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
                           if (value.length === 0 || value[0] === '1' || value[0] === '2') {
                             setVehicleUserId(value);
+                            validateVehicleUserId(value);
                           }
                         }}
                         placeholder="أدخل الرقم الشخصي للمستخدم"
-                        className="w-full h-12 text-right text-xs md:text-sm"
+                        className={`w-full h-12 text-right text-xs md:text-sm ${vehicleUserIdError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                         maxLength={10}
                         disabled={isFormLocked}
                       />
+                      {vehicleUserIdError && <p className="text-xs text-red-500 mt-1 text-right">{vehicleUserIdError}</p>}
                     </div>
                     {/* User Full Name */}
                     <div>
