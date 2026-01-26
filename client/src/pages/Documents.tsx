@@ -1488,7 +1488,7 @@ const Documents = () => {
                 {/* Row 5: القيود / النوع */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
                   <span style={{direction: 'rtl'}}>النوع</span>
-                  <span>بلا قيود</span>
+                  <span>القيود بلا قيود</span>
                 </div>
                 {/* Row 6: الجنسية */}
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
