@@ -999,7 +999,7 @@ const Documents = () => {
                   </span>
                   <span className="absolute top-[38%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '51%' : '48%'}}>Sex/الجنس</span>
                   <span className="absolute top-[42%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '53%' : '48%'}}>{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : ''}</span>
-                  <span className="absolute top-[42%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '58%' : '54%'}}>{gender}</span>
+                  <span className="absolute top-[42%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px', left: isMobile ? '58%' : '52%'}}>{gender}</span>
                   <span className="absolute top-[50%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '1.5%' : '9px'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
