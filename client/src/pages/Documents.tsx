@@ -2057,7 +2057,7 @@ const Documents = () => {
                         const letters: {[key: string]: string} = {'A': 'أ', 'B': 'ب', 'J': 'ح', 'D': 'د', 'R': 'ر', 'S': 'س', 'X': 'ص', 'T': 'ط', 'E': 'ع', 'G': 'ق', 'K': 'ك', 'L': 'ل', 'Z': 'م', 'N': 'ن', 'H': 'ه', 'U': 'و', 'V': 'ى'};
                         return letters[eng] || eng;
                       };
-                      return `${getArabicLetter(vehiclePlateLetter1)} ${vehiclePlateLetter1} ${getArabicLetter(vehiclePlateLetter2)} ${vehiclePlateLetter2} ${getArabicLetter(vehiclePlateLetter3)} ${vehiclePlateLetter3} ${vehiclePlateNumber}`;
+                      return `${vehiclePlateNumber} ${getArabicLetter(vehiclePlateLetter1)} ${vehiclePlateLetter1} ${getArabicLetter(vehiclePlateLetter2)} ${vehiclePlateLetter2} ${getArabicLetter(vehiclePlateLetter3)} ${vehiclePlateLetter3}`;
                     })()
                   : ''}
               </div>
