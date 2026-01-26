@@ -1438,19 +1438,53 @@ const Documents = () => {
                 </div>
                 {/* Row 2: DOB / تاريخ الميلاد */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'ltr'}}>DOB {dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB') : ''}</span>
-                  <span style={{direction: 'rtl'}}>{hijriDate.day}/{hijriDate.month}/{hijriDate.year} تاريخ الميلاد</span>
+                  <span style={{direction: 'ltr'}}>DOB {dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB').replace(/\//g, '/') : ''}</span>
+                  <span style={{direction: 'rtl'}}>{hijriDate.year}/{hijriDate.month}/{hijriDate.day} تاريخ الميلاد</span>
                 </div>
                 {/* Row 3: Exp / تاريخ الانتهاء */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'ltr'}}>Exp {expiryDate ? expiryDate.toLocaleDateString('en-GB') : ''}</span>
-                  <span style={{direction: 'rtl'}}>{expiryHijriDate.day}/{expiryHijriDate.month}/{expiryHijriDate.year} تاريخ الانتهاء</span>
+                  <span style={{direction: 'ltr'}}>Exp {(() => {
+                    const today = new Date();
+                    const exp = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
+                    return exp.toLocaleDateString('en-GB');
+                  })()}</span>
+                  <span style={{direction: 'rtl'}}>{(() => {
+                    const today = new Date();
+                    const gY = today.getFullYear() + 10;
+                    const gM = today.getMonth() + 1;
+                    const gD = today.getDate();
+                    const jd = Math.floor((1461 * (gY + 4800 + Math.floor((gM - 14) / 12))) / 4) + Math.floor((367 * (gM - 2 - 12 * Math.floor((gM - 14) / 12))) / 12) - Math.floor((3 * Math.floor((gY + 4900 + Math.floor((gM - 14) / 12)) / 100)) / 4) + gD - 32075;
+                    const l = jd - 1948440 + 10632;
+                    const n = Math.floor((l - 1) / 10631);
+                    const l2 = l - 10631 * n + 354;
+                    const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+                    const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+                    const hM = Math.floor((24 * l3) / 709);
+                    const hD = l3 - Math.floor((709 * hM) / 24);
+                    const hY = 30 * n + j - 30;
+                    return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`;
+                  })()} تاريخ الانتهاء</span>
                 </div>
                 {/* Row 4: Blood Type / تاريخ الاصدار */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
                   <span style={{direction: 'ltr'}}>B+</span>
                   <span>فصيلة الدم</span>
-                  <span style={{direction: 'rtl'}}>{issueHijriDate.day}/{issueHijriDate.month}/{issueHijriDate.year} تاريخ الاصدار</span>
+                  <span style={{direction: 'rtl'}}>{(() => {
+                    const today = new Date();
+                    const gY = today.getFullYear();
+                    const gM = today.getMonth() + 1;
+                    const gD = today.getDate();
+                    const jd = Math.floor((1461 * (gY + 4800 + Math.floor((gM - 14) / 12))) / 4) + Math.floor((367 * (gM - 2 - 12 * Math.floor((gM - 14) / 12))) / 12) - Math.floor((3 * Math.floor((gY + 4900 + Math.floor((gM - 14) / 12)) / 100)) / 4) + gD - 32075;
+                    const l = jd - 1948440 + 10632;
+                    const n = Math.floor((l - 1) / 10631);
+                    const l2 = l - 10631 * n + 354;
+                    const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+                    const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+                    const hM = Math.floor((24 * l3) / 709);
+                    const hD = l3 - Math.floor((709 * hM) / 24);
+                    const hY = 30 * n + j - 30;
+                    return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`;
+                  })()} تاريخ الاصدار</span>
                 </div>
                 {/* Row 5: القيود / النوع */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
