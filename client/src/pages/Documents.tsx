@@ -1119,7 +1119,7 @@ const Documents = () => {
                     })()}
                   </span>
                   {/* MRZ Lines */}
-                  <div className="absolute top-[80%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: isMobile ? '0.02em' : '0.1em', direction: 'ltr', fontSize: isMobile ? '1.4%' : '12px'}}>
+                  <div className="absolute top-[80%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: isMobile ? '0.02em' : '0.15em', direction: 'ltr', fontSize: isMobile ? '1.4%' : '14px'}}>
                     {(() => {
                       const MRZ_LENGTH = 44;
                       const surname = englishFourthName ? englishFourthName.toUpperCase() : '';
@@ -1132,7 +1132,7 @@ const Documents = () => {
                       return namesPart + fillers;
                     })()}
                   </div>
-                  <div className="absolute top-[86%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: isMobile ? '0.02em' : '0.1em', direction: 'ltr', fontSize: isMobile ? '1.4%' : '12px'}}>
+                  <div className="absolute top-[86%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: isMobile ? '0.02em' : '0.15em', direction: 'ltr', fontSize: isMobile ? '1.4%' : '14px'}}>
                     {(() => {
                       const MRZ_LENGTH = 44;
                       let birthDateStr = '';
