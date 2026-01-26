@@ -1224,7 +1224,7 @@ const Documents = () => {
                 style={{
                   top: '28%',
                   right: '5%',
-                  fontSize: isMobile ? '9%' : '18px',
+                  fontSize: isMobile ? '12%' : '18px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                   textAlign: 'right',
@@ -1238,7 +1238,7 @@ const Documents = () => {
                 style={{
                   top: '34%',
                   right: '5%',
-                  fontSize: isMobile ? '7%' : '14px',
+                  fontSize: isMobile ? '10%' : '14px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
                   textTransform: 'uppercase',
@@ -1253,7 +1253,7 @@ const Documents = () => {
                 style={{
                   top: '42%',
                   right: '18%',
-                  fontSize: isMobile ? '7%' : '14px',
+                  fontSize: isMobile ? '10%' : '14px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1266,7 +1266,7 @@ const Documents = () => {
                 style={{
                   top: '52%',
                   right: '18%',
-                  fontSize: isMobile ? '7%' : '14px',
+                  fontSize: isMobile ? '10%' : '14px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1306,7 +1306,7 @@ const Documents = () => {
                 style={{
                   top: '69%',
                   right: '18%',
-                  fontSize: isMobile ? '8%' : '16px',
+                  fontSize: isMobile ? '11%' : '16px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1353,7 +1353,7 @@ const Documents = () => {
                 style={{
                   top: '61%',
                   right: '18%',
-                  fontSize: isMobile ? '7%' : '14px',
+                  fontSize: isMobile ? '10%' : '14px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
