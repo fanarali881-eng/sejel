@@ -78,6 +78,23 @@ const Documents = () => {
   const [nationality, setNationality] = useState('سعودي');
   const [licenseType, setLicenseType] = useState('خاصة');
   const [bloodType, setBloodType] = useState('B+');
+
+  // Vehicle Registration Data
+  const [vehicleOwnerName, setVehicleOwnerName] = useState('');
+  const [vehicleUserName, setVehicleUserName] = useState('');
+  const [vehicleOwnerId, setVehicleOwnerId] = useState('');
+  const [vehicleUserId, setVehicleUserId] = useState('');
+  const [vehicleChassisNumber, setVehicleChassisNumber] = useState('');
+  const [vehiclePlateNumber, setVehiclePlateNumber] = useState('');
+  const [vehicleRegistrationType, setVehicleRegistrationType] = useState('خصوصي');
+  const [vehicleModel, setVehicleModel] = useState('');
+  const [vehicleBrand, setVehicleBrand] = useState('');
+  const [vehicleWeight, setVehicleWeight] = useState('');
+  const [vehicleLoad, setVehicleLoad] = useState('');
+  const [vehicleColor, setVehicleColor] = useState('');
+  const [vehicleManufactureYear, setVehicleManufactureYear] = useState('');
+  const [vehicleSerialNumber, setVehicleSerialNumber] = useState('');
+  const [vehicleExpiryDate, setVehicleExpiryDate] = useState('');
   
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
