@@ -907,14 +907,14 @@ const Documents = () => {
                     alt="شعار المملكة" 
                     className="absolute top-[5%] left-1/2 transform -translate-x-1/2" style={{width: '10%'}}
                   />
-                  <span className="absolute top-[21%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] font-semibold" style={{fontSize: '1.8%'}}>Country Code</span>
-                  <span className="absolute top-[24%] left-1/2 transform -translate-x-1/2 text-black font-bold" style={{fontSize: '1.8%'}}>SAU</span>
-                  <span className="absolute top-[8%] right-[14%] text-[#0D5C3D]" style={{fontFamily: 'DecoType Thuluth II, serif', fontSize: '3.5%'}}>المملكة العربية السعودية</span>
-                  <div className="absolute top-[6%] left-[14%] text-[#0D5C3D] text-left" style={{fontFamily: 'Arial, sans-serif', fontSize: '2%'}}>
+                  <span className="absolute top-[21%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] font-semibold" style={{fontSize: '1.5%'}}>Country Code</span>
+                  <span className="absolute top-[24%] left-1/2 transform -translate-x-1/2 text-black font-bold" style={{fontSize: '1.5%'}}>SAU</span>
+                  <span className="absolute top-[8%] right-[14%] text-[#0D5C3D]" style={{fontFamily: 'DecoType Thuluth II, serif', fontSize: '2.8%'}}>المملكة العربية السعودية</span>
+                  <div className="absolute top-[6%] left-[14%] text-[#0D5C3D] text-left" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.6%'}}>
                     <div>KINGDOM OF</div>
                     <div>SAUDI ARABIA</div>
                     <div className="text-black font-bold mt-1" style={{fontSize: '80%'}}>SAUDI PASSPORT</div>
-                    <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: '25px', height: '15px'}} className="mt-1 rounded-sm" />
+                    <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: '18px', height: '10px'}} className="mt-0.5 rounded-sm" />
                   </div>
                   <img src="/images/chip.png" alt="Chip" className="absolute top-[6%] left-[32%]" style={{width: '6%'}} />
                   {/* Personal Photo */}
@@ -936,17 +936,17 @@ const Documents = () => {
                       />
                     </div>
                   )}
-                  <span className="absolute top-[21%] left-[32%] text-[#0D5C3D] font-semibold" style={{fontSize: '1.8%'}}>Type</span>
-                  <span className="absolute top-[24%] left-[33%] text-black font-bold" style={{fontSize: '1.8%'}}>P</span>
-                  <span className="absolute top-[14%] right-[20%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', fontSize: '2.5%'}}>جواز سفر</span>
-                  <span className="absolute top-[21%] right-[18%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.8%'}}>رقم الجواز/Passport No</span>
-                  <span className="absolute top-[24%] right-[20%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', fontSize: '2%'}}>{passportNumber}</span>
-                  <span className="absolute top-[29%] right-[14%] text-[#0D5C3D] font-bold" style={{fontFamily: 'Arial, sans-serif', fontSize: '2%'}}>الاسم/ <span className="text-black">{arabicFirstName}{arabicFirstName && arabicSecondName ? (gender === 'ذكر' ? ' بن ' : ' بنت ') : ''}{arabicSecondName}{arabicSecondName && arabicThirdName ? ' بن ' : ''}{arabicThirdName}{arabicThirdName && arabicFourthName ? ' ' : ''}{arabicFourthName}</span></span>
-                  <span className="absolute top-[33%] left-[30%] text-[#0D5C3D] font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '2%'}}>Name/ <span className="text-black">{englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}</span></span>
-                  <span className="absolute top-[38%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>Nationality/الجنسية</span>
-                  <span className="absolute top-[42%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>SAUDI ARABIA السعودية</span>
-                  <span className="absolute top-[46%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>Date of Birth</span>
-                <span className="absolute top-[46%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>تاريخ الميلاد</span>
+                  <span className="absolute top-[21%] left-[32%] text-[#0D5C3D] font-semibold" style={{fontSize: '1.5%'}}>Type</span>
+                  <span className="absolute top-[24%] left-[33%] text-black font-bold" style={{fontSize: '1.5%'}}>P</span>
+                  <span className="absolute top-[14%] right-[20%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', fontSize: '2%'}}>جواز سفر</span>
+                  <span className="absolute top-[21%] right-[18%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.5%'}}>رقم الجواز/Passport No</span>
+                  <span className="absolute top-[24%] right-[20%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.6%'}}>{passportNumber}</span>
+                  <span className="absolute top-[29%] right-[14%] text-[#0D5C3D] font-bold" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.6%'}}>الاسم/ <span className="text-black">{arabicFirstName}{arabicFirstName && arabicSecondName ? (gender === 'ذكر' ? ' بن ' : ' بنت ') : ''}{arabicSecondName}{arabicSecondName && arabicThirdName ? ' بن ' : ''}{arabicThirdName}{arabicThirdName && arabicFourthName ? ' ' : ''}{arabicFourthName}</span></span>
+                  <span className="absolute top-[33%] left-[30%] text-[#0D5C3D] font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.6%'}}>Name/ <span className="text-black">{englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}</span></span>
+                  <span className="absolute top-[38%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>Nationality/الجنسية</span>
+                  <span className="absolute top-[42%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>SAUDI ARABIA السعودية</span>
+                  <span className="absolute top-[46%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>Date of Birth</span>
+                <span className="absolute top-[46%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>تاريخ الميلاد</span>
                   
                   {/* Oval photo on the right side */}
                   {(photoNoBg || photoPreview) && (
@@ -961,7 +961,7 @@ const Documents = () => {
                   {/* Vertical passport number next to oval photo */}
                   <div className="absolute top-[38%] right-[28%] h-[32%] flex flex-col justify-start items-center">
                     {passportNumber.split('').map((char, index) => (
-                      <span key={index} className="text-black font-bold" style={{lineHeight: '1', fontSize: '1.8%'}}>
+                      <span key={index} className="text-black font-bold" style={{lineHeight: '1', fontSize: '1.5%'}}>
                         {char}
                       </span>
                     ))}
@@ -977,16 +977,16 @@ const Documents = () => {
                     </div>
                   )}
                   {/* Issuing Authority */}
-                  <span className="absolute top-[64%] right-[14%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>Issuing Authority/ مكان الإصدار</span>
+                  <span className="absolute top-[64%] right-[14%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>Issuing Authority/ مكان الإصدار</span>
                   {/* District Display - Arabic and English */}
-                  <span className="absolute top-[68%] right-[14%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.8%'}}>{district}</span>
-                  <span className="absolute top-[68%] right-[25%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>
+                  <span className="absolute top-[68%] right-[14%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.5%'}}>{district}</span>
+                  <span className="absolute top-[68%] right-[25%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>
                     {district === 'الرياض' ? 'Riyadh' : district === 'الدرعية' ? 'Ad Diriyah' : district === 'الخرج' ? 'Al Kharj' : district === 'الدوادمي' ? 'Ad Dawadmi' : district === 'المجمعة' ? 'Al Majmaah' : district === 'القويعية' ? 'Al Quwaiyah' : district === 'وادي الدواسر' ? 'Wadi ad Dawasir' : district === 'الأفلاج' ? 'Al Aflaj' : district === 'الزلفي' ? 'Az Zulfi' : district === 'شقراء' ? 'Shaqra' : district === 'حوطة بني تميم' ? 'Howtat Bani Tamim' : district === 'عفيف' ? 'Afif' : district === 'السليل' ? 'As Sulayyil' : district === 'ضرما' ? 'Durma' : district === 'المزاحمية' ? 'Al Muzahmiyya' : district === 'رماح' ? 'Rumah' : district === 'ثادق' ? 'Thadiq' : district === 'حريملاء' ? 'Huraymila' : district === 'الحريق' ? 'Al Hariq' : district === 'الغاط' ? 'Al Ghat' : district === 'مرات' ? 'Marat' : district === 'مكة المكرمة' ? 'Makkah' : district === 'جدة' ? 'Jeddah' : district === 'الطائف' ? 'Taif' : district === 'المدينة المنورة' ? 'Madinah' : district === 'ينبع' ? 'Yanbu' : district === 'الدمام' ? 'Dammam' : district === 'الأحساء' ? 'Al Ahsa' : district === 'حفر الباطن' ? 'Hafar Al Batin' : district === 'الجبيل' ? 'Jubail' : district === 'القطيف' ? 'Qatif' : district === 'الخبر' ? 'Khobar' : district === 'الظهران' ? 'Dhahran' : district === 'أبها' ? 'Abha' : district === 'خميس مشيط' ? 'Khamis Mushait' : district === 'تبوك' ? 'Tabuk' : district === 'حائل' ? 'Hail' : district === 'عرعر' ? 'Arar' : district === 'جازان' ? 'Jazan' : district === 'نجران' ? 'Najran' : district === 'الباحة' ? 'Al Bahah' : district === 'سكاكا' ? 'Sakaka' : district === 'بريدة' ? 'Buraydah' : district === 'القنفذة' ? 'Al Qunfudhah' : district === 'الليث' ? 'Al Lith' : district === 'رابغ' ? 'Rabigh' : district === 'خليص' ? 'Khulais' : district === 'الجموم' ? 'Al Jumum' : district === 'الكامل' ? 'Al Kamil' : district === 'الخرمة' ? 'Al Khurma' : district === 'رنية' ? 'Ranyah' : district === 'تربة' ? 'Turbah' : district === 'الموية' ? 'Al Muwayh' : district === 'ميسان' ? 'Maysan' : district === 'أضم' ? 'Adham' : district === 'العرضيات' ? 'Al Ardiyat' : district === 'بحرة' ? 'Bahrah' : district === 'العلا' ? 'Al Ula' : district === 'مهد الذهب' ? 'Mahd adh Dhahab' : district === 'الحناكية' ? 'Al Hanakiyah' : district === 'بدر' ? 'Badr' : district === 'خيبر' ? 'Khaybar' : district === 'وادي الفرع' ? 'Wadi Al Fara' : district === 'عنيزة' ? 'Unayzah' : district === 'الرس' ? 'Ar Rass' : district === 'المذنب' ? 'Al Mithnab' : district === 'البكيرية' ? 'Al Bukayriyah' : district === 'البدائع' ? 'Al Badai' : district === 'الأسياح' ? 'Al Asyah' : district === 'النبهانية' ? 'An Nabhaniyah' : district === 'الشماسية' ? 'Ash Shimasiyah' : district === 'عيون الجواء' ? 'Uyun Al Jawa' : district === 'رياض الخبراء' ? 'Riyadh Al Khabra' : district === 'عقلة الصقور' ? 'Uqlat As Suqur' : district === 'ضريه' ? 'Dariyah' : district === 'رأس تنورة' ? 'Ras Tanura' : district === 'بقيق' ? 'Buqayq' : district === 'النعيرية' ? 'An Nuayriyah' : district === 'قرية العليا' ? 'Qaryat Al Ulya' : district === 'العديد' ? 'Al Adid' : district === 'بيشة' ? 'Bishah' : district === 'النماص' ? 'An Namas' : district === 'محايل عسير' ? 'Muhayil Asir' : district === 'ظهران الجنوب' ? 'Dhahran Al Janub' : district === 'تثليث' ? 'Tathlith' : district === 'سراة عبيدة' ? 'Sarat Abidah' : district === 'رجال ألمع' ? 'Rijal Almaa' : district === 'أحد رفيدة' ? 'Ahad Rafidah' : district === 'بلقرن' ? 'Balqarn' : district === 'المجاردة' ? 'Al Majardah' : district === 'البرك' ? 'Al Birk' : district === 'تنومة' ? 'Tanumah' : district === 'الوجه' ? 'Al Wajh' : district === 'ضباء' ? 'Duba' : district === 'تيماء' ? 'Tayma' : district === 'أملج' ? 'Umluj' : district === 'حقل' ? 'Haql' : district === 'البدع' ? 'Al Bada' : district === 'بقعاء' ? 'Baqaa' : district === 'الغزالة' ? 'Al Ghazalah' : district === 'الشنان' ? 'Ash Shinan' : district === 'الحائط' ? 'Al Hait' : district === 'السليمي' ? 'As Sulaymi' : district === 'موقق' ? 'Mawqaq' : district === 'الشملي' ? 'Ash Shamli' : district === 'رفحاء' ? 'Rafha' : district === 'طريف' ? 'Turaif' : district === 'العويقيلة' ? 'Al Uwayqilah' : district === 'صبيا' ? 'Sabya' : district === 'أبو عريش' ? 'Abu Arish' : district === 'صامطة' ? 'Samtah' : district === 'بيش' ? 'Baysh' : district === 'الدرب' ? 'Ad Darb' : district === 'الريث' ? 'Ar Rayth' : district === 'ضمد' ? 'Damad' : district === 'الحرث' ? 'Al Harth' : district === 'فرسان' ? 'Farasan' : district === 'الدائر' ? 'Ad Dair' : district === 'العيدابي' ? 'Al Idabi' : district === 'أحد المسارحة' ? 'Ahad Al Masarihah' : district === 'العارضة' ? 'Al Aridah' : district === 'فيفاء' ? 'Fayfa' : district === 'الطوال' ? 'At Tuwal' : district === 'هروب' ? 'Harub' : district === 'شرورة' ? 'Sharurah' : district === 'حبونا' ? 'Hubuna' : district === 'بدر الجنوب' ? 'Badr Al Janub' : district === 'يدمة' ? 'Yadamah' : district === 'ثار' ? 'Thar' : district === 'خباش' ? 'Khabash' : district === 'بلجرشي' ? 'Baljurashi' : district === 'المندق' ? 'Al Mandaq' : district === 'المخواة' ? 'Al Makhwah' : district === 'قلوة' ? 'Qilwah' : district === 'العقيق' ? 'Al Aqiq' : district === 'غامد الزناد' ? 'Ghamid Az Zinad' : district === 'الحجرة' ? 'Al Hajrah' : district === 'بني حسن' ? 'Bani Hasan' : district === 'دومة الجندل' ? 'Dumat Al Jandal' : district === 'القريات' ? 'Al Qurayyat' : district === 'طبرجل' ? 'Tabarjal' : district === 'صوير' ? 'Suwayr' : ''}
                   </span>
-                  <span className="absolute top-[38%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>Sex/الجنس</span>
-                  <span className="absolute top-[42%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : ''}</span>
-                  <span className="absolute top-[42%] left-[52%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>{gender}</span>
-                  <span className="absolute top-[50%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>
+                  <span className="absolute top-[38%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>Sex/الجنس</span>
+                  <span className="absolute top-[42%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>{gender === 'ذكر' ? 'M' : gender === 'أنثى' ? 'F' : ''}</span>
+                  <span className="absolute top-[42%] left-[52%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>{gender}</span>
+                  <span className="absolute top-[50%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
                             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -1017,7 +1017,7 @@ const Documents = () => {
                         : ''}
                   </span>
                   {/* Hijri Date of Birth */}
-                  <span className="absolute top-[50%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.8%'}}>
+                  <span className="absolute top-[50%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.5%'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
                             const gY = dateOfBirth.getFullYear();
@@ -1042,9 +1042,9 @@ const Documents = () => {
                           })()
                         : ''}
                   </span>
-                  <span className="absolute top-[54%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>Date of Issue</span>
-                  <span className="absolute top-[54%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>تاريخ الإصدار</span>
-                  <span className="absolute top-[58%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.8%'}}>
+                  <span className="absolute top-[54%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>Date of Issue</span>
+                  <span className="absolute top-[54%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>تاريخ الإصدار</span>
+                  <span className="absolute top-[58%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.5%'}}>
                     {(() => {
                       const today = new Date();
                       const gY = today.getFullYear();
@@ -1063,7 +1063,7 @@ const Documents = () => {
                       return `${toArabicNum(hY)}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(String(hD).padStart(2, '0'))}`;
                     })()}
                   </span>
-                  <span className="absolute top-[58%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>
+                  <span className="absolute top-[58%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>
                     {(() => {
                       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                       const today = new Date();
@@ -1073,9 +1073,9 @@ const Documents = () => {
                       return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
                     })()}
                   </span>
-                  <span className="absolute top-[62%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>Date of Expiry</span>
-                  <span className="absolute top-[62%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>تاريخ الانتهاء</span>
-                  <span className="absolute top-[66%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.8%'}}>
+                  <span className="absolute top-[62%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>Date of Expiry</span>
+                  <span className="absolute top-[62%] left-[48%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>تاريخ الانتهاء</span>
+                  <span className="absolute top-[66%] left-[48%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'rtl', fontSize: '1.5%'}}>
                     {(() => {
                       const today = new Date();
                       const gY = today.getFullYear() + 5;
@@ -1094,7 +1094,7 @@ const Documents = () => {
                       return `${toArabicNum(hY)}/${toArabicNum(String(hM).padStart(2, '0'))}/${toArabicNum(String(hD).padStart(2, '0'))}`;
                     })()}
                   </span>
-                  <span className="absolute top-[66%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.8%'}}>
+                  <span className="absolute top-[66%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>
                     {(() => {
                       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                       const today = new Date();
@@ -1105,7 +1105,7 @@ const Documents = () => {
                     })()}
                   </span>
                   {/* MRZ Lines */}
-                  <div className="absolute top-[80%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.1em', direction: 'ltr', fontSize: '2%'}}>
+                  <div className="absolute top-[80%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.05em', direction: 'ltr', fontSize: '1.6%'}}>
                     {(() => {
                       const MRZ_LENGTH = 44;
                       const surname = englishFourthName ? englishFourthName.toUpperCase() : '';
@@ -1118,7 +1118,7 @@ const Documents = () => {
                       return namesPart + fillers;
                     })()}
                   </div>
-                  <div className="absolute top-[86%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.1em', direction: 'ltr', fontSize: '2%'}}>
+                  <div className="absolute top-[86%] left-[14%] right-[4%] text-black font-bold" style={{fontFamily: 'OCR-B, Courier New, monospace', letterSpacing: '0.05em', direction: 'ltr', fontSize: '1.6%'}}>
                     {(() => {
                       const MRZ_LENGTH = 44;
                       let birthDateStr = '';
