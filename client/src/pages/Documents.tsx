@@ -172,6 +172,63 @@ const Documents = () => {
     'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
   ];
 
+  // Vehicle Registration Types
+  const vehicleRegistrationTypes = [
+    'خصوصي',
+    'نقل خاص',
+    'نقل عام',
+    'أجرة',
+    'حكومي',
+    'دبلوماسي',
+    'تصدير',
+    'مؤقت'
+  ];
+
+  // Vehicle Brands
+  const vehicleBrands = [
+    'تويوتا', 'لكزس', 'نيسان', 'هوندا', 'ميتسوبيشي', 'مازدا', 'سوزوكي', 'إيسوزو', 'سوبارو',
+    'مرسيدس', 'بي إم دبليو', 'أودي', 'فولكس واجن', 'بورشه', 'أوبل',
+    'فورد', 'شيفروليه', 'جي إم سي', 'جيب', 'دودج', 'كرايسلر', 'كاديلاك', 'لينكولن',
+    'هيونداي', 'كيا', 'جينيسيس',
+    'رينو', 'بيجو', 'سيتروين',
+    'فيات', 'ألفا روميو', 'مازيراتي', 'فيراري', 'لامبورغيني',
+    'لاند روفر', 'جاغوار', 'بينتلي', 'رولز رويس', 'أستون مارتن', 'ماكلارين',
+    'فولفو', 'ساب',
+    'شيري', 'جيلي', 'هافال', 'إم جي', 'بي واي دي',
+    'أخرى'
+  ];
+
+  // Vehicle Models (will be filtered by brand)
+  const vehicleModels: Record<string, string[]> = {
+    'تويوتا': ['كامري', 'كورولا', 'لاند كروزر', 'هايلكس', 'راف فور', 'يارس', 'أفالون', 'فورتشنر', 'إنوفا', 'سيكويا', 'برادو', 'إف جي'],
+    'لكزس': ['ES', 'LS', 'GS', 'IS', 'RX', 'NX', 'UX', 'GX', 'LX', 'RC', 'LC'],
+    'نيسان': ['صني', 'ألتيما', 'ماكسيما', 'باترول', 'إكس تريل', 'جوك', 'كيكس', 'سنترا', 'تيدا', 'نافارا'],
+    'هوندا': ['أكورد', 'سيفيك', 'سيتي', 'سي آر في', 'بايلوت', 'أوديسي', 'إتش آر في'],
+    'هيونداي': ['سوناتا', 'إلنترا', 'أكسنت', 'توسان', 'سانتافي', 'باليسيد', 'كونا', 'فيلوستر', 'آزيرا', 'جراندير'],
+    'كيا': ['سيراتو', 'أوبتيما', 'سورينتو', 'سبورتاج', 'كارنيفال', 'سيلتوس', 'بيكانتو', 'كادينزا', 'ستينجر', 'K5', 'K8', 'K9', 'EV6'],
+    'مرسيدس': ['S-Class', 'E-Class', 'C-Class', 'A-Class', 'GLE', 'GLC', 'GLA', 'G-Class', 'AMG GT', 'CLA', 'CLS', 'GLS', 'EQS', 'EQE'],
+    'بي إم دبليو': ['Series 3', 'Series 5', 'Series 7', 'X3', 'X5', 'X7', 'X1', 'X6', 'M3', 'M5', 'i4', 'iX'],
+    'فورد': ['إكسبيديشن', 'إكسبلورر', 'إيج', 'إسكيب', 'تورس', 'فيوجن', 'موستانج', 'برونكو', 'رينجر', 'F-150'],
+    'شيفروليه': ['تاهو', 'سوبربان', 'ترافيرس', 'ماليبو', 'كامارو', 'إمبالا', 'سيلفرادو', 'كابتيفا', 'بليزر', 'إكوينوكس'],
+    'جيب': ['رانجلر', 'غراند شيروكي', 'شيروكي', 'كوماندر', 'كومباس', 'رينيجيد', 'غلادياتور'],
+    'أخرى': ['أخرى']
+  };
+
+  // Vehicle Load Capacities
+  const vehicleLoadCapacities = [
+    'أقل من 1 طن',
+    '1 - 3 طن',
+    '3 - 5 طن',
+    '5 - 10 طن',
+    '10 - 20 طن',
+    'أكثر من 20 طن',
+    'لا ينطبق'
+  ];
+
+  // Manufacture Years (last 50 years)
+  const currentYear = new Date().getFullYear();
+  const manufactureYears = Array.from({length: 50}, (_, i) => (currentYear - i).toString());
+
   // Hijri months
   const hijriMonths = [
     { value: '1', label: 'محرم' },
@@ -853,6 +910,150 @@ const Documents = () => {
                       <option key={type} value={type}>{type}</option>
                     ))}
                   </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Vehicle Information Section */}
+            <div className="mb-6">
+              <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">معلومات المركبة</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Chassis Number */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">رقم الهيكل <span className="text-red-500">*</span></Label>
+                  <Input
+                    type="text"
+                    value={vehicleChassisNumber}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+                      setVehicleChassisNumber(value);
+                    }}
+                    placeholder="أرقام وحروف إنجليزية فقط"
+                    className="w-full h-12 text-right text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  />
+                </div>
+                {/* Registration Type */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">نوع التسجيل <span className="text-red-500">*</span></Label>
+                  <select
+                    value={vehicleRegistrationType}
+                    onChange={(e) => setVehicleRegistrationType(e.target.value)}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    {vehicleRegistrationTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* Vehicle Brand */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">ماركة المركبة <span className="text-red-500">*</span></Label>
+                  <select
+                    value={vehicleBrand}
+                    onChange={(e) => {
+                      setVehicleBrand(e.target.value);
+                      setVehicleModel('');
+                    }}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    <option value="">اختر الماركة</option>
+                    {vehicleBrands.map((brand) => (
+                      <option key={brand} value={brand}>{brand}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* Vehicle Model */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">طراز المركبة <span className="text-red-500">*</span></Label>
+                  <select
+                    value={vehicleModel}
+                    onChange={(e) => setVehicleModel(e.target.value)}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked || !vehicleBrand}
+                  >
+                    <option value="">اختر الطراز</option>
+                    {(vehicleModels[vehicleBrand] || []).map((model) => (
+                      <option key={model} value={model}>{model}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* Vehicle Load */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">حمولة المركبة <span className="text-red-500">*</span></Label>
+                  <select
+                    value={vehicleLoad}
+                    onChange={(e) => setVehicleLoad(e.target.value)}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    <option value="">اختر الحمولة</option>
+                    {vehicleLoadCapacities.map((load) => (
+                      <option key={load} value={load}>{load}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* Vehicle Weight */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">وزن المركبة (كجم) <span className="text-red-500">*</span></Label>
+                  <Input
+                    type="text"
+                    value={vehicleWeight}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '');
+                      setVehicleWeight(value);
+                    }}
+                    placeholder="أرقام فقط"
+                    className="w-full h-12 text-right text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  />
+                </div>
+                {/* Manufacture Year */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">سنة الصنع <span className="text-red-500">*</span></Label>
+                  <select
+                    value={vehicleManufactureYear}
+                    onChange={(e) => setVehicleManufactureYear(e.target.value)}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    <option value="">اختر السنة</option>
+                    {manufactureYears.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* Serial Number */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">الرقم التسلسلي <span className="text-red-500">*</span></Label>
+                  <Input
+                    type="text"
+                    value={vehicleSerialNumber}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '');
+                      setVehicleSerialNumber(value);
+                    }}
+                    placeholder="أرقام فقط"
+                    className="w-full h-12 text-right text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  />
+                </div>
+                {/* Color */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">اللون <span className="text-red-500">*</span></Label>
+                  <Input
+                    type="text"
+                    value={vehicleColor}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
+                      setVehicleColor(value);
+                    }}
+                    placeholder="حروف عربية فقط"
+                    className="w-full h-12 text-right text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  />
                 </div>
               </div>
             </div>
