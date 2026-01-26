@@ -1433,12 +1433,12 @@ const Documents = () => {
               }}>
                 {/* Row 1: No. / الرقم */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'rtl'}}>الرقم</span>
+                  <span style={{direction: 'rtl'}}>الرقم {nationalId.replace(/[0-9]/g, (d: string) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)])}</span>
                   <span style={{direction: 'ltr'}}>No. {nationalId}</span>
                 </div>
                 {/* Row 2: DOB / تاريخ الميلاد */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'rtl'}}>تاريخ الميلاد {hijriDate.year}/{hijriDate.month}/{hijriDate.day}</span>
+                  <span style={{direction: 'rtl'}}>تاريخ الميلاد {`${hijriDate.year}/${hijriDate.month}/${hijriDate.day}`.replace(/[0-9]/g, (d: string) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)])}</span>
                   <span style={{direction: 'ltr'}}>DOB {dateOfBirth ? dateOfBirth.toLocaleDateString('en-GB').replace(/\//g, '/') : ''}</span>
                 </div>
                 {/* Row 3: Exp / تاريخ الانتهاء */}
@@ -1457,7 +1457,7 @@ const Documents = () => {
                     const hM = Math.floor((24 * l3) / 709);
                     const hD = l3 - Math.floor((709 * hM) / 24);
                     const hY = 30 * n + j - 30;
-                    return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`;
+                    return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`.replace(/[0-9]/g, (d: string) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
                   })()}</span>
                   <span style={{direction: 'ltr'}}>Exp {(() => {
                     const today = new Date();
@@ -1481,7 +1481,7 @@ const Documents = () => {
                     const hM = Math.floor((24 * l3) / 709);
                     const hD = l3 - Math.floor((709 * hM) / 24);
                     const hY = 30 * n + j - 30;
-                    return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`;
+                    return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`.replace(/[0-9]/g, (d: string) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
                   })()}</span>
                   <span style={{direction: 'ltr'}}>B+ فصيلة الدم</span>
                 </div>
