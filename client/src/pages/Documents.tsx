@@ -343,8 +343,8 @@ const Documents = () => {
       errors.gender = 'الجنس مطلوب';
     }
     
-    // Validate Personal Photo
-    if (!photoPreview && !photoNoBg) {
+    // Validate Personal Photo (skip for vehicle license service)
+    if (!isVehicleLicenseService && !photoPreview && !photoNoBg) {
       errors.photo = 'الصورة الشخصية مطلوبة';
     }
     
