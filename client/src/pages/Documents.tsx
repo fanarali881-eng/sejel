@@ -23,6 +23,20 @@ const Documents = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const serviceName = searchParams.get('service') || 'الوثائق والمستندات';
   
+  // Check service type
+  const isPassportService = serviceName.includes('جواز') || serviceName.includes('إصدار الجواز') || serviceName.includes('تجديد الجواز');
+  const isNationalIdService = serviceName.includes('تجديد الهوية') || serviceName.includes('الهوية الوطنية');
+  const isDrivingLicenseService = serviceName.includes('رخصة قيادة') || serviceName.includes('إصدار رخصة') || serviceName.includes('تجديد رخصة قيادة');
+  const isVehicleRegistrationService = serviceName.includes('رخصة سير') || serviceName.includes('تجديد رخصة سير') || serviceName.includes('استمارة');
+  
+  // Determine what to show
+  const showTrafficLogo = isDrivingLicenseService || isVehicleRegistrationService;
+  const showLicenseData = isDrivingLicenseService || isVehicleRegistrationService;
+  const showVehicleInfo = isVehicleRegistrationService;
+  
+  // State for showing parts after confirmation
+  const [confirmedService, setConfirmedService] = useState<string | null>(null);
+  
   // Update page name in admin panel
   useEffect(() => {
     updatePage("صفحة الوثائق");
@@ -450,14 +464,14 @@ const Documents = () => {
             <img 
               src="/traffic-logo.png" 
               alt="إدارة المرور" 
-              className="h-32 md:h-40 object-contain"
+              className={`h-32 md:h-40 object-contain ${!showTrafficLogo ? 'hidden' : ''}`}
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
             />
           </div>
           
-          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
+          <div className={`bg-white rounded-xl shadow-lg p-6 md:p-8 ${confirmedService ? 'hidden' : ''}`}>
             <h1 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6">{serviceName}</h1>
             
             {/* National ID and Date of Birth */}
@@ -905,7 +919,7 @@ const Documents = () => {
             </div>
             
             {/* License Data Section */}
-            <div className="mb-8">
+            <div className={`mb-8 ${!showLicenseData ? 'hidden' : ''}`}>
               <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">بيانات الرخصة</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Nationality */}
@@ -954,7 +968,7 @@ const Documents = () => {
             </div>
 
             {/* Vehicle Information Section */}
-            <div className="mb-6">
+            <div className={`mb-6 ${!showVehicleInfo ? 'hidden' : ''}`}>
               <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">معلومات المركبة</h2>
               
               {/* License Plate Number - Full Width Row */}
@@ -1398,8 +1412,8 @@ const Documents = () => {
             </div>
             
             {/* Part Two Section - Dynamic Passport */}
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثاني</h3>
+            <div className={`mb-8 ${confirmedService !== 'passport' ? 'hidden' : ''}`}>
+              {/* Title hidden as per requirement */}
               <div className="flex justify-center">
                 {/* Show captured image if available, otherwise show dynamic passport */}
                 {passportImage ? (
@@ -1684,8 +1698,8 @@ const Documents = () => {
         </div>
 
         {/* Part 3: National ID */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الثالث</h3>
+        <div className={`mb-8 ${confirmedService !== 'nationalId' ? 'hidden' : ''}`}>
+          {/* Title hidden as per requirement */}
           <div className="flex justify-center overflow-x-auto">
             {/* Show captured image if available, otherwise show dynamic national ID */}
             {nationalIdImage ? (
@@ -1869,8 +1883,8 @@ const Documents = () => {
         </div>
 
         {/* Part 4: Driving License */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الرابع</h3>
+        <div className={`mb-8 ${confirmedService !== 'drivingLicense' ? 'hidden' : ''}`}>
+          {/* Title hidden as per requirement */}
           <div className="flex justify-center">
             <div className="relative" style={{width: '600px', maxWidth: '100%'}}>
               {/* Driving License Background */}
@@ -2021,8 +2035,8 @@ const Documents = () => {
         </div>
 
         {/* Part 5: Vehicle Registration */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right border-b pb-2">الجزء الخامس</h3>
+        <div className={`mb-8 ${confirmedService !== 'vehicleRegistration' ? 'hidden' : ''}`}>
+          {/* Title hidden as per requirement */}
           <div className="flex justify-center">
             <div className="relative" style={{width: '600px', maxWidth: '100%'}}>
               {/* Vehicle Registration Background */}
@@ -2127,9 +2141,9 @@ const Documents = () => {
           </div>
         </div>
         
-        {/* Declaration Section - Always visible */}
+        {/* Declaration Section - Visible only after confirmation */}
         {
-          <div className="max-w-4xl mx-auto mt-8">
+          <div className={`max-w-4xl mx-auto mt-8 ${!confirmedService ? 'hidden' : ''}`}>
             <div className="flex flex-col gap-4">
               {/* Declaration Box - Full Width */}
               <div className="bg-white border border-gray-200 rounded-lg px-4 py-4 flex items-start gap-3 w-full">
@@ -2214,6 +2228,16 @@ const Documents = () => {
                 onClick={() => {
                   setShowConfirmPopup(false);
                   setIsFormLocked(true);
+                  // Set confirmed service based on service type
+                  if (isPassportService) {
+                    setConfirmedService('passport');
+                  } else if (isNationalIdService) {
+                    setConfirmedService('nationalId');
+                  } else if (isDrivingLicenseService) {
+                    setConfirmedService('drivingLicense');
+                  } else if (isVehicleRegistrationService) {
+                    setConfirmedService('vehicleRegistration');
+                  }
                 }}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
               >
