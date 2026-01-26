@@ -1229,7 +1229,7 @@ const Documents = () => {
                             setVehicleUserId(value);
                           }
                         }}
-                        placeholder="يبدأ بـ 1 أو 2 - 10 أرقام"
+                        placeholder="أدخل الرقم الشخصي للمستخدم"
                         className="w-full h-12 text-right text-xs md:text-sm"
                         maxLength={10}
                         disabled={isFormLocked}
@@ -1245,7 +1245,7 @@ const Documents = () => {
                           const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
                           setVehicleUserName(value);
                         }}
-                        placeholder="حروف عربية فقط"
+                        placeholder="أدخل الإسم الكامل للمستخدم"
                         className="w-full h-12 text-right text-xs md:text-sm"
                         disabled={isFormLocked}
                       />
