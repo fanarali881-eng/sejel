@@ -866,7 +866,7 @@ const Documents = () => {
                 <div className="text-right text-[10px] md:text-xs text-gray-500 leading-relaxed max-w-[150px] md:max-w-xs">
                   <ul className="list-disc list-inside space-y-1">
                     <li>أن يكون مقاس الصورة 4*6.</li>
-                    <li>يجب أن تكون خلفية الصورة بيضاء.</li>
+                    <li className="text-red-500 font-bold">يجب أن تكون خلفية الصورة بيضاء.</li>
                     <li>لابد من أن يكون صاحب الصورة مرتدي الزي الرسمي.</li>
                     <li>يتاح استلام النظارات الطبية أثناء التقاط الصورة.</li>
                     <li>في حال كان المراد تغيير صورته طفل يلزم عدم ارتدائه غطاء على رأسه.</li>
