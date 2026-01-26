@@ -437,12 +437,20 @@ const Documents = () => {
       
       <main className="flex-1 py-8">
         <div className="container mx-auto px-4 max-w-4xl">
-          {/* Logo */}
-          <div className="flex justify-center mb-8">
+          {/* Logos */}
+          <div className="flex justify-center items-center gap-8 mb-8">
+            <img 
+              src="/traffic-logo.png" 
+              alt="إدارة المرور" 
+              className="h-32 md:h-40 object-contain"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
             <img 
               src="/images/moi-logo.png" 
               alt="وزارة الداخلية" 
-              className="h-40 object-contain"
+              className="h-32 md:h-40 object-contain"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
