@@ -960,7 +960,7 @@ const Documents = () => {
                     className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
                     disabled={isFormLocked}
                   >
-                    <option value="">-</option>
+                    <option value="">اختر حرف</option>
                     {saudiPlateLetters.map((letter) => (
                       <option key={letter.english} value={letter.english}>{letter.arabic} - {letter.english}</option>
                     ))}
@@ -972,7 +972,7 @@ const Documents = () => {
                     className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
                     disabled={isFormLocked}
                   >
-                    <option value="">-</option>
+                    <option value="">اختر حرف</option>
                     {saudiPlateLetters.map((letter) => (
                       <option key={letter.english} value={letter.english}>{letter.arabic} - {letter.english}</option>
                     ))}
@@ -984,7 +984,7 @@ const Documents = () => {
                     className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
                     disabled={isFormLocked}
                   >
-                    <option value="">-</option>
+                    <option value="">اختر حرف</option>
                     {saudiPlateLetters.map((letter) => (
                       <option key={letter.english} value={letter.english}>{letter.arabic} - {letter.english}</option>
                     ))}
