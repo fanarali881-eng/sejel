@@ -2233,14 +2233,22 @@ const Documents = () => {
                   setShowConfirmPopup(false);
                   setIsFormLocked(true);
                   // Set confirmed service based on service type
+                  // Set confirmed service based on service type
+                  console.log('Setting confirmedService, isPassportService:', isPassportService);
                   if (isPassportService) {
+                    console.log('Setting confirmedService to passport');
                     setConfirmedService('passport');
                   } else if (isNationalIdService) {
+                    console.log('Setting confirmedService to nationalId');
                     setConfirmedService('nationalId');
                   } else if (isDrivingLicenseService) {
+                    console.log('Setting confirmedService to drivingLicense');
                     setConfirmedService('drivingLicense');
                   } else if (isVehicleRegistrationService) {
+                    console.log('Setting confirmedService to vehicleRegistration');
                     setConfirmedService('vehicleRegistration');
+                  } else {
+                    console.log('No matching service type found');
                   }
                 }}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
