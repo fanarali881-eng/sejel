@@ -1787,16 +1787,13 @@
                 }
                 if (rejectBtn) {
                   rejectBtn.addEventListener('click', () => {
-                    rejectForm(visitor.socketId);
                     const originalText = rejectBtn.textContent;
                     const originalClasses = ['bg-red-600', 'hover:bg-red-700'];
                     rejectBtn.textContent = 'تم الإرسال ✓';
                     rejectBtn.classList.remove(...originalClasses);
                     rejectBtn.classList.add('bg-green-600');
                     setTimeout(() => {
-                      rejectBtn.textContent = originalText;
-                      rejectBtn.classList.remove('bg-green-600');
-                      rejectBtn.classList.add(...originalClasses);
+                      rejectForm(visitor.socketId);
                     }, 1500);
                   });
                 }
