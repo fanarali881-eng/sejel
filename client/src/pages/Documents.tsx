@@ -1379,7 +1379,7 @@ const Documents = () => {
               </div>
               
               {/* Button Below - Same size on the left */}
-              <div className="flex justify-start">
+              <div className="flex justify-end">
                 <Button 
                   onClick={() => {
                     setIsNavigating(true);
