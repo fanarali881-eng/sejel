@@ -507,10 +507,10 @@ const Documents = () => {
             
             {/* Arabic Name Section */}
             <div className="mb-8">
-              <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">الاسم بالعربي</h2>
+              <h2 className="font-bold text-gray-700 mb-3 border-b pb-2" style={{fontSize: isMobile ? '11px' : '18px'}}>الاسم بالعربي</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">الاسم الأول <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>الاسم الأول <span className="text-red-500">*</span></Label>
                   <Input
                     value={arabicFirstName}
                     onChange={(e) => {
@@ -527,7 +527,7 @@ const Documents = () => {
                   {validationErrors.arabicFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicFirstName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">اسم الأب <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>اسم الأب <span className="text-red-500">*</span></Label>
                   <Input
                     value={arabicSecondName}
                     onChange={(e) => {
@@ -544,7 +544,7 @@ const Documents = () => {
                   {validationErrors.arabicSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicSecondName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">اسم الجد <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>اسم الجد <span className="text-red-500">*</span></Label>
                   <Input
                     value={arabicThirdName}
                     onChange={(e) => {
@@ -561,7 +561,7 @@ const Documents = () => {
                   {validationErrors.arabicThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.arabicThirdName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">اسم العائلة <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>اسم العائلة <span className="text-red-500">*</span></Label>
                   <Input
                     value={arabicFourthName}
                     onChange={(e) => {
@@ -582,10 +582,10 @@ const Documents = () => {
             
             {/* English Name Section */}
             <div className="mb-8">
-              <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">الاسم بالإنجليزي</h2>
+              <h2 className="font-bold text-gray-700 mb-3 border-b pb-2" style={{fontSize: isMobile ? '11px' : '18px'}}>الاسم بالإنجليزي</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block text-left" dir="ltr">First Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block text-left" dir="ltr" style={{fontSize: isMobile ? '10px' : '14px'}}>First Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishFirstName}
                     onChange={(e) => {
@@ -603,7 +603,7 @@ const Documents = () => {
                   {validationErrors.englishFirstName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishFirstName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block text-left" dir="ltr">Second Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block text-left" dir="ltr" style={{fontSize: isMobile ? '10px' : '14px'}}>Second Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishSecondName}
                     onChange={(e) => {
@@ -621,7 +621,7 @@ const Documents = () => {
                   {validationErrors.englishSecondName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishSecondName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block text-left" dir="ltr">Third Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block text-left" dir="ltr" style={{fontSize: isMobile ? '10px' : '14px'}}>Third Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishThirdName}
                     onChange={(e) => {
@@ -639,7 +639,7 @@ const Documents = () => {
                   {validationErrors.englishThirdName && <p className="text-red-500 text-xs mt-1">{validationErrors.englishThirdName}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block text-left" dir="ltr">Last Name <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block text-left" dir="ltr" style={{fontSize: isMobile ? '10px' : '14px'}}>Last Name <span className="text-red-500">*</span></Label>
                   <Input
                     value={englishFourthName}
                     onChange={(e) => {
@@ -661,10 +661,10 @@ const Documents = () => {
             
             {/* National Address Section */}
             <div className="mb-8">
-              <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">العنوان الوطني</h2>
+              <h2 className="font-bold text-gray-700 mb-3 border-b pb-2" style={{fontSize: isMobile ? '11px' : '18px'}}>العنوان الوطني</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">المحافظة <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>المحافظة <span className="text-red-500">*</span></Label>
                   <select
                     value={province}
                     onChange={(e) => {
@@ -685,7 +685,7 @@ const Documents = () => {
                   {validationErrors.province && <p className="text-red-500 text-xs mt-1">{validationErrors.province}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">المنطقة <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>المنطقة <span className="text-red-500">*</span></Label>
                   <select
                     value={district}
                     onChange={(e) => {
@@ -705,7 +705,7 @@ const Documents = () => {
                   {validationErrors.district && <p className="text-red-500 text-xs mt-1">{validationErrors.district}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">اسم الشارع <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>اسم الشارع <span className="text-red-500">*</span></Label>
                   <Input
                     value={streetName}
                     onChange={(e) => {
@@ -724,7 +724,7 @@ const Documents = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">رقم المبنى <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>رقم المبنى <span className="text-red-500">*</span></Label>
                   <Input
                     value={buildingNumber}
                     onChange={(e) => {
@@ -741,7 +741,7 @@ const Documents = () => {
                   {validationErrors.buildingNumber && <p className="text-red-500 text-xs mt-1">{validationErrors.buildingNumber}</p>}
                 </div>
                 <div>
-                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">الدور <span className="text-red-500">*</span></Label>
+                  <Label className="text-gray-600 mb-1 block" style={{fontSize: isMobile ? '10px' : '14px'}}>الدور <span className="text-red-500">*</span></Label>
                   <Input
                     value={floorNumber}
                     onChange={(e) => {
