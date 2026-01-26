@@ -1222,7 +1222,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '28%',
+                  top: isMobile ? '26%' : '28%',
                   right: '5%',
                   fontSize: isMobile ? '4.5vw' : '18px',
                   fontFamily: 'Arial, sans-serif',
@@ -1236,7 +1236,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '34%',
+                  top: isMobile ? '32%' : '34%',
                   right: '5%',
                   fontSize: isMobile ? '3.5vw' : '14px',
                   fontFamily: 'Arial, sans-serif',
@@ -1251,7 +1251,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '42%',
+                  top: isMobile ? '40%' : '42%',
                   right: '18%',
                   fontSize: isMobile ? '3.5vw' : '14px',
                   fontFamily: 'Arial, sans-serif',
@@ -1264,7 +1264,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '52%',
+                  top: isMobile ? '50%' : '52%',
                   right: '18%',
                   fontSize: isMobile ? '3.5vw' : '14px',
                   fontFamily: 'Arial, sans-serif',
@@ -1304,7 +1304,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '69%',
+                  top: isMobile ? '67%' : '69%',
                   right: '18%',
                   fontSize: isMobile ? '4vw' : '16px',
                   fontFamily: 'Arial, sans-serif',
@@ -1351,7 +1351,7 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: '61%',
+                  top: isMobile ? '59%' : '61%',
                   right: '18%',
                   fontSize: isMobile ? '3.5vw' : '14px',
                   fontFamily: 'Arial, sans-serif',
