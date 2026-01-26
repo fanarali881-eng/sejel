@@ -1212,7 +1212,7 @@ const Documents = () => {
                 style={{
                   top: '28%',
                   right: '5%',
-                  fontSize: '2.3%',
+                  fontSize: '3%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                   textAlign: 'right',
@@ -1226,7 +1226,7 @@ const Documents = () => {
                 style={{
                   top: '34%',
                   right: '5%',
-                  fontSize: '1.8%',
+                  fontSize: '2.3%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
                   textTransform: 'uppercase',
@@ -1241,7 +1241,7 @@ const Documents = () => {
                 style={{
                   top: '42%',
                   right: '18%',
-                  fontSize: '1.8%',
+                  fontSize: '2.3%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1254,7 +1254,7 @@ const Documents = () => {
                 style={{
                   top: '52%',
                   right: '18%',
-                  fontSize: '1.8%',
+                  fontSize: '2.3%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1294,7 +1294,7 @@ const Documents = () => {
                 style={{
                   top: '69%',
                   right: '18%',
-                  fontSize: '2%',
+                  fontSize: '2.5%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
@@ -1341,7 +1341,7 @@ const Documents = () => {
                 style={{
                   top: '61%',
                   right: '18%',
-                  fontSize: '1.8%',
+                  fontSize: '2.3%',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                 }}
