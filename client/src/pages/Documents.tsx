@@ -1222,9 +1222,9 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: isMobile ? '26%' : '28%',
+                  top: isMobile ? '24%' : '28%',
                   right: '5%',
-                  fontSize: isMobile ? '4.5vw' : '18px',
+                  fontSize: isMobile ? '3.5vw' : '18px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'rtl',
                   textAlign: 'right',
@@ -1236,9 +1236,9 @@ const Documents = () => {
               <span 
                 className="absolute text-black font-bold"
                 style={{
-                  top: isMobile ? '32%' : '34%',
+                  top: isMobile ? '34%' : '34%',
                   right: '5%',
-                  fontSize: isMobile ? '3.5vw' : '14px',
+                  fontSize: isMobile ? '2.8vw' : '14px',
                   fontFamily: 'Arial, sans-serif',
                   direction: 'ltr',
                   textTransform: 'uppercase',
