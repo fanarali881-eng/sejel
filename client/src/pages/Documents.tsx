@@ -344,8 +344,8 @@ const Documents = () => {
       errors.gender = 'الجنس مطلوب';
     }
     
-    // Validate Personal Photo
-    if (!photoPreview && !photoNoBg) {
+    // Validate Personal Photo (not required for vehicle registration service)
+    if (!isVehicleRegistrationService && !photoPreview && !photoNoBg) {
       errors.photo = 'الصورة الشخصية مطلوبة';
     }
     
@@ -372,6 +372,8 @@ const Documents = () => {
       // Stop loading if there are errors
       setIsLoading(false);
       console.log('Validation errors:', errors);
+      // Scroll to top so user can see the error messages
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     
