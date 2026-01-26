@@ -2042,7 +2042,7 @@ const Documents = () => {
               <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '45%', right: '20%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {nationalId || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '45%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '45%', left: '10%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {wantToAddUser ? (vehicleUserId || '.....................................') : '.....................................'}
               </div>
               
@@ -2050,7 +2050,7 @@ const Documents = () => {
               <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '52%', right: '20%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleChassisNumber || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '52%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '52%', left: '10%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehiclePlateLetter1 && vehiclePlateLetter2 && vehiclePlateLetter3 && vehiclePlateNumber 
                   ? `${vehiclePlateLetter1} ${vehiclePlateLetter2} ${vehiclePlateLetter3} ${vehiclePlateNumber}` 
                   : ''}
@@ -2060,7 +2060,7 @@ const Documents = () => {
               <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '59%', right: '20%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleRegistrationType || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '59%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '59%', left: '10%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleModel || vehicleModelCustom || ''}
               </div>
               
@@ -2068,7 +2068,7 @@ const Documents = () => {
               <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '67%', right: '20%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleBrand === 'أخرى' ? vehicleBrandCustom : vehicleBrand || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '67%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '67%', left: '10%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleWeight || ''}
               </div>
               
@@ -2076,7 +2076,7 @@ const Documents = () => {
               <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '75%', right: '20%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleLoad || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '75%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '75%', left: '10%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleManufactureYear || ''}
               </div>
               
@@ -2084,7 +2084,7 @@ const Documents = () => {
               <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '82%', right: '20%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehicleSerialNumber || ''}
               </div>
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '82%', left: '5%', width: '18%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '82%', left: '10%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {(() => {
                   const today = new Date();
                   const expiryDate = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
