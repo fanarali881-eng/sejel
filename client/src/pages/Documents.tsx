@@ -1422,7 +1422,7 @@ const Documents = () => {
                       navigate('/summary-payment?service=' + encodeURIComponent(serviceName));
                     }, 3000);
                   }}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 text-sm min-w-[150px]"
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 md:px-8 py-1.5 md:py-2 text-xs md:text-sm min-w-[100px] md:min-w-[150px]"
                   disabled={!declarationChecked || isNavigating}
                 >
                   {isNavigating ? (
