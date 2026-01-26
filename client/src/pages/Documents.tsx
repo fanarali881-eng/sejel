@@ -2250,6 +2250,8 @@ const Documents = () => {
                   } else {
                     console.log('No matching service type found');
                   }
+                  // Scroll to top after confirmation
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
               >
