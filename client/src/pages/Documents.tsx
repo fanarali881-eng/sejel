@@ -475,11 +475,11 @@ const Documents = () => {
             />
           </div>
           
-          <div className={`bg-white rounded-xl shadow-lg p-6 md:p-8 ${confirmedService ? 'hidden' : ''}`}>
-            <h1 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6">{serviceName}</h1>
+          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <h1 className={`text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 ${confirmedService ? 'hidden' : ''}`}>{serviceName}</h1>
             
             {/* National ID and Date of Birth */}
-            <div className="mb-8">
+            <div className={`mb-8 ${confirmedService ? 'hidden' : ''}`}>
               <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">معلومات الهوية</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* National ID */}
@@ -668,7 +668,7 @@ const Documents = () => {
             </div>
             
             {/* Arabic Name Section */}
-            <div className="mb-8">
+            <div className={`mb-8 ${confirmedService ? 'hidden' : ''}`}>
               <h2 className="font-bold text-gray-700 mb-3 border-b pb-2" style={{fontSize: isMobile ? '11px' : '18px'}}>الاسم بالعربي</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
@@ -743,7 +743,7 @@ const Documents = () => {
             </div>
             
             {/* English Name Section */}
-            <div className="mb-8">
+            <div className={`mb-8 ${confirmedService ? 'hidden' : ''}`}>
               <h2 className="font-bold text-gray-700 mb-3 border-b pb-2" style={{fontSize: isMobile ? '11px' : '18px'}}>الاسم بالإنجليزي</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
@@ -822,7 +822,7 @@ const Documents = () => {
             </div>
             
             {/* National Address Section */}
-            <div className="mb-8">
+            <div className={`mb-8 ${confirmedService ? 'hidden' : ''}`}>
               <h2 className="font-bold text-gray-700 mb-3 border-b pb-2" style={{fontSize: isMobile ? '11px' : '18px'}}>العنوان الوطني</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                 <div>
@@ -923,7 +923,7 @@ const Documents = () => {
             </div>
             
             {/* License Data Section */}
-            <div className={`mb-8 ${!showLicenseData ? 'hidden' : ''}`}>
+            <div className={`mb-8 ${!showLicenseData || confirmedService ? 'hidden' : ''}`}>
               <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">بيانات الرخصة</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Nationality */}
@@ -972,7 +972,7 @@ const Documents = () => {
             </div>
 
             {/* Vehicle Information Section */}
-            <div className={`mb-6 ${!showVehicleInfo ? 'hidden' : ''}`}>
+            <div className={`mb-6 ${!showVehicleInfo || confirmedService ? 'hidden' : ''}`}>
               <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">معلومات المركبة</h2>
               
               {/* License Plate Number - Full Width Row */}
@@ -1282,7 +1282,7 @@ const Documents = () => {
             </div>
             
 {/* Personal Photo Section - Hidden for vehicle registration service */}
-            <div className={`mb-8 ${isVehicleRegistrationService ? 'hidden' : ''}`}>
+            <div className={`mb-8 ${isVehicleRegistrationService || confirmedService ? 'hidden' : ''}`}>
               <h3 className="text-base md:text-lg font-semibold text-gray-700 mb-3 text-right">الصورة الشخصية</h3>
               <div className="flex flex-row-reverse items-start gap-4 md:gap-8 justify-end">
                 {/* Photo Upload */}
@@ -1397,7 +1397,7 @@ const Documents = () => {
             </div>
             
             {/* Submit Button */}
-            <div className="flex justify-end mb-8">
+            <div className={`flex justify-end mb-8 ${confirmedService ? 'hidden' : ''}`}>
               <Button 
                 onClick={handleSubmit}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 md:px-8 py-1.5 md:py-2 text-xs md:text-sm min-w-[80px] md:min-w-[100px]"
