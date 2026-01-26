@@ -1372,7 +1372,7 @@ const Documents = () => {
             <div className="relative" style={{width: '600px', maxWidth: '100%'}}>
               {/* Driving License Background */}
               <img 
-                src="/saudi-driving-license.jpg" 
+                src="/saudi-driving-license.png" 
                 alt="رخصة القيادة" 
                 className="w-full h-auto rounded-lg shadow-lg"
               />
