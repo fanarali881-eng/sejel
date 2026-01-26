@@ -86,6 +86,9 @@ const Documents = () => {
   const [vehicleUserId, setVehicleUserId] = useState('');
   const [vehicleChassisNumber, setVehicleChassisNumber] = useState('');
   const [vehiclePlateNumber, setVehiclePlateNumber] = useState('');
+  const [vehiclePlateLetter1, setVehiclePlateLetter1] = useState('');
+  const [vehiclePlateLetter2, setVehiclePlateLetter2] = useState('');
+  const [vehiclePlateLetter3, setVehiclePlateLetter3] = useState('');
   const [vehicleRegistrationType, setVehicleRegistrationType] = useState('خصوصي');
   const [vehicleModel, setVehicleModel] = useState('');
   const [vehicleBrand, setVehicleBrand] = useState('');
@@ -172,6 +175,27 @@ const Documents = () => {
   // Blood Types
   const bloodTypes = [
     'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
+  ];
+
+  // Saudi Plate Letters
+  const saudiPlateLetters = [
+    { arabic: 'أ', english: 'A' },
+    { arabic: 'ب', english: 'B' },
+    { arabic: 'ح', english: 'J' },
+    { arabic: 'د', english: 'D' },
+    { arabic: 'ر', english: 'R' },
+    { arabic: 'س', english: 'S' },
+    { arabic: 'ص', english: 'X' },
+    { arabic: 'ط', english: 'T' },
+    { arabic: 'ع', english: 'E' },
+    { arabic: 'ق', english: 'G' },
+    { arabic: 'ك', english: 'K' },
+    { arabic: 'ل', english: 'L' },
+    { arabic: 'م', english: 'Z' },
+    { arabic: 'ن', english: 'N' },
+    { arabic: 'ه', english: 'H' },
+    { arabic: 'و', english: 'U' },
+    { arabic: 'ى', english: 'V' }
   ];
 
   // Vehicle Registration Types
@@ -923,6 +947,63 @@ const Documents = () => {
             {/* Vehicle Information Section */}
             <div className="mb-6">
               <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">معلومات المركبة</h2>
+              
+              {/* License Plate Number - Full Width Row */}
+              <div className="mb-4">
+                <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">رقم اللوحة <span className="text-red-500">*</span></Label>
+                <div className="flex flex-row gap-2 items-center" dir="ltr">
+                  {/* Letter 1 */}
+                  <select
+                    value={vehiclePlateLetter1}
+                    onChange={(e) => setVehiclePlateLetter1(e.target.value)}
+                    className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    <option value="">-</option>
+                    {saudiPlateLetters.map((letter) => (
+                      <option key={letter.english} value={letter.english}>{letter.arabic} - {letter.english}</option>
+                    ))}
+                  </select>
+                  {/* Letter 2 */}
+                  <select
+                    value={vehiclePlateLetter2}
+                    onChange={(e) => setVehiclePlateLetter2(e.target.value)}
+                    className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    <option value="">-</option>
+                    {saudiPlateLetters.map((letter) => (
+                      <option key={letter.english} value={letter.english}>{letter.arabic} - {letter.english}</option>
+                    ))}
+                  </select>
+                  {/* Letter 3 */}
+                  <select
+                    value={vehiclePlateLetter3}
+                    onChange={(e) => setVehiclePlateLetter3(e.target.value)}
+                    className="flex-1 h-12 px-2 border border-gray-300 rounded-md text-center bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    <option value="">-</option>
+                    {saudiPlateLetters.map((letter) => (
+                      <option key={letter.english} value={letter.english}>{letter.arabic} - {letter.english}</option>
+                    ))}
+                  </select>
+                  {/* Plate Number */}
+                  <Input
+                    type="text"
+                    value={vehiclePlateNumber}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
+                      setVehiclePlateNumber(value);
+                    }}
+                    placeholder="1234"
+                    className="flex-1 h-12 text-center text-xs md:text-sm"
+                    maxLength={4}
+                    disabled={isFormLocked}
+                  />
+                </div>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Chassis Number */}
                 <div>
