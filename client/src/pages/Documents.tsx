@@ -1419,14 +1419,6 @@ const Documents = () => {
         <div className={`mb-8 ${showNationalId ? '' : 'hidden'}`}>
           {/* Title hidden as per requirements */}
           <div className="flex justify-center overflow-x-auto">
-            {/* Show captured image if available, otherwise show dynamic national ID */}
-            {nationalIdImage ? (
-              <img 
-                src={nationalIdImage} 
-                alt="الهوية الوطنية" 
-                className="max-w-full h-auto rounded-lg shadow-lg"
-              />
-            ) : (
             <div className="relative" ref={nationalIdRef} style={{width: '600px', maxWidth: '100%'}}>
               {/* National ID Background */}
               <img 
@@ -1596,7 +1588,6 @@ const Documents = () => {
                 {district}
               </span>
             </div>
-            )}
           </div>
         </div>
 
