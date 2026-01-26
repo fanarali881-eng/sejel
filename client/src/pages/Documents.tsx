@@ -1016,7 +1016,7 @@ const Documents = () => {
                       const value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
                       setVehicleChassisNumber(value);
                     }}
-                    placeholder="أرقام وحروف إنجليزية فقط"
+                    placeholder="أدخل رقم الهيكل"
                     className="w-full h-12 text-right text-xs md:text-sm"
                     disabled={isFormLocked}
                   />
@@ -1131,12 +1131,12 @@ const Documents = () => {
                       const value = e.target.value.replace(/[^0-9]/g, '');
                       setVehicleWeight(value);
                     }}
-                    placeholder="أرقام فقط"
+                    placeholder="أدخل وزن المركبة"
                     className="w-full h-12 text-right text-xs md:text-sm"
                     disabled={isFormLocked}
                   />
                 </div>
-                {/* Manufacture Year */}
+                {/* Serial Number */}
                 <div>
                   <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">سنة الصنع <span className="text-red-500">*</span></Label>
                   <select
@@ -1161,7 +1161,7 @@ const Documents = () => {
                       const value = e.target.value.replace(/[^0-9]/g, '');
                       setVehicleSerialNumber(value);
                     }}
-                    placeholder="أرقام فقط"
+                    placeholder="أدخل الرقم التسلسلي"
                     className="w-full h-12 text-right text-xs md:text-sm"
                     disabled={isFormLocked}
                   />
@@ -1176,7 +1176,7 @@ const Documents = () => {
                       const value = e.target.value.replace(/[^\u0600-\u06FF\s]/g, '');
                       setVehicleColor(value);
                     }}
-                    placeholder="حروف عربية فقط"
+                    placeholder="أدخل اللون"
                     className="w-full h-12 text-right text-xs md:text-sm"
                     disabled={isFormLocked}
                   />
