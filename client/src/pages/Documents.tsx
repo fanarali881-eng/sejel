@@ -289,7 +289,7 @@ const Documents = () => {
     { value: '12', label: 'ذو الحجة' },
   ];
 
-  // Validate National ID
+  // Validate National ID using Luhn Algorithm
   const validateNationalId = (value: string) => {
     if (value.length > 0 && value.length !== 10) {
       setNationalIdError('رقم الهوية يجب أن يكون 10 أرقام');
@@ -298,6 +298,33 @@ const Documents = () => {
     if (value.length === 10 && !value.startsWith('1') && !value.startsWith('2')) {
       setNationalIdError('رقم الهوية يجب أن يبدأ بـ 1 أو 2');
       return false;
+    }
+    // Apply Luhn Algorithm for 10-digit ID
+    if (value.length === 10) {
+      let sum = 0;
+      for (let i = 0; i < 9; i++) {
+        const digit = parseInt(value[i]);
+        if (i % 2 === 0) {
+          // Odd positions (1,3,5,7,9) - multiply by 2
+          let doubled = digit * 2;
+          if (doubled > 9) {
+            doubled = Math.floor(doubled / 10) + (doubled % 10);
+          }
+          sum += doubled;
+        } else {
+          // Even positions (2,4,6,8) - add directly
+          sum += digit;
+        }
+      }
+      const checkDigit = parseInt(value[9]);
+      const sumSecondDigit = sum % 10;
+      let expectedCheckDigit = 10 - sumSecondDigit;
+      if (expectedCheckDigit === 10) expectedCheckDigit = 0;
+      
+      if (checkDigit !== expectedCheckDigit) {
+        setNationalIdError('رقم الهوية غير صحيح');
+        return false;
+      }
     }
     setNationalIdError('');
     return true;

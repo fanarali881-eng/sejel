@@ -602,6 +602,33 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
+  // Luhn Algorithm validation for Saudi National ID
+  const validateNationalIdLuhn = (value: string): boolean => {
+    if (value.length !== 10) return false;
+    
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+      const digit = parseInt(value[i]);
+      if (i % 2 === 0) {
+        // Odd positions (1,3,5,7,9) - multiply by 2
+        let doubled = digit * 2;
+        if (doubled > 9) {
+          doubled = Math.floor(doubled / 10) + (doubled % 10);
+        }
+        sum += doubled;
+      } else {
+        // Even positions (2,4,6,8) - add directly
+        sum += digit;
+      }
+    }
+    const checkDigit = parseInt(value[9]);
+    const sumSecondDigit = sum % 10;
+    let expectedCheckDigit = 10 - sumSecondDigit;
+    if (expectedCheckDigit === 10) expectedCheckDigit = 0;
+    
+    return checkDigit === expectedCheckDigit;
+  };
+
   const handleNationalIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     
@@ -630,9 +657,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
     setNationalId(value);
 
-    // Validate length for error message
+    // Validate length and Luhn algorithm for error message
     if (value.length > 0 && value.length < 10) {
       setNationalIdError('يجب أن يتكون رقم الهوية من 10 أرقام');
+    } else if (value.length === 10 && !validateNationalIdLuhn(value)) {
+      setNationalIdError('رقم الهوية غير صحيح');
     } else {
       setNationalIdError('');
     }
