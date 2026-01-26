@@ -2052,7 +2052,13 @@ const Documents = () => {
               </div>
               <div className="absolute text-[9px] md:text-[12px] font-bold text-black" style={{top: '52%', left: '10%', width: '18%', textAlign: 'center', direction: 'rtl'}}>
                 {vehiclePlateLetter1 && vehiclePlateLetter2 && vehiclePlateLetter3 && vehiclePlateNumber 
-                  ? `${vehiclePlateLetter1} ${vehiclePlateLetter2} ${vehiclePlateLetter3} ${vehiclePlateNumber}` 
+                  ? (() => {
+                      const getArabicLetter = (eng: string) => {
+                        const letters: {[key: string]: string} = {'A': 'أ', 'B': 'ب', 'J': 'ح', 'D': 'د', 'R': 'ر', 'S': 'س', 'X': 'ص', 'T': 'ط', 'E': 'ع', 'G': 'ق', 'K': 'ك', 'L': 'ل', 'Z': 'م', 'N': 'ن', 'H': 'ه', 'U': 'و', 'V': 'ى'};
+                        return letters[eng] || eng;
+                      };
+                      return `${getArabicLetter(vehiclePlateLetter1)} ${vehiclePlateLetter1} ${getArabicLetter(vehiclePlateLetter2)} ${vehiclePlateLetter2} ${getArabicLetter(vehiclePlateLetter3)} ${vehiclePlateLetter3} ${vehiclePlateNumber}`;
+                    })()
                   : ''}
               </div>
               
