@@ -927,7 +927,7 @@ const Documents = () => {
                     <div>SAUDI ARABIA</div>
                     <div className="text-black font-bold mt-0" style={{fontSize: '80%'}}>SAUDI PASSPORT</div>
                     <div className="flex justify-center mt-0.5">
-                      <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: '18px', height: '10px'}} className="rounded-sm" />
+                      <img src="/images/saudi-flag.jpg" alt="Saudi Flag" style={{width: isMobile ? '18px' : '32px', height: isMobile ? '10px' : '20px'}} className="rounded-sm" />
                     </div>
                   </div>
                   <img src="/images/chip.png" alt="Chip" className="absolute top-[6%] left-[32%]" style={{width: '6%'}} />
