@@ -1277,8 +1277,8 @@ const Documents = () => {
               </div>
             </div>
             
-{/* Personal Photo Section */}
-            <div className="mb-8">
+{/* Personal Photo Section - Hidden for vehicle registration service */}
+            <div className={`mb-8 ${isVehicleRegistrationService ? 'hidden' : ''}`}>
               <h3 className="text-base md:text-lg font-semibold text-gray-700 mb-3 text-right">الصورة الشخصية</h3>
               <div className="flex flex-row-reverse items-start gap-4 md:gap-8 justify-end">
                 {/* Photo Upload */}
