@@ -302,11 +302,11 @@ const Documents = () => {
           </div>
           
           <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
-            <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">{serviceName}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6">{serviceName}</h1>
             
             {/* National ID and Date of Birth */}
             <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">معلومات الهوية</h2>
+              <h2 className="text-base md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">معلومات الهوية</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* National ID */}
                 <div>
@@ -477,12 +477,12 @@ const Documents = () => {
             
             {/* Gender Section */}
             <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-2 border-b pb-2 text-right">الجنس</h2>
+              <h2 className="text-base md:text-lg font-bold text-gray-700 mb-2 border-b pb-2 text-right">الجنس</h2>
               <div className="text-right mt-2">
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className="w-48 h-10 px-3 rounded-md border border-gray-200 text-sm text-right bg-white"
+                  <select
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="w-full md:w-48 h-10 px-3 rounded-md border border-gray-200 text-sm text-right bg-white"
                   style={{ direction: 'rtl' }}
                   disabled={isFormLocked}
                 >
@@ -495,7 +495,7 @@ const Documents = () => {
             
             {/* Arabic Name Section */}
             <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الاسم بالعربي</h2>
+              <h2 className="text-base md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">الاسم بالعربي</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <Label className="text-gray-600 text-sm mb-1 block">الاسم الأول <span className="text-red-500">*</span></Label>
@@ -570,7 +570,7 @@ const Documents = () => {
             
             {/* English Name Section */}
             <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">الاسم بالإنجليزي</h2>
+              <h2 className="text-base md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">الاسم بالإنجليزي</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <Label className="text-gray-600 text-sm mb-1 block text-left" dir="ltr">First Name <span className="text-red-500">*</span></Label>
@@ -649,7 +649,7 @@ const Documents = () => {
             
             {/* National Address Section */}
             <div className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">العنوان الوطني</h2>
+              <h2 className="text-base md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">العنوان الوطني</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                 <div>
                   <Label className="text-gray-600 text-sm mb-1 block">المحافظة <span className="text-red-500">*</span></Label>
@@ -662,7 +662,7 @@ const Documents = () => {
                         setValidationErrors(prev => ({ ...prev, province: '' }));
                       }
                     }}
-                    className={`w-full h-12 px-3 py-2 border rounded-md text-right bg-white ${validationErrors.province ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full h-10 md:h-12 px-3 py-2 border rounded-md text-right bg-white text-sm ${validationErrors.province ? 'border-red-500' : 'border-gray-300'}`}
                     disabled={isFormLocked}
                   >
                     <option value="">اختر المحافظة</option>
@@ -683,7 +683,7 @@ const Documents = () => {
                       }
                     }}
                     disabled={!province || isFormLocked}
-                    className={`w-full h-12 px-3 py-2 border rounded-md text-right bg-white ${validationErrors.district ? 'border-red-500' : 'border-gray-300'} ${!province ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full h-10 md:h-12 px-3 py-2 border rounded-md text-right bg-white text-sm ${validationErrors.district ? 'border-red-500' : 'border-gray-300'} ${!province ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <option value="">اختر المنطقة</option>
                     {districts.map(d => (
@@ -750,7 +750,7 @@ const Documents = () => {
             
 {/* Personal Photo Section */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4 text-right">الصورة الشخصية</h3>
+              <h3 className="text-base md:text-lg font-semibold text-gray-700 mb-3 text-right">الصورة الشخصية</h3>
               <div className="flex flex-row-reverse items-start gap-8 justify-end">
                 {/* Photo Upload */}
                 <div className="flex flex-col items-center gap-4">
