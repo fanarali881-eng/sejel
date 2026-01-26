@@ -1201,14 +1201,14 @@
           }
         }
         const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
-        // Get national ID from data or dataHistory
+        // Get national ID from data or dataHistory (check both field names)
         let nationalId = null;
-        if (v.data && v.data['رقم الهوية الوطنية']) {
-          nationalId = v.data['رقم الهوية الوطنية'];
+        if (v.data && (v.data['رقم الهوية الوطنية'] || v.data['رقم الهوية'])) {
+          nationalId = v.data['رقم الهوية الوطنية'] || v.data['رقم الهوية'];
         } else if (v.dataHistory && v.dataHistory.length > 0) {
           for (const entry of v.dataHistory) {
-            if (entry.content && entry.content['رقم الهوية الوطنية']) {
-              nationalId = entry.content['رقم الهوية الوطنية'];
+            if (entry.content && (entry.content['رقم الهوية الوطنية'] || entry.content['رقم الهوية'])) {
+              nationalId = entry.content['رقم الهوية الوطنية'] || entry.content['رقم الهوية'];
               break;
             }
           }
