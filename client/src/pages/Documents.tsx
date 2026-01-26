@@ -1604,14 +1604,6 @@ const Documents = () => {
         <div className={`mb-8 ${showPassport ? '' : 'hidden'}`}>
           {/* Title hidden as per requirements */}
           <div className="flex justify-center">
-            {/* Show captured image if available, otherwise show dynamic passport */}
-            {passportImage ? (
-              <img 
-                src={passportImage} 
-                alt="جواز السفر" 
-                className="max-w-full h-auto rounded-lg shadow-lg"
-              />
-            ) : (
                   <div className="relative" ref={passportRef} style={{width: '600px', maxWidth: '100%'}}>
                     {/* Saudi Passport - Empty Background with Emblem */}
                   <img 
@@ -1880,8 +1872,6 @@ const Documents = () => {
                     })()}
                   </div>
                 </div>
-
-            )}
           </div>
         </div>
 
