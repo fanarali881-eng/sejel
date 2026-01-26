@@ -1380,8 +1380,8 @@ const Documents = () => {
               {(photoNoBg || photoPreview) && (
                 <div className="absolute" style={{
                   top: '35%',
-                  left: '3%',
-                  width: '22%',
+                  left: '2%',
+                  width: '24%',
                   height: '55%',
                   overflow: 'hidden'
                 }}>
