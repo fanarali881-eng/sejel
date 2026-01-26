@@ -74,6 +74,11 @@ const Documents = () => {
   const [buildingNumber, setBuildingNumber] = useState('');
   const [floorNumber, setFloorNumber] = useState('');
   
+  // License Data
+  const [nationality, setNationality] = useState('سعودي');
+  const [licenseType, setLicenseType] = useState('خاصة');
+  const [bloodType, setBloodType] = useState('B+');
+  
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   
@@ -123,6 +128,32 @@ const Documents = () => {
 
   const provinces = Object.keys(provincesData);
   const districts = province ? provincesData[province] || [] : [];
+
+  // World Nationalities
+  const nationalities = [
+    'سعودي', 'إماراتي', 'كويتي', 'بحريني', 'عماني', 'قطري', 'يمني', 'عراقي', 'سوري', 'لبناني', 'أردني', 'فلسطيني', 'مصري', 'سوداني', 'ليبي', 'تونسي', 'جزائري', 'مغربي', 'موريتاني',
+    'أمريكي', 'بريطاني', 'فرنسي', 'ألماني', 'إيطالي', 'إسباني', 'برتغالي', 'هولندي', 'بلجيكي', 'سويسري', 'نمساوي', 'سويدي', 'نرويجي', 'دنماركي', 'فنلندي', 'يوناني', 'تركي', 'روسي', 'أوكراني', 'بولندي',
+    'هندي', 'باكستاني', 'بنغلاديشي', 'سريلانكي', 'نيبالي', 'أفغاني', 'إيراني', 'صيني', 'ياباني', 'كوري', 'فلبيني', 'إندونيسي', 'ماليزي', 'تايلاندي', 'فيتنامي', 'سنغافوري',
+    'أسترالي', 'نيوزيلندي', 'كندي', 'مكسيكي', 'برازيلي', 'أرجنتيني', 'كولومبي', 'تشيلي', 'بيروفي',
+    'نيجيري', 'غاني', 'كيني', 'إثيوبي', 'جنوب أفريقي', 'مغربي', 'تونسي'
+  ];
+
+  // License Types
+  const licenseTypes = [
+    'خاصة',
+    'عامة',
+    'مركبات ثقيلة',
+    'دراجة نارية',
+    'معدات ثقيلة',
+    'حافلة',
+    'أجرة',
+    'دولية'
+  ];
+
+  // Blood Types
+  const bloodTypes = [
+    'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
+  ];
 
   // Hijri months
   const hijriMonths = [
@@ -756,6 +787,55 @@ const Documents = () => {
                     disabled={isFormLocked}
                   />
                   {validationErrors.floorNumber && <p className="text-red-500 text-xs mt-1">{validationErrors.floorNumber}</p>}
+                </div>
+              </div>
+            </div>
+            
+            {/* License Data Section */}
+            <div className="mb-8">
+              <h2 className="text-[11px] md:text-lg font-bold text-gray-700 mb-3 border-b pb-2">بيانات الرخصة</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Nationality */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">الجنسية <span className="text-red-500">*</span></Label>
+                  <select
+                    value={nationality}
+                    onChange={(e) => setNationality(e.target.value)}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    {nationalities.map((nat) => (
+                      <option key={nat} value={nat}>{nat}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* License Type */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">النوع <span className="text-red-500">*</span></Label>
+                  <select
+                    value={licenseType}
+                    onChange={(e) => setLicenseType(e.target.value)}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    {licenseTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* Blood Type */}
+                <div>
+                  <Label className="text-gray-600 text-[10px] md:text-sm mb-1 block">فصيلة الدم <span className="text-red-500">*</span></Label>
+                  <select
+                    value={bloodType}
+                    onChange={(e) => setBloodType(e.target.value)}
+                    className="w-full h-12 px-3 border border-gray-300 rounded-md text-right bg-white text-xs md:text-sm"
+                    disabled={isFormLocked}
+                  >
+                    {bloodTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
@@ -1500,16 +1580,16 @@ const Documents = () => {
                     const hY = 30 * n + j - 30;
                     return `${hY}/${String(hM).padStart(2, '0')}/${String(hD).padStart(2, '0')}`.replace(/[0-9]/g, (d: string) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
                   })()}</span>
-                  <span style={{direction: 'ltr'}}>B+ فصيلة الدم</span>
+                  <span style={{direction: 'ltr'}}>{bloodType} فصيلة الدم</span>
                 </div>
                 {/* Row 5: القيود / النوع */}
                 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '2px'}}>
-                  <span style={{direction: 'rtl'}}>النوع</span>
+                  <span style={{direction: 'rtl'}}>النوع {licenseType}</span>
                   <span>القيود بلا قيود</span>
                 </div>
                 {/* Row 6: الجنسية */}
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                  <span style={{direction: 'rtl'}}>الجنسية</span>
+                  <span style={{direction: 'rtl'}}>الجنسية {nationality}</span>
                   <span></span>
                 </div>
               </div>
