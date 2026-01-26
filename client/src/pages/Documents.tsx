@@ -907,8 +907,8 @@ const Documents = () => {
                     alt="شعار المملكة" 
                     className="absolute top-[5%] left-1/2 transform -translate-x-1/2" style={{width: '10%'}}
                   />
-                  <span className="absolute top-[23%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] font-semibold" style={{fontSize: '1.5%'}}>Country Code</span>
-                  <span className="absolute top-[26%] left-1/2 transform -translate-x-1/2 text-black font-bold" style={{fontSize: '1.5%'}}>SAU</span>
+                  <span className="absolute top-[24%] left-1/2 transform -translate-x-1/2 text-[#0D5C3D] font-semibold" style={{fontSize: '1.5%'}}>Country Code</span>
+                  <span className="absolute top-[27%] left-1/2 transform -translate-x-1/2 text-black font-bold" style={{fontSize: '1.5%'}}>SAU</span>
                   <span className="absolute top-[8%] right-[14%] text-[#0D5C3D]" style={{fontFamily: 'DecoType Thuluth II, serif', fontSize: '2.8%'}}>المملكة العربية السعودية</span>
                   <div className="absolute top-[6%] left-[14%] text-[#0D5C3D] text-left" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.6%'}}>
                     <div>KINGDOM OF</div>
@@ -946,7 +946,7 @@ const Documents = () => {
                   <span className="absolute top-[29%] right-[14%] text-[#0D5C3D] font-bold" style={{fontFamily: 'Arial, sans-serif', fontSize: '1.6%'}}>الاسم/ <span className="text-black">{arabicFirstName}{arabicFirstName && arabicSecondName ? (gender === 'ذكر' ? ' بن ' : ' بنت ') : ''}{arabicSecondName}{arabicSecondName && arabicThirdName ? ' بن ' : ''}{arabicThirdName}{arabicThirdName && arabicFourthName ? ' ' : ''}{arabicFourthName}</span></span>
                   <span className="absolute top-[33%] left-[30%] text-[#0D5C3D] font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.6%'}}>Name/ <span className="text-black">{englishFourthName ? englishFourthName.toUpperCase() + ', ' : ''}{englishFirstName ? englishFirstName.toUpperCase() + ' ' : ''}{englishSecondName ? englishSecondName.toUpperCase() + ' ' : ''}{englishThirdName ? englishThirdName.charAt(0).toUpperCase() : ''}</span></span>
                   <span className="absolute top-[38%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.2%'}}>Nationality/الجنسية</span>
-                  <span className="absolute top-[42%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '0.9%'}}>SAUDI ARABIA السعودية</span>
+                  <span className="absolute top-[42%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '0.8%'}}>SAUDI ARABIA السعودية</span>
                   <span className="absolute top-[46%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>Date of Birth</span>
                 <span className="absolute top-[46%] left-[50%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: '1.5%'}}>تاريخ الميلاد</span>
                   
