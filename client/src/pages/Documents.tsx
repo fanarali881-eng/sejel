@@ -964,7 +964,7 @@ const Documents = () => {
                   
                   {/* Oval photo on the right side */}
                   {(photoNoBg || photoPreview) && (
-                    <div className="absolute top-[36%] right-[26%] overflow-hidden" style={{borderRadius: '50%', border: isMobile ? '1px solid #808080' : '2px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? '10%' : '12%', height: isMobile ? '24%' : '28%'}}>
+                    <div className="absolute right-[26%] overflow-hidden" style={{borderRadius: '50%', border: isMobile ? '1px solid #808080' : '2px solid #808080', display: 'flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? '10%' : '12%', height: isMobile ? '24%' : '28%', top: isMobile ? '40%' : '36%'}}>
                       <img 
                         src={photoNoBg || photoPreview} 
                         alt="" 
@@ -973,9 +973,9 @@ const Documents = () => {
                     </div>
                   )}
                   {/* Vertical passport number next to oval photo */}
-                  <div className="absolute top-[36%] right-[24%] h-[32%] flex flex-col justify-start items-center">
+                  <div className="absolute right-[24%] flex flex-col justify-start items-center" style={{top: isMobile ? '40%' : '36%', height: isMobile ? '28%' : '32%'}}>
                     {passportNumber.split('').map((char, index) => (
-                      <span key={index} className="text-black font-bold" style={{lineHeight: '1', fontSize: isMobile ? '1.5%' : '9px'}}>
+                      <span key={index} className="text-black font-bold" style={{lineHeight: isMobile ? '0.8' : '1', fontSize: isMobile ? '1.3%' : '9px'}}>
                         {char}
                       </span>
                     ))}
