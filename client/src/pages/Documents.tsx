@@ -1426,7 +1426,7 @@ const Documents = () => {
               {/* License Info Grid */}
               <div className="absolute" style={{
                 top: '52%',
-                left: '28%',
+                left: '35%',
                 right: '5%',
                 fontSize: isMobile ? '2vw' : '11px',
                 fontFamily: 'Arial, sans-serif',
