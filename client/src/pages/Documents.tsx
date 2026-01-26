@@ -2027,14 +2027,14 @@ const Documents = () => {
               {/* Dynamic Data Overlay - البيانات الديناميكية */}
               
               {/* Row 1: اسم المالك - حقل عريض على اليمين */}
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black whitespace-nowrap overflow-hidden" style={{top: '29%', right: '15%', width: '50%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black whitespace-nowrap overflow-hidden" style={{top: '29%', right: '12%', width: '50%', textAlign: 'right', direction: 'rtl'}}>
                 {arabicFirstName && arabicSecondName && arabicThirdName && arabicFourthName 
                   ? `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}` 
                   : ''}
               </div>
               
               {/* Row 2: المستخدم - حقل عريض على اليمين */}
-              <div className="absolute text-[9px] md:text-[12px] font-bold text-black whitespace-nowrap overflow-hidden" style={{top: '36%', right: '15%', width: '50%', textAlign: 'left', direction: 'ltr'}}>
+              <div className="absolute text-[9px] md:text-[12px] font-bold text-black whitespace-nowrap overflow-hidden" style={{top: '36%', right: '12%', width: '50%', textAlign: 'right', direction: 'rtl'}}>
                 {wantToAddUser ? (vehicleUserName || '.....................................') : '.....................................'}
               </div>
               
