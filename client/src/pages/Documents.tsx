@@ -879,7 +879,7 @@ const Documents = () => {
             <div className="flex justify-end mb-8">
               <Button 
                 onClick={handleSubmit}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 text-sm min-w-[100px]"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 md:px-8 py-1.5 md:py-2 text-xs md:text-sm min-w-[80px] md:min-w-[100px]"
                 disabled={isLoading || isFormLocked}
               >
                 {isLoading ? (
