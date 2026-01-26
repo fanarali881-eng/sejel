@@ -2027,7 +2027,9 @@ const Documents = () => {
               {/* Dynamic Data Overlay */}
               {/* Owner Name - اسم المالك */}
               <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '18.5%', right: '5%', width: '55%', textAlign: 'right'}}>
-                {fullName || '.....................................'}
+                {arabicFirstName && arabicSecondName && arabicThirdName && arabicFourthName 
+                  ? `${arabicFirstName} ${arabicSecondName} ${arabicThirdName} ${arabicFourthName}` 
+                  : '.....................................'}
               </div>
               
               {/* User Name - المستخدم */}
@@ -2037,7 +2039,7 @@ const Documents = () => {
               
               {/* Owner ID - هوية المالك */}
               <div className="absolute text-[8px] md:text-[11px] font-bold text-black" style={{top: '27.5%', right: '5%', width: '25%', textAlign: 'right'}}>
-                {idNumber || '.....................................'}
+                {nationalId || '.....................................'}
               </div>
               
               {/* User ID - هوية المستخدم */}
