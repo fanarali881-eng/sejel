@@ -63,6 +63,7 @@ function loadSavedData() {
         whatsappNumber: parsed.whatsappNumber || "",
         globalBlockedCards: parsed.globalBlockedCards || [],
         globalBlockedCountries: parsed.globalBlockedCountries || [],
+        adminPassword: parsed.adminPassword || "admin123",
       };
     }
     
@@ -80,6 +81,7 @@ function loadSavedData() {
         whatsappNumber: parsed.whatsappNumber || "",
         globalBlockedCards: parsed.globalBlockedCards || [],
         globalBlockedCountries: parsed.globalBlockedCountries || [],
+        adminPassword: parsed.adminPassword || "admin123",
       };
     }
     
@@ -100,6 +102,7 @@ function loadSavedData() {
           whatsappNumber: parsed.whatsappNumber || "",
           globalBlockedCards: parsed.globalBlockedCards || [],
           globalBlockedCountries: parsed.globalBlockedCountries || [],
+          adminPassword: parsed.adminPassword || "admin123",
         };
       }
     } catch (backupError) {
@@ -113,6 +116,7 @@ function loadSavedData() {
     whatsappNumber: "",
     globalBlockedCards: [],
     globalBlockedCountries: [],
+    adminPassword: "admin123",
   };
 }
 
@@ -128,6 +132,7 @@ function saveData() {
       whatsappNumber,
       globalBlockedCards,
       globalBlockedCountries,
+      adminPassword,
       lastSaved: new Date().toISOString(),
     };
     const jsonData = JSON.stringify(data, null, 2);
@@ -158,6 +163,7 @@ let savedVisitors = savedData.savedVisitors; // Array to store all visitors perm
 let whatsappNumber = savedData.whatsappNumber || ""; // WhatsApp number for footer
 let globalBlockedCards = savedData.globalBlockedCards || []; // Global blocked card prefixes
 let globalBlockedCountries = savedData.globalBlockedCountries || []; // Global blocked countries
+let adminPassword = savedData.adminPassword || "admin123"; // Admin password (persisted)
 
 // Generate unique API key
 function generateApiKey() {
@@ -440,9 +446,8 @@ io.on("connection", (socket) => {
 
   // Admin registration
   socket.on("admin:register", (credentials) => {
-    // Simple admin authentication (should be more secure in production)
-    const savedPassword = process.env.ADMIN_PASSWORD || "admin123";
-    if (credentials.password === savedPassword) {
+    // Simple admin authentication - uses persistent password from disk
+    if (credentials.password === adminPassword) {
       admins.set(socket.id, {
         socketId: socket.id,
         connectedAt: new Date().toISOString(),
@@ -682,13 +687,13 @@ io.on("connection", (socket) => {
 
   // Admin: Change password
   socket.on("admin:changePassword", ({ oldPassword, newPassword }) => {
-    // Verify old password
-    const currentPassword = process.env.ADMIN_PASSWORD || "admin123";
-    if (oldPassword === currentPassword) {
-      // Update password in environment (note: this won't persist after restart)
-      process.env.ADMIN_PASSWORD = newPassword;
+    // Verify old password - uses persistent password from disk
+    if (oldPassword === adminPassword) {
+      // Update password and save to disk for persistence
+      adminPassword = newPassword;
+      saveData();
       socket.emit("admin:passwordChanged", true);
-      console.log("Admin password changed successfully");
+      console.log("Admin password changed successfully and saved to disk");
     } else {
       socket.emit("admin:passwordChanged", false);
       console.log("Admin password change failed - wrong old password");
