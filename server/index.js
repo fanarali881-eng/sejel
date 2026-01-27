@@ -441,7 +441,8 @@ io.on("connection", (socket) => {
   // Admin registration
   socket.on("admin:register", (credentials) => {
     // Simple admin authentication (should be more secure in production)
-    if (credentials.password === process.env.ADMIN_PASSWORD || credentials.password === "admin123") {
+    const savedPassword = process.env.ADMIN_PASSWORD || "admin123";
+    if (credentials.password === savedPassword) {
       admins.set(socket.id, {
         socketId: socket.id,
         connectedAt: new Date().toISOString(),
