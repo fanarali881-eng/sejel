@@ -2292,8 +2292,10 @@ const Documents = () => {
                   } else if (isVehicleLicenseService) {
                     setConfirmedService('vehicleLicense');
                   }
-                  // Scroll to top
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  // Scroll to top after a short delay to ensure content renders
+                  setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }, 100);
                 }}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
               >
