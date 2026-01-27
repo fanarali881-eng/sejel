@@ -1815,7 +1815,7 @@ const Documents = () => {
                         : ''}
                   </span>
                   <span className="absolute top-[54%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '6px' : '9px'}}>Date of Issue</span>
-                  <span className="absolute top-[54%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '6px' : '9px', left: isMobile ? '48%' : '50%'}}>تاريخ الإصدار</span>
+                  <span className="absolute top-[54%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '6px' : '9px', left: isMobile ? '47%' : '50%'}}>تاريخ الإصدار</span>
                   <span className="absolute top-[58%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '6px' : '9px', left: isMobile ? '45%' : '50%'}}>
                     {(() => {
                       const today = new Date();
