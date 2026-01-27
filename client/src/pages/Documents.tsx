@@ -1497,7 +1497,7 @@ const Documents = () => {
               />
               {/* Client Photo Overlay */}
               {(photoNoBg || photoPreview) && (
-                <div className="absolute top-[24%] left-[5%] w-[24%] h-[50%] overflow-hidden">
+                <div className={`absolute top-[24%] ${isMobile ? 'left-[4%]' : 'left-[5%]'} w-[24%] h-[50%] overflow-hidden`}>
                   <img 
                     src={photoNoBg || photoPreview} 
                     alt="صورة العميل" 
