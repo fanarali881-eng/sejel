@@ -1718,7 +1718,7 @@ const Documents = () => {
                   <span className="absolute top-[38%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '5px' : '7px'}}>Nationality/الجنسية</span>
                   <span className="absolute top-[42%] left-[30%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '5px' : '8px', letterSpacing: isMobile ? '-0.1em' : 'normal'}}>SAUDI ARABIA السعودية</span>
                   <span className="absolute top-[46%] left-[30%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '6px' : '9px'}}>Date of Birth</span>
-                <span className="absolute top-[46%] left-[50%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '6px' : '9px'}}>تاريخ الميلاد</span>
+                <span className="absolute top-[46%] text-[#0D5C3D]" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', fontSize: isMobile ? '6px' : '9px', left: isMobile ? '48%' : '50%'}}>تاريخ الميلاد</span>
                   
                   {/* Oval photo on the right side */}
                   {(photoNoBg || photoPreview) && (
