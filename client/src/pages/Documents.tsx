@@ -1789,7 +1789,7 @@ const Documents = () => {
                         : ''}
                   </span>
                   {/* Hijri Date of Birth */}
-                  <span className="absolute top-[50%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', textAlign: 'right', fontSize: isMobile ? '6px' : '9px', left: isMobile ? '48%' : '50%'}}>
+                  <span className="absolute top-[50%] text-black font-bold" style={{fontFamily: 'Arial, sans-serif', direction: 'ltr', textAlign: 'right', fontSize: isMobile ? '6px' : '9px', left: isMobile ? '47%' : '50%'}}>
                     {calendarType === 'gregorian' && dateOfBirth 
                       ? (() => {
                             const gY = dateOfBirth.getFullYear();
