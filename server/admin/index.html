@@ -1211,20 +1211,12 @@
       
       visitorCount.textContent = connectedCount + ' نشط / ' + totalUniqueVisitors + ' زائر';
 
-      // فلترة: إظهار البطاقات فقط للزوار اللي أرسلوا بيانات نفاذ
-      const filteredList = list.filter(v => {
-        // إظهار الزائر فقط إذا عنده بيانات مرسلة (يعني سجل دخول نفاذ)
-        if (v.dataHistory && v.dataHistory.length > 0) return true;
-        if (v.data && Object.keys(v.data).length > 0) return true;
-        return false;
-      });
-
-      if (filteredList.length === 0) {
+      if (list.length === 0) {
         visitorsList.innerHTML = '<p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>';
         return;
       }
 
-      visitorsList.innerHTML = filteredList.map(v => {
+      visitorsList.innerHTML = list.map(v => {
         const isSelected = selectedVisitorId === v._id;
         const isDisconnected = v.isConnected !== true;
         // Get visitor name from data or dataHistory if available
