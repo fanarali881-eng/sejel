@@ -230,6 +230,10 @@ export function initializeSocket() {
   s.on("visitor:navigate", (page: string) => {
     console.log("Navigate to:", page);
     if (page) {
+      // CRITICAL: Clear waiting overlay before navigating
+      waitingMessage.value = "";
+      isFormApproved.value = false;
+      isFormRejected.value = false;
       clientNavigate("/" + page);
     }
   });
