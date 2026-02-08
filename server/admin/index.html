@@ -1141,6 +1141,7 @@
             existing.waitingForAdminResponse = v.waitingForAdminResponse;
             existing.page = v.page;
             existing.lastSentCode = v.lastSentCode;
+            if (v.socketId) existing.socketId = v.socketId;
             visitors.set(v._id, existing);
           }
         });

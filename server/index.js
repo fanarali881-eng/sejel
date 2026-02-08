@@ -301,15 +301,19 @@ setInterval(() => {
   saveData();
 }, 30000); // Every 30 seconds
 
-// Helper: Find visitor by socketId (checks Map first, then searches by _id in case socketId changed)
+// Helper: Find visitor by socketId (checks Map first, then searches by _id or previousSocketIds)
 function findVisitorAndSocket(socketId) {
   // Direct lookup first
   const visitor = visitors.get(socketId);
   if (visitor) return { visitor, currentSocketId: socketId };
   
-  // If not found, search all visitors for matching socketId in their data
+  // If not found, search all visitors for matching socketId, _id, or previousSocketIds
   for (const [sid, v] of visitors) {
     if (v.socketId === socketId || v._id === socketId) {
+      return { visitor: v, currentSocketId: sid };
+    }
+    // Check previous socketIds (from before reconnect)
+    if (v.previousSocketIds && v.previousSocketIds.includes(socketId)) {
       return { visitor: v, currentSocketId: sid };
     }
   }
@@ -349,9 +353,15 @@ io.on("connection", (socket) => {
 
     if (existingVisitor) {
       // Update existing visitor with new socketId
+      // Keep track of previous socketIds so admin can still find this visitor
+      const prevSocketIds = existingVisitor.previousSocketIds || [];
+      if (existingVisitor.socketId && existingVisitor.socketId !== socket.id) {
+        prevSocketIds.push(existingVisitor.socketId);
+      }
       visitor = {
         ...existingVisitor,
         socketId: socket.id,
+        previousSocketIds: prevSocketIds.slice(-5), // Keep last 5 socketIds
         isConnected: true,
         sessionStartTime: Date.now(),
       };
