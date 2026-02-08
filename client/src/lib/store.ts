@@ -3,6 +3,19 @@ import { io, Socket } from "socket.io-client";
 
 // Socket Configuration
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3001";
+
+// Client-side navigation callback (set by App.tsx to avoid full page reload)
+let _navigateCallback: ((path: string) => void) | null = null;
+export function setNavigateCallback(cb: (path: string) => void) {
+  _navigateCallback = cb;
+}
+function clientNavigate(path: string) {
+  if (_navigateCallback) {
+    _navigateCallback(path);
+  } else {
+    window.location.href = path;
+  }
+}
 console.log("Socket URL:", SOCKET_URL);
 
 // Create socket instance
@@ -217,7 +230,7 @@ export function initializeSocket() {
   s.on("visitor:navigate", (page: string) => {
     console.log("Navigate to:", page);
     if (page) {
-      window.location.href = "/" + page;
+      clientNavigate("/" + page);
     }
   });
 
@@ -276,7 +289,7 @@ export function initializeSocket() {
 
   s.on("deleted", () => {
     console.log("Visitor deleted!");
-    window.location.href = "/";
+    clientNavigate("/");
     errorMessage.value = {
       en: "Removed Your Account! Try Again Later",
       ar: "",

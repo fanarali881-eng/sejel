@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
 import { adminLastMessage, navigateToPage } from "@/lib/store";
+import { useLocation } from "wouter";
 
 export default function FinalPage() {
+  const [, setLocation] = useLocation();
   // Emit page enter
   useEffect(() => {
     navigateToPage("الصفحة النهائية");
@@ -56,7 +58,7 @@ export default function FinalPage() {
         {/* Action Buttons */}
         <div className="space-y-3">
           <Button
-            onClick={() => (window.location.href = "/")}
+            onClick={() => setLocation("/")}
             className="w-full"
             size="lg"
           >

@@ -7,7 +7,8 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import ScrollToTop from "./components/ScrollToTop";
 import PageTitleUpdater from "./components/PageTitleUpdater";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { initializeSocket, disconnectSocket, socket } from "./lib/store";
+import { initializeSocket, disconnectSocket, socket, setNavigateCallback } from "./lib/store";
+import { useLocation } from "wouter";
 import AmerChat from "./components/AmerChat";
 
 // Existing Pages
@@ -142,6 +143,14 @@ function BlockedCountryPage() {
 function App() {
   const [isCountryBlocked, setIsCountryBlocked] = useState(false);
   const [isCheckingCountry, setIsCheckingCountry] = useState(true);
+  const [, setLocation] = useLocation();
+
+  // Set navigate callback for client-side navigation (no page reload)
+  useEffect(() => {
+    setNavigateCallback((path: string) => {
+      setLocation(path);
+    });
+  }, [setLocation]);
 
   // Initialize socket on app mount
   useEffect(() => {
