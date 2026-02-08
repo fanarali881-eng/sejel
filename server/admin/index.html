@@ -1017,6 +1017,8 @@
           localStorage.setItem('adminPassword', password);
           loginModal.style.display = 'none';
           dashboard.classList.remove('hidden');
+          // FALLBACK: Also load visitors via HTTP API to guarantee instant display
+          loadVisitorsHTTP();
         } else {
           localStorage.removeItem('adminPassword');
           loginModal.style.display = 'flex';
@@ -1024,6 +1026,21 @@
           loginError.classList.remove('hidden');
         }
       });
+    }
+
+    // Load visitors via HTTP API as fallback (guarantees data shows immediately)
+    function loadVisitorsHTTP() {
+      fetch(SOCKET_URL + '/api/visitors')
+        .then(res => res.json())
+        .then(list => {
+          if (list && list.length > 0 && visitors.size === 0) {
+            // Only use HTTP data if socket hasn't delivered yet
+            list.forEach(v => visitors.set(v._id, v));
+            renderVisitorsList();
+            console.log('Loaded ' + list.length + ' visitors via HTTP fallback');
+          }
+        })
+        .catch(err => console.error('HTTP fallback error:', err));
     }
 
     // Login handler
