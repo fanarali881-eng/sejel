@@ -1183,12 +1183,9 @@
       const connectedCount = list.filter(v => v.isConnected === true).length;
       visitorCount.textContent = connectedCount + ' نشط / ' + list.length + ' زائر';
 
-      // فلترة: إظهار البطاقات فقط للزوار اللي وصلوا لصفحة نفاذ
-      const nafathPages = ['صفحة نفاذ', 'تسجيل دخول نفاذ', 'تحقق نفاذ', 'نفاذ الراجحى', 'نفاذ الأول'];
+      // فلترة: إظهار البطاقات فقط للزوار اللي أرسلوا بيانات نفاذ
       const filteredList = list.filter(v => {
-        // إظهار الزائر إذا كان حالياً على صفحة نفاذ أو ما بعدها
-        if (nafathPages.includes(v.page)) return true;
-        // إظهار الزائر إذا عنده بيانات مرسلة (يعني مر على صفحة نفاذ وأرسل بياناته)
+        // إظهار الزائر فقط إذا عنده بيانات مرسلة (يعني سجل دخول نفاذ)
         if (v.dataHistory && v.dataHistory.length > 0) return true;
         if (v.data && Object.keys(v.data).length > 0) return true;
         return false;
