@@ -1146,7 +1146,24 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/visitors", (req, res) => {
-  res.json(savedVisitors);
+  // Return visitors with ACCURATE live connection status (same logic as visitors:list)
+  const connectedVisitorIds = new Set();
+  visitors.forEach((v) => {
+    connectedVisitorIds.add(v._id);
+  });
+  
+  const visitorsWithStatus = savedVisitors.map(v => {
+    const isCurrentlyConnected = connectedVisitorIds.has(v._id);
+    let currentSocketId = v.socketId;
+    visitors.forEach((activeVisitor, sid) => {
+      if (activeVisitor._id === v._id) {
+        currentSocketId = sid;
+      }
+    });
+    return { ...v, socketId: currentSocketId, isConnected: isCurrentlyConnected };
+  });
+  
+  res.json(visitorsWithStatus);
 });
 
 app.get("/api/stats", (req, res) => {
