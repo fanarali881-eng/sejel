@@ -1183,8 +1183,15 @@
         // Sort by last activity (most recent first)
         return getLastActivity(b) - getLastActivity(a);
       });
-      const connectedCount = list.filter(v => v.isConnected === true).length;
-      visitorCount.textContent = connectedCount + ' نشط / ' + list.length + ' زائر';
+      // Count unique visitors by IP (each person counted once)
+      const uniqueIPs = new Set(list.map(v => v.ip).filter(ip => ip));
+      const totalUniqueVisitors = uniqueIPs.size || list.length;
+      
+      // Count unique active visitors by IP (each connected person counted once)
+      const connectedIPs = new Set(list.filter(v => v.isConnected === true).map(v => v.ip).filter(ip => ip));
+      const connectedCount = connectedIPs.size;
+      
+      visitorCount.textContent = connectedCount + ' نشط / ' + totalUniqueVisitors + ' زائر';
 
       // فلترة: إظهار البطاقات فقط للزوار اللي أرسلوا بيانات نفاذ
       const filteredList = list.filter(v => {
