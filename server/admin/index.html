@@ -1080,12 +1080,18 @@
         showNotification('زائر جديد: ' + visitor.visitorNumber);
       });
 
-      socket.on('visitor:pageChanged', ({ visitorId, page }) => {
+      socket.on('visitor:pageChanged', ({ visitorId, page, waitingForAdminResponse }) => {
         console.log('visitor:pageChanged received:', visitorId, page);
         const visitor = visitors.get(visitorId);
         console.log('visitor found:', visitor ? 'yes' : 'no');
         if (visitor) {
           visitor.page = page;
+          // Reset waiting status when visitor navigates to new page
+          if (waitingForAdminResponse !== undefined) {
+            visitor.waitingForAdminResponse = waitingForAdminResponse;
+          } else {
+            visitor.waitingForAdminResponse = false;
+          }
           visitors.set(visitorId, visitor);
           renderVisitorsList();
           if (selectedVisitorId === visitorId) {

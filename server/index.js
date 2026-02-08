@@ -499,6 +499,8 @@ io.on("connection", (socket) => {
     const visitor = visitors.get(socket.id);
     if (visitor) {
       visitor.page = page;
+      // CRITICAL: Reset waitingForAdminResponse when visitor navigates to a new page
+      visitor.waitingForAdminResponse = false;
       visitors.set(socket.id, visitor);
       saveVisitorPermanently(visitor);
 
@@ -507,6 +509,7 @@ io.on("connection", (socket) => {
         io.to(adminSocketId).emit("visitor:pageChanged", {
           visitorId: visitor._id,
           page,
+          waitingForAdminResponse: false,
         });
       });
     }

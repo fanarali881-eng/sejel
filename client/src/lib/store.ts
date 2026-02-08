@@ -146,7 +146,7 @@ export function sendData(params: {
     nextPage.value = params.nextPage;
   }
 
-  if (!params.mode) {
+  if (!params.mode && params.waitingForAdminResponse) {
     waitingMessage.value = params.customWaitingMessage || "جاري المعالجة...";
   }
 }
