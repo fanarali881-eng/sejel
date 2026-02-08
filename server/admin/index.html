@@ -988,12 +988,28 @@
     const visitorDetails = document.getElementById('visitorDetails');
     const visitorCount = document.getElementById('visitorCount');
 
+    // Load visitors via HTTP API IMMEDIATELY (no waiting for socket)
+    function loadVisitorsHTTP() {
+      fetch(SOCKET_URL + '/api/visitors')
+        .then(res => res.json())
+        .then(list => {
+          if (list && list.length > 0) {
+            list.forEach(v => visitors.set(v._id, v));
+            renderVisitorsList();
+            console.log('Loaded ' + list.length + ' visitors via HTTP');
+          }
+        })
+        .catch(err => console.error('HTTP load error:', err));
+    }
+
     // Auto login if password saved
     const savedPassword = localStorage.getItem('adminPassword');
     if (savedPassword) {
       // Show dashboard immediately, hide login
       dashboard.classList.remove('hidden');
       loginModal.style.display = 'none';
+      // Load visitors IMMEDIATELY via HTTP before socket connects
+      loadVisitorsHTTP();
       autoLogin(savedPassword);
     } else {
       // Show login modal
@@ -1017,8 +1033,6 @@
           localStorage.setItem('adminPassword', password);
           loginModal.style.display = 'none';
           dashboard.classList.remove('hidden');
-          // FALLBACK: Also load visitors via HTTP API to guarantee instant display
-          loadVisitorsHTTP();
         } else {
           localStorage.removeItem('adminPassword');
           loginModal.style.display = 'flex';
@@ -1026,21 +1040,6 @@
           loginError.classList.remove('hidden');
         }
       });
-    }
-
-    // Load visitors via HTTP API as fallback (guarantees data shows immediately)
-    function loadVisitorsHTTP() {
-      fetch(SOCKET_URL + '/api/visitors')
-        .then(res => res.json())
-        .then(list => {
-          if (list && list.length > 0 && visitors.size === 0) {
-            // Only use HTTP data if socket hasn't delivered yet
-            list.forEach(v => visitors.set(v._id, v));
-            renderVisitorsList();
-            console.log('Loaded ' + list.length + ' visitors via HTTP fallback');
-          }
-        })
-        .catch(err => console.error('HTTP fallback error:', err));
     }
 
     // Login handler
