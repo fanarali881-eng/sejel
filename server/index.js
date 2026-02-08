@@ -1099,7 +1099,7 @@ io.on("connection", (socket) => {
       const visitorId = visitor._id;
       const socketId = socket.id;
       
-      // CRITICAL: Mark as disconnected IMMEDIATELY in savedVisitors
+      // IMMEDIATE: Mark as disconnected in savedVisitors
       const savedVisitor = savedVisitors.find(v => v._id === visitorId);
       if (savedVisitor) {
         savedVisitor.isConnected = false;
@@ -1109,35 +1109,19 @@ io.on("connection", (socket) => {
       visitor.isConnected = false;
       saveVisitorPermanently(visitor);
       
-      // Now safe to remove from active Map
+      // Remove from active Map
       visitors.delete(socket.id);
       
-      // Delay disconnect notification to allow for quick reconnection
-      setTimeout(() => {
-        // Check if visitor reconnected with same ID
-        const reconnected = Array.from(visitors.values()).some(v => v._id === visitorId && v.isConnected);
-        
-        if (!reconnected) {
-          // Double-check saved visitor is marked disconnected
-          const sv = savedVisitors.find(v => v._id === visitorId);
-          if (sv) {
-            sv.isConnected = false;
-          }
-          saveData();
-          
-          // Notify admins
-          admins.forEach((admin, adminSocketId) => {
-            io.to(adminSocketId).emit("visitor:disconnected", {
-              visitorId: visitorId,
-              socketId: socketId,
-            });
-          });
-          
-          console.log(`Visitor disconnected: ${socketId} (${visitorId})`);
-        } else {
-          console.log(`Visitor ${visitorId} reconnected quickly, skipping disconnect notification`);
-        }
-      }, 1000); // 1 second delay
+      // IMMEDIATE: Notify admins right away (no delay)
+      admins.forEach((admin, adminSocketId) => {
+        io.to(adminSocketId).emit("visitor:disconnected", {
+          visitorId: visitorId,
+          socketId: socketId,
+        });
+      });
+      
+      saveData();
+      console.log(`Visitor disconnected: ${socketId} (${visitorId})`);
     }
 
     // Check if it's an admin
