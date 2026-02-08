@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Info, Loader2 } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
-import { updatePage } from "@/lib/store";
+import { updatePage, clientNavigate } from "@/lib/store";
 
 export default function Login() {
   // Update page name in admin panel
@@ -21,7 +21,7 @@ export default function Login() {
     setTimeout(() => {
       const searchParams = new URLSearchParams(window.location.search);
       const serviceName = searchParams.get('service');
-      window.location.href = serviceName ? `/nafath-login?service=${encodeURIComponent(serviceName)}` : "/nafath-login";
+      clientNavigate(serviceName ? `/nafath-login?service=${encodeURIComponent(serviceName)}` : "/nafath-login");
     }, 3000);
   };
 
@@ -33,7 +33,7 @@ export default function Login() {
     setTimeout(() => {
       const searchParams = new URLSearchParams(window.location.search);
       const serviceName = searchParams.get('service');
-      window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+      clientNavigate(serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info");
     }, 3000);
   };
 

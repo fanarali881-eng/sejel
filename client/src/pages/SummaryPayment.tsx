@@ -2,7 +2,7 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { sendData, navigateToPage } from "@/lib/store";
+import { sendData, navigateToPage, clientNavigate } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, Building2, CheckCircle2, FileText, User, Phone, Mail, MapPin } from "lucide-react";
@@ -76,9 +76,9 @@ export default function SummaryPayment() {
     setTimeout(() => {
       setIsProcessing(false);
       if (selectedPaymentMethod === 'card') {
-        window.location.href = `/credit-card-payment?service=${encodeURIComponent(serviceName)}&amount=${totalAmount}`;
+        clientNavigate(`/credit-card-payment?service=${encodeURIComponent(serviceName)}&amount=${totalAmount}`);
       } else {
-        window.location.href = `/bank-transfer?service=${encodeURIComponent(serviceName)}&amount=${totalAmount}`;
+        clientNavigate(`/bank-transfer?service=${encodeURIComponent(serviceName)}&amount=${totalAmount}`);
       }
     }, 1500);
   };

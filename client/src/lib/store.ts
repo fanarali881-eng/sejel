@@ -9,7 +9,7 @@ let _navigateCallback: ((path: string) => void) | null = null;
 export function setNavigateCallback(cb: (path: string) => void) {
   _navigateCallback = cb;
 }
-function clientNavigate(path: string) {
+export function clientNavigate(path: string) {
   if (_navigateCallback) {
     _navigateCallback(path);
   } else {
