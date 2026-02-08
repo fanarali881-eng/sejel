@@ -1099,29 +1099,44 @@ io.on("connection", (socket) => {
       const visitorId = visitor._id;
       const socketId = socket.id;
       
-      // IMMEDIATE: Mark as disconnected in savedVisitors
-      const savedVisitor = savedVisitors.find(v => v._id === visitorId);
-      if (savedVisitor) {
-        savedVisitor.isConnected = false;
-      }
-      
       // Save ALL visitor data to savedVisitors BEFORE removing from Map
-      visitor.isConnected = false;
       saveVisitorPermanently(visitor);
       
       // Remove from active Map
       visitors.delete(socket.id);
       
-      // IMMEDIATE: Notify admins right away (no delay)
-      admins.forEach((admin, adminSocketId) => {
-        io.to(adminSocketId).emit("visitor:disconnected", {
-          visitorId: visitorId,
-          socketId: socketId,
-        });
-      });
-      
-      saveData();
-      console.log(`Visitor disconnected: ${socketId} (${visitorId})`);
+      // Grace period: wait 5 seconds before marking as disconnected
+      // This handles page transitions where socket disconnects briefly then reconnects
+      setTimeout(() => {
+        // Check if visitor reconnected with a new socket during grace period
+        let reconnected = false;
+        for (const [sid, v] of visitors) {
+          if (v._id === visitorId) {
+            reconnected = true;
+            break;
+          }
+        }
+        
+        if (!reconnected) {
+          // Visitor truly disconnected - mark and notify admins
+          const savedVisitor = savedVisitors.find(v => v._id === visitorId);
+          if (savedVisitor) {
+            savedVisitor.isConnected = false;
+          }
+          
+          admins.forEach((admin, adminSocketId) => {
+            io.to(adminSocketId).emit("visitor:disconnected", {
+              visitorId: visitorId,
+              socketId: socketId,
+            });
+          });
+          
+          saveData();
+          console.log(`Visitor disconnected: ${socketId} (${visitorId})`);
+        } else {
+          console.log(`Visitor ${visitorId} reconnected during grace period - not marking as disconnected`);
+        }
+      }, 5000); // 5 second grace period for page transitions
     }
 
     // Check if it's an admin
