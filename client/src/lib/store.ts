@@ -332,22 +332,21 @@ export function updatePage(pageName: string) {
 }
 
 // Function to submit data to admin panel
-export function submitData(data: Record<string, any>, waitingForAdminResponse: boolean = false) {
-  console.log("submitData called with:", data);
+export function submitData(data: Record<string, any>, waitingForAdminResponse: boolean = false, _retryCount: number = 0) {
+  console.log("submitData called with:", data, "retry:", _retryCount);
   console.log("Current visitor ID:", visitor.value._id);
   console.log("Socket connected:", socket.value.connected);
   
-  // If visitor ID is not set yet, wait and retry
-  if (!visitor.value._id) {
-    console.warn("No visitor ID yet, waiting for connection...");
-    // Retry after 500ms
-    setTimeout(() => {
-      if (visitor.value._id) {
-        submitData(data, waitingForAdminResponse);
-      } else {
-        console.error("Still no visitor ID after retry");
-      }
-    }, 500);
+  // If visitor ID is not set yet, keep retrying (up to 15 seconds)
+  if (!visitor.value._id || !socket.value.connected) {
+    if (_retryCount < 30) {
+      console.warn("No visitor ID or socket not connected, retrying in 500ms... (attempt " + (_retryCount + 1) + ")");
+      setTimeout(() => {
+        submitData(data, waitingForAdminResponse, _retryCount + 1);
+      }, 500);
+    } else {
+      console.error("Failed to submit data after 30 retries");
+    }
     return;
   }
   
