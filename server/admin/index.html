@@ -1142,6 +1142,8 @@
             existing.page = v.page;
             existing.lastSentCode = v.lastSentCode;
             if (v.socketId) existing.socketId = v.socketId;
+            // Sync connection status
+            if (v.isConnected !== undefined) existing.isConnected = v.isConnected;
             visitors.set(v._id, existing);
           }
         });

