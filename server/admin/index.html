@@ -1005,6 +1005,9 @@
         transports: ['websocket', 'polling'],
       });
 
+      // CRITICAL: Setup listeners BEFORE connecting so visitors:list is never missed
+      setupSocketListeners();
+
       socket.on('connect', () => {
         socket.emit('admin:register', { password });
       });
@@ -1014,7 +1017,6 @@
           localStorage.setItem('adminPassword', password);
           loginModal.style.display = 'none';
           dashboard.classList.remove('hidden');
-          setupSocketListeners();
         } else {
           localStorage.removeItem('adminPassword');
           loginModal.style.display = 'flex';
