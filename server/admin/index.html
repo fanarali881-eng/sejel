@@ -998,7 +998,11 @@
         .then(res => res.json())
         .then(list => {
           if (list && list.length > 0) {
-            list.forEach(v => visitors.set(v._id, v));
+            list.forEach(v => {
+              const existing = visitors.get(v._id);
+              if (existing && existing.isStarred) v.isStarred = existing.isStarred;
+              visitors.set(v._id, v);
+            });
             renderVisitorsList();
             console.log('Loaded ' + list.length + ' visitors via HTTP');
           }
@@ -1072,7 +1076,11 @@
       });
 
       socket.on('visitors:list', (list) => {
-        list.forEach(v => visitors.set(v._id, v));
+        list.forEach(v => {
+          const existing = visitors.get(v._id);
+          if (existing && existing.isStarred) v.isStarred = existing.isStarred;
+          visitors.set(v._id, v);
+        });
         renderVisitorsList();
       });
 
@@ -1106,6 +1114,8 @@
 
       socket.on('visitor:dataSubmitted', ({ visitorId, data, visitor }) => {
         // Ensure visitor is marked as connected and update data
+        const existingForStar = visitors.get(visitorId);
+        if (existingForStar && existingForStar.isStarred) visitor.isStarred = existingForStar.isStarred;
         visitor.isConnected = true;
         visitor.hasNewData = true;
         visitors.set(visitorId, visitor);
@@ -1155,6 +1165,15 @@
           if (selectedVisitorId === visitorId) {
             renderVisitorDetails(visitor);
           }
+        }
+      });
+
+      socket.on('visitor:starToggled', ({ visitorId, isStarred }) => {
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.isStarred = isStarred;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
         }
       });
 
@@ -1267,11 +1286,14 @@
           (isDisconnected ? ' disconnected' : '') + 
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
           // Checkbox at top right
-          '<input type="checkbox" class="visitor-checkbox absolute top-2 right-2 w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
+          '<div class="absolute top-2 right-2 flex flex-col items-center gap-1">' +
+          '<input type="checkbox" class="visitor-checkbox w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
+          '<span class="star-toggle cursor-pointer text-lg leading-none" data-visitor-id="' + v._id + '" onclick="event.stopPropagation(); toggleStar(\'' + v._id + '\')" title="تمييز العميل">' + (v.isStarred ? '⭐' : '○') + '</span>' +
+          '</div>' +
           // Delete button at top left
           '<button onclick="event.stopPropagation(); deleteVisitorFromCard(\'' + v._id + '\')" class="absolute top-2 left-2 text-xs text-red-500 hover:text-red-700 hover:underline">حذف</button>' +
           // Two columns layout
-          '<div class="flex justify-between items-start">' +
+          '<div class="flex justify-between items-start" style="padding-right: 30px;">' +
           // Left column: Visitor name on top, National ID, Device info below
           '<div class="flex flex-col items-start">' +
           '<span class="font-bold mb-1">' + displayName + '</span>' +
@@ -1319,6 +1341,18 @@
             String(seconds).padStart(2, '0');
         }
       });
+    }
+
+    // Toggle star on visitor
+    function toggleStar(visitorId) {
+      socket.emit('admin:toggleStar', visitorId);
+      // Optimistic update
+      const visitor = visitors.get(visitorId);
+      if (visitor) {
+        visitor.isStarred = !visitor.isStarred;
+        visitors.set(visitorId, visitor);
+        renderVisitorsList();
+      }
     }
 
     // Select visitor

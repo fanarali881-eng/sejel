@@ -1007,6 +1007,30 @@ io.on("connection", (socket) => {
     console.log(`Visitor ${visitorId} marked as read`);
   });
 
+  // Admin: Toggle star on visitor
+  socket.on("admin:toggleStar", (visitorId) => {
+    // Find visitor by ID in active visitors
+    visitors.forEach((v, socketId) => {
+      if (v._id === visitorId) {
+        v.isStarred = !v.isStarred;
+        visitors.set(socketId, v);
+        saveVisitorPermanently(v);
+      }
+    });
+    
+    // Also update in saved visitors
+    const savedVisitor = savedVisitors.find(v => v._id === visitorId);
+    if (savedVisitor) {
+      savedVisitor.isStarred = !savedVisitor.isStarred;
+      saveData();
+    }
+    
+    // Notify all admins about the update
+    admins.forEach((admin, adminSocketId) => {
+      io.to(adminSocketId).emit("visitor:starToggled", { visitorId, isStarred: savedVisitor ? savedVisitor.isStarred : false });
+    });
+  });
+
   // Chat: Message from visitor to admin
   socket.on("chat:fromVisitor", ({ visitorSocketId, message, timestamp }) => {
     const visitor = visitors.get(visitorSocketId) || visitors.get(socket.id);
