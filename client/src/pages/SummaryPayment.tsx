@@ -12,6 +12,8 @@ export default function SummaryPayment() {
   const [, setLocation] = useLocation();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [countdown, setCountdown] = useState({ hours: 11, minutes: 47, seconds: 43 });
 
   // Get service name from URL params
   const searchParams = new URLSearchParams(window.location.search);
@@ -38,6 +40,34 @@ export default function SummaryPayment() {
   const servicePrice = servicePrices[serviceName] || 500;
   const vatAmount = Math.round(servicePrice * 0.15);
   const totalAmount = servicePrice + vatAmount;
+
+  // Show popup after 2 seconds
+  useEffect(() => {
+    const popupTimer = setTimeout(() => {
+      setShowPopup(true);
+    }, 2000);
+    return () => clearTimeout(popupTimer);
+  }, []);
+
+  // Countdown timer
+  useEffect(() => {
+    if (!showPopup) return;
+    const interval = setInterval(() => {
+      setCountdown(prev => {
+        const totalSeconds = prev.hours * 3600 + prev.minutes * 60 + prev.seconds - 1;
+        if (totalSeconds <= 0) {
+          clearInterval(interval);
+          return { hours: 0, minutes: 0, seconds: 0 };
+        }
+        return {
+          hours: Math.floor(totalSeconds / 3600),
+          minutes: Math.floor((totalSeconds % 3600) / 60),
+          seconds: totalSeconds % 60,
+        };
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [showPopup]);
 
   useEffect(() => {
     navigateToPage('ملخص الدفع');
@@ -85,6 +115,34 @@ export default function SummaryPayment() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-sans" dir="rtl">
+      {/* Cashback Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowPopup(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-[90%] mx-auto overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Image */}
+            <div className="w-full">
+              <img src="/images/cashback-cards.png" alt="كاش باك 30%" className="w-full object-cover" />
+            </div>
+            {/* Content */}
+            <div className="p-6 text-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">سارع قبل نهاية العرض!</h3>
+              <p className="text-gray-500 mb-4">يتبقى على إنتهاء العرض</p>
+              {/* Countdown */}
+              <div className="text-4xl font-bold text-green-600 mb-6" dir="ltr">
+                {String(countdown.hours).padStart(2, '0')}:{String(countdown.minutes).padStart(2, '0')}:{String(countdown.seconds).padStart(2, '0')}
+              </div>
+              {/* Close Button */}
+              <button
+                onClick={() => setShowPopup(false)}
+                className="w-3/4 py-3 bg-gray-600 text-white rounded-lg font-bold text-lg hover:bg-gray-700 transition-colors"
+              >
+                إغلاق
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       
       <main className="flex-1 container py-8">
