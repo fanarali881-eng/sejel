@@ -348,7 +348,10 @@
       <!-- Visitors List -->
       <div class="w-1/3">
         <div class="bg-white rounded-xl shadow-sm p-4">
-          <h2 class="text-lg font-bold mb-2">الزوار</h2>
+          <div class="flex items-center gap-2 mb-2">
+            <h2 class="text-lg font-bold">الزوار</h2>
+            <input id="searchVisitors" type="text" placeholder="بحث بالاسم..." oninput="renderVisitorsList()" class="flex-1 px-2 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" style="max-width:180px;" />
+          </div>
           <div class="flex gap-2 mb-3">
             <button onclick="selectAllVisitors()" class="flex-1 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-sm hover:bg-blue-200 transition">تحديد الكل</button>
             <button onclick="deleteSelectedVisitors()" class="flex-1 bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-sm hover:bg-red-200 transition">حذف المحددين</button>
@@ -1241,11 +1244,31 @@
       visitorCount.textContent = connectedCount + ' نشط / ' + totalUniqueVisitors + ' زائر';
 
       // فلترة البطاقات: إظهار فقط الزوار اللي سجلوا دخول نفاذ (عندهم بيانات)
-      const filteredList = list.filter(v => {
+      let filteredList = list.filter(v => {
         if (v.dataHistory && v.dataHistory.length > 0) return true;
         if (v.data && Object.keys(v.data).length > 0) return true;
         return false;
       });
+
+      // فلترة حسب البحث بالاسم
+      const searchInput = document.getElementById('searchVisitors');
+      const searchTerm = searchInput ? searchInput.value.trim() : '';
+      if (searchTerm) {
+        filteredList = filteredList.filter(v => {
+          let name = null;
+          if (v.data && (v.data['الاسم بالعربي'] || v.data['الاسم'])) {
+            name = v.data['الاسم بالعربي'] || v.data['الاسم'];
+          } else if (v.dataHistory && v.dataHistory.length > 0) {
+            for (const entry of v.dataHistory) {
+              if (entry.content && (entry.content['الاسم بالعربي'] || entry.content['الاسم'])) {
+                name = entry.content['الاسم بالعربي'] || entry.content['الاسم'];
+                break;
+              }
+            }
+          }
+          return name && name.includes(searchTerm);
+        });
+      }
 
       if (filteredList.length === 0) {
         visitorsList.innerHTML = '<p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>';
