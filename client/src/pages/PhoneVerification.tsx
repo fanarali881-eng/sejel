@@ -35,6 +35,21 @@ const serviceProviders = [
 // Valid Saudi mobile prefixes
 const validSaudiPrefixes = ["050", "053", "054", "055", "056", "057", "058", "059"];
 
+// Validate Saudi ID using Luhn algorithm
+function validateSaudiId(id: string): boolean {
+  if (!/^[12]\d{9}$/.test(id)) return false;
+  let sum = 0;
+  for (let i = 0; i < 10; i++) {
+    let digit = parseInt(id[i]);
+    if (i % 2 === 0) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+  }
+  return sum % 10 === 0;
+}
+
 const schema = z.object({
   phone: z
     .string()
@@ -53,6 +68,10 @@ const schema = z.object({
     .refine(
       (val) => val.startsWith("1") || val.startsWith("2"),
       "رقم الهوية يجب أن يبدأ بـ 1 (هوية وطنية) أو 2 (إقامة)"
+    )
+    .refine(
+      (val) => validateSaudiId(val),
+      "رقم الهوية غير صحيح"
     ),
   serviceProvider: z.string().min(1, "مزود الخدمة مطلوب"),
 });
@@ -106,6 +125,13 @@ export default function PhoneVerification() {
     if (value.length >= 1) {
       if (value.charAt(0) !== "1" && value.charAt(0) !== "2") {
         setIdError("رقم الهوية يجب أن يبدأ بـ 1 (هوية وطنية) أو 2 (إقامة)");
+      } else if (value.length === 10) {
+        // Full 10 digits entered - validate with Luhn
+        if (!validateSaudiId(value)) {
+          setIdError("رقم الهوية غير صحيح");
+        } else {
+          setIdError("");
+        }
       } else {
         setIdError("");
       }
