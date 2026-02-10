@@ -345,7 +345,13 @@ export default function PhoneVerification() {
               "إرسال رمز التحقق"
             )}
           </Button>
+
         </form>
+      </div>
+
+      {/* CST Logo */}
+      <div className="flex items-center justify-center mt-8">
+        <img src="/images/cst.png" alt="هيئة الاتصالات والفضاء والتقنية" className="h-12 object-contain" />
       </div>
     </PageLayout>
   );
