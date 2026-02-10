@@ -326,6 +326,7 @@ export const VISA_BINS: Record<string, BinInfo> = {
   '476815': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Signature' },
   '478295': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
   '478296': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+  '428331': { bank: 'ساب', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
   '414478': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
   '455058': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Gold' },
   '455340': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
