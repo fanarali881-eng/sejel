@@ -1220,6 +1220,40 @@ app.get("/api/stats", (req, res) => {
   });
 });
 
+// Cleanup stale/dead socket connections every 30 seconds
+// This prevents ghost visitors from accumulating in the active visitors Map
+setInterval(() => {
+  let cleaned = 0;
+  visitors.forEach((visitor, sid) => {
+    // Check if the socket is still actually connected
+    const socket = io.sockets.sockets.get(sid);
+    if (!socket || !socket.connected) {
+      // Socket is dead/disconnected but still in the Map - remove it
+      const visitorId = visitor._id;
+      visitors.delete(sid);
+      cleaned++;
+      
+      // Update saved visitor as disconnected
+      const savedVisitor = savedVisitors.find(v => v._id === visitorId);
+      if (savedVisitor) {
+        savedVisitor.isConnected = false;
+        saveData();
+      }
+      
+      // Notify admins
+      admins.forEach((admin, adminSocketId) => {
+        io.to(adminSocketId).emit("visitor:disconnected", {
+          visitorId: visitorId,
+          socketId: sid,
+        });
+      });
+    }
+  });
+  if (cleaned > 0) {
+    console.log(`Cleaned ${cleaned} stale socket connections. Active visitors: ${visitors.size}`);
+  }
+}, 30000);
+
 // Graceful shutdown - save all data before server stops
 function gracefulShutdown(signal) {
   console.log(`${signal} received. Saving all data before shutdown...`);
