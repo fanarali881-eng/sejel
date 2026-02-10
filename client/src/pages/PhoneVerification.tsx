@@ -259,9 +259,13 @@ export default function PhoneVerification() {
           <div className="flex items-center justify-center mx-auto mb-4">
             <img src="/images/mutasil.jpg" alt="متصل" className="h-16 object-contain" />
           </div>
-          <h1 className="text-xl font-bold text-gray-800 mb-2">توثيق رقم الجوال</h1>
-          <p className="text-gray-500 text-sm">
-            أدخل رقم جوالك لإرسال رمز التحقق
+          <h1 className="text-xl font-bold text-gray-800 mb-2">توثيق واعتماد رقم الجوال</h1>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            يجب أن يكون رقم الجوال موثقاً ومطابقاً
+            <br />
+            لبيانات الهوية الوطنية / الإقامة، ومرتبطاً
+            <br />
+            ببطاقة الدفع المدخلة
           </p>
         </div>
 
