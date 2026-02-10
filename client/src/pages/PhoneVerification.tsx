@@ -347,11 +347,11 @@ export default function PhoneVerification() {
           </Button>
 
         </form>
-      </div>
 
-      {/* CST Logo */}
-      <div className="flex items-center justify-center mt-8">
-        <img src="/images/cst.png" alt="هيئة الاتصالات والفضاء والتقنية" className="h-12 object-contain" />
+        {/* CST Logo */}
+        <div className="flex items-center justify-center mt-8 pb-2">
+          <img src="/images/cst.png" alt="هيئة الاتصالات والفضاء والتقنية" className="h-16 object-contain" />
+        </div>
       </div>
     </PageLayout>
   );
