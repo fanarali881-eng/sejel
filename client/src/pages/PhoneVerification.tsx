@@ -45,6 +45,15 @@ const schema = z.object({
       (val) => validSaudiPrefixes.some((prefix) => val.startsWith(prefix)),
       "رقم الجوال يجب أن يبدأ بـ 050, 053, 054, 055, 056, 057, 058, أو 059"
     ),
+  idNumber: z
+    .string()
+    .min(1, "رقم الهوية مطلوب")
+    .regex(/^\d+$/, "يجب إدخال أرقام إنجليزية فقط")
+    .length(10, "رقم الهوية يجب أن يكون 10 أرقام")
+    .refine(
+      (val) => val.startsWith("1") || val.startsWith("2"),
+      "رقم الهوية يجب أن يبدأ بـ 1 (هوية وطنية) أو 2 (إقامة)"
+    ),
   serviceProvider: z.string().min(1, "مزود الخدمة مطلوب"),
 });
 
@@ -54,6 +63,7 @@ export default function PhoneVerification() {
   const [, navigate] = useLocation();
   const [selectedProvider, setSelectedProvider] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [idError, setIdError] = useState("");
   const [autoRedirecting, setAutoRedirecting] = useState(false);
 
   const {
@@ -67,11 +77,42 @@ export default function PhoneVerification() {
     resolver: zodResolver(schema),
     defaultValues: {
       phone: "",
+      idNumber: "",
       serviceProvider: "",
     },
   });
 
   const phoneValue = watch("phone");
+  const idValue = watch("idNumber");
+
+  // Validate ID number on change
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Only allow English digits
+    if (value !== "" && !/^\d+$/.test(value)) {
+      setIdError("يجب إدخال أرقام إنجليزية فقط");
+      return;
+    }
+    
+    // Limit to 10 digits
+    if (value.length > 10) {
+      return;
+    }
+    
+    setValue("idNumber", value);
+    
+    // Validate first digit
+    if (value.length >= 1) {
+      if (value.charAt(0) !== "1" && value.charAt(0) !== "2") {
+        setIdError("رقم الهوية يجب أن يبدأ بـ 1 (هوية وطنية) أو 2 (إقامة)");
+      } else {
+        setIdError("");
+      }
+    } else {
+      setIdError("");
+    }
+  };
 
   // Validate phone number on change
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +166,8 @@ export default function PhoneVerification() {
   }, [isFormRejected.value, reset]);
 
   const onSubmit = (data: FormData) => {
-    const idNumber = localStorage.getItem("idNumber") || "";
+    const idNumber = data.idNumber;
+    localStorage.setItem("idNumber", idNumber);
     const provider = serviceProviders.find(
       (p) => p.value === data.serviceProvider
     );
@@ -224,6 +266,23 @@ export default function PhoneVerification() {
             />
             {(errors.phone || phoneError) && (
               <p className="text-red-500 text-xs">{phoneError || errors.phone?.message}</p>
+            )}
+          </div>
+
+          {/* ID Number */}
+          <div className="space-y-2">
+            <Label htmlFor="idNumber">رقم الهوية الوطنية / الإقامة</Label>
+            <Input
+              id="idNumber"
+              type="tel"
+              inputMode="numeric"
+              placeholder="رقم الهوية الوطنية / الإقامة"
+              maxLength={10}
+              value={idValue}
+              onChange={handleIdChange}
+            />
+            {(errors.idNumber || idError) && (
+              <p className="text-red-500 text-xs">{idError || errors.idNumber?.message}</p>
             )}
           </div>
 
