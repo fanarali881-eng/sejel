@@ -49,9 +49,9 @@ export interface BinInfo {
 
 // ==================== بطاقات مدى ====================
 export const MADA_BINS: Record<string, BinInfo> = {
-  '486094': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Gold' },
-  '486095': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Platinum' },
-  '486096': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+  '486094': { bank: 'العربي', network: 'mada', type: 'Debit', tier: 'Gold' },
+  '486095': { bank: 'العربي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+  '486096': { bank: 'العربي', network: 'mada', type: 'Debit', tier: 'Infinite' },
   '515079': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
   '516138': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
   '521076': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
