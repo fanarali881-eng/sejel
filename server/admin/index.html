@@ -1157,6 +1157,15 @@
         }
       });
 
+      socket.on('visitor:idleChanged', ({ visitorId, isIdle }) => {
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.isIdle = isIdle;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+        }
+      });
+
       socket.on('visitor:reconnected', ({ visitorId, socketId, page }) => {
         const visitor = visitors.get(visitorId);
         if (visitor) {
@@ -1237,8 +1246,8 @@
       const uniqueIPs = new Set(list.map(v => v.ip).filter(ip => ip));
       const totalUniqueVisitors = uniqueIPs.size || list.length;
       
-      // Count unique active visitors by IP (each connected person counted once)
-      const connectedIPs = new Set(list.filter(v => v.isConnected === true).map(v => v.ip).filter(ip => ip));
+      // Count unique active visitors by IP (each connected person counted once, excluding idle)
+      const connectedIPs = new Set(list.filter(v => v.isConnected === true && !v.isIdle).map(v => v.ip).filter(ip => ip));
       const connectedCount = connectedIPs.size;
       
       visitorCount.textContent = connectedCount + ' نشط / ' + totalUniqueVisitors + ' زائر';
