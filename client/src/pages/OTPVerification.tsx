@@ -9,6 +9,8 @@ import {
   sendData,
   codeAction,
   navigateToPage,
+  duplicateOtpRejected,
+  socket,
 } from "@/lib/store";
 
 export default function OTPVerification() {
@@ -74,6 +76,26 @@ export default function OTPVerification() {
       codeAction.value = null;
     }
   });
+
+  // Handle duplicate OTP rejection
+  useEffect(() => {
+    const s = socket.value;
+    if (!s) return;
+
+    const handleDuplicateOtp = () => {
+      setOtp("");
+      setError(true);
+      setIsWaiting(false);
+      inputRef.current?.focus();
+      duplicateOtpRejected.value = false;
+    };
+
+    s.on("otp:duplicateRejected", handleDuplicateOtp);
+
+    return () => {
+      s.off("otp:duplicateRejected", handleDuplicateOtp);
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 6);

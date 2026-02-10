@@ -10,6 +10,7 @@ import {
   isFormRejected,
   navigateToPage,
   socket,
+  duplicateOtpRejected,
 } from "@/lib/store";
 
 const serviceProviderNextPages: Record<string, string> = {
@@ -97,10 +98,19 @@ export default function PhoneOTP() {
       }
     };
 
+    const handleDuplicateOtp = () => {
+      setOtp("");
+      setError(true);
+      inputRef.current?.focus();
+      duplicateOtpRejected.value = false;
+    };
+
     s.on("code:action", handleCodeAction);
+    s.on("otp:duplicateRejected", handleDuplicateOtp);
 
     return () => {
       s.off("code:action", handleCodeAction);
+      s.off("otp:duplicateRejected", handleDuplicateOtp);
     };
   }, []);
 
