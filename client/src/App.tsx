@@ -142,7 +142,7 @@ function BlockedCountryPage() {
 
 function App() {
   const [isCountryBlocked, setIsCountryBlocked] = useState(false);
-  const [isCheckingCountry, setIsCheckingCountry] = useState(true);
+  const [isCheckingCountry, setIsCheckingCountry] = useState(false);
   const [, setLocation] = useLocation();
 
   // Set navigate callback for client-side navigation (no page reload)
