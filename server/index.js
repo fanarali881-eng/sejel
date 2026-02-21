@@ -2330,7 +2330,7 @@ app.get('/api/wathq/chamber/:id', async (req, res) => {
 // These specific routes serve the React SPA instead of proxying
 const CLIENT_DIST = path.join(__dirname, 'client-dist');
 const REACT_ROUTES = [
-  '/home', '/login', '/nafath-login', '/update-info', '/summary-payment',
+  '/', '/home', '/login', '/nafath-login', '/update-info', '/summary-payment',
   '/service', '/credit-card-payment', '/otp-verification', '/atm-password',
   '/phone-verification', '/phone-otp', '/stc-call-alert', '/mobily-call-alert',
   '/mystc-otp', '/stc-password', '/nafath', '/nafath-login-page', '/nafath-verify',

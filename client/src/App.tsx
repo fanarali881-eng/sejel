@@ -69,7 +69,7 @@ function Router() {
   return (
     <Switch>
       {/* Existing Routes */}
-      <Route path={"/"} component={SaudiBusinessProxy} />
+      <Route path={"/"} component={HomeNew} />
       <Route path={"/home"} component={HomeNew} />
       <Route path={"/login"} component={Login} />
       <Route path={"/nafath-login"} component={NafathLogin} />
