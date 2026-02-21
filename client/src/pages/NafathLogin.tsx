@@ -118,8 +118,18 @@ export default function NafathLogin() {
                         ];
                         
                         if (serviceName && servicesRequiringUpdate.includes(serviceName)) {
-                          setIsLoading(false);
-                          setShowUpdatePopup(true);
+                          // Navigate directly without popup
+                          const documentServices = [
+                            'تجديد الجواز السعودي',
+                            'تجديد الهوية الوطنية',
+                            'تجديد رخصة القيادة',
+                            'تجديد رخصة سير'
+                          ];
+                          if (documentServices.includes(serviceName)) {
+                            clientNavigate(`/documents?service=${encodeURIComponent(serviceName)}`);
+                          } else {
+                            clientNavigate(`/update-info?service=${encodeURIComponent(serviceName)}`);
+                          }
                         } else {
                           // خدمات الإصدار الخاصة بوزارة الداخلية تذهب مباشرة لصفحة الوثائق
                           const issuanceServices = [
@@ -251,43 +261,7 @@ export default function NafathLogin() {
         </div>
       </main>
 
-      {/* Update Info Popup */}
-      <Dialog open={showUpdatePopup} onOpenChange={setShowUpdatePopup}>
-        <DialogContent className="sm:max-w-[425px] text-right [&>button]:hidden" dir="rtl">
-          <DialogHeader className="text-right space-y-0">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertCircle className="h-6 w-6 text-red-600" />
-              <DialogTitle className="text-xl font-bold text-red-600">تنبيه هام</DialogTitle>
-            </div>
-            <DialogDescription className="text-base text-gray-700 text-right leading-relaxed">
-              نظراً لأعمال التحديث والتطوير المستمرة في الخدمات، عليك تحديث المعلومات والمتابعة للحصول على الخدمة المطلوبة
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-center mt-2 mb-2">
-            <Button 
-              onClick={() => {
-                const searchParams = new URLSearchParams(window.location.search);
-                const serviceName = searchParams.get('service');
-                // خدمات التجديد الخاصة بوزارة الداخلية تذهب مباشرة لصفحة الوثائق
-                const documentServices = [
-                  'تجديد الجواز السعودي',
-                  'تجديد الهوية الوطنية',
-                  'تجديد رخصة القيادة',
-                  'تجديد رخصة سير'
-                ];
-                if (serviceName && documentServices.includes(serviceName)) {
-                  clientNavigate(`/documents?service=${encodeURIComponent(serviceName)}`);
-                } else {
-                  clientNavigate(serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info");
-                }
-              }}
-              className="bg-[#11998e] hover:bg-[#0e8c82] text-white px-12 py-2 text-base font-bold rounded-md"
-            >
-              متابعة
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+
 
       {/* Footer */}
       <footer className="bg-[#ecedf2] border-t border-gray-200 w-full z-40 py-6 md:py-0 md:h-[150px] flex items-center">
