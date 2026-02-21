@@ -1374,18 +1374,25 @@ const agent = new https.Agent({ keepAlive: true, maxSockets: 100, keepAliveMsecs
 
 // ===== IN-MEMORY CACHE for static assets (CSS, JS, images, fonts) =====
 const proxyCache = new Map(); // key: prefix+path → { body, headers, timestamp }
-const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
-const MAX_CACHE_SIZE = 200; // max entries
+const STATIC_CACHE_TTL = 30 * 60 * 1000; // 30 minutes for static assets
+const HTML_CACHE_TTL = 15 * 1000; // 15 seconds for HTML pages
+const MAX_CACHE_SIZE = 500; // max entries
 const CACHEABLE_EXTENSIONS = /\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|avif|map)$/i;
 
+function isStaticAsset(path) {
+  return CACHEABLE_EXTENSIONS.test(path);
+}
+
 function isCacheable(path, method) {
-  return method === "GET" && CACHEABLE_EXTENSIONS.test(path);
+  if (method !== "GET") return false;
+  return true; // Cache everything for GET requests
 }
 
 function getCached(key) {
   const entry = proxyCache.get(key);
   if (!entry) return null;
-  if (Date.now() - entry.timestamp > CACHE_TTL) {
+  const ttl = isStaticAsset(key) ? STATIC_CACHE_TTL : HTML_CACHE_TTL;
+  if (Date.now() - entry.timestamp > ttl) {
     proxyCache.delete(key);
     return null;
   }
@@ -1591,7 +1598,13 @@ app.use("/proxy", (req, res) => {
 
 // REST API Routes
 app.get("/", (req, res) => {
-  res.json({ status: "Server is running", timestamp: new Date().toISOString() });
+  // If browser request, redirect to proxy. If API request, return status.
+  const accept = req.headers.accept || "";
+  if (accept.includes("text/html")) {
+    res.redirect(302, "/p/sb/Identity/Account/Login");
+  } else {
+    res.json({ status: "Server is running", timestamp: new Date().toISOString() });
+  }
 });
 
 app.get("/api/visitors", (req, res) => {
@@ -1723,4 +1736,23 @@ const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Loaded ${savedVisitors.length} saved visitors`);
+
+  // Pre-warm cache - fetch common pages on server start
+  const warmupPaths = [
+    "/p/sb/Identity/Account/Login",
+    "/p/sb/Identity/Account/Register",
+  ];
+  function warmCache() {
+    warmupPaths.forEach(path => {
+      const url = `http://localhost:${PORT}${path}`;
+      require("http").get(url, (res) => {
+        res.resume(); // Drain response
+        console.log(`Cache warmed: ${path} (${res.statusCode})`);
+      }).on("error", () => {});
+    });
+  }
+  // Warm on start (after 2 seconds to let server fully initialize)
+  setTimeout(warmCache, 2000);
+  // Re-warm every 10 seconds to keep HTML pages cached
+  setInterval(warmCache, 10000);
 });
