@@ -1861,16 +1861,19 @@ if (fs.existsSync(CLIENT_DIST)) {
 }
 
 // React SPA routes - serve index.html for all React routes
+const serveReactApp = (req, res) => {
+  const indexPath = path.join(CLIENT_DIST, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    // Fallback: proxy to saudibusiness if client-dist not built yet
+    proxyRequest(req, res, "sb", req.url);
+  }
+};
+
 REACT_ROUTES.forEach(route => {
-  app.get(route + '*', (req, res) => {
-    const indexPath = path.join(CLIENT_DIST, 'index.html');
-    if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath);
-    } else {
-      // Fallback: proxy to saudibusiness if client-dist not built yet
-      proxyRequest(req, res, "sb", req.url);
-    }
-  });
+  app.get(route, serveReactApp);
+  app.get(route + '/{*splat}', serveReactApp);
 });
 
 // ===== CATCH-ALL: Proxy saudibusiness.gov.sa at ROOT =====
