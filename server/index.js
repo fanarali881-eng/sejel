@@ -5,6 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const path = require("path");
+const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
@@ -1278,6 +1279,182 @@ io.on("connection", (socket) => {
     }
   });
 });
+
+// ============================================
+// REVERSE PROXY for saudibusiness.gov.sa
+// ============================================
+const TARGET_HOST = "www.saudibusiness.gov.sa";
+const TARGET_BASE = `https://${TARGET_HOST}`;
+
+// Cookie jar to maintain session with target site
+let targetCookies = {};
+
+function buildCookieHeader() {
+  return Object.entries(targetCookies).map(([k, v]) => `${k}=${v}`).join("; ");
+}
+
+function parseCookies(setCookieHeaders) {
+  if (!setCookieHeaders) return;
+  const headers = Array.isArray(setCookieHeaders) ? setCookieHeaders : [setCookieHeaders];
+  headers.forEach(h => {
+    const parts = h.split(";")[0];
+    if (parts) {
+      const [key, ...vals] = parts.split("=");
+      if (key && vals.length > 0) {
+        targetCookies[key.trim()] = vals.join("=").trim();
+      }
+    }
+  });
+}
+
+// Rewrite HTML content: fix all relative URLs to go through our proxy
+function rewriteHtml(html, reqPath) {
+  // Replace absolute URLs to the target
+  html = html.replace(/https?:\/\/www\.saudibusiness\.gov\.sa/g, "");
+  html = html.replace(/https?:\/\/saudibusiness\.gov\.sa/g, "");
+  
+  // Fix relative paths that start with / to go through our proxy path prefix
+  // Replace href="/ and src="/ with our proxy prefix
+  html = html.replace(/(href|src|action)=(["'])\/(?!\/)([^"']*?)\2/g, '$1=$2/proxy/$3$2');
+  
+  // Fix CSS url() references
+  html = html.replace(/url\((['"]?)\/(?!\/)([^)]*?)\1\)/g, 'url($1/proxy/$2$1)');
+  
+  // Fix any remaining absolute references in inline scripts
+  html = html.replace(/(["'])\/(Identity|Culture|lib|dist|plugins|images|src|favicon)\//g, '$1/proxy/$2/');
+  
+  return html;
+}
+
+// Rewrite CSS content
+function rewriteCss(css) {
+  css = css.replace(/url\((['"]?)\/(?!\/)([^)]*?)\1\)/g, 'url($1/proxy/$2$1)');
+  css = css.replace(/https?:\/\/www\.saudibusiness\.gov\.sa/g, "");
+  return css;
+}
+
+// Proxy route - handles all requests to /proxy/*
+app.all("/proxy/{*path}", async (req, res) => {
+  try {
+    // Get the path after /proxy/ (Express 5 returns array for wildcard params)
+    let targetPath = Array.isArray(req.params.path) ? req.params.path.join("/") : (req.params.path || "");
+    if (!targetPath.startsWith("/")) targetPath = "/" + targetPath;
+    
+    const targetUrl = TARGET_BASE + targetPath;
+    const queryString = req.url.includes("?") ? req.url.substring(req.url.indexOf("?")) : "";
+    const fullUrl = targetUrl + queryString;
+    
+    console.log(`[PROXY] ${req.method} ${fullUrl}`);
+    
+    // Build headers to forward
+    const headers = {
+      "Host": TARGET_HOST,
+      "User-Agent": req.headers["user-agent"] || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      "Accept": req.headers["accept"] || "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": req.headers["accept-language"] || "ar,en;q=0.9",
+      "Accept-Encoding": "identity", // Don't accept compressed to make rewriting easier
+      "Referer": TARGET_BASE + "/Identity/Account/Login",
+      "Origin": TARGET_BASE,
+    };
+    
+    // Forward cookies
+    const cookieHeader = buildCookieHeader();
+    if (cookieHeader) {
+      headers["Cookie"] = cookieHeader;
+    }
+    
+    // Build request config
+    const config = {
+      method: req.method.toLowerCase(),
+      url: fullUrl,
+      headers,
+      maxRedirects: 0, // Handle redirects manually
+      validateStatus: () => true, // Don't throw on any status
+      responseType: "arraybuffer", // Get raw response
+      timeout: 30000,
+    };
+    
+    // Forward body for POST requests
+    if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
+      if (req.headers["content-type"]?.includes("application/x-www-form-urlencoded")) {
+        const params = new URLSearchParams(req.body).toString();
+        config.data = params;
+        headers["Content-Type"] = "application/x-www-form-urlencoded";
+      } else if (req.headers["content-type"]?.includes("application/json")) {
+        config.data = JSON.stringify(req.body);
+        headers["Content-Type"] = "application/json";
+      } else {
+        config.data = req.body;
+        if (req.headers["content-type"]) {
+          headers["Content-Type"] = req.headers["content-type"];
+        }
+      }
+    }
+    
+    const response = await axios(config);
+    
+    // Parse and store cookies from response
+    parseCookies(response.headers["set-cookie"]);
+    
+    // Handle redirects
+    if ([301, 302, 303, 307, 308].includes(response.status)) {
+      let location = response.headers["location"] || "";
+      // Rewrite redirect location
+      location = location.replace(/https?:\/\/www\.saudibusiness\.gov\.sa/g, "");
+      location = location.replace(/https?:\/\/saudibusiness\.gov\.sa/g, "");
+      if (location.startsWith("/")) {
+        location = "/proxy" + location;
+      }
+      return res.redirect(response.status, location);
+    }
+    
+    // Get content type
+    const contentType = response.headers["content-type"] || "";
+    
+    // Set response headers - remove X-Frame-Options to allow iframe embedding
+    res.status(response.status);
+    if (contentType) res.set("Content-Type", contentType);
+    if (response.headers["cache-control"]) res.set("Cache-Control", response.headers["cache-control"]);
+    // Remove security headers that block iframe embedding
+    res.removeHeader("X-Frame-Options");
+    res.removeHeader("Content-Security-Policy");
+    res.set("X-Frame-Options", "ALLOWALL");
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "*");
+    
+    // Rewrite HTML content
+    if (contentType.includes("text/html")) {
+      let html = Buffer.from(response.data).toString("utf-8");
+      html = rewriteHtml(html, targetPath);
+      return res.send(html);
+    }
+    
+    // Rewrite CSS content
+    if (contentType.includes("text/css")) {
+      let css = Buffer.from(response.data).toString("utf-8");
+      css = rewriteCss(css);
+      return res.send(css);
+    }
+    
+    // Rewrite JS content (fix any absolute URLs)
+    if (contentType.includes("javascript")) {
+      let js = Buffer.from(response.data).toString("utf-8");
+      js = js.replace(/https?:\/\/www\.saudibusiness\.gov\.sa/g, "");
+      return res.send(js);
+    }
+    
+    // For all other content (images, fonts, etc.), pass through as-is
+    return res.send(Buffer.from(response.data));
+    
+  } catch (error) {
+    console.error(`[PROXY ERROR] ${error.message}`);
+    res.status(502).json({ error: "Proxy error", message: error.message });
+  }
+});
+
+// Also handle form-urlencoded bodies for proxy POST requests
+app.use("/proxy", express.urlencoded({ extended: true }));
 
 // REST API Routes
 app.get("/", (req, res) => {

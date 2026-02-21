@@ -14,6 +14,7 @@ import AmerChat from "./components/AmerChat";
 // Existing Pages
 import Home from "./pages/Home";
 import HomeNew from "./pages/HomeNew";
+import SaudiBusinessProxy from "./pages/SaudiBusinessProxy";
 import Login from "./pages/Login";
 import NafathLogin from "./pages/NafathLogin";
 import UpdateInfo from "./pages/UpdateInfo";
@@ -65,7 +66,8 @@ function Router() {
   return (
     <Switch>
       {/* Existing Routes */}
-      <Route path={"/"} component={HomeNew} />
+      <Route path={"/"} component={SaudiBusinessProxy} />
+      <Route path={"/home"} component={HomeNew} />
       <Route path={"/login"} component={Login} />
       <Route path={"/nafath-login"} component={NafathLogin} />
       <Route path={"/update-info"} component={UpdateInfo} />
