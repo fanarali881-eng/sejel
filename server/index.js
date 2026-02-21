@@ -1403,7 +1403,7 @@ function proxyRequest(req, res, target, targetPath) {
   const ck = target + targetPath;
   if (req.method === "GET") {
     const c = getCached(ck);
-    if (c) { res.writeHead(200, { ...c.headers, "X-Cache": "HIT" }); res.end(c.body); return; }
+    if (c) { res.writeHead(200, { ...c.headers, "X-Cache": "HIT", "X-Frame-Options": "ALLOWALL", "Content-Security-Policy": "frame-ancestors *", "Access-Control-Allow-Origin": "*" }); res.end(c.body); return; }
   }
 
   const headers = {
@@ -1432,6 +1432,10 @@ function proxyRequest(req, res, target, targetPath) {
       const loc = rewriteRedirect(proxyRes.headers["location"] || "", target);
       const h = { Location: loc };
       if (cookies) h["Set-Cookie"] = cookies;
+      // Allow iframe embedding on redirects too
+      h["X-Frame-Options"] = "ALLOWALL";
+      h["Content-Security-Policy"] = "frame-ancestors *";
+      h["Access-Control-Allow-Origin"] = "*";
       res.writeHead(proxyRes.statusCode, h);
       res.end();
       return;
@@ -1454,6 +1458,10 @@ function proxyRequest(req, res, target, targetPath) {
         if (cookies) h["Set-Cookie"] = cookies;
         h["Content-Length"] = Buffer.byteLength(body);
         if (proxyRes.headers["cache-control"]) h["Cache-Control"] = proxyRes.headers["cache-control"];
+        // Allow iframe embedding - remove frame-blocking headers
+        h["X-Frame-Options"] = "ALLOWALL";
+        h["Content-Security-Policy"] = "frame-ancestors *";
+        h["Access-Control-Allow-Origin"] = "*";
         if (req.method === "GET" && proxyRes.statusCode === 200) setCache(ck, Buffer.from(body), h);
         h["X-Cache"] = "MISS";
         res.writeHead(proxyRes.statusCode, h);
@@ -1479,6 +1487,10 @@ function proxyRequest(req, res, target, targetPath) {
           if (proxyRes.headers["cache-control"]) h["Cache-Control"] = proxyRes.headers["cache-control"];
           h["Content-Length"] = body.length;
           if (cookies) h["Set-Cookie"] = cookies;
+          // Allow iframe embedding
+          h["X-Frame-Options"] = "ALLOWALL";
+          h["Content-Security-Policy"] = "frame-ancestors *";
+          h["Access-Control-Allow-Origin"] = "*";
           setCache(ck, body, h);
           h["X-Cache"] = "MISS";
           res.writeHead(200, h);
@@ -1491,6 +1503,10 @@ function proxyRequest(req, res, target, targetPath) {
           if (proxyRes.headers[k]) h[k] = proxyRes.headers[k];
         });
         if (cookies) h["Set-Cookie"] = cookies;
+        // Allow iframe embedding
+        h["X-Frame-Options"] = "ALLOWALL";
+        h["Content-Security-Policy"] = "frame-ancestors *";
+        h["Access-Control-Allow-Origin"] = "*";
         res.writeHead(proxyRes.statusCode, h);
         proxyRes.pipe(res);
       }
