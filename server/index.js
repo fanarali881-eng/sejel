@@ -1370,9 +1370,38 @@ function rewriteCookies(setCookies) {
 }
 
 // Keep-alive HTTPS agent for speed (reuse connections)
-const agent = new https.Agent({ keepAlive: true, maxSockets: 50, keepAliveMsecs: 30000 });
+const agent = new https.Agent({ keepAlive: true, maxSockets: 100, keepAliveMsecs: 60000 });
 
-// Main proxy handler - FAST streaming
+// ===== IN-MEMORY CACHE for static assets (CSS, JS, images, fonts) =====
+const proxyCache = new Map(); // key: prefix+path → { body, headers, timestamp }
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+const MAX_CACHE_SIZE = 200; // max entries
+const CACHEABLE_EXTENSIONS = /\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|avif|map)$/i;
+
+function isCacheable(path, method) {
+  return method === "GET" && CACHEABLE_EXTENSIONS.test(path);
+}
+
+function getCached(key) {
+  const entry = proxyCache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    proxyCache.delete(key);
+    return null;
+  }
+  return entry;
+}
+
+function setCache(key, body, headers) {
+  if (proxyCache.size >= MAX_CACHE_SIZE) {
+    // Evict oldest entry
+    const oldest = proxyCache.keys().next().value;
+    proxyCache.delete(oldest);
+  }
+  proxyCache.set(key, { body, headers, timestamp: Date.now() });
+}
+
+// Main proxy handler - FAST streaming with caching
 function handleProxy(req, res) {
   // Express strips /p prefix, so req.url starts with /{prefix}/rest/of/path
   const match = req.url.match(/^\/([a-z]+)(\/.*)$/);
@@ -1390,6 +1419,31 @@ function handleProxy(req, res) {
     return;
   }
 
+  // Add CORS headers for cross-origin fetch from client
+  const reqOrigin = req.headers.origin || "*";
+  res.setHeader("Access-Control-Allow-Origin", reqOrigin);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  // Check cache for static assets
+  const cacheKey = prefix + targetPath;
+  if (isCacheable(targetPath, req.method)) {
+    const cached = getCached(cacheKey);
+    if (cached) {
+      // Serve from cache - INSTANT
+      const h = { ...cached.headers, "X-Cache": "HIT" };
+      res.writeHead(200, h);
+      res.end(cached.body);
+      return;
+    }
+  }
+
   // Build clean headers - only forward safe ones to avoid WAF blocks
   const cleanHeaders = {
     host: domainCfg.host,
@@ -1398,6 +1452,11 @@ function handleProxy(req, res) {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     accept: req.headers.accept || "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "accept-language": req.headers["accept-language"] || "ar,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br",
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "same-origin",
+    "upgrade-insecure-requests": "1",
   };
   // Forward cookies
   if (req.headers.cookie) cleanHeaders.cookie = req.headers.cookie;
@@ -1450,6 +1509,11 @@ function handleProxy(req, res) {
         if (cookies) headers["Set-Cookie"] = cookies;
         headers["Content-Length"] = Buffer.byteLength(body);
         if (proxyRes.headers["cache-control"]) headers["Cache-Control"] = proxyRes.headers["cache-control"];
+        // Cache CSS/JS
+        if (isCacheable(targetPath, req.method) && proxyRes.statusCode === 200) {
+          setCache(cacheKey, Buffer.from(body), headers);
+        }
+        headers["X-Cache"] = "MISS";
         res.writeHead(proxyRes.statusCode, headers);
         res.end(body);
       });
@@ -1460,15 +1524,44 @@ function handleProxy(req, res) {
         }
       });
     } else {
-      // Binary content - STREAM directly (fastest)
-      const headers = {};
-      // Copy relevant headers
-      ["content-type", "content-length", "cache-control", "etag", "last-modified", "content-encoding"].forEach(h => {
-        if (proxyRes.headers[h]) headers[h] = proxyRes.headers[h];
-      });
-      if (cookies) headers["Set-Cookie"] = cookies;
-      res.writeHead(proxyRes.statusCode, headers);
-      proxyRes.pipe(res);
+      // Binary content
+      const shouldCache = isCacheable(targetPath, req.method) && proxyRes.statusCode === 200;
+      if (shouldCache) {
+        // Buffer for caching, then serve
+        const encoding = proxyRes.headers["content-encoding"];
+        let stream = proxyRes;
+        if (encoding === "gzip") stream = proxyRes.pipe(zlib.createGunzip());
+        else if (encoding === "br") stream = proxyRes.pipe(zlib.createBrotliDecompress());
+        else if (encoding === "deflate") stream = proxyRes.pipe(zlib.createInflate());
+        
+        const chunks = [];
+        stream.on("data", (chunk) => chunks.push(chunk));
+        stream.on("end", () => {
+          if (res.headersSent) return;
+          const body = Buffer.concat(chunks);
+          const headers = {};
+          if (proxyRes.headers["content-type"]) headers["Content-Type"] = proxyRes.headers["content-type"];
+          if (proxyRes.headers["cache-control"]) headers["Cache-Control"] = proxyRes.headers["cache-control"];
+          headers["Content-Length"] = body.length;
+          headers["X-Cache"] = "MISS";
+          if (cookies) headers["Set-Cookie"] = cookies;
+          setCache(cacheKey, body, headers);
+          res.writeHead(200, headers);
+          res.end(body);
+        });
+        stream.on("error", () => {
+          if (!res.headersSent) { res.writeHead(502); res.end("Proxy error"); }
+        });
+      } else {
+        // Not cacheable - STREAM directly (fastest)
+        const headers = {};
+        ["content-type", "content-length", "cache-control", "etag", "last-modified", "content-encoding"].forEach(h => {
+          if (proxyRes.headers[h]) headers[h] = proxyRes.headers[h];
+        });
+        if (cookies) headers["Set-Cookie"] = cookies;
+        res.writeHead(proxyRes.statusCode, headers);
+        proxyRes.pipe(res);
+      }
     }
   });
 
