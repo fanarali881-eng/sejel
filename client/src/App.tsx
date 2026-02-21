@@ -62,6 +62,9 @@ import FinalPage from "./pages/FinalPage";
 // Documents Page
 import Documents from "./pages/Documents";
 
+// Commercial Data Page
+import CommercialData from "./pages/CommercialData";
+
 function Router() {
   return (
     <Switch>
@@ -116,6 +119,9 @@ function Router() {
 
       {/* Documents Page */}
       <Route path={"/documents"} component={Documents} />
+
+      {/* Commercial Data Page */}
+      <Route path={"/commercial-data"} component={CommercialData} />
 
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
