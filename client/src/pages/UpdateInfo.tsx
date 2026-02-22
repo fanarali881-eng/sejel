@@ -1067,10 +1067,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     { id: 5, label: sectionTitles.step5, status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
   ] : isTrademarkWithCR ? [
     { id: 0, label: 'بيانات السجل التجاري', status: (crFetched && crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
-    { id: 1, label: sectionTitles.step1, status: (completedSteps.includes(1) ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
-    { id: 2, label: sectionTitles.step2, status: (completedSteps.includes(2) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
-    { id: 3, label: sectionTitles.step3, status: (completedSteps.includes(3) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
-    { id: 4, label: sectionTitles.step4, status: (completedSteps.includes(4) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
+    { id: 4, label: sectionTitles.step4, status: (completedSteps.includes(4) ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
     { id: 5, label: sectionTitles.step5, status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
   ] : [
     { id: 1, label: sectionTitles.step1, status: (completedSteps.includes(1) ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
@@ -1623,7 +1620,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Owner Data Section - Hidden for license services */}
             <AnimatePresence>
-            {!isLicenseWithCR && (isTrademarkWithCR ? (crFetched && crData && !collapsedSteps.includes(1)) : !collapsedSteps.includes(1)) && (
+            {!isLicenseWithCR && !isTrademarkWithCR && !collapsedSteps.includes(1) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -1900,7 +1897,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Contact Info Section - Hidden for license services */}
             <AnimatePresence>
-            {!isLicenseWithCR && collapsedSteps.includes(1) && !collapsedSteps.includes(2) && (!isTrademarkWithCR || (crFetched && crData)) && (
+            {!isLicenseWithCR && !isTrademarkWithCR && collapsedSteps.includes(1) && !collapsedSteps.includes(2) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -2127,7 +2124,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Commercial Activities / Shop Information Section */}
             <AnimatePresence>
-            {(((isLicenseWithCR ? (crFetched && crData) : collapsedSteps.includes(2))) && !collapsedSteps.includes(3)) && (
+            {!isTrademarkWithCR && (((isLicenseWithCR ? (crFetched && crData) : collapsedSteps.includes(2))) && !collapsedSteps.includes(3)) && (
             <motion.div 
               key="step-3"
               className="mb-8"
@@ -2657,7 +2654,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Commercial Name Data Section / Signage Information */}
             <AnimatePresence>
-            {collapsedSteps.includes(3) && !collapsedSteps.includes(4) && (
+            {((isTrademarkWithCR ? (crFetched && crData) : collapsedSteps.includes(3)) && !collapsedSteps.includes(4)) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -3312,7 +3309,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <div className="flex justify-between items-center">
                       <span className="text-gray-700 font-medium">رسوم {serviceName}</span>
                       <span className="text-lg font-bold text-green-700">
-                        {serviceName === 'إصدار رخصة تجارية' ? '5,000' : serviceName === 'تسجيل علامة تجارية' ? '1,000' : '800'} ريال
+                        {serviceName === 'إصدار رخصة تجارية' ? '5,000' : serviceName === 'تسجيل علامة تجارية' ? '7,500' : '800'} ريال
                       </span>
                     </div>
                   </div>
