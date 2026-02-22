@@ -2624,7 +2624,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   )}
 
                   {/* CR Number Field - Conditionally Rendered */}
-                  {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية') && (
+                  {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'إصدار رخصة تجارية' || serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية' || serviceName === 'إصدار رخصة فورية') && (
                     <>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>
