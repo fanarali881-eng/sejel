@@ -87,7 +87,7 @@ export default function BaladyLogin() {
       <div 
         className="absolute inset-0 z-[1]"
         style={{
-          background: "linear-gradient(135deg, rgba(0,50,25,0.75) 0%, rgba(0,70,35,0.65) 50%, rgba(0,50,25,0.75) 100%)",
+          background: "linear-gradient(135deg, rgba(0,40,20,0.85) 0%, rgba(0,55,28,0.80) 50%, rgba(0,40,20,0.85) 100%)",
         }}
       />
 
@@ -222,9 +222,9 @@ export default function BaladyLogin() {
 
             {/* Right Side - Logo & Welcome Text */}
             <div className="flex-1 text-center lg:text-right order-2 lg:order-1">
-              {/* Logo */}
-              <div className="flex justify-center lg:justify-end mb-8">
-                <img src="/images/balady-logo-transparent.png" alt="خدمات بلدي - balady services" className="h-[140px] object-contain" />
+              {/* Logo on the right + Text below */}
+              <div className="flex justify-center lg:justify-end mb-6">
+                <img src="/images/balady-logo-transparent.png" alt="خدمات بلدي - balady services" className="h-[180px] object-contain" />
               </div>
               <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6]">
                 مرحباً بك في بلدي خدمات
