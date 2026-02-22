@@ -85,8 +85,12 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
       // حفظ اسم الخدمة في localStorage لاستخدامه لاحقاً
       localStorage.setItem('selectedService', serviceTitle);
       
-      // الخدمات التي تحول إلى صفحة نفاذ مباشرة
-      setLocation(`/login?service=${encodeURIComponent(serviceTitle)}`);
+      // خدمات الرخصة التجارية تحول إلى صفحة بلدي
+      if (serviceId === 'issue-license' || serviceId === 'renew-license') {
+        setLocation(`/balady?service=${encodeURIComponent(serviceTitle)}`);
+      } else {
+        setLocation(`/login?service=${encodeURIComponent(serviceTitle)}`);
+      }
     }, 3000);
   };
 
