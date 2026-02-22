@@ -223,9 +223,7 @@ export default function BaladyLogin() {
 
             {/* Right Side - Logo & Welcome Text */}
             <div className="flex-1 text-center lg:text-right order-2 lg:order-1">
-              <div className="flex justify-end mb-8">
-                <img src="/images/balady-logo-transparent.png" alt="خدمات بلدي - balady services" className="h-[200px] object-contain" />
-              </div>
+              <img src="/images/balady-logo-transparent.png" alt="خدمات بلدي - balady services" className="h-[200px] object-contain block mr-0 ml-auto mb-8" />
               <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6]">
                 مرحباً بك في بلدي خدمات
               </h1>
