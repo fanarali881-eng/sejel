@@ -223,7 +223,32 @@ export default function BaladyLogin() {
             <div className="flex-1 text-center lg:text-right order-2 lg:order-1">
               {/* Logo - بلدي خدمات */}
               <div className="flex justify-center lg:justify-end mb-10">
-                <img src="/images/balady-services-full-logo.png" alt="خدمات بلدي - balady services" className="h-32 object-contain" />
+                <div className="flex items-center gap-5" dir="ltr">
+                  {/* Text on left side */}
+                  <div className="text-right">
+                    <p className="text-white/90 text-sm tracking-[0.35em] font-light leading-relaxed">خـــدمـــات</p>
+                    <p className="text-white text-4xl font-bold leading-tight">بلدي</p>
+                    <p className="text-white/90 text-base tracking-[0.15em] mt-1">balady</p>
+                    <p className="text-white/80 text-xs tracking-[0.2em]">services</p>
+                  </div>
+                  {/* Palm tree circle */}
+                  <div className="w-[100px] h-[100px] rounded-full bg-white flex items-center justify-center flex-shrink-0">
+                    <svg width="65" height="75" viewBox="0 0 65 75" fill="none">
+                      {/* Palm tree trunk */}
+                      <rect x="29" y="35" width="7" height="35" rx="2" fill="#1a5c3a" />
+                      {/* Palm leaves - left side */}
+                      <path d="M32 38 C20 30, 5 28, 2 18 C5 22, 18 24, 32 32" fill="#2d8b4e" />
+                      <path d="M32 35 C22 25, 8 20, 3 8 C8 14, 22 20, 32 30" fill="#1a5c3a" />
+                      <path d="M32 32 C25 20, 15 12, 12 2 C16 8, 25 18, 32 28" fill="#7ab648" />
+                      {/* Palm leaves - right side */}
+                      <path d="M32 38 C44 30, 59 28, 62 18 C59 22, 46 24, 32 32" fill="#7ab648" />
+                      <path d="M32 35 C42 25, 56 20, 61 8 C56 14, 42 20, 32 30" fill="#2d8b4e" />
+                      <path d="M32 32 C39 20, 49 12, 52 2 C48 8, 39 18, 32 28" fill="#1a5c3a" />
+                      {/* Center top leaf */}
+                      <path d="M32 30 C30 18, 28 8, 32 0 C36 8, 34 18, 32 30" fill="#2d8b4e" />
+                    </svg>
+                  </div>
+                </div>
               </div>
               
               <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6]">
