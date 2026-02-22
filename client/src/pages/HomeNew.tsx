@@ -62,56 +62,142 @@ export default function HomeNew() {
 
 
 
-        {/* Services List */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="relative w-full md:w-64 order-1 md:order-2 hidden md:block">
+        {/* Services Cards */}
+        <div>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 w-full md:w-auto">
+              <h2 className="text-xl font-extrabold text-gray-900">الخدمات المتاحة</h2>
+              <span className="bg-[#e6f4ea] text-[#006C35] text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap">الاكثر استخداما</span>
+            </div>
+            <div className="relative w-full md:w-64 hidden md:block">
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input 
                 type="text" 
                 placeholder="بحث في الخدمات..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pr-10 pl-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#006C35]"
+                className="w-full pr-10 pl-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#006C35] bg-white"
               />
-            </div>
-            <div className="flex items-center gap-4 order-2 md:order-1 w-full md:w-auto">
-              <h2 className="text-xl font-extrabold text-gray-900">الخدمات المتاحة</h2>
-              <span className="bg-[#e6f4ea] text-[#006C35] text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap">الاكثر استخداما</span>
             </div>
           </div>
           
-          <div className="divide-y divide-gray-100">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredServices.map((service, i) => (
               <div 
                 key={i} 
                 onClick={() => handleServiceClick(service.link, service.name)}
-                className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between group cursor-pointer"
+                className="group relative bg-white rounded-xl border border-gray-200 p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#006C35]/30 hover:-translate-y-1 min-h-[200px]"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-[#e6f4ea] rounded-lg flex items-center justify-center text-xl relative">
-                    {loadingService === service.name ? (
-                      <Loader2 className="w-6 h-6 text-[#006C35] animate-spin" />
-                    ) : (
-                      service.icon
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-bold text-gray-800 group-hover:text-[#006C35] transition-colors whitespace-nowrap truncate">{service.name}</h3>
-                    <p className="text-sm text-gray-500">{service.desc}</p>
-                  </div>
+                {/* Icon */}
+                <div className="w-20 h-20 flex items-center justify-center mb-4">
+                  {loadingService === service.name ? (
+                    <Loader2 className="w-10 h-10 text-[#006C35] animate-spin" />
+                  ) : (
+                    <svg className="w-16 h-16" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      {service.link === '/service/new-cr' && (
+                        <>
+                          <rect x="18" y="10" width="44" height="56" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="28" y1="24" x2="52" y2="24" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="32" x2="52" y2="32" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="40" x2="44" y2="40" stroke="#2A8B6E" strokeWidth="2" />
+                          <circle cx="56" cy="54" r="10" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <line x1="52" y1="54" x2="60" y2="54" stroke="#E8772E" strokeWidth="2" />
+                          <line x1="56" y1="50" x2="56" y2="58" stroke="#E8772E" strokeWidth="2" />
+                        </>
+                      )}
+                      {service.link === '/service/renew-cr' && (
+                        <>
+                          <rect x="18" y="10" width="44" height="56" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="28" y1="24" x2="52" y2="24" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="32" x2="52" y2="32" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="40" x2="44" y2="40" stroke="#2A8B6E" strokeWidth="2" />
+                          <path d="M50 50 A8 8 0 1 1 58 58" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <polyline points="58,52 58,58 52,58" stroke="#E8772E" strokeWidth="2" fill="none" />
+                        </>
+                      )}
+                      {service.link === '/service/reserve-name' && (
+                        <>
+                          <rect x="18" y="14" width="44" height="52" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <text x="40" y="48" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#2A8B6E" fontFamily="serif">abc</text>
+                          <circle cx="56" cy="22" r="8" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <circle cx="56" cy="22" r="2" fill="#E8772E" />
+                          <line x1="53" y1="22" x2="59" y2="22" stroke="#E8772E" strokeWidth="1.5" />
+                        </>
+                      )}
+                      {service.link === '/service/edit-cr' && (
+                        <>
+                          <rect x="18" y="10" width="44" height="56" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="28" y1="24" x2="52" y2="24" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="32" x2="52" y2="32" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="40" x2="44" y2="40" stroke="#2A8B6E" strokeWidth="2" />
+                          <path d="M54 44 L62 52 L58 56 L50 48 Z" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <line x1="62" y1="52" x2="58" y2="56" stroke="#E8772E" strokeWidth="2" />
+                        </>
+                      )}
+                      {service.link === '/service/commercial-extract' && (
+                        <>
+                          <rect x="18" y="10" width="44" height="56" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="28" y1="24" x2="52" y2="24" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="32" x2="52" y2="32" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="40" x2="52" y2="40" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="48" x2="44" y2="48" stroke="#2A8B6E" strokeWidth="2" />
+                          <rect x="46" y="50" width="16" height="12" rx="2" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <line x1="49" y1="56" x2="59" y2="56" stroke="#E8772E" strokeWidth="1.5" />
+                        </>
+                      )}
+                      {service.link === '/service/issue-license' && (
+                        <>
+                          <rect x="20" y="12" width="40" height="52" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <circle cx="40" cy="26" r="6" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="40" y1="32" x2="40" y2="38" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="30" y1="44" x2="50" y2="44" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="30" y1="50" x2="50" y2="50" stroke="#2A8B6E" strokeWidth="2" />
+                          <path d="M52 56 L60 48" stroke="#E8772E" strokeWidth="2" />
+                          <circle cx="60" cy="48" r="4" stroke="#E8772E" strokeWidth="2" fill="none" />
+                        </>
+                      )}
+                      {service.link === '/service/renew-license' && (
+                        <>
+                          <rect x="20" y="12" width="40" height="52" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <circle cx="40" cy="26" r="6" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="40" y1="32" x2="40" y2="38" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="30" y1="44" x2="50" y2="44" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="30" y1="50" x2="50" y2="50" stroke="#2A8B6E" strokeWidth="2" />
+                          <path d="M52 52 A7 7 0 1 1 59 59" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <polyline points="59,53 59,59 53,59" stroke="#E8772E" strokeWidth="2" fill="none" />
+                        </>
+                      )}
+                      {service.link === '/service/register-trademark' && (
+                        <>
+                          <circle cx="40" cy="38" r="22" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <text x="40" y="46" textAnchor="middle" fontSize="28" fontWeight="bold" fill="#2A8B6E" fontFamily="serif">®</text>
+                          <circle cx="56" cy="20" r="8" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <polyline points="53,20 55,22 59,18" stroke="#E8772E" strokeWidth="2" fill="none" />
+                        </>
+                      )}
+                    </svg>
+                  )}
                 </div>
-                <Button variant="ghost" className="text-[#006C35] opacity-0 group-hover:opacity-100 transition-opacity" disabled={loadingService === service.name}>
-                  {loadingService === service.name ? "جاري التحميل..." : "بدء الخدمة ←"}
-                </Button>
+                
+                {/* Service Name */}
+                <h3 className="font-bold text-gray-800 text-sm md:text-base leading-relaxed mb-2">{service.name}</h3>
+                
+                {/* Hover Button */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 w-[85%]">
+                  <button className="w-full bg-gradient-to-l from-[#E8772E] to-[#F4A261] text-white font-bold py-2.5 px-4 rounded-full text-sm shadow-md hover:shadow-lg transition-shadow">
+                    {loadingService === service.name ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        جاري التحميل...
+                      </span>
+                    ) : (
+                      "الحصول على الخدمة"
+                    )}
+                  </button>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-        
-        {/* Pagination */}
-        <div className="flex justify-center mt-6 mb-2">
-          <img src="/images/pagination.png" alt="Pagination" className="h-8 object-contain" />
         </div>
       </main>
       
