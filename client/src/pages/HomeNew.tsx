@@ -86,7 +86,7 @@ export default function HomeNew() {
               <div 
                 key={i} 
                 onClick={() => handleServiceClick(service.link, service.name)}
-                className="group relative bg-white rounded-xl border border-gray-200 p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#006C35]/30 hover:-translate-y-1 min-h-[200px]"
+                className="group relative bg-white rounded-xl border border-gray-200 p-6 pb-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#006C35]/30 hover:-translate-y-1 min-h-[240px]"
               >
                 {/* Icon */}
                 <div className="w-20 h-20 flex items-center justify-center mb-4">
@@ -180,11 +180,11 @@ export default function HomeNew() {
                 </div>
                 
                 {/* Service Name */}
-                <h3 className="font-bold text-gray-800 text-sm md:text-base leading-relaxed mb-2">{service.name}</h3>
+                <h3 className="font-bold text-gray-800 text-sm md:text-base leading-relaxed mb-3">{service.name}</h3>
                 
                 {/* Hover Button */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 w-[85%]">
-                  <button className="w-full bg-gradient-to-l from-[#E8772E] to-[#F4A261] text-white font-bold py-2.5 px-4 rounded-full text-sm shadow-md hover:shadow-lg transition-shadow">
+                <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 w-[85%] mt-auto">
+                  <button className="w-full bg-[#D4621A] text-white font-bold py-2.5 px-4 rounded-full text-sm shadow-md hover:bg-[#C05515] hover:shadow-lg transition-all">
                     {loadingService === service.name ? (
                       <span className="flex items-center justify-center gap-2">
                         <Loader2 className="w-4 h-4 animate-spin" />
