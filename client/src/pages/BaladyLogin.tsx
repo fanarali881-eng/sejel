@@ -94,33 +94,6 @@ export default function BaladyLogin() {
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
         
-        {/* Logo - أقصى يمين فوق */}
-        <div className="absolute top-8 right-8 lg:right-16 z-20 flex items-center gap-4" dir="rtl">
-          {/* دائرة بيضاء + نخلة أخضر غامق */}
-          <div className="w-[80px] h-[80px] rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-lg">
-            <svg width="50" height="60" viewBox="0 0 50 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Trunk */}
-              <rect x="22" y="32" width="6" height="26" rx="2" fill="#0C4A3A" />
-              {/* Person at base */}
-              <circle cx="25" cy="55" r="3" fill="#0C4A3A" />
-              {/* Left leaves */}
-              <path d="M25 30 C18 22 6 20 2 12 C6 18 16 22 25 28" fill="#0C4A3A" />
-              <path d="M25 26 C20 16 10 10 5 2 C10 10 18 16 25 24" fill="#0C4A3A" />
-              {/* Right leaves */}
-              <path d="M25 30 C32 22 44 20 48 12 C44 18 34 22 25 28" fill="#0C4A3A" />
-              <path d="M25 26 C30 16 40 10 45 2 C40 10 32 16 25 24" fill="#0C4A3A" />
-              {/* Center leaf */}
-              <path d="M25 24 C24 14 23 6 25 0 C27 6 26 14 25 24" fill="#0C4A3A" />
-            </svg>
-          </div>
-          {/* نص بجانب الدائرة */}
-          <div className="text-right">
-            <p className="text-white/90 text-xs tracking-[0.3em] font-light">خــدمــات</p>
-            <p className="text-white text-2xl font-bold leading-tight">بلدي</p>
-            <p className="text-white/80 text-[11px] tracking-[0.1em]">balady</p>
-            <p className="text-white/70 text-[9px] tracking-[0.15em]">services</p>
-          </div>
-        </div>
 
         {/* Center Content */}
         <div className="flex-1 flex items-center justify-center px-4 py-8">
@@ -247,9 +220,13 @@ export default function BaladyLogin() {
               </div>
             </div>
 
-            {/* Right Side - Welcome Text */}
+            {/* Right Side - Logo & Welcome Text */}
             <div className="flex-1 text-center lg:text-right order-2 lg:order-1">
-              <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6] mt-16 lg:mt-24">
+              {/* Logo */}
+              <div className="flex justify-center lg:justify-end mb-8">
+                <img src="/images/balady-logo-transparent.png" alt="خدمات بلدي - balady services" className="h-[140px] object-contain" />
+              </div>
+              <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6]">
                 مرحباً بك في بلدي خدمات
               </h1>
               <p className="text-base lg:text-lg text-white/85 leading-[2] max-w-[550px] mx-auto lg:mx-0 lg:mr-0">
