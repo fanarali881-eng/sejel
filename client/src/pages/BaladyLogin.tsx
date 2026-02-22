@@ -94,10 +94,7 @@ export default function BaladyLogin() {
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
         
-        {/* Logo - أقصى يمين الصفحة */}
-        <div className="absolute top-6 right-6 lg:top-10 lg:right-16 z-20">
-          <img src="/images/balady-logo-transparent.png" alt="خدمات بلدي - balady services" className="h-[120px] lg:h-[160px] object-contain" />
-        </div>
+
 
         {/* Center Content */}
         <div className="flex-1 flex items-center justify-center px-4 py-8">
@@ -226,7 +223,10 @@ export default function BaladyLogin() {
 
             {/* Right Side - Logo & Welcome Text */}
             <div className="flex-1 text-center lg:text-right order-2 lg:order-1">
-              <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6] mt-16 lg:mt-0">
+              <div className="flex justify-center lg:justify-end mb-8">
+                <img src="/images/balady-logo-transparent.png" alt="خدمات بلدي - balady services" className="h-[200px] object-contain" />
+              </div>
+              <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6]">
                 مرحباً بك في بلدي خدمات
               </h1>
               <p className="text-base lg:text-lg text-white/85 leading-[2] max-w-[550px] mx-auto lg:mx-0 lg:mr-0">
