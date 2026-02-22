@@ -24,12 +24,12 @@ export const SBCStepper = ({ steps }: SBCStepperProps) => {
             <div 
               className={cn(
                 "w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center border-2 text-xs md:text-sm font-bold mb-1 md:mb-2 transition-colors bg-white z-10",
-                step.status === 'completed' ? "border-green-600 text-green-600" :
+                step.status === 'completed' ? "border-green-600 text-green-600 bg-green-50" :
                 step.status === 'current' ? "border-blue-600 text-blue-600" :
                 "border-gray-300 text-gray-400"
               )}
             >
-              {step.id}
+              {step.status === 'completed' ? <Check className="w-3 h-3 md:w-4 md:h-4" /> : (index + 1)}
             </div>
             <span 
               className={cn(
