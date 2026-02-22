@@ -1325,6 +1325,20 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 </Card>
               </div>
 
+              {/* Service Fees for CR Only */}
+              {crData && !crLoading && (
+              <div className="mb-8">
+                <Card className="border-none shadow-sm bg-amber-50 border border-amber-200">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex items-center justify-between" dir="rtl">
+                      <span className="text-gray-700 font-bold text-base">رسوم الخدمة</span>
+                      <span className="text-green-700 font-bold text-lg">200 ريال</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              )}
+
               {/* Declaration Section for CR Only */}
               {crData && !crLoading && (
               <>
