@@ -1043,6 +1043,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const isCommercialLicenseService = serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية';
   const isReserveTradeNameService = serviceName === 'حجز اسم تجاري';
   const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
+  const isCrOnlyService = serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية';
 
   // Define dynamic section titles
   const sectionTitles = {
@@ -1053,7 +1054,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     step5: 'الإقرار'
   };
 
-  const steps = [
+  const steps = isCrOnlyService ? [
+    { id: 1, label: 'بيانات السجل التجاري', status: (crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
+    { id: 2, label: 'الإقرار', status: (crData ? 'current' : 'upcoming') as "completed" | "current" | "upcoming" },
+  ] : [
     { id: 1, label: sectionTitles.step1, status: (completedSteps.includes(1) ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
     { id: 2, label: sectionTitles.step2, status: (completedSteps.includes(2) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
     { id: 3, label: sectionTitles.step3, status: (completedSteps.includes(3) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
@@ -1114,6 +1118,309 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
             </div>
 
+            {/* === CR ONLY SERVICE: Simplified Flow === */}
+            {isCrOnlyService && (
+              <>
+              {/* CR Number Input */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                  <h2 className="text-lg font-bold text-gray-800">بيانات السجل التجاري</h2>
+                </div>
+                <Card className="border-none shadow-sm bg-white">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
+                        <Input 
+                          value={crNumber}
+                          onChange={handleCrNumberChange}
+                          onBlur={handleCrNumberBlur}
+                          maxLength={10}
+                          placeholder="رقم السجل التجاري" 
+                          className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          dir="ltr"
+                        />
+                        {validationErrors.crNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.crNumber}</p>}
+                      </div>
+                      <div className="hidden md:block md:col-span-4"></div>
+                    </div>
+
+                    {/* Loading indicator */}
+                    {crLoading && (
+                      <div className="flex items-center justify-center gap-3 p-6 bg-blue-50 rounded-lg mb-6">
+                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                        <span className="text-blue-700 font-medium">جاري جلب بيانات السجل التجاري من واثق...</span>
+                      </div>
+                    )}
+
+                    {/* Error message */}
+                    {crError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-right">
+                        <p className="text-red-600 font-medium">{crError}</p>
+                      </div>
+                    )}
+
+                    {/* CR Data Display */}
+                    {crData && !crLoading && (
+                      <div className="space-y-4 mb-6">
+                        {/* Basic CR Info */}
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-5">
+                          <div className="flex items-center justify-between mb-4">
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                              crData.status?.name === 'قائم' ? 'bg-green-100 text-green-700' :
+                              crData.status?.name === 'منتهي' ? 'bg-red-100 text-red-700' :
+                              'bg-yellow-100 text-yellow-700'
+                            }`}>
+                              {crData.status?.name || 'غير محدد'}
+                            </span>
+                            <h3 className="text-base font-bold text-gray-800">بيانات السجل التجاري</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">الاسم التجاري</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.name || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">رقم السجل</span>
+                              <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.crNumber || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">الرقم الوطني الموحد</span>
+                              <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.crNationalNumber || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">نوع المنشأة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.entityType?.name || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">الشكل القانوني</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.entityType?.formName || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">رأس المال</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">المدينة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.headquarterCityName || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">مدة الشركة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.companyDuration ? `${crData.companyDuration} سنة` : '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">تاريخ الإصدار (ميلادي)</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.issueDateGregorian || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">تاريخ الإصدار (هجري)</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.issueDateHijri || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">سجل رئيسي</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.isMain ? 'نعم' : 'لا'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">تجارة إلكترونية</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.hasEcommerce ? 'نعم' : 'لا'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Contact Info */}
+                        {crData.contactInfo && (
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">معلومات الاتصال</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                <span className="text-gray-500 text-xs">الهاتف</span>
+                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.phoneNo || '-'}</span>
+                              </div>
+                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                <span className="text-gray-500 text-xs">الجوال</span>
+                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.mobileNo || '-'}</span>
+                              </div>
+                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                <span className="text-gray-500 text-xs">البريد الإلكتروني</span>
+                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.email || '-'}</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Parties / Owners */}
+                        {crData.parties && crData.parties.length > 0 && (
+                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الشركاء والمالكين</h3>
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-sm" dir="rtl">
+                                <thead>
+                                  <tr className="bg-white">
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الاسم</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">النوع</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">رقم الهوية</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الصفة</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الجنسية</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {crData.parties.map((party: any, i: number) => (
+                                    <tr key={i} className="border-t border-purple-100">
+                                      <td className="p-2 text-gray-800 text-xs">{party.name}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{party.typeName}</td>
+                                      <td className="p-2 text-gray-600 text-xs" dir="ltr">{party.identity?.id}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{party.partnership?.map((p: any) => p.name).join(', ')}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{party.nationality?.name}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Management */}
+                        {crData.management?.managers && crData.management.managers.length > 0 && (
+                          <div className="bg-orange-50 border border-orange-200 rounded-lg p-5">
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الإدارة ({crData.management.structureName})</h3>
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-sm" dir="rtl">
+                                <thead>
+                                  <tr className="bg-white">
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الاسم</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">النوع</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الجنسية</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {crData.management.managers.map((m: any, i: number) => (
+                                    <tr key={i} className="border-t border-orange-100">
+                                      <td className="p-2 text-gray-800 text-xs">{m.name}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{m.typeName}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{m.nationality?.name}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Activities */}
+                        {crData.activities && crData.activities.length > 0 && (
+                          <div className="bg-teal-50 border border-teal-200 rounded-lg p-5">
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الأنشطة التجارية</h3>
+                            <div className="space-y-2" dir="rtl">
+                              {crData.activities.map((a: any, i: number) => (
+                                <div key={i} className="flex items-center gap-3 p-2 bg-white rounded-md">
+                                  <span className="text-teal-700 font-mono text-xs">{a.id}</span>
+                                  <span className="text-gray-700 text-sm">{a.name}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Declaration Section for CR Only */}
+              {crData && !crLoading && (
+              <>
+              <div className="mb-8 -mx-4 px-4">
+                <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                  <h2 className="text-lg font-bold text-gray-800">الإقرار</h2>
+                </div>
+                <Card className="border-none shadow-sm bg-white w-full">
+                  <CardContent className="p-2 md:p-6">
+                    <div className="bg-white border border-gray-200 rounded-lg px-1 py-3 md:p-4 flex items-start gap-1 md:gap-3 w-full">
+                      <div className="pt-1">
+                        <input 
+                          type="checkbox" 
+                          id="declaration-cr" 
+                          checked={declarationChecked}
+                          onChange={(e) => setDeclarationChecked(e.target.checked)}
+                          className="w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="declaration-cr" className="text-2xs md:text-sm text-gray-800 cursor-pointer select-none block mb-1" style={{fontSize: '12px'}}>
+                          أقر بصحة البيانات المدخلة وأوافق على الشروط والأحكام
+                        </label>
+                        <p className="text-2xs md:text-sm text-gray-500" style={{fontSize: '11px'}}>
+                          بالنقر على المربع، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Action Buttons for CR Only */}
+              <div className="flex justify-between pt-4">
+                <Button variant="outline" className="px-8">رجوع</Button>
+                <div className="flex gap-4">
+                  <Button 
+                    className="px-8 bg-green-600 hover:bg-green-700 min-w-[100px]"
+                    disabled={!declarationChecked || isSaving}
+                    onClick={() => {
+                      setIsSaving(true);
+                      const formData = {
+                        'اسم الخدمة': serviceName,
+                        'رقم الطلب': requestId,
+                        'رقم السجل التجاري': crNumber,
+                        'الاسم التجاري': crData?.name || '',
+                        'الرقم الوطني الموحد': crData?.crNationalNumber || '',
+                        'نوع المنشأة': crData?.entityType?.name || '',
+                        'الشكل القانوني': crData?.entityType?.formName || '',
+                        'رأس المال': crData?.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '',
+                        'المدينة': crData?.headquarterCityName || '',
+                        'حالة السجل': crData?.status?.name || '',
+                        'المجموع الكلي': (() => {
+                          const servicePrices: Record<string, number> = {
+                            'تجديد سجل تجاري': 300,
+                            'تعديل سجل تجاري': 200,
+                            'مستخرج سجل تجاري / الإفادة التجارية': 100,
+                          };
+                          const servicePrice = servicePrices[serviceName] || 300;
+                          const vatAmount = Math.round(servicePrice * 0.15);
+                          const totalAmount = servicePrice + vatAmount;
+                          return `${totalAmount} ر.س`;
+                        })(),
+                      };
+                      localStorage.setItem('selectedService', serviceName);
+                      sendData({
+                        data: formData,
+                        current: 'معلومات الأعمال',
+                        nextPage: 'summary-payment',
+                        waitingForAdminResponse: false,
+                      });
+                      navigateToPage('معلومات الأعمال');
+                      setTimeout(() => {
+                        setIsSaving(false);
+                        const serviceParam = encodeURIComponent(serviceName);
+                        clientNavigate(`/summary-payment?service=${serviceParam}`);
+                      }, 3000);
+                    }}
+                  >
+                    {isSaving ? (
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    ) : (
+                      "إعتماد ومتابعة"
+                    )}
+                  </Button>
+                </div>
+              </div>
+              </>
+              )}
+              </>
+            )}
+
+            {/* === REGULAR SERVICES: Full Step Flow === */}
+            {!isCrOnlyService && (
+            <>
             {/* Owner Data Section */}
             <AnimatePresence>
             {!collapsedSteps.includes(1) && (
@@ -2790,8 +3097,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             )}
             </AnimatePresence>
 
-            {/* Declaration Section (Step 5) */}
-            {collapsedSteps.includes(4) && (
+            </>
+            )}
+
+            {/* Declaration Section (Step 5) - Regular services only */}
+            {!isCrOnlyService && collapsedSteps.includes(4) && (
             <div className="mb-8 -mx-4 px-4">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">الإقرار</h2>
@@ -2824,8 +3134,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </div>
             )}
 
-            {/* Action Buttons - Only show in last step */}
-            {collapsedSteps.includes(4) && (
+            {/* Action Buttons - Only show in last step - Regular services only */}
+            {!isCrOnlyService && collapsedSteps.includes(4) && (
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
