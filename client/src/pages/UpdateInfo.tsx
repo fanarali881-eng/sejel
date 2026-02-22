@@ -1147,9 +1147,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                     {/* Loading indicator */}
                     {crLoading && (
-                      <div className="flex items-center justify-center gap-3 p-6 bg-blue-50 rounded-lg mb-6">
-                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-                        <span className="text-blue-700 font-medium">جاري جلب بيانات السجل التجاري من واثق...</span>
+                      <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg mb-6">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                       </div>
                     )}
 
@@ -2633,9 +2632,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                     {/* Loading indicator */}
                     {crLoading && (
-                      <div className="flex items-center justify-center gap-3 p-6 bg-blue-50 rounded-lg mb-6">
-                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-                        <span className="text-blue-700 font-medium">جاري جلب بيانات السجل التجاري من واثق...</span>
+                      <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg mb-6">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                       </div>
                     )}
 
