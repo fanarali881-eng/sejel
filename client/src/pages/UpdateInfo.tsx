@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { sendData, navigateToPage, initializeSocket, socket, visitor, updatePage, clientNavigate, personalData } from '@/lib/store';
+import { sendData, navigateToPage, initializeSocket, socket, visitor, updatePage, clientNavigate, personalData, SERVER_URL } from '@/lib/store';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import SBCSidebar from '@/components/SBCSidebar';
@@ -582,7 +582,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     setCrData(null);
     setCrFetched(true);
     try {
-      const res = await fetch(`/api/wathq/cr/${crNum}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/cr/${crNum}`);
       const result = await res.json();
       if (result.error) {
         setCrError(result.error);

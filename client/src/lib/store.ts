@@ -4,6 +4,9 @@ import { io, Socket } from "socket.io-client";
 // Socket Configuration
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || (typeof window !== 'undefined' ? window.location.origin : "http://localhost:3001");
 
+// Export the server URL for API calls
+export const SERVER_URL = SOCKET_URL;
+
 // Client-side navigation callback (set by App.tsx to avoid full page reload)
 let _navigateCallback: ((path: string) => void) | null = null;
 export function setNavigateCallback(cb: (path: string) => void) {
