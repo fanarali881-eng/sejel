@@ -90,9 +90,6 @@ export default function HomeNew() {
               >
                 {/* Icon */}
                 <div className="w-20 h-20 flex items-center justify-center mb-4">
-                  {loadingService === service.name ? (
-                    <Loader2 className="w-10 h-10 text-[#006C35] animate-spin" />
-                  ) : (
                     <svg className="w-16 h-16" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                       {service.link === '/service/new-cr' && (
                         <>
@@ -176,14 +173,13 @@ export default function HomeNew() {
                         </>
                       )}
                     </svg>
-                  )}
                 </div>
                 
                 {/* Service Name */}
                 <h3 className="font-bold text-gray-800 text-sm md:text-base leading-relaxed mb-3">{service.name}</h3>
                 
                 {/* Hover Button */}
-                <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 w-[85%] mt-auto">
+                <div className={`transition-all duration-300 w-[85%] mt-auto ${loadingService === service.name ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                   <button className="w-full bg-[#D4621A] text-white font-bold py-2.5 px-4 rounded-full text-sm shadow-md hover:bg-[#C05515] hover:shadow-lg transition-all">
                     {loadingService === service.name ? (
                       <span className="flex items-center justify-center gap-2">
