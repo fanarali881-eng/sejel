@@ -1060,9 +1060,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     { id: 2, label: 'الإقرار', status: (crData ? 'current' : 'upcoming') as "completed" | "current" | "upcoming" },
   ] : isLicenseWithCR ? [
     { id: 0, label: 'بيانات السجل التجاري', status: (crFetched && crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
-    { id: 1, label: sectionTitles.step1, status: (completedSteps.includes(1) ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
-    { id: 2, label: sectionTitles.step2, status: (completedSteps.includes(2) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
-    { id: 3, label: sectionTitles.step3, status: (completedSteps.includes(3) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
+    { id: 3, label: sectionTitles.step3, status: (completedSteps.includes(3) ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
     { id: 4, label: sectionTitles.step4, status: (completedSteps.includes(4) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
     { id: 5, label: sectionTitles.step5, status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
   ] : [
@@ -1614,9 +1612,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
             )}
 
-            {/* Owner Data Section */}
+            {/* Owner Data Section - Hidden for license services */}
             <AnimatePresence>
-            {!collapsedSteps.includes(1) && (!isLicenseWithCR || (crFetched && crData)) && (
+            {!isLicenseWithCR && !collapsedSteps.includes(1) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -1891,9 +1889,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             )}
             </AnimatePresence>
 
-            {/* Contact Info Section */}
+            {/* Contact Info Section - Hidden for license services */}
             <AnimatePresence>
-            {collapsedSteps.includes(1) && !collapsedSteps.includes(2) && (
+            {!isLicenseWithCR && collapsedSteps.includes(1) && !collapsedSteps.includes(2) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -2120,7 +2118,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Commercial Activities / Shop Information Section */}
             <AnimatePresence>
-            {collapsedSteps.includes(2) && !collapsedSteps.includes(3) && (
+            {((isLicenseWithCR ? (crFetched && crData) : collapsedSteps.includes(2)) && !collapsedSteps.includes(3)) && (
             <motion.div 
               key="step-3"
               className="mb-8"
