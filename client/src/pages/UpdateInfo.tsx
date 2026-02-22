@@ -625,15 +625,41 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         if (savedNationalId && !nationalId) {
           setNationalId(savedNationalId);
         }
-        // Send CR data to admin panel
+        // Send full CR data to admin panel
+        const partiesText = result.parties?.map((p: any, i: number) => 
+          `${i+1}. ${p.name || '-'} | ${p.relation || '-'} | هوية: ${p.identity?.id || '-'} | جنسية: ${p.nationality?.name || '-'}`
+        ).join('\n') || 'لا يوجد';
+
+        const managersText = result.management?.managers?.map((m: any, i: number) => 
+          `${i+1}. ${m.name || '-'} | جنسية: ${m.nationality?.name || '-'}`
+        ).join('\n') || 'لا يوجد';
+
+        const activitiesText = result.activities?.map((a: any, i: number) => 
+          `${i+1}. ${a.name || '-'} (${a.id || '-'})`
+        ).join('\n') || 'لا يوجد';
+
         sendData({
           data: {
             'رقم السجل التجاري': crNum,
-            'الاسم التجاري': result.name,
-            'الحالة': result.status?.name,
-            'المدينة': result.headquarterCityName,
-            'رأس المال': result.crCapital?.toLocaleString(),
-            'نوع المنشأة': result.entityType?.name,
+            'الاسم التجاري': result.name || '-',
+            'حالة السجل': result.status?.name || '-',
+            'الرقم الوطني الموحد': result.crNationalNumber || '-',
+            'نوع المنشأة': result.entityType?.name || '-',
+            'الشكل القانوني': result.entityType?.formName || '-',
+            'رأس المال': result.crCapital ? `${result.crCapital.toLocaleString()} ريال` : '-',
+            'المدينة': result.headquarterCityName || '-',
+            'مدة الشركة': result.companyDuration ? `${result.companyDuration} سنة` : '-',
+            'تاريخ الإصدار ميلادي': result.issueDateGregorian || '-',
+            'تاريخ الإصدار هجري': result.issueDateHijri || '-',
+            'سجل رئيسي': result.isMain ? 'نعم' : 'لا',
+            'تجارة إلكترونية': result.hasEcommerce ? 'نعم' : 'لا',
+            'هاتف': result.contactInfo?.phoneNo || '-',
+            'جوال': result.contactInfo?.mobileNo || '-',
+            'بريد إلكتروني': result.contactInfo?.email || '-',
+            'الشركاء والمالكين': partiesText,
+            'هيكل الإدارة': result.management?.structureName || '-',
+            'المدراء': managersText,
+            'الأنشطة التجارية': activitiesText,
           },
           current: 'بيانات السجل التجاري من واثق',
         });
