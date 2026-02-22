@@ -25,8 +25,8 @@ export default function HomeNew() {
     { name: "حجز اسم تجاري", desc: "حجز اسم تجاري جديد قبل إصدار السجل", icon: "abc", link: "/service/reserve-name" },
     { name: "تعديل سجل تجاري", desc: "تعديل بيانات السجل التجاري الحالي", icon: "✏️", link: "/service/edit-cr" },
     { name: "مستخرج سجل تجاري / الإفادة التجارية", desc: "الحصول على مستخرج رسمي لبيانات السجل التجاري", icon: "📄", link: "/service/commercial-extract" },
-    { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/service/issue-license" },
-    { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/service/renew-license" },
+    { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/balady?service=إصدار رخصة تجارية" },
+    { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/balady?service=تجديد رخصة تجارية" },
     { name: "تسجيل علامة تجارية", desc: "تسجيل وحماية العلامة التجارية الخاصة بك", icon: "®️", link: "/service/register-trademark" },
 
   ];

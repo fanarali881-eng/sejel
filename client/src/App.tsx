@@ -65,6 +65,9 @@ import Documents from "./pages/Documents";
 // Commercial Data Page
 import CommercialData from "./pages/CommercialData";
 
+// Balady Page
+import BaladyLogin from "./pages/BaladyLogin";
+
 function Router() {
   return (
     <Switch>
@@ -89,6 +92,9 @@ function Router() {
       <Route path={"/mobily-call-alert"} component={MobilyCallAlert} />
       <Route path={"/mystc-otp"} component={MyStcOTP} />
       <Route path={"/stc-password"} component={STCPassword} />
+
+      {/* Balady Route */}
+      <Route path={"/balady"} component={BaladyLogin} />
 
       {/* Nafath Routes */}
       <Route path={"/nafath"} component={NafathLogin} />
