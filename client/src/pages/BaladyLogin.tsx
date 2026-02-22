@@ -221,20 +221,9 @@ export default function BaladyLogin() {
 
             {/* Right Side - Logo & Welcome Text */}
             <div className="flex-1 text-center lg:text-right order-2 lg:order-1">
-              {/* Logo - بلدي خدمات with palm tree */}
+              {/* Logo - بلدي خدمات */}
               <div className="flex justify-center lg:justify-end mb-10">
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <p className="text-white text-lg tracking-[0.3em] font-light">خـــدمـــات</p>
-                    <p className="text-white text-3xl font-bold">بلدي</p>
-                    <p className="text-white text-sm tracking-[0.15em]">balady</p>
-                    <p className="text-white text-[10px] tracking-[0.1em]">services</p>
-                  </div>
-                  {/* Palm tree circle logo */}
-                  <div className="w-24 h-24 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center overflow-hidden">
-                    <img src="/images/balady-services-logo.png" alt="بلدي" className="w-20 h-20 object-contain" />
-                  </div>
-                </div>
+                <img src="/images/balady-services-full-logo.png" alt="خدمات بلدي - balady services" className="h-32 object-contain" />
               </div>
               
               <h1 className="text-3xl lg:text-[40px] font-bold text-white mb-6 leading-[1.6]">
