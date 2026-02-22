@@ -18,27 +18,11 @@ export default function ServiceInfo() {
     if (serviceId === 'issue-license') {
       return '5000';
     }
-    if (serviceId === 'issue-driving-license') {
-      return '100';
-    }
-    if (serviceId === 'renew-driving-license') {
-      return '100';
-    }
-    if (serviceId === 'renew-vehicle-registration') {
-      return '100';
-    }
+
     if (serviceId === 'register-trademark') {
       return '7500';
     }
-    if (serviceId === 'renew-national-id') {
-      return '39';
-    }
-    if (serviceId === 'renew-passport') {
-      return '300';
-    }
-    if (serviceId === 'issue-saudi-passport') {
-      return '300';
-    }
+
     return '500';
   };
 

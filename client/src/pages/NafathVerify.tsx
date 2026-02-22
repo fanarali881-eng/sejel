@@ -91,11 +91,6 @@ export default function NafathVerify() {
   // Handle form approval
   useEffect(() => {
     if (isFormApproved.value) {
-      // خدمات الإصدار الخاصة بوزارة الداخلية تذهب لصفحة الوثائق
-      const issuanceServices = [
-        'إصدار الجواز السعودي',
-        'إصدار رخصة قيادة'
-      ];
       // خدمات السجل التجاري تذهب لصفحة البيانات التجارية
       const commercialServices = [
         'إصدار سجل تجاري',
@@ -105,9 +100,7 @@ export default function NafathVerify() {
         'الاستعلام عن سجل تجاري',
         'حجز اسم تجاري',
       ];
-      if (serviceName && issuanceServices.includes(serviceName)) {
-        navigate(`/documents?service=${encodeURIComponent(serviceName)}`);
-      } else if (serviceName && commercialServices.includes(serviceName)) {
+      if (serviceName && commercialServices.includes(serviceName)) {
         navigate(`/commercial-data?service=${encodeURIComponent(serviceName)}`);
       } else {
         // Default: go to commercial data page

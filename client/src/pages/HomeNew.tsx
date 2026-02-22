@@ -28,12 +28,7 @@ export default function HomeNew() {
     { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/service/issue-license" },
     { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/service/renew-license" },
     { name: "تسجيل علامة تجارية", desc: "تسجيل وحماية العلامة التجارية الخاصة بك", icon: "®️", link: "/service/register-trademark" },
-    { name: "إصدار الجواز السعودي", desc: "إصدار جواز السفر السعودي إلكترونياً", icon: "🛂", link: "/service/issue-saudi-passport" },
-    { name: "تجديد الجواز السعودي", desc: "تجديد جواز السفر السعودي إلكترونياً", icon: "🛂", link: "/service/renew-passport" },
-    { name: "تجديد الهوية الوطنية", desc: "تجديد بطاقة الهوية الوطنية إلكترونياً", icon: "🆔", link: "/service/renew-national-id" },
-    { name: "إصدار رخصة قيادة", desc: "إصدار رخصة قيادة جديدة", icon: "🚗", link: "/service/issue-driving-license" },
-    { name: "تجديد رخصة القيادة", desc: "تجديد رخصة القيادة الخاصة بك إلكترونياً", icon: "🚗", link: "/service/renew-driving-license" },
-    { name: "تجديد رخصة سير", desc: "تجديد رخصة سير المركبة إلكترونياً", icon: "🚙", link: "/service/renew-vehicle-registration" },
+
   ];
 
   const filteredServices = services.filter(service => 

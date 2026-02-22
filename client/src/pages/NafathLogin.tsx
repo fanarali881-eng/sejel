@@ -119,36 +119,12 @@ export default function NafathLogin() {
                           'تجديد رخصة تجارية',
                           'تجديد الرخصة التجارية',
                           'مستخرج سجل تجاري / الإفادة التجارية',
-                          'تجديد الجواز السعودي',
-                          'تجديد الهوية الوطنية',
-                          'تجديد رخصة القيادة',
-                          'تجديد رخصة سير'
                         ];
                         
                         if (serviceName && servicesRequiringUpdate.includes(serviceName)) {
-                          // Navigate directly without popup
-                          const documentServices = [
-                            'تجديد الجواز السعودي',
-                            'تجديد الهوية الوطنية',
-                            'تجديد رخصة القيادة',
-                            'تجديد رخصة سير'
-                          ];
-                          if (documentServices.includes(serviceName)) {
-                            clientNavigate(`/documents?service=${encodeURIComponent(serviceName)}`);
-                          } else {
-                            clientNavigate(`/update-info?service=${encodeURIComponent(serviceName)}`);
-                          }
+                          clientNavigate(`/update-info?service=${encodeURIComponent(serviceName)}`);
                         } else {
-                          // خدمات الإصدار الخاصة بوزارة الداخلية تذهب مباشرة لصفحة الوثائق
-                          const issuanceServices = [
-                            'إصدار الجواز السعودي',
-                            'إصدار رخصة قيادة'
-                          ];
-                          if (serviceName && issuanceServices.includes(serviceName)) {
-                            clientNavigate(`/documents?service=${encodeURIComponent(serviceName)}`);
-                          } else {
-                            clientNavigate(serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info");
-                          }
+                          clientNavigate(serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info");
                         }
                       }, 3000);
                     }
