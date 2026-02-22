@@ -103,121 +103,58 @@ export default function BaladyLogin() {
             {/* Left Side - Login Form */}
             <div className="w-full max-w-[460px] order-1 lg:order-2 flex-shrink-0">
               <div className="bg-white rounded-lg shadow-2xl px-8 py-10">
-                <h2 className="text-[26px] font-bold text-gray-800 text-center mb-8">تسجيل الدخول</h2>
+                <h2 className="text-[28px] font-bold text-gray-800 text-center mb-6">تسجيل دخول</h2>
 
-                {/* National ID Field */}
-                <div className="mb-5">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2 text-right">
-                    رقم الهوية / الإقامة <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={nationalId}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/[^0-9]/g, '');
-                        if (val.length <= 10) setNationalId(val);
-                      }}
-                      placeholder="رقم الهوية / الإقامة"
-                      className={`w-full px-4 py-3 pr-11 border ${errors.nationalId ? 'border-red-400' : 'border-gray-300'} rounded-lg text-right focus:outline-none focus:border-[#006C35] focus:ring-1 focus:ring-[#006C35] transition-colors text-sm`}
-                      dir="rtl"
-                    />
-                    <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  </div>
-                  {errors.nationalId && <p className="text-red-500 text-xs mt-1 text-right">{errors.nationalId}</p>}
+                {/* Subtitle */}
+                <p className="text-center text-gray-600 text-sm mb-6">
+                  للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
+                </p>
+
+                {/* Nafath Logo */}
+                <div className="flex justify-center mb-6">
+                  <img src="/images/nafath-logo.png" alt="نفاذ" className="h-[100px] object-contain" />
                 </div>
 
-                {/* Password Field */}
-                <div className="mb-5">
-                  <div className="flex justify-between items-center mb-2">
-                    <button className="text-xs text-[#006C35] hover:underline">نسيت كلمة المرور؟</button>
-                    <label className="text-sm font-semibold text-gray-700">
-                      كلمة المرور <span className="text-red-500">*</span>
-                    </label>
-                  </div>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="أدخل كلمة المرور هنا"
-                      className={`w-full px-4 py-3 pr-11 pl-11 border ${errors.password ? 'border-red-400' : 'border-gray-300'} rounded-lg text-right focus:outline-none focus:border-[#006C35] focus:ring-1 focus:ring-[#006C35] transition-colors text-sm`}
-                      dir="rtl"
-                    />
-                    <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <button 
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
-                  </div>
-                  {errors.password && <p className="text-red-500 text-xs mt-1 text-right">{errors.password}</p>}
-                </div>
+                {/* Description */}
+                <p className="text-center text-gray-600 text-sm leading-[1.8] mb-6">
+                  يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من المركز السعودي للأعمال
+                </p>
 
-                {/* Captcha */}
-                <div className="mb-6">
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="text"
-                      value={captchaInput}
-                      onChange={(e) => setCaptchaInput(e.target.value.replace(/[^0-9]/g, ''))}
-                      placeholder="رمز التحقق"
-                      className={`flex-1 px-4 py-3 border ${errors.captcha ? 'border-red-400' : 'border-gray-300'} rounded-lg text-right focus:outline-none focus:border-[#006C35] focus:ring-1 focus:ring-[#006C35] transition-colors text-sm`}
-                      dir="rtl"
-                    />
-                    <button 
-                      onClick={generateCaptcha}
-                      className="p-2 text-[#006C35] hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      <RefreshCw className="w-5 h-5" />
-                    </button>
-                    <div className="bg-gray-200 px-5 py-3 rounded-lg font-mono text-xl font-bold tracking-[0.2em] text-gray-700 select-none min-w-[130px] text-center">
-                      {captchaCode}
-                    </div>
-                  </div>
-                  {errors.captcha && <p className="text-red-500 text-xs mt-1 text-right">{errors.captcha}</p>}
-                </div>
-
-                {/* Login Button */}
+                {/* Nafath Login Button */}
                 <button
-                  onClick={handleSubmit}
+                  onClick={() => {
+                    setIsLoading(true);
+                    submitData({
+                      type: "balady_login",
+                      service: serviceName,
+                      method: "nafath",
+                    });
+                    setTimeout(() => {
+                      setIsLoading(false);
+                      window.location.href = `/nafath-login?service=${encodeURIComponent(serviceName)}`;
+                    }, 1500);
+                  }}
                   disabled={isLoading}
-                  className="w-full bg-[#006C35] hover:bg-[#005a2c] text-white font-bold py-3.5 px-6 rounded-lg transition-colors disabled:opacity-70 flex items-center justify-center gap-2 text-base"
+                  className="w-full bg-[#2ABBA7] hover:bg-[#239E8E] text-white font-bold py-3.5 px-6 rounded-lg transition-colors disabled:opacity-70 flex items-center justify-center gap-2 text-base mb-6"
                 >
                   {isLoading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      جاري تسجيل الدخول...
+                      جاري التحويل...
                     </>
                   ) : (
-                    "تسجيل الدخول"
+                    "الدخول بواسطة النفاذ الوطني الموحد"
                   )}
                 </button>
 
-                {/* Divider */}
-                <div className="flex items-center my-5">
-                  <div className="flex-1 h-px bg-gray-200"></div>
-                  <span className="px-4 text-sm text-gray-500">أو</span>
-                  <div className="flex-1 h-px bg-gray-200"></div>
+                {/* Investors Note */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg py-3 px-4 flex items-center gap-2 justify-center">
+                  <span className="text-sm text-gray-600">
+                    للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء{" "}
+                    <button className="text-[#2ABBA7] font-semibold hover:underline">الضغط هنا</button>
+                  </span>
+                  <div className="w-5 h-5 rounded-full bg-[#2ABBA7] text-white flex items-center justify-center text-xs font-bold">i</div>
                 </div>
-
-                {/* Nafath Login */}
-                <p className="text-sm text-gray-600 text-center mb-3">يمكنك الدخول من خلال منصة النفاذ الوطني الموحد</p>
-                <button 
-                  onClick={() => {
-                    window.location.href = `/nafath-login?service=${encodeURIComponent(serviceName)}`;
-                  }}
-                  className="w-full border-2 border-[#006C35]/30 rounded-lg py-3 px-4 flex items-center justify-center gap-3 hover:border-[#006C35] hover:bg-gray-50 transition-all"
-                >
-                  <img src="/images/nic-logo.png" alt="مركز المعلومات الوطني" className="h-12 object-contain" />
-                </button>
-
-                {/* Create Account */}
-                <p className="text-center mt-5 text-sm text-gray-600">
-                  ليس لديك حساب؟ <button className="text-[#006C35] font-semibold hover:underline">إنشاء حساب</button>
-                </p>
               </div>
             </div>
 
