@@ -2054,7 +2054,7 @@ app.post("/api/proxy-capture", (req, res) => {
 });
 
 // ===== WATHQ API ROUTES =====
-const WATHQ_API_KEY = process.env.WATHQ_API_KEY || 'pQws0LA0zTdMCQmDmGmiljIkpxSDengM';
+const WATHQ_API_KEY = process.env.WATHQ_API_KEY || '8iq8j3YBjBkgihcXKAEEuU3g6ASSxcdJ';
 
 // Generic helper function to make Wathq API requests to any service
 function wathqApiRequest(basePath, endpoint) {
@@ -2084,7 +2084,7 @@ function wathqApiRequest(basePath, endpoint) {
 
 // Backward-compatible helper for Commercial Registration
 function wathqRequest(endpoint, crId) {
-  return wathqApiRequest('/sandbox/commercial-registration', `${endpoint}/${crId}`);
+  return wathqApiRequest('/v2/commercial-registration', `${endpoint}/${crId}`);
 }
 
 // Fetch commercial registration full data from Wathq
@@ -2203,12 +2203,12 @@ app.get('/api/wathq/cr-capital/:id', async (req, res) => {
 });
 
 // ===== COMPANY CONTRACT (عقود الشركات) =====
-// Base URL: api.wathq.sa/sandbox/company-contract
+// Base URL: api.wathq.sa/company-contract
 app.get('/api/wathq/company-contract/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[WATHQ] Fetching Company Contract for: ${id}`);
-    const result = await wathqApiRequest('/sandbox/company-contract', `fullinfo/${id}`);
+    const result = await wathqApiRequest('/company-contract', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
       try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات عقد الشركة' }); }
     } else {
@@ -2223,7 +2223,7 @@ app.get('/api/wathq/company-contract/:id', async (req, res) => {
 app.get('/api/wathq/company-contract-partners/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await wathqApiRequest('/sandbox/company-contract', `partners/${id}`);
+    const result = await wathqApiRequest('/company-contract', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
       try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات' }); }
     } else {
@@ -2237,7 +2237,7 @@ app.get('/api/wathq/company-contract-partners/:id', async (req, res) => {
 app.get('/api/wathq/company-contract-managers/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await wathqApiRequest('/sandbox/company-contract', `managers/${id}`);
+    const result = await wathqApiRequest('/company-contract', `management/${id}`);
     if (result.statusCode === 200 && result.body) {
       try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات' }); }
     } else {
@@ -2298,12 +2298,12 @@ app.get('/api/wathq/real-estate/:deedNumber/:idNumber/:idType', async (req, res)
 });
 
 // ===== E-DELEGATION (التفويض الإلكتروني) =====
-// Base URL: api.wathq.sa/sandbox/e-delegation (or /v1/e-delegation)
+// Base URL: api.wathq.sa/v1/e-delegation
 app.get('/api/wathq/e-delegation/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[WATHQ] Fetching E-Delegation for: ${id}`);
-    const result = await wathqApiRequest('/sandbox/e-delegation', `info/${id}`);
+    const result = await wathqApiRequest('/v1/e-delegation', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
       try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات التفويض' }); }
     } else {
@@ -2320,7 +2320,7 @@ app.get('/api/wathq/chamber/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[WATHQ] Fetching Chamber of Commerce for: ${id}`);
-    const result = await wathqApiRequest('/sandbox/chamber-of-commerce', `info/${id}`);
+    const result = await wathqApiRequest('/v1/chamber-of-commerce', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
       try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات الغرفة' }); }
     } else {
