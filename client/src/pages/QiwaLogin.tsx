@@ -60,9 +60,7 @@ export default function QiwaLogin() {
               <img src="/images/nafath-logo.png" alt="Nafath" className="h-[90px] object-contain" />
             </div>
             
-            <p className="text-[#212529] text-[16px] mb-[16px] leading-[26px] max-w-full mx-auto font-normal">
-              يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من منصة قوى
-            </p>
+
             
             <button
               onClick={handleLogin}
@@ -78,21 +76,16 @@ export default function QiwaLogin() {
               )}
             </button>
             
-            <div className="w-full flex items-center gap-2 text-[14px] text-[#212529] bg-[#f4f7fe] mt-[15px] h-[50px] px-[1.25rem] border border-[#E1E1E8] rounded-[7px]">
-              <div className="flex-shrink-0">
-                <img src="/images/info-icon.png" alt="info" className="w-6 h-6" />
-              </div>
-              <div className="flex-grow text-right">
-                <span>للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء </span>
-                {isLinkLoading ? (
-                  <span className="inline-flex items-center gap-2 font-bold text-[#35363A]">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    جاري التحميل...
-                  </span>
-                ) : (
-                  <a href="/update-info" onClick={handleLinkClick} className="font-bold hover:no-underline text-[#35363A] no-underline bg-transparent cursor-pointer">الضغط هنا</a>
-                )}
-              </div>
+            <div className="text-center mt-[15px]">
+              <span className="text-[15px] text-[#3b3b3b]">ليس لديك حساب على قوى؟ </span>
+              {isLinkLoading ? (
+                <span className="inline-flex items-center gap-1 text-[15px] font-bold text-[#0066ff]">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  جاري التحميل...
+                </span>
+              ) : (
+                <a href="/update-info" onClick={handleLinkClick} className="text-[15px] font-bold text-[#0066ff] hover:underline cursor-pointer">سجّل الآن</a>
+              )}
             </div>
           </div>
         </div>
