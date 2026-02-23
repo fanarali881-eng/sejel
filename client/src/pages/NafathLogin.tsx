@@ -184,7 +184,7 @@ export default function NafathLogin() {
                         value={username}
                         onChange={(e) => handleNationalIdChange(e.target.value)}
                         className={`w-full px-4 py-3 border rounded-[4px] focus:outline-none text-right placeholder-gray-300 text-sm ${errors.username ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-[#11998e]'}`}
-                        placeholder="رقم الهوية الوطنية (10 أرقام)"
+                        placeholder="رقم الهوية الوطنية"
                       />
                       {errors.username && <p className="text-xs text-red-500 mt-1 text-right">{errors.username}</p>}
                       {!errors.username && nationalIdError && <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError}</p>}
