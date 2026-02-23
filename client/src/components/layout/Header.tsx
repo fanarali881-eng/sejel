@@ -54,7 +54,7 @@ export default function Header({ searchQuery, setSearchQuery }: HeaderProps) {
         <div className="container flex justify-between items-center h-8">
           {/* Right Side: Gov Info */}
           <div className="flex items-center gap-2">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Saudi_Arabia.svg/800px-Flag_of_Saudi_Arabia.svg.png" alt="Saudi Flag" className="w-6 h-4 object-cover border border-gray-200" />
+            <img src="/images/saudi-flag.png" alt="Saudi Flag" className="w-6 h-4 object-cover border border-gray-200" />
             <span className="text-[10px] md:text-xs text-gray-800 font-medium">موقع حكومي رسمي تابع لحكومة المملكة العربية السعودية</span>
             
             <Popover open={isOpen} onOpenChange={handleVerification}>
