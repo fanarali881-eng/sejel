@@ -166,6 +166,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [isEditingCR, setIsEditingCR] = useState(false);
   const [editedCrData, setEditedCrData] = useState<any>(null);
   
+  // Contact Info Edit State
+  const [isEditingContact, setIsEditingContact] = useState(false);
+  const [contactForm, setContactForm] = useState({ phoneNo: '', mobileNo: '', email: '' });
+  const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
+
   // GOSI Employee Data State
   const [employees, setEmployees] = useState<any[]>([]);
   const [employeeIdInput, setEmployeeIdInput] = useState('');
@@ -1227,6 +1232,58 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     setEditedCrData((prev: any) => ({ ...prev, [field]: value }));
   };
 
+  // Contact Info Edit Functions
+  const startEditingContact = () => {
+    setContactForm({
+      phoneNo: crData?.contactInfo?.phoneNo || '',
+      mobileNo: crData?.contactInfo?.mobileNo || '',
+      email: crData?.contactInfo?.email || ''
+    });
+    setContactErrors({});
+    setIsEditingContact(true);
+  };
+
+  const validateContactForm = () => {
+    const errors: Record<string, string> = {};
+    // Email validation: English only, valid format
+    if (!contactForm.email) {
+      errors.email = 'البريد الإلكتروني مطلوب';
+    } else if (!/^[a-zA-Z0-9@.\-_]+$/.test(contactForm.email)) {
+      errors.email = 'البريد الإلكتروني يجب أن يكون بأحرف إنجليزية فقط';
+    } else if (!/^[a-zA-Z0-9._\-]+@[a-zA-Z0-9._\-]+\.[a-zA-Z]{2,}$/.test(contactForm.email)) {
+      errors.email = 'صيغة البريد الإلكتروني غير صحيحة';
+    }
+    // Mobile validation: 10 digits, starts with 05X
+    if (!contactForm.mobileNo) {
+      errors.mobileNo = 'رقم الجوال مطلوب';
+    } else if (!/^\d+$/.test(contactForm.mobileNo)) {
+      errors.mobileNo = 'رقم الجوال يجب أن يحتوي على أرقام فقط';
+    } else if (!/^05[0-9]\d{7}$/.test(contactForm.mobileNo)) {
+      errors.mobileNo = 'رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام';
+    }
+    // Phone validation: digits only
+    if (contactForm.phoneNo && !/^\d+$/.test(contactForm.phoneNo)) {
+      errors.phoneNo = 'رقم الهاتف يجب أن يحتوي على أرقام فقط';
+    }
+    setContactErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const saveContactInfo = () => {
+    if (!validateContactForm()) return;
+    setCrData((prev: any) => ({
+      ...prev,
+      contactInfo: {
+        ...prev.contactInfo,
+        phoneNo: contactForm.phoneNo,
+        mobileNo: contactForm.mobileNo,
+        email: contactForm.email
+      }
+    }));
+    setIsEditingContact(false);
+    setContactErrors({});
+  };
+
   const updateEditedParty = (index: number, field: string, value: string) => {
     setEditedCrData((prev: any) => {
       const newParties = [...prev.parties];
@@ -1589,55 +1646,99 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Contact Info */}
-                        {crData.contactInfo && (
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
-                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">معلومات الاتصال</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                          <div className="flex justify-between items-center mb-3">
+                            <div>
+                              {!isEditingContact && (
+                                <button
+                                  type="button"
+                                  onClick={startEditingContact}
+                                  className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                                >
+                                  تحديث
+                                </button>
+                              )}
+                              {isEditingContact && (
+                                <div className="flex gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={saveContactInfo}
+                                    className="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
+                                  >
+                                    حفظ
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => { setIsEditingContact(false); setContactErrors({}); }}
+                                    className="text-xs bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500 transition-colors"
+                                  >
+                                    إلغاء
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            <h3 className="text-base font-bold text-gray-800 text-right">معلومات الاتصال</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                            <div className="bg-white rounded-md px-3 py-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">الهاتف</span>
-                                {isEditingCR && editedCrData ? (
+                                {isEditingContact ? (
                                   <input
                                     type="text"
-                                    value={editedCrData.phoneNo}
-                                    onChange={(e) => updateEditedField('phoneNo', e.target.value)}
-                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    inputMode="numeric"
+                                    value={contactForm.phoneNo}
+                                    onChange={(e) => { setContactForm(prev => ({ ...prev, phoneNo: e.target.value })); if (contactErrors.phoneNo) setContactErrors(prev => ({ ...prev, phoneNo: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.phoneNo ? 'border-red-500' : 'border-yellow-300'}`}
                                     dir="ltr"
+                                    placeholder="مثال: 0112345678"
                                   />
                                 ) : (
-                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.phoneNo || '-'}</span>
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.phoneNo || 'غير محدد'}</span>
                                 )}
                               </div>
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              {contactErrors.phoneNo && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.phoneNo}</p>}
+                            </div>
+                            <div className="bg-white rounded-md px-3 py-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">الجوال</span>
-                                {isEditingCR && editedCrData ? (
+                                {isEditingContact ? (
                                   <input
                                     type="text"
-                                    value={editedCrData.mobileNo}
-                                    onChange={(e) => updateEditedField('mobileNo', e.target.value)}
-                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    inputMode="numeric"
+                                    maxLength={10}
+                                    value={contactForm.mobileNo}
+                                    onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setContactForm(prev => ({ ...prev, mobileNo: v })); if (contactErrors.mobileNo) setContactErrors(prev => ({ ...prev, mobileNo: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.mobileNo ? 'border-red-500' : 'border-yellow-300'}`}
                                     dir="ltr"
+                                    placeholder="05XXXXXXXX"
                                   />
                                 ) : (
-                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.mobileNo || '-'}</span>
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.mobileNo || 'غير محدد'}</span>
                                 )}
                               </div>
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              {contactErrors.mobileNo && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.mobileNo}</p>}
+                            </div>
+                            <div className="bg-white rounded-md px-3 py-2 md:col-span-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">البريد الإلكتروني</span>
-                                {isEditingCR && editedCrData ? (
+                                {isEditingContact ? (
                                   <input
                                     type="email"
-                                    value={editedCrData.email}
-                                    onChange={(e) => updateEditedField('email', e.target.value)}
-                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-left w-48 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    value={contactForm.email}
+                                    onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@.\-_]/g, ''); setContactForm(prev => ({ ...prev, email: v })); if (contactErrors.email) setContactErrors(prev => ({ ...prev, email: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-64 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.email ? 'border-red-500' : 'border-yellow-300'}`}
                                     dir="ltr"
+                                    placeholder="example@domain.com"
                                   />
                                 ) : (
-                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.email || '-'}</span>
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.email || 'غير محدد'}</span>
                                 )}
                               </div>
+                              {contactErrors.email && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.email}</p>}
                             </div>
                           </div>
-                        )}
+                        </div>
 
                         {/* Parties / Owners */}
                         {(crData.parties && crData.parties.length > 0 || (isEditingCR && editedCrData)) && (
@@ -2014,25 +2115,99 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Contact Info */}
-                        {crData.contactInfo && (
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
-                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">معلومات الاتصال</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                          <div className="flex justify-between items-center mb-3">
+                            <div>
+                              {!isEditingContact && (
+                                <button
+                                  type="button"
+                                  onClick={startEditingContact}
+                                  className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                                >
+                                  تحديث
+                                </button>
+                              )}
+                              {isEditingContact && (
+                                <div className="flex gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={saveContactInfo}
+                                    className="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
+                                  >
+                                    حفظ
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => { setIsEditingContact(false); setContactErrors({}); }}
+                                    className="text-xs bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500 transition-colors"
+                                  >
+                                    إلغاء
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            <h3 className="text-base font-bold text-gray-800 text-right">معلومات الاتصال</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                            <div className="bg-white rounded-md px-3 py-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">الهاتف</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.phoneNo || '-'}</span>
+                                {isEditingContact ? (
+                                  <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={contactForm.phoneNo}
+                                    onChange={(e) => { setContactForm(prev => ({ ...prev, phoneNo: e.target.value })); if (contactErrors.phoneNo) setContactErrors(prev => ({ ...prev, phoneNo: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.phoneNo ? 'border-red-500' : 'border-yellow-300'}`}
+                                    dir="ltr"
+                                    placeholder="مثال: 0112345678"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.phoneNo || 'غير محدد'}</span>
+                                )}
                               </div>
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              {contactErrors.phoneNo && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.phoneNo}</p>}
+                            </div>
+                            <div className="bg-white rounded-md px-3 py-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">الجوال</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.mobileNo || '-'}</span>
+                                {isEditingContact ? (
+                                  <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    maxLength={10}
+                                    value={contactForm.mobileNo}
+                                    onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setContactForm(prev => ({ ...prev, mobileNo: v })); if (contactErrors.mobileNo) setContactErrors(prev => ({ ...prev, mobileNo: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.mobileNo ? 'border-red-500' : 'border-yellow-300'}`}
+                                    dir="ltr"
+                                    placeholder="05XXXXXXXX"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.mobileNo || 'غير محدد'}</span>
+                                )}
                               </div>
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              {contactErrors.mobileNo && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.mobileNo}</p>}
+                            </div>
+                            <div className="bg-white rounded-md px-3 py-2 md:col-span-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">البريد الإلكتروني</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.email || '-'}</span>
+                                {isEditingContact ? (
+                                  <input
+                                    type="email"
+                                    value={contactForm.email}
+                                    onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@.\-_]/g, ''); setContactForm(prev => ({ ...prev, email: v })); if (contactErrors.email) setContactErrors(prev => ({ ...prev, email: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-64 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.email ? 'border-red-500' : 'border-yellow-300'}`}
+                                    dir="ltr"
+                                    placeholder="example@domain.com"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.email || 'غير محدد'}</span>
+                                )}
                               </div>
+                              {contactErrors.email && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.email}</p>}
                             </div>
                           </div>
-                        )}
+                        </div>
 
                         {/* Parties / Owners */}
                         {crData.parties && crData.parties.length > 0 && (
@@ -3708,25 +3883,99 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         </div>
 
                         {/* Contact Info */}
-                        {crData.contactInfo && (
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
-                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">معلومات الاتصال</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                          <div className="flex justify-between items-center mb-3">
+                            <div>
+                              {!isEditingContact && (
+                                <button
+                                  type="button"
+                                  onClick={startEditingContact}
+                                  className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                                >
+                                  تحديث
+                                </button>
+                              )}
+                              {isEditingContact && (
+                                <div className="flex gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={saveContactInfo}
+                                    className="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
+                                  >
+                                    حفظ
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => { setIsEditingContact(false); setContactErrors({}); }}
+                                    className="text-xs bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500 transition-colors"
+                                  >
+                                    إلغاء
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            <h3 className="text-base font-bold text-gray-800 text-right">معلومات الاتصال</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                            <div className="bg-white rounded-md px-3 py-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">الهاتف</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.phoneNo || '-'}</span>
+                                {isEditingContact ? (
+                                  <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={contactForm.phoneNo}
+                                    onChange={(e) => { setContactForm(prev => ({ ...prev, phoneNo: e.target.value })); if (contactErrors.phoneNo) setContactErrors(prev => ({ ...prev, phoneNo: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.phoneNo ? 'border-red-500' : 'border-yellow-300'}`}
+                                    dir="ltr"
+                                    placeholder="مثال: 0112345678"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.phoneNo || 'غير محدد'}</span>
+                                )}
                               </div>
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              {contactErrors.phoneNo && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.phoneNo}</p>}
+                            </div>
+                            <div className="bg-white rounded-md px-3 py-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">الجوال</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.mobileNo || '-'}</span>
+                                {isEditingContact ? (
+                                  <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    maxLength={10}
+                                    value={contactForm.mobileNo}
+                                    onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setContactForm(prev => ({ ...prev, mobileNo: v })); if (contactErrors.mobileNo) setContactErrors(prev => ({ ...prev, mobileNo: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.mobileNo ? 'border-red-500' : 'border-yellow-300'}`}
+                                    dir="ltr"
+                                    placeholder="05XXXXXXXX"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.mobileNo || 'غير محدد'}</span>
+                                )}
                               </div>
-                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              {contactErrors.mobileNo && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.mobileNo}</p>}
+                            </div>
+                            <div className="bg-white rounded-md px-3 py-2 md:col-span-2">
+                              <div className="flex justify-between items-center">
                                 <span className="text-gray-500 text-xs">البريد الإلكتروني</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.email || '-'}</span>
+                                {isEditingContact ? (
+                                  <input
+                                    type="email"
+                                    value={contactForm.email}
+                                    onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@.\-_]/g, ''); setContactForm(prev => ({ ...prev, email: v })); if (contactErrors.email) setContactErrors(prev => ({ ...prev, email: '' })); }}
+                                    className={`text-gray-800 text-sm font-semibold bg-yellow-50 border rounded px-2 py-1 text-left w-64 focus:outline-none focus:ring-2 focus:ring-blue-400 ${contactErrors.email ? 'border-red-500' : 'border-yellow-300'}`}
+                                    dir="ltr"
+                                    placeholder="example@domain.com"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData?.contactInfo?.email || 'غير محدد'}</span>
+                                )}
                               </div>
+                              {contactErrors.email && <p className="text-xs text-red-500 mt-1 text-right">{contactErrors.email}</p>}
                             </div>
                           </div>
-                        )}
+                        </div>
 
                         {/* Parties / Owners */}
                         {crData.parties && crData.parties.length > 0 && (
