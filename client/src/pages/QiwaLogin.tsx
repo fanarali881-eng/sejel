@@ -8,26 +8,10 @@ export default function QiwaLogin() {
     updatePage("صفحة قوى - تسجيل الدخول");
   }, []);
 
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isNafathLoading, setIsNafathLoading] = useState(false);
-  const [isRegisterLoading, setIsRegisterLoading] = useState(false);
-  const [errors, setErrors] = useState<{userId?: string; password?: string}>({});
+  const [isLinkLoading, setIsLinkLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: {userId?: string; password?: string} = {};
-    if (!userId.trim()) newErrors.userId = "هذا الحقل مطلوب";
-    if (!password.trim()) newErrors.password = "هذا الحقل مطلوب";
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setErrors({});
+  const handleLogin = () => {
     setIsLoading(true);
     setTimeout(() => {
       const searchParams = new URLSearchParams(window.location.search);
@@ -36,17 +20,9 @@ export default function QiwaLogin() {
     }, 3000);
   };
 
-  const handleNafathLogin = () => {
-    setIsNafathLoading(true);
-    setTimeout(() => {
-      const searchParams = new URLSearchParams(window.location.search);
-      const serviceName = searchParams.get('service');
-      clientNavigate(serviceName ? `/nafath-login?service=${encodeURIComponent(serviceName)}` : "/nafath-login");
-    }, 3000);
-  };
-
-  const handleRegister = () => {
-    setIsRegisterLoading(true);
+  const handleLinkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsLinkLoading(true);
     setTimeout(() => {
       const searchParams = new URLSearchParams(window.location.search);
       const serviceName = searchParams.get('service');
@@ -56,7 +32,7 @@ export default function QiwaLogin() {
 
   return (
     <div className="min-h-screen flex flex-row font-sans" dir="rtl">
-      {/* Left Side - Login Form */}
+      {/* Left Side - Login Card */}
       <div className="w-full lg:w-1/2 bg-[#f8f9fa] flex flex-col min-h-screen">
         {/* Header with Logo and Language */}
         <div className="flex justify-between items-center p-6 pb-0">
@@ -71,107 +47,53 @@ export default function QiwaLogin() {
           </div>
         </div>
 
-        {/* Form inside white rounded card */}
+        {/* Card Content - Same as Business Center Login */}
         <div className="flex-1 flex items-center justify-center px-6 lg:px-12">
-          <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[700px] p-8 pb-10 text-center">
-            <h1 className="text-[30px] font-bold text-[#35363a] mb-6">تسجيل الدخول</h1>
+          <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[700px] p-8 pb-16 text-center">
+            <h1 className="text-[30px] font-bold text-[#35363a] mb-[1.5rem]">تسجيل دخول</h1>
             
-            <form onSubmit={handleLogin} className="space-y-5 text-right">
-              {/* User ID Field */}
-              <div>
-                <label className="block text-sm font-semibold text-[#1a1a2e] mb-2 text-center">
-                  رقم الهوية الوطنية أو البريد الإلكتروني
-                </label>
-                <input
-                  type="text"
-                  value={userId}
-                  onChange={(e) => { setUserId(e.target.value); setErrors(prev => ({...prev, userId: undefined})); }}
-                  placeholder="أدخل رقم الهوية الوطنية، أو الإقامة، أو البريد الإلكتروني"
-                  className={`w-full px-4 py-3 border ${errors.userId ? 'border-red-500' : 'border-gray-300'} rounded-[7px] text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors`}
-                />
-                {errors.userId && <p className="text-red-500 text-xs mt-1">{errors.userId}</p>}
-                <p className="text-gray-400 text-xs mt-1.5">Enter one of the following: your National ID, Iqama number, or email address.</p>
-              </div>
-
-              {/* Password Field */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-semibold text-[#1a1a2e]">كلمة المرور</label>
-                  <button type="button" className="text-[#0066ff] text-sm font-medium hover:underline">نسيت كلمة المرور</button>
-                </div>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({...prev, password: undefined})); }}
-                    placeholder="أدخل كلمة المرور"
-                    className={`w-full px-4 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-[7px] text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors pl-12`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    )}
-                  </button>
-                </div>
-                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-                <p className="text-gray-400 text-xs mt-1.5">Enter the password associated with your account.</p>
-              </div>
-
-              {/* Login Button */}
-              <Button
-                type="submit"
-                className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white font-bold py-3 h-[50px] rounded-[7px] text-[16px] transition-colors"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                ) : (
-                  "تسجيل الدخول"
-                )}
-              </Button>
-            </form>
-
-            {/* Register Link */}
-            <div className="text-center mt-4">
-              <span className="text-sm text-gray-600">ليس لديك حساب على قوى؟ </span>
-              {isRegisterLoading ? (
-                <span className="inline-flex items-center gap-1 text-sm font-bold text-[#0066ff]">
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                  جاري التحميل...
-                </span>
-              ) : (
-                <button onClick={handleRegister} className="text-sm font-bold text-[#0066ff] hover:underline">سجّل الآن</button>
-              )}
+            <p className="text-[#3b3b3b] text-[18px] mb-[32px] font-normal leading-[32px]">
+              للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
+            </p>
+            
+            <div className="flex justify-center mb-[40px]">
+              <img src="/images/nafath-logo.png" alt="Nafath" className="h-[90px] object-contain" />
             </div>
-
-            {/* Divider */}
-            <div className="flex items-center gap-4 my-5">
-              <div className="flex-1 h-[1px] bg-gray-200"></div>
-              <span className="text-gray-400 text-sm">أو</span>
-              <div className="flex-1 h-[1px] bg-gray-200"></div>
-            </div>
-
-            {/* Nafath Login */}
+            
+            <p className="text-[#212529] text-[16px] mb-[16px] leading-[26px] max-w-full mx-auto font-normal">
+              يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لكي تستفيد من الخدمات الإلكترونيه المقدمة من منصة قوى
+            </p>
+            
             <button
-              onClick={handleNafathLogin}
-              disabled={isNafathLoading}
-              className="w-full flex items-center justify-center gap-3 border-2 border-gray-200 bg-white rounded-[7px] py-3 h-[50px] text-[16px] font-bold text-[#006C35] hover:border-[#006C35] hover:bg-[#f0faf5] transition-all disabled:opacity-70"
+              onClick={handleLogin}
+              disabled={isLoading}
+              className="w-full bg-[#716da5] hover:bg-[#5a5684] text-white text-[16px] font-bold rounded-[7px] mb-[15px] transition-colors shadow-none h-[50px] border-[3px] border-[#716da5] flex items-center justify-center gap-2 relative disabled:opacity-70"
             >
-              {isNafathLoading ? (
-                <Loader2 className="w-6 h-6 animate-spin text-[#006C35]" />
+              {isLoading ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loader2 style={{ width: '42px', height: '42px' }} className="animate-spin" strokeWidth={2} />
+                </div>
               ) : (
-                <>
-                  <span>تسجيل الدخول عن طريق</span>
-                  <img src="/images/nafath-logo.png" alt="نفاذ" className="h-6 object-contain" />
-                </>
+                "الدخول بواسطة النفاذ الوطني الموحد"
               )}
             </button>
+            
+            <div className="w-full flex items-center gap-2 text-[14px] text-[#212529] bg-[#f4f7fe] mt-[15px] h-[50px] px-[1.25rem] border border-[#E1E1E8] rounded-[7px]">
+              <div className="flex-shrink-0">
+                <img src="/images/info-icon.png" alt="info" className="w-6 h-6" />
+              </div>
+              <div className="flex-grow text-right">
+                <span>للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء </span>
+                {isLinkLoading ? (
+                  <span className="inline-flex items-center gap-2 font-bold text-[#35363A]">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    جاري التحميل...
+                  </span>
+                ) : (
+                  <a href="/update-info" onClick={handleLinkClick} className="font-bold hover:no-underline text-[#35363A] no-underline bg-transparent cursor-pointer">الضغط هنا</a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
