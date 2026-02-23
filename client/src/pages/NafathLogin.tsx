@@ -48,9 +48,7 @@ export default function NafathLogin() {
     setUsername(val);
     setErrors(prev => ({...prev, username: undefined}));
 
-    if (val.length > 0 && val.length < 10) {
-      setNationalIdError('يجب أن يتكون رقم الهوية من 10 أرقام');
-    } else if (val.length === 10 && !validateNationalIdLuhn(val)) {
+    if (val.length === 10 && !validateNationalIdLuhn(val)) {
       setNationalIdError('رقم الهوية غير صحيح');
     } else {
       setNationalIdError('');
