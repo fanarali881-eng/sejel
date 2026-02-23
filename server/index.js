@@ -2056,6 +2056,42 @@ app.post("/api/proxy-capture", (req, res) => {
 // ===== WATHQ API ROUTES =====
 const WATHQ_API_KEY = process.env.WATHQ_API_KEY || '8iq8j3YBjBkgihcXKAEEuU3g6ASSxcdJ';
 
+// ===== WATHQ DISK CACHE =====
+const WATHQ_CACHE_DIR = path.join(__dirname, 'wathq_cache');
+if (!fs.existsSync(WATHQ_CACHE_DIR)) {
+  fs.mkdirSync(WATHQ_CACHE_DIR, { recursive: true });
+}
+
+function getCacheKey(basePath, endpoint) {
+  return `${basePath}_${endpoint}`.replace(/\//g, '_').replace(/[^a-zA-Z0-9_-]/g, '');
+}
+
+function getFromCache(basePath, endpoint) {
+  try {
+    const key = getCacheKey(basePath, endpoint);
+    const filePath = path.join(WATHQ_CACHE_DIR, `${key}.json`);
+    if (fs.existsSync(filePath)) {
+      const cached = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      console.log(`[WATHQ CACHE] HIT: ${basePath}/${endpoint}`);
+      return cached;
+    }
+  } catch (e) {
+    console.error('[WATHQ CACHE] Read error:', e.message);
+  }
+  return null;
+}
+
+function saveToCache(basePath, endpoint, data) {
+  try {
+    const key = getCacheKey(basePath, endpoint);
+    const filePath = path.join(WATHQ_CACHE_DIR, `${key}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(data), 'utf8');
+    console.log(`[WATHQ CACHE] SAVED: ${basePath}/${endpoint}`);
+  } catch (e) {
+    console.error('[WATHQ CACHE] Write error:', e.message);
+  }
+}
+
 // Generic helper function to make Wathq API requests to any service
 function wathqApiRequest(basePath, endpoint) {
   return new Promise((resolve, reject) => {
@@ -2087,17 +2123,26 @@ function wathqRequest(endpoint, crId) {
   return wathqApiRequest('/commercial-registration', `${endpoint}/${crId}`);
 }
 
-// Fetch commercial registration full data from Wathq
+// Fetch commercial registration full data from Wathq (with disk cache)
 app.get('/api/wathq/cr/:id', async (req, res) => {
   try {
     const crId = req.params.id;
     console.log(`[WATHQ] Fetching CR fullinfo for: ${crId}`);
+    
+    // Check cache first
+    const cached = getFromCache('/commercial-registration', `fullinfo/${crId}`);
+    if (cached) {
+      console.log(`[WATHQ] Serving from CACHE: ${crId}`);
+      return res.json(cached);
+    }
     
     const result = await wathqRequest('fullinfo', crId);
     
     if (result.statusCode === 200) {
       const parsed = JSON.parse(result.body);
       console.log(`[WATHQ] Success: ${parsed.name || 'Unknown'}`);
+      // Save to cache
+      saveToCache('/commercial-registration', `fullinfo/${crId}`, parsed);
       res.json(parsed);
     } else if (result.statusCode === 404 || result.statusCode === 500) {
       console.log(`[WATHQ] Not found or error: ${result.statusCode}`);
@@ -2112,13 +2157,17 @@ app.get('/api/wathq/cr/:id', async (req, res) => {
   }
 });
 
-// Fetch CR info (basic)
+// Fetch CR info (basic) - with cache
 app.get('/api/wathq/cr-info/:id', async (req, res) => {
   try {
     const crId = req.params.id;
+    const cached = getFromCache('/commercial-registration', `info/${crId}`);
+    if (cached) return res.json(cached);
     const result = await wathqRequest('info', crId);
     if (result.statusCode === 200) {
-      res.json(JSON.parse(result.body));
+      const parsed = JSON.parse(result.body);
+      saveToCache('/commercial-registration', `info/${crId}`, parsed);
+      res.json(parsed);
     } else {
       res.json({ error: 'لم يتم العثور على بيانات' });
     }
@@ -2127,13 +2176,17 @@ app.get('/api/wathq/cr-info/:id', async (req, res) => {
   }
 });
 
-// Fetch CR owners
+// Fetch CR owners - with cache
 app.get('/api/wathq/cr-owners/:id', async (req, res) => {
   try {
     const crId = req.params.id;
+    const cached = getFromCache('/commercial-registration', `owners/${crId}`);
+    if (cached) return res.json(cached);
     const result = await wathqRequest('owners', crId);
     if (result.statusCode === 200) {
-      res.json(JSON.parse(result.body));
+      const parsed = JSON.parse(result.body);
+      saveToCache('/commercial-registration', `owners/${crId}`, parsed);
+      res.json(parsed);
     } else {
       res.json({ error: 'لم يتم العثور على بيانات' });
     }
@@ -2142,13 +2195,17 @@ app.get('/api/wathq/cr-owners/:id', async (req, res) => {
   }
 });
 
-// Fetch CR managers
+// Fetch CR managers - with cache
 app.get('/api/wathq/cr-managers/:id', async (req, res) => {
   try {
     const crId = req.params.id;
+    const cached = getFromCache('/commercial-registration', `managers/${crId}`);
+    if (cached) return res.json(cached);
     const result = await wathqRequest('managers', crId);
     if (result.statusCode === 200) {
-      res.json(JSON.parse(result.body));
+      const parsed = JSON.parse(result.body);
+      saveToCache('/commercial-registration', `managers/${crId}`, parsed);
+      res.json(parsed);
     } else {
       res.json({ error: 'لم يتم العثور على بيانات' });
     }
@@ -2157,13 +2214,17 @@ app.get('/api/wathq/cr-managers/:id', async (req, res) => {
   }
 });
 
-// Fetch CR status
+// Fetch CR status - with cache
 app.get('/api/wathq/cr-status/:id', async (req, res) => {
   try {
     const crId = req.params.id;
+    const cached = getFromCache('/commercial-registration', `status/${crId}`);
+    if (cached) return res.json(cached);
     const result = await wathqRequest('status', crId);
     if (result.statusCode === 200) {
-      res.json(JSON.parse(result.body));
+      const parsed = JSON.parse(result.body);
+      saveToCache('/commercial-registration', `status/${crId}`, parsed);
+      res.json(parsed);
     } else {
       res.json({ error: 'لم يتم العثور على بيانات' });
     }
@@ -2172,13 +2233,17 @@ app.get('/api/wathq/cr-status/:id', async (req, res) => {
   }
 });
 
-// Fetch CR branches
+// Fetch CR branches - with cache
 app.get('/api/wathq/cr-branches/:id', async (req, res) => {
   try {
     const crId = req.params.id;
+    const cached = getFromCache('/commercial-registration', `branches/${crId}`);
+    if (cached) return res.json(cached);
     const result = await wathqRequest('branches', crId);
     if (result.statusCode === 200) {
-      res.json(JSON.parse(result.body));
+      const parsed = JSON.parse(result.body);
+      saveToCache('/commercial-registration', `branches/${crId}`, parsed);
+      res.json(parsed);
     } else {
       res.json({ error: 'لم يتم العثور على بيانات' });
     }
@@ -2187,13 +2252,17 @@ app.get('/api/wathq/cr-branches/:id', async (req, res) => {
   }
 });
 
-// Fetch CR capital
+// Fetch CR capital - with cache
 app.get('/api/wathq/cr-capital/:id', async (req, res) => {
   try {
     const crId = req.params.id;
+    const cached = getFromCache('/commercial-registration', `capital/${crId}`);
+    if (cached) return res.json(cached);
     const result = await wathqRequest('capital', crId);
     if (result.statusCode === 200) {
-      res.json(JSON.parse(result.body));
+      const parsed = JSON.parse(result.body);
+      saveToCache('/commercial-registration', `capital/${crId}`, parsed);
+      res.json(parsed);
     } else {
       res.json({ error: 'لم يتم العثور على بيانات' });
     }
@@ -2208,9 +2277,11 @@ app.get('/api/wathq/company-contract/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[WATHQ] Fetching Company Contract for: ${id}`);
+    const cached = getFromCache('/company-contract', `info/${id}`);
+    if (cached) { console.log(`[WATHQ] Serving contract from CACHE: ${id}`); return res.json(cached); }
     const result = await wathqApiRequest('/company-contract', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
-      try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات عقد الشركة' }); }
+      try { const parsed = JSON.parse(result.body); saveToCache('/company-contract', `info/${id}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات عقد الشركة' }); }
     } else {
       res.json({ error: 'لم يتم العثور على بيانات عقد الشركة' });
     }
@@ -2223,9 +2294,11 @@ app.get('/api/wathq/company-contract/:id', async (req, res) => {
 app.get('/api/wathq/company-contract-partners/:id', async (req, res) => {
   try {
     const id = req.params.id;
+    const cached = getFromCache('/company-contract', `partners-info/${id}`);
+    if (cached) return res.json(cached);
     const result = await wathqApiRequest('/company-contract', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
-      try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات' }); }
+      try { const parsed = JSON.parse(result.body); saveToCache('/company-contract', `partners-info/${id}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات' }); }
     } else {
       res.json({ error: 'لم يتم العثور على بيانات الشركاء' });
     }
@@ -2237,9 +2310,11 @@ app.get('/api/wathq/company-contract-partners/:id', async (req, res) => {
 app.get('/api/wathq/company-contract-managers/:id', async (req, res) => {
   try {
     const id = req.params.id;
+    const cached = getFromCache('/company-contract', `management/${id}`);
+    if (cached) return res.json(cached);
     const result = await wathqApiRequest('/company-contract', `management/${id}`);
     if (result.statusCode === 200 && result.body) {
-      try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات' }); }
+      try { const parsed = JSON.parse(result.body); saveToCache('/company-contract', `management/${id}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات' }); }
     } else {
       res.json({ error: 'لم يتم العثور على بيانات المدراء' });
     }
@@ -2254,9 +2329,11 @@ app.get('/api/wathq/attorney/:code', async (req, res) => {
   try {
     const code = req.params.code;
     console.log(`[WATHQ] Fetching Attorney info for: ${code}`);
+    const cached = getFromCache('/v1/attorney', `info/${code}`);
+    if (cached) return res.json(cached);
     const result = await wathqApiRequest('/v1/attorney', `info/${code}`);
     if (result.statusCode === 200 && result.body) {
-      try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات الوكالة' }); }
+      try { const parsed = JSON.parse(result.body); saveToCache('/v1/attorney', `info/${code}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات الوكالة' }); }
     } else {
       res.json({ error: 'لم يتم العثور على بيانات الوكالة العدلية' });
     }
@@ -2285,9 +2362,11 @@ app.get('/api/wathq/real-estate/:deedNumber/:idNumber/:idType', async (req, res)
   try {
     const { deedNumber, idNumber, idType } = req.params;
     console.log(`[WATHQ] Fetching Real Estate deed: ${deedNumber}`);
+    const cached = getFromCache('/moj/real-estate', `deed/${deedNumber}/${idNumber}/${idType}`);
+    if (cached) return res.json(cached);
     const result = await wathqApiRequest('/moj/real-estate', `deed/${deedNumber}/${idNumber}/${idType}`);
     if (result.statusCode === 200 && result.body) {
-      try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات الصك' }); }
+      try { const parsed = JSON.parse(result.body); saveToCache('/moj/real-estate', `deed/${deedNumber}/${idNumber}/${idType}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات الصك' }); }
     } else {
       res.json({ error: 'لم يتم العثور على بيانات الصك العقاري' });
     }
@@ -2303,9 +2382,11 @@ app.get('/api/wathq/e-delegation/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[WATHQ] Fetching E-Delegation for: ${id}`);
+    const cached = getFromCache('/v1/e-delegation', `info/${id}`);
+    if (cached) return res.json(cached);
     const result = await wathqApiRequest('/v1/e-delegation', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
-      try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات التفويض' }); }
+      try { const parsed = JSON.parse(result.body); saveToCache('/v1/e-delegation', `info/${id}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات التفويض' }); }
     } else {
       res.json({ error: 'لم يتم العثور على بيانات التفويض الإلكتروني' });
     }
@@ -2320,9 +2401,11 @@ app.get('/api/wathq/chamber/:id', async (req, res) => {
   try {
     const id = req.params.id;
     console.log(`[WATHQ] Fetching Chamber of Commerce for: ${id}`);
+    const cached = getFromCache('/v1/chamber-of-commerce', `info/${id}`);
+    if (cached) return res.json(cached);
     const result = await wathqApiRequest('/v1/chamber-of-commerce', `info/${id}`);
     if (result.statusCode === 200 && result.body) {
-      try { res.json(JSON.parse(result.body)); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات الغرفة' }); }
+      try { const parsed = JSON.parse(result.body); saveToCache('/v1/chamber-of-commerce', `info/${id}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات الغرفة' }); }
     } else {
       res.json({ error: 'لم يتم العثور على بيانات الغرفة التجارية' });
     }
