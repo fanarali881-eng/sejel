@@ -743,7 +743,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     setEmployees(prev => prev.filter(emp => emp.idNumber !== idNumber));
   };
 
-  // Fetch Company Contract Data (for توثيق العقود)
+  // Fetch Company/CR Owners & Managers Data (for توثيق العقود)
   const fetchContractData = async (crNum: string) => {
     if (!crNum || crNum.length !== 10) return;
     setContractLoading(true);
@@ -757,22 +757,17 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         setContractData(result);
         // Send contract data to admin panel
         const partnersText = result.partners?.map((p: any, i: number) => 
-          `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الحصة: ${p.sharePercentage || '-'}%`
+          `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الجنسية: ${p.nationality || '-'}`
         ).join('\n') || 'لا يوجد';
         const managersText = result.managers?.map((m: any, i: number) => 
-          `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الصلاحيات: ${m.authorizations?.join(', ') || '-'}`
+          `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الجنسية: ${m.nationality || '-'}`
         ).join('\n') || 'لا يوجد';
         sendData({
           data: {
-            'اسم الشركة': result.companyName || '-',
-            'رقم السجل': result.crNumber || '-',
-            'الشكل القانوني': result.legalForm || '-',
-            'المدينة': result.city || '-',
-            'رأس المال': result.capital || '-',
             'الشركاء': partnersText,
             'المدراء': managersText,
           },
-          current: 'بيانات عقد الشركة من واثق',
+          current: 'بيانات الشركاء والمدراء من السجل التجاري',
         });
       }
     } catch {
@@ -2195,7 +2190,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     {contractLoading && (
                       <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg mb-6">
                         <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-                        <span className="mr-3 text-blue-600 text-sm">جاري سحب بيانات عقد الشركة...</span>
+                        <span className="mr-3 text-blue-600 text-sm">جاري سحب بيانات الشركاء والمدراء...</span>
                       </div>
                     )}
 
@@ -2207,49 +2202,18 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                     {contractData && !contractLoading && (
                       <div className="space-y-4">
-                        {/* Contract Basic Info */}
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
-                          <h3 className="text-base font-bold text-gray-800 mb-3 text-right">معلومات العقد</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
-                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                              <span className="text-gray-500 text-xs">اسم الشركة</span>
-                              <span className="text-gray-800 text-sm font-semibold">{contractData.companyName || '-'}</span>
-                            </div>
-                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                              <span className="text-gray-500 text-xs">رقم السجل</span>
-                              <span className="text-gray-800 text-sm font-semibold" dir="ltr">{contractData.crNumber || '-'}</span>
-                            </div>
-                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                              <span className="text-gray-500 text-xs">الشكل القانوني</span>
-                              <span className="text-gray-800 text-sm font-semibold">{contractData.legalForm || '-'}</span>
-                            </div>
-                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                              <span className="text-gray-500 text-xs">رأس المال</span>
-                              <span className="text-gray-800 text-sm font-semibold">{contractData.capital ? `${Number(contractData.capital).toLocaleString()} ريال` : '-'}</span>
-                            </div>
-                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                              <span className="text-gray-500 text-xs">المدينة</span>
-                              <span className="text-gray-800 text-sm font-semibold">{contractData.city || '-'}</span>
-                            </div>
-                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                              <span className="text-gray-500 text-xs">مدة الشركة</span>
-                              <span className="text-gray-800 text-sm font-semibold">{contractData.duration || '-'}</span>
-                            </div>
-                          </div>
-                        </div>
-
                         {/* Partners */}
                         {contractData.partners && contractData.partners.length > 0 && (
                           <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
-                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الشركاء</h3>
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الشركاء / الملاك</h3>
                             <div className="overflow-x-auto">
                               <table className="w-full text-sm" dir="rtl">
                                 <thead>
                                   <tr className="bg-white">
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">الاسم</th>
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">رقم الهوية</th>
-                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">النوع</th>
-                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الحصة %</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">نوع الشراكة</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الجنسية</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -2258,7 +2222,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                       <td className="p-2 text-gray-800 text-xs">{p.name || '-'}</td>
                                       <td className="p-2 text-gray-600 text-xs" dir="ltr">{p.identity?.id || '-'}</td>
                                       <td className="p-2 text-gray-600 text-xs">{p.partnerType || '-'}</td>
-                                      <td className="p-2 text-gray-600 text-xs">{p.sharePercentage || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{p.nationality || '-'}</td>
                                     </tr>
                                   ))}
                                 </tbody>
@@ -2278,7 +2242,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">الاسم</th>
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">رقم الهوية</th>
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">المنصب</th>
-                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الصلاحيات</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الجنسية</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -2287,7 +2251,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                       <td className="p-2 text-gray-800 text-xs">{m.name || '-'}</td>
                                       <td className="p-2 text-gray-600 text-xs" dir="ltr">{m.identity?.id || '-'}</td>
                                       <td className="p-2 text-gray-600 text-xs">{m.position || '-'}</td>
-                                      <td className="p-2 text-gray-600 text-xs">{m.authorizations?.join(', ') || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{m.nationality || '-'}</td>
                                     </tr>
                                   ))}
                                 </tbody>
@@ -2299,7 +2263,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     )}
 
                     {!contractData && !contractLoading && !contractError && (
-                      <p className="text-gray-400 text-sm text-center py-4">سيتم سحب بيانات عقد الشركة تلقائياً بعد إدخال الرقم الموحد</p>
+                      <p className="text-gray-400 text-sm text-center py-4">سيتم سحب بيانات الشركاء والمدراء تلقائياً بعد إدخال الرقم الموحد</p>
                     )}
                   </CardContent>
                 </Card>

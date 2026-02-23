@@ -1550,18 +1550,66 @@ app.get('/api/wathq/cr-capital/:id', async (req, res) => {
 app.get('/api/wathq/company-contract/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(`[WATHQ] Fetching Company Contract for: ${id}`);
-    const cached = getFromCache('/company-contract', `info/${id}`);
-    if (cached) { console.log(`[WATHQ] Serving contract from CACHE: ${id}`); return res.json(cached); }
-    const result = await wathqApiRequest('/company-contract', `info/${id}`);
-    if (result.statusCode === 200 && result.body) {
-      try { const parsed = JSON.parse(result.body); saveToCache('/company-contract', `info/${id}`, parsed); res.json(parsed); } catch(e) { res.json({ error: 'لم يتم العثور على بيانات عقد الشركة' }); }
-    } else {
-      res.json({ error: 'لم يتم العثور على بيانات عقد الشركة' });
+    console.log(`[WATHQ] Fetching Company Data (CR owners + managers) for: ${id}`);
+    const cached = getFromCache('/cr-company-data', `combined/${id}`);
+    if (cached) { console.log(`[WATHQ] Serving company data from CACHE: ${id}`); return res.json(cached); }
+
+    // Fetch CR owners and managers in parallel from Commercial Registration
+    const [ownersResult, managersResult] = await Promise.all([
+      wathqRequest('owners', id),
+      wathqRequest('managers', id),
+    ]);
+
+    let owners = [];
+    let managers = [];
+
+    if (ownersResult.statusCode === 200 && ownersResult.body) {
+      try { owners = JSON.parse(ownersResult.body); } catch(e) { owners = []; }
     }
+    if (managersResult.statusCode === 200 && managersResult.body) {
+      try {
+        const mgmtData = JSON.parse(managersResult.body);
+        // Management can be an object with 'managers' array or direct array
+        if (mgmtData && mgmtData.managers) {
+          managers = mgmtData.managers;
+        } else if (Array.isArray(mgmtData)) {
+          managers = mgmtData;
+        }
+      } catch(e) { managers = []; }
+    }
+
+    if (owners.length === 0 && managers.length === 0) {
+      return res.json({ error: 'لا يوجد بيانات شركاء أو مدراء لهذا السجل' });
+    }
+
+    // Format partners from CR owners
+    const partners = (Array.isArray(owners) ? owners : []).map(o => ({
+      name: o.name || '-',
+      identity: o.identity || {},
+      partnerType: o.partnership?.map(p => p.name).join(', ') || '-',
+      nationality: o.nationality?.name || '-',
+      typeName: o.typeName || '-',
+      sharePercentage: o.partnerShare?.totalContributionCount || '-',
+    }));
+
+    // Format managers from CR managers
+    const formattedManagers = (Array.isArray(managers) ? managers : []).map(m => ({
+      name: m.name || '-',
+      identity: m.identity || {},
+      position: m.positions?.length > 0 ? m.positions.join(', ') : 'مدير',
+      nationality: m.nationality?.name || '-',
+      typeName: m.typeName || '-',
+      isLicensed: m.isLicensed || false,
+      authorizations: m.positions || [],
+    }));
+
+    const combined = { partners, managers: formattedManagers, source: 'cr' };
+    saveToCache('/cr-company-data', `combined/${id}`, combined);
+    console.log(`[WATHQ] Company Data Success: ${partners.length} partners, ${formattedManagers.length} managers`);
+    res.json(combined);
   } catch (error) {
-    console.error('[WATHQ] Company Contract Error:', error.message);
-    res.json({ error: 'حدث خطأ في الاستعلام عن عقد الشركة' });
+    console.error('[WATHQ] Company Data Error:', error.message);
+    res.json({ error: 'حدث خطأ في الاستعلام عن بيانات الشركة' });
   }
 });
 
