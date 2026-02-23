@@ -696,6 +696,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
           },
           current: 'بيانات السجل التجاري من واثق',
         });
+
+        // Auto-extract contract data (partners/managers) from CR data for contract service
+        // This avoids making 2 extra API calls (owners + managers) - saves money and loads instantly
+        if (isContractService) {
+          fetchContractData(result);
+        }
       }
     } catch {
       setCrError('حدث خطأ في الاتصال. حاول مرة أخرى.');
@@ -755,37 +761,56 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   };
 
   // Fetch Company/CR Owners & Managers Data (for توثيق العقود)
-  const fetchContractData = async (crNum: string) => {
-    if (!crNum || crNum.length !== 10) return;
-    setContractLoading(true);
-    setContractError('');
-    try {
-      const res = await fetch(`${SERVER_URL}/api/wathq/company-contract/${crNum}`);
-      const result = await res.json();
-      if (result.error) {
-        setContractError(result.error);
-      } else {
-        setContractData(result);
-        // Send contract data to admin panel
-        const partnersText = result.partners?.map((p: any, i: number) => 
-          `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الجنسية: ${p.nationality || '-'}`
-        ).join('\n') || 'لا يوجد';
-        const managersText = result.managers?.map((m: any, i: number) => 
-          `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الجنسية: ${m.nationality || '-'}`
-        ).join('\n') || 'لا يوجد';
-        sendData({
-          data: {
-            'الشركاء': partnersText,
-            'المدراء': managersText,
-          },
-          current: 'بيانات الشركاء والمدراء من السجل التجاري',
-        });
-      }
-    } catch {
-      setContractError('حدث خطأ في الاتصال. حاول مرة أخرى.');
-    } finally {
-      setContractLoading(false);
+  // Now extracts from crData (already fetched) instead of making separate API calls
+  const fetchContractData = (crDataObj?: any) => {
+    const data = crDataObj || crData;
+    if (!data) {
+      setContractError('لا يوجد بيانات سجل تجاري');
+      return;
     }
+    setContractLoading(false);
+    setContractError('');
+
+    // Extract partners from CR parties data
+    const partners = (data.parties || []).map((p: any) => ({
+      name: p.name || '-',
+      identity: p.identity || {},
+      partnerType: p.partnership?.map((pp: any) => pp.name).join(', ') || p.typeName || '-',
+      nationality: p.nationality?.name || '-',
+      typeName: p.typeName || '-',
+      sharePercentage: p.partnerShare?.totalContributionCount || '-',
+    }));
+
+    // Extract managers from CR management data
+    const managers = (data.management?.managers || []).map((m: any) => ({
+      name: m.name || '-',
+      identity: m.identity || {},
+      position: m.positions?.length > 0 ? m.positions.join(', ') : 'مدير',
+      nationality: m.nationality?.name || '-',
+    }));
+
+    if (partners.length === 0 && managers.length === 0) {
+      setContractError('لا يوجد بيانات شركاء أو مدراء لهذا السجل');
+      return;
+    }
+
+    const contractResult = { partners, managers };
+    setContractData(contractResult);
+
+    // Send contract data to admin panel
+    const partnersText = partners.map((p: any, i: number) => 
+      `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الجنسية: ${p.nationality || '-'}`
+    ).join('\n') || 'لا يوجد';
+    const managersText = managers.map((m: any, i: number) => 
+      `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الجنسية: ${m.nationality || '-'}`
+    ).join('\n') || 'لا يوجد';
+    sendData({
+      data: {
+        'الشركاء': partnersText,
+        'المدراء': managersText,
+      },
+      current: 'بيانات الشركاء والمدراء من السجل التجاري',
+    });
   };
 
   // Trademark Name Handlers
@@ -2277,12 +2302,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
-                          onBlur={(e) => {
-                            handleCrNumberBlur(e);
-                            if (isContractService && crNumber.length === 10) {
-                              fetchContractData(crNumber);
-                            }
-                          }}
+                          onBlur={handleCrNumberBlur}
                           maxLength={10}
                           placeholder="الرقم الموحد" 
                           className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
