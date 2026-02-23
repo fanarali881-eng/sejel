@@ -163,6 +163,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [crLoading, setCrLoading] = useState(false);
   const [crError, setCrError] = useState('');
   const [crFetched, setCrFetched] = useState(false);
+  const [isEditingCR, setIsEditingCR] = useState(false);
+  const [editedCrData, setEditedCrData] = useState<any>(null);
   
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -649,7 +651,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
         sendData({
           data: {
-            'الرقم الوطني الموحد': crNum,
+            'الرقم الوطني الموحد (المدخل)': crNum,
             'الاسم التجاري': result.name || '-',
             'حالة السجل': result.status?.name || '-',
             'الرقم الوطني الموحد': result.crNationalNumber || '-',
@@ -1049,6 +1051,99 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
+  // CR Edit Mode Functions
+  const isModifyCRService = serviceName === 'تعديل سجل تجاري';
+  
+  const startEditingCR = () => {
+    if (!crData) return;
+    setEditedCrData({
+      name: crData.name || '',
+      entityTypeName: crData.entityType?.name || '',
+      crCapital: crData.crCapital ? String(crData.crCapital) : '',
+      companyDuration: crData.companyDuration ? String(crData.companyDuration) : '',
+      hasEcommerce: crData.hasEcommerce || false,
+      phoneNo: crData.contactInfo?.phoneNo || '',
+      mobileNo: crData.contactInfo?.mobileNo || '',
+      email: crData.contactInfo?.email || '',
+      parties: crData.parties ? crData.parties.map((p: any) => ({
+        name: p.name || '',
+        typeName: p.typeName || '',
+        identityId: p.identity?.id || '',
+        partnershipName: p.partnership?.map((pp: any) => pp.name).join(', ') || '',
+        nationalityName: p.nationality?.name || '',
+      })) : [],
+      managers: crData.management?.managers ? crData.management.managers.map((m: any) => ({
+        name: m.name || '',
+        typeName: m.typeName || '',
+        nationalityName: m.nationality?.name || '',
+      })) : [],
+    });
+    setIsEditingCR(true);
+  };
+
+  const cancelEditingCR = () => {
+    setIsEditingCR(false);
+    setEditedCrData(null);
+  };
+
+  const saveEditedCR = () => {
+    if (!editedCrData || !crData) return;
+    const updatedCrData = {
+      ...crData,
+      name: editedCrData.name,
+      entityType: { ...crData.entityType, name: editedCrData.entityTypeName },
+      crCapital: Number(editedCrData.crCapital) || 0,
+      companyDuration: Number(editedCrData.companyDuration) || 0,
+      hasEcommerce: editedCrData.hasEcommerce,
+      contactInfo: {
+        ...crData.contactInfo,
+        phoneNo: editedCrData.phoneNo,
+        mobileNo: editedCrData.mobileNo,
+        email: editedCrData.email,
+      },
+      parties: editedCrData.parties.map((p: any, i: number) => ({
+        ...((crData.parties && crData.parties[i]) || {}),
+        name: p.name,
+        typeName: p.typeName,
+        identity: { ...((crData.parties?.[i]?.identity) || {}), id: p.identityId },
+        partnership: [{ name: p.partnershipName }],
+        nationality: { ...((crData.parties?.[i]?.nationality) || {}), name: p.nationalityName },
+      })),
+      management: {
+        ...crData.management,
+        managers: editedCrData.managers.map((m: any, i: number) => ({
+          ...((crData.management?.managers?.[i]) || {}),
+          name: m.name,
+          typeName: m.typeName,
+          nationality: { ...((crData.management?.managers?.[i]?.nationality) || {}), name: m.nationalityName },
+        })),
+      },
+    };
+    setCrData(updatedCrData);
+    setIsEditingCR(false);
+    setEditedCrData(null);
+  };
+
+  const updateEditedField = (field: string, value: any) => {
+    setEditedCrData((prev: any) => ({ ...prev, [field]: value }));
+  };
+
+  const updateEditedParty = (index: number, field: string, value: string) => {
+    setEditedCrData((prev: any) => {
+      const newParties = [...prev.parties];
+      newParties[index] = { ...newParties[index], [field]: value };
+      return { ...prev, parties: newParties };
+    });
+  };
+
+  const updateEditedManager = (index: number, field: string, value: string) => {
+    setEditedCrData((prev: any) => {
+      const newManagers = [...prev.managers];
+      newManagers[index] = { ...newManagers[index], [field]: value };
+      return { ...prev, managers: newManagers };
+    });
+  };
+
   const isCommercialLicenseService = serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية';
   const isReserveTradeNameService = serviceName === 'حجز اسم تجاري';
   const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
@@ -1193,56 +1288,158 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             }`}>
                               {crData.status?.name || 'غير محدد'}
                             </span>
-                            <h3 className="text-base font-bold text-gray-800">بيانات السجل التجاري</h3>
+                            <div className="flex items-center gap-3">
+                              <h3 className="text-base font-bold text-gray-800">بيانات السجل التجاري</h3>
+                              {isModifyCRService && !isEditingCR && (
+                                <button
+                                  onClick={startEditingCR}
+                                  className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
+                                  تعديل
+                                </button>
+                              )}
+                              {isModifyCRService && isEditingCR && (
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={saveEditedCR}
+                                    className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white text-xs font-bold rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    حفظ
+                                  </button>
+                                  <button
+                                    onClick={cancelEditingCR}
+                                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-500 text-white text-xs font-bold rounded-lg hover:bg-gray-600 transition-colors shadow-sm"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    إلغاء
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                            {/* Trade Name - Editable */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">الاسم التجاري</span>
-                              <span className="text-gray-800 text-sm font-semibold">{crData.name || '-'}</span>
+                              {isEditingCR && editedCrData ? (
+                                <input
+                                  type="text"
+                                  value={editedCrData.name}
+                                  onChange={(e) => updateEditedField('name', e.target.value)}
+                                  className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-right w-48 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                />
+                              ) : (
+                                <span className="text-gray-800 text-sm font-semibold">{crData.name || '-'}</span>
+                              )}
                             </div>
+                            {/* CR Number - Read Only */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">رقم السجل</span>
                               <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.crNumber || '-'}</span>
                             </div>
+                            {/* National Number - Read Only */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">الرقم الوطني الموحد</span>
                               <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.crNationalNumber || '-'}</span>
                             </div>
+                            {/* Entity Type - Editable */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">نوع المنشأة</span>
-                              <span className="text-gray-800 text-sm font-semibold">{crData.entityType?.name || '-'}</span>
+                              {isEditingCR && editedCrData ? (
+                                <input
+                                  type="text"
+                                  value={editedCrData.entityTypeName}
+                                  onChange={(e) => updateEditedField('entityTypeName', e.target.value)}
+                                  className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-right w-48 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                />
+                              ) : (
+                                <span className="text-gray-800 text-sm font-semibold">{crData.entityType?.name || '-'}</span>
+                              )}
                             </div>
+                            {/* Legal Form - Read Only */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">الشكل القانوني</span>
                               <span className="text-gray-800 text-sm font-semibold">{crData.entityType?.formName || '-'}</span>
                             </div>
+                            {/* Capital - Editable */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">رأس المال</span>
-                              <span className="text-gray-800 text-sm font-semibold">{crData.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '-'}</span>
+                              {isEditingCR && editedCrData ? (
+                                <div className="flex items-center gap-1">
+                                  <span className="text-gray-500 text-xs">ريال</span>
+                                  <input
+                                    type="text"
+                                    value={editedCrData.crCapital}
+                                    onChange={(e) => updateEditedField('crCapital', e.target.value)}
+                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-right w-36 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    dir="ltr"
+                                  />
+                                </div>
+                              ) : (
+                                <span className="text-gray-800 text-sm font-semibold">{crData.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '-'}</span>
+                              )}
                             </div>
+                            {/* City - Read Only */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">المدينة</span>
                               <span className="text-gray-800 text-sm font-semibold">{crData.headquarterCityName || '-'}</span>
                             </div>
+                            {/* Company Duration - Editable */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">مدة الشركة</span>
-                              <span className="text-gray-800 text-sm font-semibold">{crData.companyDuration ? `${crData.companyDuration} سنة` : '-'}</span>
+                              {isEditingCR && editedCrData ? (
+                                <div className="flex items-center gap-1">
+                                  <span className="text-gray-500 text-xs">سنة</span>
+                                  <input
+                                    type="text"
+                                    value={editedCrData.companyDuration}
+                                    onChange={(e) => updateEditedField('companyDuration', e.target.value)}
+                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-right w-20 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    dir="ltr"
+                                  />
+                                </div>
+                              ) : (
+                                <span className="text-gray-800 text-sm font-semibold">{crData.companyDuration ? `${crData.companyDuration} سنة` : '-'}</span>
+                              )}
                             </div>
+                            {/* Issue Date Gregorian - Read Only */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">تاريخ الإصدار (ميلادي)</span>
                               <span className="text-gray-800 text-sm font-semibold">{crData.issueDateGregorian || '-'}</span>
                             </div>
+                            {/* Issue Date Hijri - Read Only */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">تاريخ الإصدار (هجري)</span>
                               <span className="text-gray-800 text-sm font-semibold">{crData.issueDateHijri || '-'}</span>
                             </div>
+                            {/* Is Main - Read Only */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">سجل رئيسي</span>
                               <span className="text-gray-800 text-sm font-semibold">{crData.isMain ? 'نعم' : 'لا'}</span>
                             </div>
+                            {/* E-commerce - Editable */}
                             <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                               <span className="text-gray-500 text-xs">تجارة إلكترونية</span>
-                              <span className="text-gray-800 text-sm font-semibold">{crData.hasEcommerce ? 'نعم' : 'لا'}</span>
+                              {isEditingCR && editedCrData ? (
+                                <select
+                                  value={editedCrData.hasEcommerce ? 'yes' : 'no'}
+                                  onChange={(e) => updateEditedField('hasEcommerce', e.target.value === 'yes')}
+                                  className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                >
+                                  <option value="yes">نعم</option>
+                                  <option value="no">لا</option>
+                                </select>
+                              ) : (
+                                <span className="text-gray-800 text-sm font-semibold">{crData.hasEcommerce ? 'نعم' : 'لا'}</span>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1254,15 +1451,45 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
                               <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                                 <span className="text-gray-500 text-xs">الهاتف</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.phoneNo || '-'}</span>
+                                {isEditingCR && editedCrData ? (
+                                  <input
+                                    type="text"
+                                    value={editedCrData.phoneNo}
+                                    onChange={(e) => updateEditedField('phoneNo', e.target.value)}
+                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    dir="ltr"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.phoneNo || '-'}</span>
+                                )}
                               </div>
                               <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                                 <span className="text-gray-500 text-xs">الجوال</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.mobileNo || '-'}</span>
+                                {isEditingCR && editedCrData ? (
+                                  <input
+                                    type="text"
+                                    value={editedCrData.mobileNo}
+                                    onChange={(e) => updateEditedField('mobileNo', e.target.value)}
+                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-left w-40 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    dir="ltr"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.mobileNo || '-'}</span>
+                                )}
                               </div>
                               <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
                                 <span className="text-gray-500 text-xs">البريد الإلكتروني</span>
-                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.email || '-'}</span>
+                                {isEditingCR && editedCrData ? (
+                                  <input
+                                    type="email"
+                                    value={editedCrData.email}
+                                    onChange={(e) => updateEditedField('email', e.target.value)}
+                                    className="text-gray-800 text-sm font-semibold bg-yellow-50 border border-yellow-300 rounded px-2 py-1 text-left w-48 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    dir="ltr"
+                                  />
+                                ) : (
+                                  <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.contactInfo.email || '-'}</span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -1284,15 +1511,37 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {crData.parties.map((party: any, i: number) => (
-                                    <tr key={i} className="border-t border-purple-100">
-                                      <td className="p-2 text-gray-800 text-xs">{party.name}</td>
-                                      <td className="p-2 text-gray-600 text-xs">{party.typeName}</td>
-                                      <td className="p-2 text-gray-600 text-xs" dir="ltr">{party.identity?.id}</td>
-                                      <td className="p-2 text-gray-600 text-xs">{party.partnership?.map((p: any) => p.name).join(', ')}</td>
-                                      <td className="p-2 text-gray-600 text-xs">{party.nationality?.name}</td>
-                                    </tr>
-                                  ))}
+                                  {isEditingCR && editedCrData ? (
+                                    editedCrData.parties.map((party: any, i: number) => (
+                                      <tr key={i} className="border-t border-purple-100">
+                                        <td className="p-1">
+                                          <input type="text" value={party.name} onChange={(e) => updateEditedParty(i, 'name', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                        </td>
+                                        <td className="p-1">
+                                          <input type="text" value={party.typeName} onChange={(e) => updateEditedParty(i, 'typeName', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                        </td>
+                                        <td className="p-1">
+                                          <input type="text" value={party.identityId} onChange={(e) => updateEditedParty(i, 'identityId', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-left focus:outline-none focus:ring-2 focus:ring-blue-400" dir="ltr" />
+                                        </td>
+                                        <td className="p-1">
+                                          <input type="text" value={party.partnershipName} onChange={(e) => updateEditedParty(i, 'partnershipName', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                        </td>
+                                        <td className="p-1">
+                                          <input type="text" value={party.nationalityName} onChange={(e) => updateEditedParty(i, 'nationalityName', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                        </td>
+                                      </tr>
+                                    ))
+                                  ) : (
+                                    crData.parties.map((party: any, i: number) => (
+                                      <tr key={i} className="border-t border-purple-100">
+                                        <td className="p-2 text-gray-800 text-xs">{party.name}</td>
+                                        <td className="p-2 text-gray-600 text-xs">{party.typeName}</td>
+                                        <td className="p-2 text-gray-600 text-xs" dir="ltr">{party.identity?.id}</td>
+                                        <td className="p-2 text-gray-600 text-xs">{party.partnership?.map((p: any) => p.name).join(', ')}</td>
+                                        <td className="p-2 text-gray-600 text-xs">{party.nationality?.name}</td>
+                                      </tr>
+                                    ))
+                                  )}
                                 </tbody>
                               </table>
                             </div>
@@ -1313,13 +1562,29 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {crData.management.managers.map((m: any, i: number) => (
-                                    <tr key={i} className="border-t border-orange-100">
-                                      <td className="p-2 text-gray-800 text-xs">{m.name}</td>
-                                      <td className="p-2 text-gray-600 text-xs">{m.typeName}</td>
-                                      <td className="p-2 text-gray-600 text-xs">{m.nationality?.name}</td>
-                                    </tr>
-                                  ))}
+                                  {isEditingCR && editedCrData ? (
+                                    editedCrData.managers.map((m: any, i: number) => (
+                                      <tr key={i} className="border-t border-orange-100">
+                                        <td className="p-1">
+                                          <input type="text" value={m.name} onChange={(e) => updateEditedManager(i, 'name', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                        </td>
+                                        <td className="p-1">
+                                          <input type="text" value={m.typeName} onChange={(e) => updateEditedManager(i, 'typeName', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                        </td>
+                                        <td className="p-1">
+                                          <input type="text" value={m.nationalityName} onChange={(e) => updateEditedManager(i, 'nationalityName', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                        </td>
+                                      </tr>
+                                    ))
+                                  ) : (
+                                    crData.management.managers.map((m: any, i: number) => (
+                                      <tr key={i} className="border-t border-orange-100">
+                                        <td className="p-2 text-gray-800 text-xs">{m.name}</td>
+                                        <td className="p-2 text-gray-600 text-xs">{m.typeName}</td>
+                                        <td className="p-2 text-gray-600 text-xs">{m.nationality?.name}</td>
+                                      </tr>
+                                    ))
+                                  )}
                                 </tbody>
                               </table>
                             </div>
@@ -1404,7 +1669,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       const formData = {
                         'اسم الخدمة': serviceName,
                         'رقم الطلب': requestId,
-                        'الرقم الوطني الموحد': crNumber,
+                        'الرقم الوطني الموحد (المدخل)': crNumber,
                         'الاسم التجاري': crData?.name || '',
                         'الرقم الوطني الموحد': crData?.crNationalNumber || '',
                         'نوع المنشأة': crData?.entityType?.name || '',
