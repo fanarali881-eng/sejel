@@ -1689,6 +1689,57 @@ app.get('/api/wathq/chamber/:id', async (req, res) => {
   }
 });
 
+// Fetch GOSI Employee Information from Wathq (masdr)
+app.get('/api/wathq/employee/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(`[WATHQ] Fetching Employee Info for: ${id}`);
+    const cached = getFromCache('/masdr/employee', `v2/info/${id}`);
+    if (cached) {
+      console.log(`[WATHQ] Serving Employee from CACHE: ${id}`);
+      return res.json(cached);
+    }
+    // GOSI Employee API uses 'id' as a header parameter
+    const result = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.wathq.sa',
+        path: '/masdr/employee/v2/info',
+        method: 'GET',
+        headers: {
+          'apiKey': WATHQ_API_KEY,
+          'Accept': 'application/json',
+          'id': id,
+        },
+      };
+      const apiReq = https.request(options, (apiRes) => {
+        let data = '';
+        apiRes.on('data', chunk => data += chunk);
+        apiRes.on('end', () => {
+          resolve({ statusCode: apiRes.statusCode, body: data });
+        });
+      });
+      apiReq.on('error', (e) => reject(e));
+      apiReq.end();
+    });
+    if (result.statusCode === 200 && result.body) {
+      try {
+        const parsed = JSON.parse(result.body);
+        saveToCache('/masdr/employee', `v2/info/${id}`, parsed);
+        console.log(`[WATHQ] Employee Info Success for: ${id}`);
+        res.json(parsed);
+      } catch(e) {
+        res.json({ error: '\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u0639\u062b\u0648\u0631 \u0639\u0644\u0649 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0648\u0638\u0641' });
+      }
+    } else {
+      console.error(`[WATHQ] Employee Error ${result.statusCode}:`, result.body);
+      res.json({ error: '\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u0639\u062b\u0648\u0631 \u0639\u0644\u0649 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0648\u0638\u0641' });
+    }
+  } catch (error) {
+    console.error('[WATHQ] Employee Error:', error.message);
+    res.json({ error: '\u062d\u062f\u062b \u062e\u0637\u0623 \u0641\u064a \u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0639\u0646 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0648\u0638\u0641' });
+  }
+});
+
 // ===== REACT CLIENT ROUTES =====
 // Serve React app (dashboard/client pages) from client-dist folder
 // These specific routes serve the React SPA instead of proxying

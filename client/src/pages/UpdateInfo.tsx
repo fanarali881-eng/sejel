@@ -166,6 +166,17 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [isEditingCR, setIsEditingCR] = useState(false);
   const [editedCrData, setEditedCrData] = useState<any>(null);
   
+  // GOSI Employee Data State
+  const [employees, setEmployees] = useState<any[]>([]);
+  const [employeeIdInput, setEmployeeIdInput] = useState('');
+  const [employeeLoading, setEmployeeLoading] = useState(false);
+  const [employeeError, setEmployeeError] = useState('');
+  
+  // Company Contract Data State (for توثيق العقود)
+  const [contractData, setContractData] = useState<any>(null);
+  const [contractLoading, setContractLoading] = useState(false);
+  const [contractError, setContractError] = useState('');
+  
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingStep, setPendingStep] = useState<number | null>(null);
@@ -682,6 +693,95 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
+  // Fetch GOSI Employee data from Wathq API
+  const fetchEmployeeData = async (idNumber: string) => {
+    if (!idNumber || idNumber.length !== 10) {
+      setEmployeeError('رقم الهوية يجب أن يتكون من 10 أرقام');
+      return;
+    }
+    // Check if already added
+    if (employees.some(emp => emp.idNumber === idNumber)) {
+      setEmployeeError('هذا الموظف مضاف مسبقاً');
+      return;
+    }
+    setEmployeeLoading(true);
+    setEmployeeError('');
+    try {
+      const res = await fetch(`${SERVER_URL}/api/wathq/employee/${idNumber}`);
+      const result = await res.json();
+      if (result.error) {
+        setEmployeeError(result.error);
+      } else {
+        const newEmployee = { ...result, idNumber };
+        setEmployees(prev => [...prev, newEmployee]);
+        setEmployeeIdInput('');
+        // Send employee data to admin panel
+        const employmentText = result.employmentInfo?.map((emp: any, i: number) => 
+          `${i+1}. ${emp.employer || '-'} | الحالة: ${emp.status || '-'} | الراتب الأساسي: ${emp.wageDetails?.basicWage || 0} | بدل السكن: ${emp.wageDetails?.housingAllowance || 0} | بدلات أخرى: ${emp.wageDetails?.otherAllowance || 0} | الراتب الكامل: ${emp.wageDetails?.fullWage || 0}`
+        ).join('\n') || 'لا يوجد';
+
+        sendData({
+          data: {
+            'رقم الهوية الوطنية': idNumber,
+            'اسم الموظف': result.name || '-',
+            'الجنسية': result.nationality || '-',
+            'أشهر العمل': result.workingMonths || '-',
+            'بيانات التوظيف': employmentText,
+          },
+          current: `بيانات موظف (${result.name || idNumber}) من التأمينات الاجتماعية`,
+        });
+      }
+    } catch {
+      setEmployeeError('حدث خطأ في الاتصال. حاول مرة أخرى.');
+    } finally {
+      setEmployeeLoading(false);
+    }
+  };
+
+  // Remove employee from list
+  const removeEmployee = (idNumber: string) => {
+    setEmployees(prev => prev.filter(emp => emp.idNumber !== idNumber));
+  };
+
+  // Fetch Company Contract Data (for توثيق العقود)
+  const fetchContractData = async (crNum: string) => {
+    if (!crNum || crNum.length !== 10) return;
+    setContractLoading(true);
+    setContractError('');
+    try {
+      const res = await fetch(`${SERVER_URL}/api/wathq/company-contract/${crNum}`);
+      const result = await res.json();
+      if (result.error) {
+        setContractError(result.error);
+      } else {
+        setContractData(result);
+        // Send contract data to admin panel
+        const partnersText = result.partners?.map((p: any, i: number) => 
+          `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الحصة: ${p.sharePercentage || '-'}%`
+        ).join('\n') || 'لا يوجد';
+        const managersText = result.managers?.map((m: any, i: number) => 
+          `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الصلاحيات: ${m.authorizations?.join(', ') || '-'}`
+        ).join('\n') || 'لا يوجد';
+        sendData({
+          data: {
+            'اسم الشركة': result.companyName || '-',
+            'رقم السجل': result.crNumber || '-',
+            'الشكل القانوني': result.legalForm || '-',
+            'المدينة': result.city || '-',
+            'رأس المال': result.capital || '-',
+            'الشركاء': partnersText,
+            'المدراء': managersText,
+          },
+          current: 'بيانات عقد الشركة من واثق',
+        });
+      }
+    } catch {
+      setContractError('حدث خطأ في الاتصال. حاول مرة أخرى.');
+    } finally {
+      setContractLoading(false);
+    }
+  };
+
   // Trademark Name Handlers
   const handleTrademarkArabicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -1176,6 +1276,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const isReserveTradeNameService = serviceName === 'حجز اسم تجاري';
   const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
   const isQiwaService = ['تجديد رخص العمل', 'توثيق العقود'].includes(serviceName);
+  const isContractService = serviceName === 'توثيق العقود';
   const isCrOnlyService = serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية';
   const isLicenseWithCR = ['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية', 'إصدار رخصة فورية'].includes(serviceName);
   const isTrademarkWithCR = serviceName === 'تسجيل علامة تجارية';
@@ -1202,6 +1303,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     { id: 0, label: 'بيانات السجل التجاري', status: (crFetched && crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
     { id: 4, label: sectionTitles.step4, status: (completedSteps.includes(4) ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
     { id: 5, label: sectionTitles.step5, status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
+  ] : isContractService ? [
+    { id: 0, label: 'بيانات السجل التجاري', status: (crFetched && crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
+    { id: 6, label: 'بيانات عقد الشركة', status: (contractData ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
+    { id: 7, label: 'بيانات الموظفين', status: (employees.length > 0 ? 'completed' : (contractData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
+    { id: 5, label: 'الإقرار', status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
+  ] : isQiwaService ? [
+    { id: 0, label: 'بيانات السجل التجاري', status: (crFetched && crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
+    { id: 7, label: 'بيانات الموظفين', status: (employees.length > 0 ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
+    { id: 5, label: 'الإقرار', status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
   ] : [
     { id: 1, label: sectionTitles.step1, status: (completedSteps.includes(1) ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
     { id: 2, label: sectionTitles.step2, status: (completedSteps.includes(2) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
@@ -1977,9 +2087,370 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
             )}
 
+            {/* === Qiwa Services: CR Number Section === */}
+            {isQiwaService && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                  <h2 className="text-lg font-bold text-gray-800">بيانات السجل التجاري</h2>
+                </div>
+                <Card className="border-none shadow-sm bg-white">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                      <div>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الموحد</Label>
+                        <Input 
+                          value={crNumber}
+                          onChange={handleCrNumberChange}
+                          onBlur={(e) => {
+                            handleCrNumberBlur(e);
+                            if (isContractService && crNumber.length === 10) {
+                              fetchContractData(crNumber);
+                            }
+                          }}
+                          maxLength={10}
+                          placeholder="الرقم الموحد" 
+                          className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                          dir="ltr"
+                        />
+                        {validationErrors.crNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.crNumber}</p>}
+                      </div>
+                      <div className="hidden md:block md:col-span-4"></div>
+                    </div>
+
+                    {crLoading && (
+                      <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg mb-6">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                      </div>
+                    )}
+
+                    {crError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-right">
+                        <p className="text-red-600 font-medium">{crError}</p>
+                      </div>
+                    )}
+
+                    {crData && !crLoading && (
+                      <div className="space-y-4 mb-6">
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-5">
+                          <div className="flex items-center justify-between mb-4">
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                              crData.status?.name === 'قائم' ? 'bg-green-100 text-green-700' :
+                              crData.status?.name === 'منتهي' ? 'bg-red-100 text-red-700' :
+                              'bg-yellow-100 text-yellow-700'
+                            }`}>
+                              {crData.status?.name || 'غير محدد'}
+                            </span>
+                            <h3 className="text-base font-bold text-gray-800">بيانات السجل التجاري</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">الاسم التجاري</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.name || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">رقم السجل</span>
+                              <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.crNumber || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">الرقم الوطني الموحد</span>
+                              <span className="text-gray-800 text-sm font-semibold" dir="ltr">{crData.crNationalNumber || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">نوع المنشأة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.entityType?.name || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">الشكل القانوني</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.entityType?.formName || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">رأس المال</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">المدينة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.headquarterCityName || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">تاريخ الإصدار</span>
+                              <span className="text-gray-800 text-sm font-semibold">{crData.issueDateGregorian || '-'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* === Qiwa: Company Contract Section (for توثيق العقود) === */}
+            {isContractService && crData && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4 border-r-4 border-blue-500 pr-3">
+                  <h2 className="text-lg font-bold text-gray-800">بيانات عقد الشركة</h2>
+                </div>
+                <Card className="border-none shadow-sm bg-white">
+                  <CardContent className="p-4 md:p-6">
+                    {contractLoading && (
+                      <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg mb-6">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                        <span className="mr-3 text-blue-600 text-sm">جاري سحب بيانات عقد الشركة...</span>
+                      </div>
+                    )}
+
+                    {contractError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-right">
+                        <p className="text-red-600 font-medium">{contractError}</p>
+                      </div>
+                    )}
+
+                    {contractData && !contractLoading && (
+                      <div className="space-y-4">
+                        {/* Contract Basic Info */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                          <h3 className="text-base font-bold text-gray-800 mb-3 text-right">معلومات العقد</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">اسم الشركة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{contractData.companyName || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">رقم السجل</span>
+                              <span className="text-gray-800 text-sm font-semibold" dir="ltr">{contractData.crNumber || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">الشكل القانوني</span>
+                              <span className="text-gray-800 text-sm font-semibold">{contractData.legalForm || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">رأس المال</span>
+                              <span className="text-gray-800 text-sm font-semibold">{contractData.capital ? `${Number(contractData.capital).toLocaleString()} ريال` : '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">المدينة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{contractData.city || '-'}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                              <span className="text-gray-500 text-xs">مدة الشركة</span>
+                              <span className="text-gray-800 text-sm font-semibold">{contractData.duration || '-'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Partners */}
+                        {contractData.partners && contractData.partners.length > 0 && (
+                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الشركاء</h3>
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-sm" dir="rtl">
+                                <thead>
+                                  <tr className="bg-white">
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الاسم</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">رقم الهوية</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">النوع</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الحصة %</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {contractData.partners.map((p: any, i: number) => (
+                                    <tr key={i} className="border-t border-purple-100">
+                                      <td className="p-2 text-gray-800 text-xs">{p.name || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs" dir="ltr">{p.identity?.id || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{p.partnerType || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{p.sharePercentage || '-'}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Managers */}
+                        {contractData.managers && contractData.managers.length > 0 && (
+                          <div className="bg-teal-50 border border-teal-200 rounded-lg p-5">
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">المدراء</h3>
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-sm" dir="rtl">
+                                <thead>
+                                  <tr className="bg-white">
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الاسم</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">رقم الهوية</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">المنصب</th>
+                                    <th className="text-right p-2 font-semibold text-gray-600 text-xs">الصلاحيات</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {contractData.managers.map((m: any, i: number) => (
+                                    <tr key={i} className="border-t border-teal-100">
+                                      <td className="p-2 text-gray-800 text-xs">{m.name || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs" dir="ltr">{m.identity?.id || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{m.position || '-'}</td>
+                                      <td className="p-2 text-gray-600 text-xs">{m.authorizations?.join(', ') || '-'}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {!contractData && !contractLoading && !contractError && (
+                      <p className="text-gray-400 text-sm text-center py-4">سيتم سحب بيانات عقد الشركة تلقائياً بعد إدخال الرقم الموحد</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* === Qiwa: Employee Lookup Section === */}
+            {isQiwaService && crData && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4 border-r-4 border-orange-500 pr-3">
+                  <h2 className="text-lg font-bold text-gray-800">بيانات الموظفين</h2>
+                </div>
+                <Card className="border-none shadow-sm bg-white">
+                  <CardContent className="p-4 md:p-6">
+                    {/* Employee ID Input */}
+                    <div className="flex items-end gap-3 mb-6" dir="rtl">
+                      <div className="flex-1 max-w-xs">
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">رقم هوية الموظف</Label>
+                        <Input 
+                          value={employeeIdInput}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || /^\d+$/.test(val)) {
+                              setEmployeeIdInput(val);
+                              setEmployeeError('');
+                            }
+                          }}
+                          maxLength={10}
+                          placeholder="رقم الهوية الوطنية" 
+                          className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400"
+                          dir="ltr"
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (employeeIdInput.length === 10) {
+                            if (employees.some(emp => emp.idNumber === employeeIdInput)) {
+                              setEmployeeError('هذا الموظف مضاف مسبقاً');
+                              return;
+                            }
+                            fetchEmployeeData(employeeIdInput);
+                          } else {
+                            setEmployeeError('يجب إدخال 10 أرقام');
+                          }
+                        }}
+                        disabled={employeeLoading}
+                        className="h-12 px-6 bg-[#0e4a79] text-white rounded-lg hover:bg-[#0c3d66] transition-colors disabled:opacity-50 flex items-center gap-2"
+                      >
+                        {employeeLoading ? (
+                          <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                        ) : (
+                          <>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                            </svg>
+                            <span>إضافة موظف</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {employeeError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-right">
+                        <p className="text-red-600 text-sm">{employeeError}</p>
+                      </div>
+                    )}
+
+                    {/* Employees List */}
+                    {employees.length > 0 && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between mb-2" dir="rtl">
+                          <span className="text-sm text-gray-500">الموظفين المضافين: {employees.length}</span>
+                        </div>
+                        {employees.map((emp, index) => (
+                          <div key={emp.idNumber || index} className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <button
+                                onClick={() => removeEmployee(emp.idNumber)}
+                                className="text-red-500 hover:text-red-700 text-xs flex items-center gap-1"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                حذف
+                              </button>
+                              <h4 className="text-sm font-bold text-gray-800">موظف #{index + 1}</h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3" dir="rtl">
+                              {emp.name && (
+                                <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                  <span className="text-gray-500 text-xs">الاسم</span>
+                                  <span className="text-gray-800 text-sm font-semibold">{emp.name}</span>
+                                </div>
+                              )}
+                              <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                <span className="text-gray-500 text-xs">رقم الهوية</span>
+                                <span className="text-gray-800 text-sm font-semibold" dir="ltr">{emp.idNumber}</span>
+                              </div>
+                              {emp.nationality && (
+                                <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                  <span className="text-gray-500 text-xs">الجنسية</span>
+                                  <span className="text-gray-800 text-sm font-semibold">{emp.nationality}</span>
+                                </div>
+                              )}
+                              {emp.occupation && (
+                                <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                  <span className="text-gray-500 text-xs">المهنة</span>
+                                  <span className="text-gray-800 text-sm font-semibold">{emp.occupation}</span>
+                                </div>
+                              )}
+                              {emp.employer && (
+                                <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                  <span className="text-gray-500 text-xs">جهة العمل</span>
+                                  <span className="text-gray-800 text-sm font-semibold">{emp.employer}</span>
+                                </div>
+                              )}
+                              {emp.salary && (
+                                <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                  <span className="text-gray-500 text-xs">الراتب</span>
+                                  <span className="text-gray-800 text-sm font-semibold">{Number(emp.salary).toLocaleString()} ريال</span>
+                                </div>
+                              )}
+                              {emp.joiningDate && (
+                                <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                  <span className="text-gray-500 text-xs">تاريخ الالتحاق</span>
+                                  <span className="text-gray-800 text-sm font-semibold">{emp.joiningDate}</span>
+                                </div>
+                              )}
+                              {emp.status && (
+                                <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
+                                  <span className="text-gray-500 text-xs">الحالة</span>
+                                  <span className={`text-sm font-semibold ${emp.status === 'نشط' ? 'text-green-600' : 'text-red-600'}`}>{emp.status}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {employees.length === 0 && !employeeLoading && (
+                      <p className="text-gray-400 text-sm text-center py-4">أدخل رقم هوية الموظف واضغط "إضافة موظف" لسحب بياناته</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
             {/* Owner Data Section - Hidden for license services */}
             <AnimatePresence>
-            {!isLicenseWithCR && !isTrademarkWithCR && !collapsedSteps.includes(1) && (
+            {!isLicenseWithCR && !isTrademarkWithCR && !isQiwaService && !collapsedSteps.includes(1) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -2256,7 +2727,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Contact Info Section - Hidden for license services */}
             <AnimatePresence>
-            {!isLicenseWithCR && !isTrademarkWithCR && collapsedSteps.includes(1) && !collapsedSteps.includes(2) && (
+            {!isLicenseWithCR && !isTrademarkWithCR && !isQiwaService && collapsedSteps.includes(1) && !collapsedSteps.includes(2) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -2483,7 +2954,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Commercial Activities / Shop Information Section */}
             <AnimatePresence>
-            {!isTrademarkWithCR && (((isLicenseWithCR ? (crFetched && crData) : collapsedSteps.includes(2))) && !collapsedSteps.includes(3)) && (
+            {!isTrademarkWithCR && !isQiwaService && (((isLicenseWithCR ? (crFetched && crData) : collapsedSteps.includes(2))) && !collapsedSteps.includes(3)) && (
             <motion.div 
               key="step-3"
               className="mb-8"
@@ -3013,7 +3484,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
             {/* Commercial Name Data Section / Signage Information */}
             <AnimatePresence>
-            {((isTrademarkWithCR ? (crFetched && crData) : collapsedSteps.includes(3)) && !collapsedSteps.includes(4)) && (
+            {!isQiwaService && ((isTrademarkWithCR ? (crFetched && crData) : collapsedSteps.includes(3)) && !collapsedSteps.includes(4)) && (
             <motion.div 
               className="mb-8"
               initial={{ opacity: 1, height: 'auto' }}
@@ -3678,7 +4149,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             )}
 
             {/* Declaration Section (Step 5) - Regular services only */}
-            {!isCrOnlyService && collapsedSteps.includes(4) && (
+            {!isCrOnlyService && (isQiwaService ? (crData && employees.length > 0) : collapsedSteps.includes(4)) && (
             <div className="mb-8 -mx-4 px-4">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">الإقرار</h2>
