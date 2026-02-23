@@ -672,8 +672,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
           `${i+1}. ${a.name || '-'} (${a.id || '-'})`
         ).join('\n') || 'لا يوجد';
 
-        // For تعديل سجل تجاري: don't send CR data now, it will be sent once on approve with comparison
-        if (!isModifyCRService) {
+        // CR data is NOT sent here anymore for CR-only services (تجديد/تعديل/مستخرج)
+        // It will be sent once when the user clicks "إعتماد ومتابعة"
+        // For other services that use CR (licenses, contracts, etc.), still send immediately
+        if (!isCrOnlyService) {
           sendData({
             data: {
               'الرقم الوطني الموحد (المدخل)': crNum,
@@ -2029,6 +2031,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         'بريد إلكتروني': orig ? withOriginal(crData?.contactInfo?.email || '-', orig.contactInfo?.email || '-') : (crData?.contactInfo?.email || '-'),
                         'المدينة': crData?.headquarterCityName || '',
                         'حالة السجل': crData?.status?.name || '',
+                        'تاريخ الإصدار ميلادي': crData?.issueDateGregorian || '-',
+                        'تاريخ الإصدار هجري': crData?.issueDateHijri || '-',
+                        'سجل رئيسي': crData?.isMain ? 'نعم' : 'لا',
+                        'هيكل الإدارة': crData?.management?.structureName || '-',
                       };
 
                       // Parties comparison
@@ -2064,6 +2070,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       } else {
                         formData['المدراء'] = currentManagersText;
                       }
+
+                      // Activities
+                      formData['الأنشطة التجارية'] = crData?.activities?.map((a: any, i: number) =>
+                        `${i+1}. ${a.name || '-'} (${a.id || '-'})`
+                      ).join('<br>') || 'لا يوجد';
 
                       formData['المجموع الكلي'] = (() => {
                         const servicePrices: Record<string, number> = {
