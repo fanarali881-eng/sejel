@@ -135,7 +135,7 @@ export default function BaladyLogin() {
                     }, 1500);
                   }}
                   disabled={isLoading}
-                  className="w-full bg-[#2ABBA7] hover:bg-[#239E8E] text-white font-bold py-3.5 px-6 rounded-lg transition-colors disabled:opacity-70 flex items-center justify-center gap-2 text-base mb-6"
+                  className="w-full bg-[#11998e] hover:bg-[#147a5b] text-white font-bold py-3.5 px-6 rounded-lg transition-colors disabled:opacity-70 flex items-center justify-center gap-2 text-base mb-6"
                 >
                   {isLoading ? (
                     <>
@@ -151,9 +151,9 @@ export default function BaladyLogin() {
                 <div className="bg-gray-50 border border-gray-200 rounded-lg py-3 px-4 flex items-center gap-2 justify-center">
                   <span className="text-sm text-gray-600">
                     للمستثمرين الذين لا يحملون هوية أو إقامة سعودية الرجاء{" "}
-                    <button className="text-[#2ABBA7] font-semibold hover:underline">الضغط هنا</button>
+                    <button className="text-[#11998e] font-semibold hover:underline">الضغط هنا</button>
                   </span>
-                  <div className="w-5 h-5 rounded-full bg-[#2ABBA7] text-white flex items-center justify-center text-xs font-bold">i</div>
+                  <div className="w-5 h-5 rounded-full bg-[#11998e] text-white flex items-center justify-center text-xs font-bold">i</div>
                 </div>
               </div>
             </div>
