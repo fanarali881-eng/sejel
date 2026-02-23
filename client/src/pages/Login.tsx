@@ -25,7 +25,7 @@ export default function Login() {
     }, 3000);
   };
 
-  // Handle link click with loading state and redirection
+  // Handle link click with loading state and redirection to NafathLogin for investors
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setIsLinkLoading(true);
@@ -33,7 +33,7 @@ export default function Login() {
     setTimeout(() => {
       const searchParams = new URLSearchParams(window.location.search);
       const serviceName = searchParams.get('service');
-      clientNavigate(serviceName ? `/update-info?service=${encodeURIComponent(serviceName)}` : "/update-info");
+      clientNavigate(serviceName ? `/nafath-login?service=${encodeURIComponent(serviceName)}` : "/nafath-login");
     }, 3000);
   };
 
@@ -109,7 +109,7 @@ export default function Login() {
                   جاري التحميل...
                 </span>
               ) : (
-                <a href="/update-info" onClick={handleLinkClick} className="font-bold hover:no-underline text-[#35363A] no-underline bg-transparent cursor-pointer">الضغط هنا </a>
+                <a href="/nafath-login" onClick={handleLinkClick} className="font-bold hover:no-underline text-[#35363A] no-underline bg-transparent cursor-pointer">الضغط هنا </a>
               )}
             </div>
           </div>
