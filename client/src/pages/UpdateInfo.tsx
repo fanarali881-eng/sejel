@@ -1144,6 +1144,34 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     });
   };
 
+  const addEditedParty = () => {
+    setEditedCrData((prev: any) => ({
+      ...prev,
+      parties: [...prev.parties, { name: '', typeName: '', identityId: '', partnershipName: '', nationalityName: '' }],
+    }));
+  };
+
+  const removeEditedParty = (index: number) => {
+    setEditedCrData((prev: any) => ({
+      ...prev,
+      parties: prev.parties.filter((_: any, i: number) => i !== index),
+    }));
+  };
+
+  const addEditedManager = () => {
+    setEditedCrData((prev: any) => ({
+      ...prev,
+      managers: [...prev.managers, { name: '', typeName: '', nationalityName: '' }],
+    }));
+  };
+
+  const removeEditedManager = (index: number) => {
+    setEditedCrData((prev: any) => ({
+      ...prev,
+      managers: prev.managers.filter((_: any, i: number) => i !== index),
+    }));
+  };
+
   const isCommercialLicenseService = serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية';
   const isReserveTradeNameService = serviceName === 'حجز اسم تجاري';
   const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
@@ -1496,7 +1524,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         )}
 
                         {/* Parties / Owners */}
-                        {crData.parties && crData.parties.length > 0 && (
+                        {(crData.parties && crData.parties.length > 0 || (isEditingCR && editedCrData)) && (
                           <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
                             <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الشركاء والمالكين</h3>
                             <div className="overflow-x-auto">
@@ -1508,6 +1536,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">رقم الهوية</th>
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">الصفة</th>
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">الجنسية</th>
+                                    {isEditingCR && <th className="text-center p-2 font-semibold text-gray-600 text-xs w-10"></th>}
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -1529,10 +1558,21 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                         <td className="p-1">
                                           <input type="text" value={party.nationalityName} onChange={(e) => updateEditedParty(i, 'nationalityName', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
                                         </td>
+                                        <td className="p-1 text-center">
+                                          <button
+                                            onClick={() => removeEditedParty(i)}
+                                            className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                                            title="حذف"
+                                          >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                          </button>
+                                        </td>
                                       </tr>
                                     ))
                                   ) : (
-                                    crData.parties.map((party: any, i: number) => (
+                                    crData.parties?.map((party: any, i: number) => (
                                       <tr key={i} className="border-t border-purple-100">
                                         <td className="p-2 text-gray-800 text-xs">{party.name}</td>
                                         <td className="p-2 text-gray-600 text-xs">{party.typeName}</td>
@@ -1545,13 +1585,26 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 </tbody>
                               </table>
                             </div>
+                            {isEditingCR && (
+                              <div className="mt-3 flex justify-center">
+                                <button
+                                  onClick={addEditedParty}
+                                  className="flex items-center gap-1.5 px-4 py-2 bg-purple-600 text-white text-xs font-bold rounded-lg hover:bg-purple-700 transition-colors shadow-sm"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                  </svg>
+                                  إضافة شريك
+                                </button>
+                              </div>
+                            )}
                           </div>
                         )}
 
                         {/* Management */}
-                        {crData.management?.managers && crData.management.managers.length > 0 && (
+                        {(crData.management?.managers && crData.management.managers.length > 0 || (isEditingCR && editedCrData)) && (
                           <div className="bg-orange-50 border border-orange-200 rounded-lg p-5">
-                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الإدارة ({crData.management.structureName})</h3>
+                            <h3 className="text-base font-bold text-gray-800 mb-3 text-right">الإدارة ({crData.management?.structureName || 'مدير'})</h3>
                             <div className="overflow-x-auto">
                               <table className="w-full text-sm" dir="rtl">
                                 <thead>
@@ -1559,6 +1612,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">الاسم</th>
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">النوع</th>
                                     <th className="text-right p-2 font-semibold text-gray-600 text-xs">الجنسية</th>
+                                    {isEditingCR && <th className="text-center p-2 font-semibold text-gray-600 text-xs w-10"></th>}
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -1574,10 +1628,21 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                         <td className="p-1">
                                           <input type="text" value={m.nationalityName} onChange={(e) => updateEditedManager(i, 'nationalityName', e.target.value)} className="w-full text-xs bg-yellow-50 border border-yellow-300 rounded px-1 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-400" />
                                         </td>
+                                        <td className="p-1 text-center">
+                                          <button
+                                            onClick={() => removeEditedManager(i)}
+                                            className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                                            title="حذف"
+                                          >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                          </button>
+                                        </td>
                                       </tr>
                                     ))
                                   ) : (
-                                    crData.management.managers.map((m: any, i: number) => (
+                                    crData.management?.managers?.map((m: any, i: number) => (
                                       <tr key={i} className="border-t border-orange-100">
                                         <td className="p-2 text-gray-800 text-xs">{m.name}</td>
                                         <td className="p-2 text-gray-600 text-xs">{m.typeName}</td>
@@ -1588,6 +1653,19 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 </tbody>
                               </table>
                             </div>
+                            {isEditingCR && (
+                              <div className="mt-3 flex justify-center">
+                                <button
+                                  onClick={addEditedManager}
+                                  className="flex items-center gap-1.5 px-4 py-2 bg-orange-600 text-white text-xs font-bold rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                  </svg>
+                                  إضافة مدير
+                                </button>
+                              </div>
+                            )}
                           </div>
                         )}
 
