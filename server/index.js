@@ -2084,7 +2084,7 @@ function wathqApiRequest(basePath, endpoint) {
 
 // Backward-compatible helper for Commercial Registration
 function wathqRequest(endpoint, crId) {
-  return wathqApiRequest('/v2/commercial-registration', `${endpoint}/${crId}`);
+  return wathqApiRequest('/commercial-registration', `${endpoint}/${crId}`);
 }
 
 // Fetch commercial registration full data from Wathq

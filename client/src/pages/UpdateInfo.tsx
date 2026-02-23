@@ -534,7 +534,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
-  // CR Number Handler (English Numbers Only, Max 10 digits)
+  // CR Number Handler (English Numbers Only, Max 10 digits, must start with 700)
   const handleCrNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Allow only English numbers and max 10 digits
@@ -550,9 +550,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         });
       }
       
-      // Auto-fetch when 10 digits entered
-      if (value.length === 10) {
+      // Auto-fetch when 10 digits entered and starts with 700
+      if (value.length === 10 && value.startsWith('700')) {
         fetchCrData(value);
+      } else if (value.length === 10 && !value.startsWith('700')) {
+        setCrData(null);
+        setCrError('الرقم الوطني الموحد يجب أن يبدأ بـ 700');
+        setCrFetched(false);
       } else {
         // Reset CR data if number is incomplete
         setCrData(null);
@@ -567,9 +571,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     if (crNumber && crNumber.length !== 10) {
       setValidationErrors(prev => ({
         ...prev,
-        crNumber: 'يجب أن يتكون رقم السجل التجاري من 10 أرقام'
+        crNumber: 'يجب أن يتكون الرقم الوطني الموحد من 10 أرقام ويبدأ بـ 700'
       }));
-    } else if (crNumber && crNumber.length === 10 && !crData && !crLoading) {
+    } else if (crNumber && crNumber.length === 10 && !crNumber.startsWith('700')) {
+      setValidationErrors(prev => ({
+        ...prev,
+        crNumber: 'الرقم الوطني الموحد يجب أن يبدأ بـ 700'
+      }));
+    } else if (crNumber && crNumber.length === 10 && crNumber.startsWith('700') && !crData && !crLoading) {
       fetchCrData(crNumber);
     }
   };
@@ -640,7 +649,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
         sendData({
           data: {
-            'رقم السجل التجاري': crNum,
+            'الرقم الوطني الموحد': crNum,
             'الاسم التجاري': result.name || '-',
             'حالة السجل': result.status?.name || '-',
             'الرقم الوطني الموحد': result.crNationalNumber || '-',
@@ -1142,13 +1151,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <CardContent className="p-4 md:p-6">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الوطني الموحد</Label>
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
-                          placeholder="رقم السجل التجاري" 
+                          placeholder="الرقم الوطني الموحد" 
                           className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
@@ -1395,7 +1404,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       const formData = {
                         'اسم الخدمة': serviceName,
                         'رقم الطلب': requestId,
-                        'رقم السجل التجاري': crNumber,
+                        'الرقم الوطني الموحد': crNumber,
                         'الاسم التجاري': crData?.name || '',
                         'الرقم الوطني الموحد': crData?.crNationalNumber || '',
                         'نوع المنشأة': crData?.entityType?.name || '',
@@ -1457,13 +1466,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <CardContent className="p-4 md:p-6">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الوطني الموحد</Label>
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
-                          placeholder="رقم السجل التجاري" 
+                          placeholder="الرقم الوطني الموحد" 
                           className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
@@ -2812,13 +2821,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">رقم السجل التجاري</Label>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الوطني الموحد</Label>
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
-                          placeholder="رقم السجل التجاري" 
+                          placeholder="الرقم الوطني الموحد" 
                           className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
@@ -3453,7 +3462,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         // Service Info
                         'اسم الخدمة': serviceName,
                         'رقم الطلب': requestId,
-                        'رقم السجل التجاري': crNumber,
+                        'الرقم الوطني الموحد': crNumber,
                         
                         // Total Fees
                         'المجموع الكلي': (() => {
