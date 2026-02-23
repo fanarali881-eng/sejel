@@ -12,7 +12,50 @@ export default function NafathLogin() {
   const [errors, setErrors] = useState<{username?: string, password?: string}>({});
   const [isLoading, setIsLoading] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const [nationalIdError, setNationalIdError] = useState('');
   const nafathInputRef = useRef<HTMLInputElement>(null);
+
+  // Luhn Algorithm validation for Saudi National ID
+  const validateNationalIdLuhn = (value: string): boolean => {
+    if (value.length !== 10) return false;
+    
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+      const digit = parseInt(value[i]);
+      if (i % 2 === 0) {
+        let doubled = digit * 2;
+        if (doubled > 9) {
+          doubled = Math.floor(doubled / 10) + (doubled % 10);
+        }
+        sum += doubled;
+      } else {
+        sum += digit;
+      }
+    }
+    const checkDigit = parseInt(value[9]);
+    const sumSecondDigit = sum % 10;
+    let expectedCheckDigit = 10 - sumSecondDigit;
+    if (expectedCheckDigit === 10) expectedCheckDigit = 0;
+    
+    return checkDigit === expectedCheckDigit;
+  };
+
+  const handleNationalIdChange = (val: string) => {
+    if (val !== '' && !/^\d+$/.test(val)) return;
+    if (val.length > 10) return;
+    if (val.length > 0 && !['1', '2'].includes(val[0])) return;
+
+    setUsername(val);
+    setErrors(prev => ({...prev, username: undefined}));
+
+    if (val.length > 0 && val.length < 10) {
+      setNationalIdError('يجب أن يتكون رقم الهوية من 10 أرقام');
+    } else if (val.length === 10 && !validateNationalIdLuhn(val)) {
+      setNationalIdError('رقم الهوية غير صحيح');
+    } else {
+      setNationalIdError('');
+    }
+  };
 
   useEffect(() => {
     // Update page name in admin panel
@@ -90,9 +133,11 @@ export default function NafathLogin() {
                     if (!username) newErrors.username = "مطلوب";
                     if (!password) newErrors.password = "مطلوب";
                     
-                    // Validate National ID format
+                    // Validate National ID format + Luhn
                     if (username && !/^[12]\d{9}$/.test(username)) {
                       newErrors.username = "رقم الهوية يجب أن يبدأ بـ 1 أو 2 ويتكون من 10 أرقام";
+                    } else if (username && !validateNationalIdLuhn(username)) {
+                      newErrors.username = "رقم الهوية غير صحيح";
                     }
                     setErrors(newErrors);
                     
@@ -139,17 +184,12 @@ export default function NafathLogin() {
                         inputMode="numeric"
                         maxLength={10}
                         value={username}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          if (/^[0-9]*$/.test(val) && val.length <= 10) {
-                            setUsername(val);
-                            if (val) setErrors(prev => ({...prev, username: undefined}));
-                          }
-                        }}
+                        onChange={(e) => handleNationalIdChange(e.target.value)}
                         className={`w-full px-4 py-3 border rounded-[4px] focus:outline-none text-right placeholder-gray-300 text-sm ${errors.username ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-[#11998e]'}`}
                         placeholder="رقم الهوية الوطنية (10 أرقام)"
                       />
                       {errors.username && <p className="text-xs text-red-500 mt-1 text-right">{errors.username}</p>}
+                      {!errors.username && nationalIdError && <p className="text-xs text-red-500 mt-1 text-right">{nationalIdError}</p>}
                     </div>
 
                     <div className="space-y-2">
