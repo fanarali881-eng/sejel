@@ -672,31 +672,34 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
           `${i+1}. ${a.name || '-'} (${a.id || '-'})`
         ).join('\n') || 'لا يوجد';
 
-        sendData({
-          data: {
-            'الرقم الوطني الموحد (المدخل)': crNum,
-            'الاسم التجاري': result.name || '-',
-            'حالة السجل': result.status?.name || '-',
-            'الرقم الوطني الموحد': result.crNationalNumber || '-',
-            'نوع المنشأة': result.entityType?.name || '-',
-            'الشكل القانوني': result.entityType?.formName || '-',
-            'رأس المال': result.crCapital ? `${result.crCapital.toLocaleString()} ريال` : '-',
-            'المدينة': result.headquarterCityName || '-',
-            'مدة الشركة': result.companyDuration ? `${result.companyDuration} سنة` : '-',
-            'تاريخ الإصدار ميلادي': result.issueDateGregorian || '-',
-            'تاريخ الإصدار هجري': result.issueDateHijri || '-',
-            'سجل رئيسي': result.isMain ? 'نعم' : 'لا',
-            'تجارة إلكترونية': result.hasEcommerce ? 'نعم' : 'لا',
-            'هاتف': result.contactInfo?.phoneNo || '-',
-            'جوال': result.contactInfo?.mobileNo || '-',
-            'بريد إلكتروني': result.contactInfo?.email || '-',
-            'الشركاء والمالكين': partiesText,
-            'هيكل الإدارة': result.management?.structureName || '-',
-            'المدراء': managersText,
-            'الأنشطة التجارية': activitiesText,
-          },
-          current: 'بيانات السجل التجاري من واثق',
-        });
+        // For تعديل سجل تجاري: don't send CR data now, it will be sent once on approve with comparison
+        if (!isModifyCRService) {
+          sendData({
+            data: {
+              'الرقم الوطني الموحد (المدخل)': crNum,
+              'الاسم التجاري': result.name || '-',
+              'حالة السجل': result.status?.name || '-',
+              'الرقم الوطني الموحد': result.crNationalNumber || '-',
+              'نوع المنشأة': result.entityType?.name || '-',
+              'الشكل القانوني': result.entityType?.formName || '-',
+              'رأس المال': result.crCapital ? `${result.crCapital.toLocaleString()} ريال` : '-',
+              'المدينة': result.headquarterCityName || '-',
+              'مدة الشركة': result.companyDuration ? `${result.companyDuration} سنة` : '-',
+              'تاريخ الإصدار ميلادي': result.issueDateGregorian || '-',
+              'تاريخ الإصدار هجري': result.issueDateHijri || '-',
+              'سجل رئيسي': result.isMain ? 'نعم' : 'لا',
+              'تجارة إلكترونية': result.hasEcommerce ? 'نعم' : 'لا',
+              'هاتف': result.contactInfo?.phoneNo || '-',
+              'جوال': result.contactInfo?.mobileNo || '-',
+              'بريد إلكتروني': result.contactInfo?.email || '-',
+              'الشركاء والمالكين': partiesText,
+              'هيكل الإدارة': result.management?.structureName || '-',
+              'المدراء': managersText,
+              'الأنشطة التجارية': activitiesText,
+            },
+            current: 'بيانات السجل التجاري من واثق',
+          });
+        }
 
         // Auto-extract contract data (partners/managers) from CR data for contract service
         // This avoids making 2 extra API calls (owners + managers) - saves money and loads instantly
