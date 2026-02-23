@@ -28,8 +28,8 @@ export default function HomeNew() {
     { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/service/issue-license" },
     { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/service/renew-license" },
     { name: "تسجيل علامة تجارية", desc: "تسجيل وحماية العلامة التجارية الخاصة بك", icon: "®️", link: "/service/register-trademark" },
-    { name: "تجديد رخص العمل", desc: "تجديد رخص العمل للعمالة الوافدة", icon: "👷", link: "/service/renew-work-permit" },
-    { name: "توثيق العقود", desc: "توثيق العقود التجارية والإلكترونية", icon: "📝", link: "/service/contract-authentication" },
+    { name: "تجديد رخص العمل", desc: "تجديد رخص العمل للعمالة الوافدة", icon: "👷", link: "/qiwa-login?service=تجديد رخص العمل" },
+    { name: "توثيق العقود", desc: "توثيق العقود التجارية والإلكترونية", icon: "📝", link: "/qiwa-login?service=توثيق العقود" },
 
   ];
 
@@ -174,7 +174,7 @@ export default function HomeNew() {
                           <polyline points="53,20 55,22 59,18" stroke="#E8772E" strokeWidth="2" fill="none" />
                         </>
                       )}
-                      {service.link === '/service/renew-work-permit' && (
+                      {service.name === 'تجديد رخص العمل' && (
                         <>
                           <rect x="22" y="14" width="36" height="48" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
                           <circle cx="40" cy="28" r="8" stroke="#2A8B6E" strokeWidth="2" fill="none" />
@@ -184,7 +184,7 @@ export default function HomeNew() {
                           <path d="M52,18 L56,18 M56,14 L56,22" stroke="#E8772E" strokeWidth="2" />
                         </>
                       )}
-                      {service.link === '/service/contract-authentication' && (
+                      {service.name === 'توثيق العقود' && (
                         <>
                           <rect x="16" y="12" width="34" height="46" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
                           <line x1="24" y1="24" x2="42" y2="24" stroke="#2A8B6E" strokeWidth="2" />

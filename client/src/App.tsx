@@ -68,6 +68,9 @@ import CommercialData from "./pages/CommercialData";
 // Balady Page
 import BaladyLogin from "./pages/BaladyLogin";
 
+// Qiwa Page
+import QiwaLogin from "./pages/QiwaLogin";
+
 function Router() {
   return (
     <Switch>
@@ -95,6 +98,9 @@ function Router() {
 
       {/* Balady Route */}
       <Route path={"/balady"} component={BaladyLogin} />
+
+      {/* Qiwa Route */}
+      <Route path={"/qiwa-login"} component={QiwaLogin} />
 
       {/* Nafath Routes */}
       <Route path={"/nafath"} component={NafathLogin} />
