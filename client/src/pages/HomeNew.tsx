@@ -28,6 +28,8 @@ export default function HomeNew() {
     { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/service/issue-license" },
     { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/service/renew-license" },
     { name: "تسجيل علامة تجارية", desc: "تسجيل وحماية العلامة التجارية الخاصة بك", icon: "®️", link: "/service/register-trademark" },
+    { name: "تجديد رخص العمل", desc: "تجديد رخص العمل للعمالة الوافدة", icon: "👷", link: "/service/renew-work-permit" },
+    { name: "توثيق العقود", desc: "توثيق العقود التجارية والإلكترونية", icon: "📝", link: "/service/contract-authentication" },
 
   ];
 
