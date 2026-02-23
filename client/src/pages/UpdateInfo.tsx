@@ -1229,7 +1229,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans" dir="rtl">
       {/* Top Navigation Bar (Simplified for this page) */}
       <header className="bg-white border-b border-gray-200 py-3 px-6 flex items-center justify-start">
-        <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
+        {isLicenseWithCR ? (
+          <img src="/images/balady-services-logo.png" alt="بلدي خدمات" className="h-10 md:h-12" />
+        ) : (
+          <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
+        )}
       </header>
 
       <div className="flex flex-1">
