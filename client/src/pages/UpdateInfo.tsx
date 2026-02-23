@@ -222,7 +222,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     const isLicenseService = ['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية'].includes(serviceName);
 
     // Step 3: Activity Info (Only for non-license services) OR Shop Info (for license services)
-    if (!step || step === 3) {
+    // Skip step 3 for trademark service (goes directly from CR to trademark name)
+    const isTrademarkService = serviceName === 'تسجيل علامة تجارية';
+    if ((!step || step === 3) && !isTrademarkService) {
       if (isLicenseService) {
         // For license services, validate shop info (بيانات المحل)
         if (!shopName) errors.shopName = 'اسم المحل مطلوب';
@@ -267,7 +269,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
 
     // Step 6: Commercial/Trademark Name (Only for non-license services)
-    if ((!step || step === 6) && !isLicenseService) {
+    if ((!step || step === 6) && !isLicenseService && !isTrademarkService) {
       if (serviceName === 'تسجيل علامة تجارية') {
         if (!trademarkArabicName) errors.trademarkArabicName = 'اسم العلامة بالعربي مطلوب';
         if (!trademarkEnglishName) errors.trademarkEnglishName = 'اسم العلامة بالانجليزي مطلوب';
