@@ -55,31 +55,31 @@ export default function QiwaLogin() {
   };
 
   return (
-    <div className="min-h-screen flex flex-row-reverse font-sans" dir="rtl">
-      {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 bg-white flex flex-col min-h-screen">
-        {/* Header with Logo */}
+    <div className="min-h-screen flex flex-row font-sans" dir="rtl">
+      {/* Left Side - Login Form (appears on the left in RTL with flex-row) */}
+      <div className="w-full lg:w-1/2 bg-[#f8f9fa] flex flex-col min-h-screen">
+        {/* Header with Logo and Language */}
         <div className="flex justify-between items-center p-6 pb-0">
           <img src="/images/qiwa-logo.png" alt="قوى" className="h-14 object-contain" />
           <div className="flex items-center gap-2 text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
-            <span className="text-sm font-medium">AR</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/>
               <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
               <path d="M2 12h20"/>
             </svg>
+            <span className="text-sm font-medium">AR</span>
           </div>
         </div>
 
         {/* Form */}
         <div className="flex-1 flex items-center justify-center px-8 lg:px-16">
-          <div className="w-full max-w-[420px]">
-            <h1 className="text-[32px] font-bold text-[#1a1a2e] mb-8">تسجيل الدخول</h1>
+          <div className="w-full max-w-[440px]">
+            <h1 className="text-[32px] font-bold text-[#1a1a2e] mb-8 text-center">تسجيل الدخول</h1>
             
             <form onSubmit={handleLogin} className="space-y-5">
               {/* User ID Field */}
               <div>
-                <label className="block text-sm font-semibold text-[#1a1a2e] mb-2">
+                <label className="block text-sm font-semibold text-[#1a1a2e] mb-2 text-center">
                   رقم الهوية الوطنية أو البريد الإلكتروني
                 </label>
                 <input
@@ -87,7 +87,7 @@ export default function QiwaLogin() {
                   value={userId}
                   onChange={(e) => { setUserId(e.target.value); setErrors(prev => ({...prev, userId: undefined})); }}
                   placeholder="أدخل رقم الهوية الوطنية، أو الإقامة، أو البريد الإلكتروني"
-                  className={`w-full px-4 py-3 border ${errors.userId ? 'border-red-500' : 'border-gray-300'} rounded-lg text-sm focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors`}
+                  className={`w-full px-4 py-3 border ${errors.userId ? 'border-red-500' : 'border-gray-300'} rounded-lg text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors`}
                 />
                 {errors.userId && <p className="text-red-500 text-xs mt-1">{errors.userId}</p>}
                 <p className="text-gray-400 text-xs mt-1.5">Enter one of the following: your National ID, Iqama number, or email address.</p>
@@ -105,7 +105,7 @@ export default function QiwaLogin() {
                     value={password}
                     onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({...prev, password: undefined})); }}
                     placeholder="أدخل كلمة المرور"
-                    className={`w-full px-4 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg text-sm focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors pl-12`}
+                    className={`w-full px-4 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors pl-12`}
                   />
                   <button
                     type="button"
@@ -152,16 +152,16 @@ export default function QiwaLogin() {
 
             {/* Divider */}
             <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 h-[1px] bg-gray-200"></div>
+              <div className="flex-1 h-[1px] bg-gray-300"></div>
               <span className="text-gray-400 text-sm">أو</span>
-              <div className="flex-1 h-[1px] bg-gray-200"></div>
+              <div className="flex-1 h-[1px] bg-gray-300"></div>
             </div>
 
             {/* Nafath Login */}
             <button
               onClick={handleNafathLogin}
               disabled={isNafathLoading}
-              className="w-full flex items-center justify-center gap-3 border-2 border-gray-200 rounded-lg py-3 h-[48px] text-base font-bold text-[#006C35] hover:border-[#006C35] hover:bg-[#f0faf5] transition-all disabled:opacity-70"
+              className="w-full flex items-center justify-center gap-3 border-2 border-gray-200 bg-white rounded-lg py-3 h-[48px] text-base font-bold text-[#006C35] hover:border-[#006C35] hover:bg-[#f0faf5] transition-all disabled:opacity-70"
             >
               {isNafathLoading ? (
                 <Loader2 className="w-6 h-6 animate-spin text-[#006C35]" />
@@ -176,44 +176,44 @@ export default function QiwaLogin() {
         </div>
       </div>
 
-      {/* Left Side - Hero Section */}
+      {/* Right Side - Hero Section with Background Image */}
       <div className="hidden lg:flex w-1/2 relative overflow-hidden">
         {/* Background Image */}
         <img 
-          src="/images/qiwa-bg.jpg" 
+          src="/images/qiwa-bg2.jpg" 
           alt="Background" 
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover object-top"
         />
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a2e]/80 via-[#1a1a2e]/70 to-[#1a1a2e]/90"></div>
+        {/* Dark Blue Overlay - gradient from transparent at top to dark at bottom */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a2744]/30 via-[#1a2744]/50 to-[#0f1a2e]/90"></div>
         
-        {/* Content */}
-        <div className="relative z-10 flex flex-col justify-center px-12 py-16 text-white">
-          <h2 className="text-[28px] font-bold leading-[1.6] mb-12">
+        {/* Content - positioned at bottom */}
+        <div className="relative z-10 flex flex-col justify-end px-12 py-16 text-white h-full">
+          <h2 className="text-[28px] font-bold leading-[1.6] mb-10">
             تعامل بسهولة ومرونة مع متطلبات<br />
-            <span className="text-[#00d4aa]">العمل و التوظيف</span>
+            <span className="text-[#4da8ff]">العمل و التوظيف</span>
           </h2>
           
-          <div className="space-y-8">
-            <div className="flex items-center gap-4 flex-row-reverse">
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                <Monitor className="w-6 h-6 text-white/80" />
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                <Monitor className="w-5 h-5 text-white/90" />
               </div>
-              <p className="text-white/90 text-base leading-relaxed">متوافق وسهل الاستخدام على الهواتف والأجهزة المكتبية</p>
+              <p className="text-white/90 text-[15px] leading-relaxed">متوافق وسهل الاستخدام على الهواتف والأجهزة المكتبية</p>
             </div>
             
-            <div className="flex items-center gap-4 flex-row-reverse">
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                <FileText className="w-6 h-6 text-white/80" />
+            <div className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5 text-white/90" />
               </div>
-              <p className="text-white/90 text-base leading-relaxed">تعامل سهل مع المعاملات الرسمية إلكترونياً</p>
+              <p className="text-white/90 text-[15px] leading-relaxed">تعامل سهل مع المعاملات الرسمية إلكترونياً</p>
             </div>
             
-            <div className="flex items-center gap-4 flex-row-reverse">
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                <FolderOpen className="w-6 h-6 text-white/80" />
+            <div className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                <FolderOpen className="w-5 h-5 text-white/90" />
               </div>
-              <p className="text-white/90 text-base leading-relaxed">احصل على جميع مستنداتك بصورة رقمية</p>
+              <p className="text-white/90 text-[15px] leading-relaxed">احصل على جميع مستنداتك بصورة رقمية</p>
             </div>
           </div>
         </div>
