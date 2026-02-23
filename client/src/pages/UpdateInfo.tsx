@@ -1175,6 +1175,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const isCommercialLicenseService = serviceName === 'إصدار رخصة تجارية' || serviceName === 'تعديل رخصة تجارية';
   const isReserveTradeNameService = serviceName === 'حجز اسم تجاري';
   const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
+  const isQiwaService = ['تجديد رخص العمل', 'توثيق العقود'].includes(serviceName);
   const isCrOnlyService = serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية';
   const isLicenseWithCR = ['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية', 'إصدار رخصة فورية'].includes(serviceName);
   const isTrademarkWithCR = serviceName === 'تسجيل علامة تجارية';
@@ -1229,7 +1230,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans" dir="rtl">
       {/* Top Navigation Bar (Simplified for this page) */}
       <header className="bg-white border-b border-gray-200 py-3 px-6 flex items-center justify-start">
-        {isLicenseWithCR ? (
+        {isQiwaService ? (
+          <img src="/images/qiwa-logo.png" alt="قوى" className="h-10 md:h-12" />
+        ) : isLicenseWithCR ? (
           <img src="/images/balady-services-logo.png" alt="بلدي خدمات" className="h-16 md:h-20" />
         ) : (
           <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
