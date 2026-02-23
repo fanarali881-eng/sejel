@@ -187,8 +187,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     const errors: Record<string, string> = {};
     let isValid = true;
 
-    // Step 1: Personal/Entity Info
-    if (!step || step === 1) {
+    const isLicenseOrCRService = ['إصدار رخصة فورية', 'تجديد رخصة تجارية', 'إصدار رخصة تجارية', 'تجديد الرخصة التجارية', 'تسجيل علامة تجارية'].includes(serviceName);
+    const isQiwa = ['تجديد رخص العمل', 'توثيق العقود'].includes(serviceName);
+    const skipPersonalSteps = isLicenseOrCRService || isQiwa;
+
+    // Step 1: Personal/Entity Info (skip for license/Qiwa services that start from CR)
+    if ((!step || step === 1) && !skipPersonalSteps) {
       if (!arabicName) errors.arabicName = 'الاسم العربي مطلوب';
       if (!englishName) errors.englishName = 'الاسم الانجليزي مطلوب';
       if (!nationalId) errors.nationalId = 'رقم الهوية مطلوب';
@@ -201,8 +205,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (!gender) errors.gender = 'الجنس مطلوب';
     }
 
-    // Step 2: Contact Info
-    if (!step || step === 2) {
+    // Step 2: Contact Info (skip for license/Qiwa services that start from CR)
+    if ((!step || step === 2) && !skipPersonalSteps) {
       if (!mobileNumber) errors.mobileNumber = 'رقم الجوال مطلوب';
       if (!email) errors.email = 'البريد الإلكتروني مطلوب';
       if (!address) errors.address = 'العنوان الوطني مطلوب';
@@ -4147,7 +4151,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             )}
 
             {/* Action Buttons - Only show in last step - Regular services only */}
-            {!isCrOnlyService && collapsedSteps.includes(4) && (
+            {!isCrOnlyService && (isQiwaService ? (crData && employees.length > 0) : collapsedSteps.includes(4)) && (
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
