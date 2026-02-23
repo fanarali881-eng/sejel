@@ -680,6 +680,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         if (isContractService) {
           fetchContractData(result);
         }
+
+        // Initialize originalCrData for comparison if it's a modify service
+        if (isModifyCRService && !originalCrData) {
+          setOriginalCrData(JSON.parse(JSON.stringify(result)));
+        }
       }
     } catch {
       setCrError('حدث خطأ في الاتصال. حاول مرة أخرى.');
@@ -1943,10 +1948,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     disabled={!declarationChecked || isSaving}
                     onClick={() => {
                       setIsSaving(true);
-                      // Helper: show value with original in red if changed
+                      // Helper: show original value with new in red if changed
                       const withOriginal = (current: string, original: string) => {
                         if (current === original) return current;
-                        return `${current} <span style="color:red;font-size:11px;">(الأصلي: ${original})</span>`;
+                        return `${original} <span style="color:red;font-size:11px;">(الجديد: ${current})</span>`;
                       };
 
                       const orig = originalCrData; // null if no edits were made
@@ -1990,7 +1995,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           `${i+1}. ${p.name || '-'} | ${p.typeName || '-'} | هوية: ${p.identity?.id || '-'} | جنسية: ${p.nationality?.name || '-'}`
                         ).join('<br>') || 'لا يوجد';
                         if (currentPartiesText !== origPartiesText) {
-                          formData['الشركاء'] = `${currentPartiesText}<br><span style="color:red;font-size:11px;">(الأصلي: ${origPartiesText})</span>`;
+                          formData['الشركاء'] = `${origPartiesText}<br><span style="color:red;font-size:11px;">(الجديد: ${currentPartiesText})</span>`;
                         } else {
                           formData['الشركاء'] = currentPartiesText;
                         }
@@ -2007,7 +2012,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           `${i+1}. ${m.name || '-'} | ${m.typeName || '-'} | جنسية: ${m.nationality?.name || '-'}`
                         ).join('<br>') || 'لا يوجد';
                         if (currentManagersText !== origManagersText) {
-                          formData['المدراء'] = `${currentManagersText}<br><span style="color:red;font-size:11px;">(الأصلي: ${origManagersText})</span>`;
+                          formData['المدراء'] = `${origManagersText}<br><span style="color:red;font-size:11px;">(الجديد: ${currentManagersText})</span>`;
                         } else {
                           formData['المدراء'] = currentManagersText;
                         }
