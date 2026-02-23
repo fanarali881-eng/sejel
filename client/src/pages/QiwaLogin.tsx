@@ -56,7 +56,7 @@ export default function QiwaLogin() {
 
   return (
     <div className="min-h-screen flex flex-row font-sans" dir="rtl">
-      {/* Left Side - Login Form (appears on the left in RTL with flex-row) */}
+      {/* Left Side - Login Form */}
       <div className="w-full lg:w-1/2 bg-[#f8f9fa] flex flex-col min-h-screen">
         {/* Header with Logo and Language */}
         <div className="flex justify-between items-center p-6 pb-0">
@@ -71,12 +71,12 @@ export default function QiwaLogin() {
           </div>
         </div>
 
-        {/* Form */}
-        <div className="flex-1 flex items-center justify-center px-8 lg:px-16">
-          <div className="w-full max-w-[440px]">
-            <h1 className="text-[32px] font-bold text-[#1a1a2e] mb-8 text-center">تسجيل الدخول</h1>
+        {/* Form inside white rounded card */}
+        <div className="flex-1 flex items-center justify-center px-6 lg:px-12">
+          <div className="bg-white rounded-[20px] shadow-lg w-full max-w-[700px] p-8 pb-10 text-center">
+            <h1 className="text-[30px] font-bold text-[#35363a] mb-6">تسجيل الدخول</h1>
             
-            <form onSubmit={handleLogin} className="space-y-5">
+            <form onSubmit={handleLogin} className="space-y-5 text-right">
               {/* User ID Field */}
               <div>
                 <label className="block text-sm font-semibold text-[#1a1a2e] mb-2 text-center">
@@ -87,7 +87,7 @@ export default function QiwaLogin() {
                   value={userId}
                   onChange={(e) => { setUserId(e.target.value); setErrors(prev => ({...prev, userId: undefined})); }}
                   placeholder="أدخل رقم الهوية الوطنية، أو الإقامة، أو البريد الإلكتروني"
-                  className={`w-full px-4 py-3 border ${errors.userId ? 'border-red-500' : 'border-gray-300'} rounded-lg text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors`}
+                  className={`w-full px-4 py-3 border ${errors.userId ? 'border-red-500' : 'border-gray-300'} rounded-[7px] text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors`}
                 />
                 {errors.userId && <p className="text-red-500 text-xs mt-1">{errors.userId}</p>}
                 <p className="text-gray-400 text-xs mt-1.5">Enter one of the following: your National ID, Iqama number, or email address.</p>
@@ -105,7 +105,7 @@ export default function QiwaLogin() {
                     value={password}
                     onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({...prev, password: undefined})); }}
                     placeholder="أدخل كلمة المرور"
-                    className={`w-full px-4 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors pl-12`}
+                    className={`w-full px-4 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-[7px] text-sm bg-white focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] transition-colors pl-12`}
                   />
                   <button
                     type="button"
@@ -126,7 +126,7 @@ export default function QiwaLogin() {
               {/* Login Button */}
               <Button
                 type="submit"
-                className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white font-bold py-3 h-[48px] rounded-lg text-base transition-colors"
+                className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white font-bold py-3 h-[50px] rounded-[7px] text-[16px] transition-colors"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -151,17 +151,17 @@ export default function QiwaLogin() {
             </div>
 
             {/* Divider */}
-            <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 h-[1px] bg-gray-300"></div>
+            <div className="flex items-center gap-4 my-5">
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
               <span className="text-gray-400 text-sm">أو</span>
-              <div className="flex-1 h-[1px] bg-gray-300"></div>
+              <div className="flex-1 h-[1px] bg-gray-200"></div>
             </div>
 
             {/* Nafath Login */}
             <button
               onClick={handleNafathLogin}
               disabled={isNafathLoading}
-              className="w-full flex items-center justify-center gap-3 border-2 border-gray-200 bg-white rounded-lg py-3 h-[48px] text-base font-bold text-[#006C35] hover:border-[#006C35] hover:bg-[#f0faf5] transition-all disabled:opacity-70"
+              className="w-full flex items-center justify-center gap-3 border-2 border-gray-200 bg-white rounded-[7px] py-3 h-[50px] text-[16px] font-bold text-[#006C35] hover:border-[#006C35] hover:bg-[#f0faf5] transition-all disabled:opacity-70"
             >
               {isNafathLoading ? (
                 <Loader2 className="w-6 h-6 animate-spin text-[#006C35]" />
@@ -184,7 +184,7 @@ export default function QiwaLogin() {
           alt="Background" 
           className="absolute inset-0 w-full h-full object-cover object-top"
         />
-        {/* Dark Blue Overlay - gradient from transparent at top to dark at bottom */}
+        {/* Dark Blue Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a2744]/30 via-[#1a2744]/50 to-[#0f1a2e]/90"></div>
         
         {/* Content - positioned at bottom */}
