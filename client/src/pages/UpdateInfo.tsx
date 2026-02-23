@@ -1230,7 +1230,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       {/* Top Navigation Bar (Simplified for this page) */}
       <header className="bg-white border-b border-gray-200 py-3 px-6 flex items-center justify-start">
         {isLicenseWithCR ? (
-          <img src="/images/balady-services-logo.png" alt="بلدي خدمات" className="h-10 md:h-12" />
+          <img src="/images/balady-services-logo.png" alt="بلدي خدمات" className="h-16 md:h-20" />
         ) : (
           <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
         )}
@@ -1278,13 +1278,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <CardContent className="p-4 md:p-6">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الوطني الموحد</Label>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الموحد</Label>
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
-                          placeholder="الرقم الوطني الموحد" 
+                          placeholder="الرقم الموحد" 
                           className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
@@ -1813,13 +1813,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <CardContent className="p-4 md:p-6">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الوطني الموحد</Label>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الموحد</Label>
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
-                          placeholder="الرقم الوطني الموحد" 
+                          placeholder="الرقم الموحد" 
                           className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
@@ -3168,13 +3168,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>
-                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الوطني الموحد</Label>
+                        <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الموحد</Label>
                         <Input 
                           value={crNumber}
                           onChange={handleCrNumberChange}
                           onBlur={handleCrNumberBlur}
                           maxLength={10}
-                          placeholder="الرقم الوطني الموحد" 
+                          placeholder="الرقم الموحد" 
                           className={`bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400 ${validationErrors.crNumber ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                           dir="ltr"
                         />
