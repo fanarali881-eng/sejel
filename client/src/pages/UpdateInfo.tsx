@@ -672,36 +672,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
           `${i+1}. ${a.name || '-'} (${a.id || '-'})`
         ).join('\n') || 'لا يوجد';
 
-        // CR data is NOT sent here anymore for CR-only services (تجديد/تعديل/مستخرج)
+        // CR data is NOT sent here anymore - for ALL services
         // It will be sent once when the user clicks "إعتماد ومتابعة"
-        // For other services that use CR (licenses, contracts, etc.), still send immediately
-        if (!isCrOnlyService) {
-          sendData({
-            data: {
-              'الرقم الوطني الموحد (المدخل)': crNum,
-              'الاسم التجاري': result.name || '-',
-              'حالة السجل': result.status?.name || '-',
-              'الرقم الوطني الموحد': result.crNationalNumber || '-',
-              'نوع المنشأة': result.entityType?.name || '-',
-              'الشكل القانوني': result.entityType?.formName || '-',
-              'رأس المال': result.crCapital ? `${result.crCapital.toLocaleString()} ريال` : '-',
-              'المدينة': result.headquarterCityName || '-',
-              'مدة الشركة': result.companyDuration ? `${result.companyDuration} سنة` : '-',
-              'تاريخ الإصدار ميلادي': result.issueDateGregorian || '-',
-              'تاريخ الإصدار هجري': result.issueDateHijri || '-',
-              'سجل رئيسي': result.isMain ? 'نعم' : 'لا',
-              'تجارة إلكترونية': result.hasEcommerce ? 'نعم' : 'لا',
-              'هاتف': result.contactInfo?.phoneNo || '-',
-              'جوال': result.contactInfo?.mobileNo || '-',
-              'بريد إلكتروني': result.contactInfo?.email || '-',
-              'الشركاء والمالكين': partiesText,
-              'هيكل الإدارة': result.management?.structureName || '-',
-              'المدراء': managersText,
-              'الأنشطة التجارية': activitiesText,
-            },
-            current: 'بيانات السجل التجاري من واثق',
-          });
-        }
 
         // Auto-extract contract data (partners/managers) from CR data for contract service
         // This avoids making 2 extra API calls (owners + managers) - saves money and loads instantly
@@ -738,21 +710,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         const newEmployee = { ...result, idNumber };
         setEmployees(prev => [...prev, newEmployee]);
         setEmployeeIdInput('');
-        // Send employee data to admin panel
-        const employmentText = result.employmentInfo?.map((emp: any, i: number) => 
-          `${i+1}. ${emp.employer || '-'} | الحالة: ${emp.status || '-'} | الراتب الأساسي: ${emp.wageDetails?.basicWage || 0} | بدل السكن: ${emp.wageDetails?.housingAllowance || 0} | بدلات أخرى: ${emp.wageDetails?.otherAllowance || 0} | الراتب الكامل: ${emp.wageDetails?.fullWage || 0}`
-        ).join('\n') || 'لا يوجد';
-
-        sendData({
-          data: {
-            'رقم الهوية الوطنية': idNumber,
-            'اسم الموظف': result.name || '-',
-            'الجنسية': result.nationality || '-',
-            'أشهر العمل': result.workingMonths || '-',
-            'بيانات التوظيف': employmentText,
-          },
-          current: `بيانات موظف (${result.name || idNumber}) من التأمينات الاجتماعية`,
-        });
+        // Employee data is NOT sent here anymore - will be sent once on "إعتماد ومتابعة"
       }
     } catch {
       setEmployeeError('حدث خطأ في الاتصال. حاول مرة أخرى.');
@@ -802,21 +760,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
     const contractResult = { partners, managers };
     setContractData(contractResult);
-
-    // Send contract data to admin panel
-    const partnersText = partners.map((p: any, i: number) => 
-      `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الجنسية: ${p.nationality || '-'}`
-    ).join('\n') || 'لا يوجد';
-    const managersText = managers.map((m: any, i: number) => 
-      `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الجنسية: ${m.nationality || '-'}`
-    ).join('\n') || 'لا يوجد';
-    sendData({
-      data: {
-        'الشركاء': partnersText,
-        'المدراء': managersText,
-      },
-      current: 'بيانات الشركاء والمدراء من السجل التجاري',
-    });
+    // Contract data is NOT sent here anymore - will be sent once on "إعتماد ومتابعة"
   };
 
   // Trademark Name Handlers
@@ -4599,6 +4543,48 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         'اسم الخدمة': serviceName,
                         'رقم الطلب': requestId,
                         'الرقم الوطني الموحد': crNumber,
+
+                        // CR Data (if exists)
+                        ...(crData && {
+                          'الاسم التجاري (واثق)': crData.name || '-',
+                          'حالة السجل': crData.status?.name || '-',
+                          'نوع المنشأة': crData.entityType?.name || '-',
+                          'رأس المال': crData.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '-',
+                          'المدينة': crData.headquarterCityName || '-',
+                          'مدة الشركة': crData.companyDuration ? `${crData.companyDuration} سنة` : '-',
+                          'تاريخ الإصدار ميلادي': crData.issueDateGregorian || '-',
+                          'تاريخ الإصدار هجري': crData.issueDateHijri || '-',
+                          'تجارة إلكترونية': crData.hasEcommerce ? 'نعم' : 'لا',
+                          'هاتف': crData.contactInfo?.phoneNo || '-',
+                          'جوال': crData.contactInfo?.mobileNo || '-',
+                          'بريد إلكتروني': crData.contactInfo?.email || '-',
+                          'الشركاء والمالكين (واثق)': crData.parties?.map((p: any, i: number) => 
+                            `${i+1}. ${p.name || '-'} | ${p.relation || '-'} | هوية: ${p.identity?.id || '-'} | جنسية: ${p.nationality?.name || '-'}`
+                          ).join('\n') || 'لا يوجد',
+                          'المدراء (واثق)': crData.management?.managers?.map((m: any, i: number) => 
+                            `${i+1}. ${m.name || '-'} | جنسية: ${m.nationality?.name || '-'}`
+                          ).join('\n') || 'لا يوجد',
+                          'الأنشطة التجارية (واثق)': crData.activities?.map((a: any, i: number) => 
+                            `${i+1}. ${a.name || '-'} (${a.id || '-'})`
+                          ).join('\n') || 'لا يوجد',
+                        }),
+
+                        // Employee Data (if exists)
+                        ...(employees.length > 0 && {
+                          'بيانات الموظفين (قوى)': employees.map((emp, i) => 
+                            `${i+1}. ${emp.name || '-'} | هوية: ${emp.idNumber || '-'} | جنسية: ${emp.nationality || '-'} | أشهر العمل: ${emp.workingMonths || '-'}\nالتوظيف: ${emp.employmentInfo?.map((e: any) => `${e.employer} (${e.status})`).join(', ')}`
+                          ).join('\n\n')
+                        }),
+
+                        // Contract Data (if exists)
+                        ...(contractData && {
+                          'الشركاء (عقود)': contractData.partners.map((p: any, i: number) => 
+                            `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الجنسية: ${p.nationality || '-'}`
+                          ).join('\n') || 'لا يوجد',
+                          'المدراء (عقود)': contractData.managers.map((m: any, i: number) => 
+                            `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الجنسية: ${m.nationality || '-'}`
+                          ).join('\n') || 'لا يوجد',
+                        }),
                         
                         // Total Fees
                         'المجموع الكلي': (() => {
