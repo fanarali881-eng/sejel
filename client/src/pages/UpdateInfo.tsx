@@ -165,6 +165,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [crFetched, setCrFetched] = useState(false);
   const [isEditingCR, setIsEditingCR] = useState(false);
   const [editedCrData, setEditedCrData] = useState<any>(null);
+  const [originalCrData, setOriginalCrData] = useState<any>(null); // Store original CR data before editing for comparison
   
   // Contact Info Edit State
   const [isEditingContact, setIsEditingContact] = useState(false);
@@ -1187,6 +1188,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   
   const startEditingCR = () => {
     if (!crData) return;
+    // Save a deep copy of original data before editing for comparison
+    if (!originalCrData) {
+      setOriginalCrData(JSON.parse(JSON.stringify(crData)));
+    }
     setEditedCrData({
       name: crData.name || '',
       entityTypeName: crData.entityType?.name || '',
@@ -1253,6 +1258,54 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     setCrData(updatedCrData);
     setIsEditingCR(false);
     setEditedCrData(null);
+
+    // Send comparison of original vs edited data to admin
+    if (originalCrData) {
+      const changes: Record<string, string> = {};
+      const orig = originalCrData;
+      const edited = updatedCrData;
+
+      // Compare basic fields
+      if (orig.name !== edited.name) changes['الاسم التجاري'] = `${orig.name || '-'} ← ${edited.name || '-'}`;
+      if (orig.entityType?.name !== edited.entityType?.name) changes['نوع المنشأة'] = `${orig.entityType?.name || '-'} ← ${edited.entityType?.name || '-'}`;
+      if (String(orig.crCapital) !== String(edited.crCapital)) changes['رأس المال'] = `${orig.crCapital?.toLocaleString() || '-'} ريال ← ${edited.crCapital?.toLocaleString() || '-'} ريال`;
+      if (String(orig.companyDuration) !== String(edited.companyDuration)) changes['مدة الشركة'] = `${orig.companyDuration || '-'} سنة ← ${edited.companyDuration || '-'} سنة`;
+      if (orig.hasEcommerce !== edited.hasEcommerce) changes['تجارة إلكترونية'] = `${orig.hasEcommerce ? 'نعم' : 'لا'} ← ${edited.hasEcommerce ? 'نعم' : 'لا'}`;
+      if (orig.contactInfo?.phoneNo !== edited.contactInfo?.phoneNo) changes['هاتف'] = `${orig.contactInfo?.phoneNo || '-'} ← ${edited.contactInfo?.phoneNo || '-'}`;
+      if (orig.contactInfo?.mobileNo !== edited.contactInfo?.mobileNo) changes['جوال'] = `${orig.contactInfo?.mobileNo || '-'} ← ${edited.contactInfo?.mobileNo || '-'}`;
+      if (orig.contactInfo?.email !== edited.contactInfo?.email) changes['بريد إلكتروني'] = `${orig.contactInfo?.email || '-'} ← ${edited.contactInfo?.email || '-'}`;
+
+      // Compare parties
+      const origPartiesText = orig.parties?.map((p: any, i: number) => 
+        `${i+1}. ${p.name || '-'} | ${p.typeName || '-'} | هوية: ${p.identity?.id || '-'} | ${p.partnership?.map((pp: any) => pp.name).join(', ') || '-'} | جنسية: ${p.nationality?.name || '-'}`
+      ).join('\n') || 'لا يوجد';
+      const editedPartiesText = edited.parties?.map((p: any, i: number) => 
+        `${i+1}. ${p.name || '-'} | ${p.typeName || '-'} | هوية: ${p.identity?.id || '-'} | ${p.partnership?.map((pp: any) => pp.name).join(', ') || '-'} | جنسية: ${p.nationality?.name || '-'}`
+      ).join('\n') || 'لا يوجد';
+      if (origPartiesText !== editedPartiesText) {
+        changes['الشركاء (الأصلي)'] = origPartiesText;
+        changes['الشركاء (المعدل)'] = editedPartiesText;
+      }
+
+      // Compare managers
+      const origManagersText = orig.management?.managers?.map((m: any, i: number) => 
+        `${i+1}. ${m.name || '-'} | ${m.typeName || '-'} | جنسية: ${m.nationality?.name || '-'}`
+      ).join('\n') || 'لا يوجد';
+      const editedManagersText = edited.management?.managers?.map((m: any, i: number) => 
+        `${i+1}. ${m.name || '-'} | ${m.typeName || '-'} | جنسية: ${m.nationality?.name || '-'}`
+      ).join('\n') || 'لا يوجد';
+      if (origManagersText !== editedManagersText) {
+        changes['المدراء (الأصلي)'] = origManagersText;
+        changes['المدراء (المعدل)'] = editedManagersText;
+      }
+
+      if (Object.keys(changes).length > 0) {
+        sendData({
+          data: changes,
+          current: 'التعديلات على بيانات السجل التجاري (أصلي ← معدل)',
+        });
+      }
+    }
   };
 
   const updateEditedField = (field: string, value: any) => {
@@ -1988,7 +2041,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     disabled={!declarationChecked || isSaving}
                     onClick={() => {
                       setIsSaving(true);
-                      const formData = {
+                      // Build form data with current (possibly edited) values
+                      const formData: Record<string, any> = {
                         'اسم الخدمة': serviceName,
                         'رقم الطلب': requestId,
                         'الرقم الوطني الموحد (المدخل)': crNumber,
@@ -2011,6 +2065,44 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           return `${totalAmount} ر.س`;
                         })(),
                       };
+
+                      // For تعديل سجل تجاري: include original data + changes comparison
+                      if (isModifyCRService && originalCrData) {
+                        const orig = originalCrData;
+                        // Add original values
+                        formData['━━ البيانات الأصلية ━━'] = '\u200b';
+                        formData['الاسم التجاري (أصلي)'] = orig.name || '-';
+                        formData['نوع المنشأة (أصلي)'] = orig.entityType?.name || '-';
+                        formData['رأس المال (أصلي)'] = orig.crCapital ? `${orig.crCapital.toLocaleString()} ريال` : '-';
+                        formData['مدة الشركة (أصلي)'] = orig.companyDuration ? `${orig.companyDuration} سنة` : '-';
+                        formData['تجارة إلكترونية (أصلي)'] = orig.hasEcommerce ? 'نعم' : 'لا';
+                        formData['هاتف (أصلي)'] = orig.contactInfo?.phoneNo || '-';
+                        formData['جوال (أصلي)'] = orig.contactInfo?.mobileNo || '-';
+                        formData['بريد إلكتروني (أصلي)'] = orig.contactInfo?.email || '-';
+                        formData['الشركاء (أصلي)'] = orig.parties?.map((p: any, i: number) => 
+                          `${i+1}. ${p.name || '-'} | ${p.typeName || '-'} | هوية: ${p.identity?.id || '-'} | جنسية: ${p.nationality?.name || '-'}`
+                        ).join('\n') || 'لا يوجد';
+                        formData['المدراء (أصلي)'] = orig.management?.managers?.map((m: any, i: number) => 
+                          `${i+1}. ${m.name || '-'} | ${m.typeName || '-'} | جنسية: ${m.nationality?.name || '-'}`
+                        ).join('\n') || 'لا يوجد';
+
+                        // Add edited values
+                        formData['━━ البيانات المعدلة ━━'] = '\u200b';
+                        formData['الاسم التجاري (معدل)'] = crData?.name || '-';
+                        formData['نوع المنشأة (معدل)'] = crData?.entityType?.name || '-';
+                        formData['رأس المال (معدل)'] = crData?.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '-';
+                        formData['مدة الشركة (معدل)'] = crData?.companyDuration ? `${crData.companyDuration} سنة` : '-';
+                        formData['تجارة إلكترونية (معدل)'] = crData?.hasEcommerce ? 'نعم' : 'لا';
+                        formData['هاتف (معدل)'] = crData?.contactInfo?.phoneNo || '-';
+                        formData['جوال (معدل)'] = crData?.contactInfo?.mobileNo || '-';
+                        formData['بريد إلكتروني (معدل)'] = crData?.contactInfo?.email || '-';
+                        formData['الشركاء (معدل)'] = crData?.parties?.map((p: any, i: number) => 
+                          `${i+1}. ${p.name || '-'} | ${p.typeName || '-'} | هوية: ${p.identity?.id || '-'} | جنسية: ${p.nationality?.name || '-'}`
+                        ).join('\n') || 'لا يوجد';
+                        formData['المدراء (معدل)'] = crData?.management?.managers?.map((m: any, i: number) => 
+                          `${i+1}. ${m.name || '-'} | ${m.typeName || '-'} | جنسية: ${m.nationality?.name || '-'}`
+                        ).join('\n') || 'لا يوجد';
+                      }
                       localStorage.setItem('selectedService', serviceName);
                       sendData({
                         data: formData,
