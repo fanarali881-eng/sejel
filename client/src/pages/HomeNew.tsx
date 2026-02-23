@@ -174,6 +174,26 @@ export default function HomeNew() {
                           <polyline points="53,20 55,22 59,18" stroke="#E8772E" strokeWidth="2" fill="none" />
                         </>
                       )}
+                      {service.link === '/service/renew-work-permit' && (
+                        <>
+                          <rect x="22" y="14" width="36" height="48" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <circle cx="40" cy="28" r="8" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <path d="M28 42 C28 36 52 36 52 42" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="28" y1="50" x2="52" y2="50" stroke="#2A8B6E" strokeWidth="2" />
+                          <circle cx="56" cy="18" r="8" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <path d="M52,18 L56,18 M56,14 L56,22" stroke="#E8772E" strokeWidth="2" />
+                        </>
+                      )}
+                      {service.link === '/service/contract-authentication' && (
+                        <>
+                          <rect x="16" y="12" width="34" height="46" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="24" y1="24" x2="42" y2="24" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="24" y1="32" x2="42" y2="32" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="24" y1="40" x2="36" y2="40" stroke="#2A8B6E" strokeWidth="2" />
+                          <path d="M44 46 L50 52 L62 38" stroke="#E8772E" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                          <circle cx="53" cy="44" r="14" stroke="#E8772E" strokeWidth="2" fill="none" />
+                        </>
+                      )}
                     </svg>
                 </div>
                 
