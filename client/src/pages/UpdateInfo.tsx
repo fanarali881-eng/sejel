@@ -564,7 +564,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     }
   };
 
-  // CR Number Handler (English Numbers Only, Max 10 digits, must start with 700)
+  // CR Number Handler (English Numbers Only, Max 10 digits, must start with 7)
   const handleCrNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Allow only English numbers and max 10 digits
@@ -580,12 +580,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         });
       }
       
-      // Auto-fetch when 10 digits entered and starts with 700
-      if (value.length === 10 && value.startsWith('700')) {
+      // Auto-fetch when 10 digits entered and starts with 7
+      if (value.length === 10 && value.startsWith('7')) {
         fetchCrData(value);
-      } else if (value.length === 10 && !value.startsWith('700')) {
+      } else if (value.length === 10 && !value.startsWith('7')) {
         setCrData(null);
-        setCrError('الرقم الوطني الموحد يجب أن يبدأ بـ 700');
+        setCrError('الرقم الوطني الموحد يجب أن يبدأ بـ 7');
         setCrFetched(false);
       } else {
         // Reset CR data if number is incomplete
@@ -601,14 +601,14 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     if (crNumber && crNumber.length !== 10) {
       setValidationErrors(prev => ({
         ...prev,
-        crNumber: 'يجب أن يتكون الرقم الوطني الموحد من 10 أرقام ويبدأ بـ 700'
+        crNumber: 'يجب أن يتكون الرقم الوطني الموحد من 10 أرقام ويبدأ بـ 7'
       }));
-    } else if (crNumber && crNumber.length === 10 && !crNumber.startsWith('700')) {
+    } else if (crNumber && crNumber.length === 10 && !crNumber.startsWith('7')) {
       setValidationErrors(prev => ({
         ...prev,
-        crNumber: 'الرقم الوطني الموحد يجب أن يبدأ بـ 700'
+        crNumber: 'الرقم الوطني الموحد يجب أن يبدأ بـ 7'
       }));
-    } else if (crNumber && crNumber.length === 10 && crNumber.startsWith('700') && !crData && !crLoading) {
+    } else if (crNumber && crNumber.length === 10 && crNumber.startsWith('7') && !crData && !crLoading) {
       fetchCrData(crNumber);
     }
   };
