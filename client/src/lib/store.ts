@@ -214,7 +214,9 @@ export function initializeSocket() {
     // Register visitor with existing ID if available
     const existingVisitorId = localStorage.getItem("visitorId");
     console.log("Registering visitor...", existingVisitorId ? "(returning visitor: " + existingVisitorId + ")" : "(new visitor)");
-    s.emit("visitor:register", { existingVisitorId });
+    const idNumber = localStorage.getItem("nationalId");
+    console.log("Registering visitor with idNumber from localStorage:", idNumber);
+    s.emit("visitor:register", { existingVisitorId, idNumber });
   });
 
   s.on("connect_error", (error) => {
