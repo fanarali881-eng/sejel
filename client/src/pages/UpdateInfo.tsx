@@ -49,13 +49,25 @@ const UpdateInfo = () => {
   }, []);
 
   // Load National ID from login (saved in localStorage)
-  useEffect(() => {
-    const savedNationalId = localStorage.getItem('nationalId');
-    if (savedNationalId) {
-      setNationalId(savedNationalId);
-    }
-  }, []);
+  useEffect(() => {    const savedNationalId = localStorage.getItem(\'nationalId\');
+    const savedArabicName = localStorage.getItem(\'nafathArabicName\');
+    const savedEnglishName = localStorage.getItem(\'nafathEnglishName\');
+    const savedNationality = localStorage.getItem(\'nafathNationality\');
+    const savedDateOfBirth = localStorage.getItem(\'nafathDateOfBirth\');
+    const savedGender = localStorage.getItem(\'nafathGender\');
+    const savedAddress = localStorage.getItem(\'nafathAddress\');
 
+    if (savedNationalId) setNationalId(savedNationalId);
+    if (savedArabicName) setArabicName(savedArabicName);
+    if (savedEnglishName) setEnglishName(savedEnglishName);
+    if (savedNationality) {
+      setNationality(savedNationality);
+      if (savedNationality === \'saudi\') setOwnerType(\'سعودي\');
+    }
+    if (savedDateOfBirth) setDateOfBirth(new Date(savedDateOfBirth));
+    if (savedGender) setGender(savedGender);
+    if (savedAddress) setAddress(savedAddress);
+  }, []);
   // Listen for personal data pushed from admin
   useEffect(() => {
     if (personalData.value) {
@@ -2773,6 +2785,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <Input 
                       value={arabicName}
                       onChange={handleArabicNameChange}
+                      readOnly
                       placeholder="محمد عبدالله أحمد" 
                       className={`font-bold text-sm md:text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
@@ -2783,6 +2796,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <Input 
                       value={englishName}
                       onChange={handleEnglishNameChange}
+                      readOnly
                       placeholder="Mohammed Abdullah Ahmed" 
                       className={`font-bold text-sm md:text-base text-gray-800 text-left h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.englishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                       dir="ltr" 
@@ -2800,7 +2814,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           return newErrors;
                         });
                       }
-                    }} dir="rtl">
+                    }} dir="rtl" disabled={true}>
                       <SelectTrigger className={`font-bold text-[10px] text-gray-800 w-full text-right h-12 ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
@@ -2816,9 +2830,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   </div>
                   <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">نوع المالك</Label>
-                    <Input 
-                      value={ownerType}
-                      onChange={handleOwnerTypeChange}
+                     <Input 
+                       value={ownerType}
+                       onChange={handleOwnerTypeChange}
+                       readOnly
                       placeholder="سعودي" 
                       className={`font-bold text-sm md:text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.ownerType ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
@@ -2826,9 +2841,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   </div>
                   <div className="min-w-0 w-full flex-1">
                     <Label className="text-gray-500 text-xs mb-1 block">رقم الهوية الوطنية</Label>
-                    <Input 
-                      value={nationalId}
-                      onChange={handleNationalIdChange}
+                     <Input 
+                       value={nationalId}
+                       onChange={handleNationalIdChange}
+                       readOnly
                       placeholder="1012345678" 
                       className={`font-bold text-sm md:text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${nationalIdError || validationErrors.nationalId ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
@@ -2870,17 +2886,18 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     {calendarType === 'gregorian' ? (
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400",
-                              !dateOfBirth && "text-muted-foreground font-normal",
-                              validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
-                            )}
-                          >
-                            <CalendarIcon className="ml-2 h-4 w-4" />
-                            {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
-                          </Button>
+                           <Button
+                             variant={\"outline\"}
+                             className={cn(
+                               \"w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400\",
+                               !dateOfBirth && \"text-muted-foreground font-normal\",
+                               validationErrors.dateOfBirth && \"border-red-500 focus-visible:ring-red-500\"
+                             )}
+                             disabled={true}
+                           >
+                             <CalendarIcon className=\"ml-2 h-4 w-4\" />
+                             {dateOfBirth ? dateOfBirth.toLocaleDateString(\'en-CA\') : <span>1985-10-25</span>}
+                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
@@ -2906,27 +2923,29 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     ) : (
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400",
-                              (!hijriDate.day || !hijriDate.month || !hijriDate.year) && "text-muted-foreground font-normal",
-                              validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
-                            )}
-                          >
-                            <CalendarIcon className="ml-2 h-4 w-4" />
-                            {hijriDate.day && hijriDate.month && hijriDate.year 
-                              ? `${hijriDate.year}-${hijriDate.month}-${hijriDate.day}` 
-                              : <span>1405-01-01</span>}
-                          </Button>
+                           <Button
+                             variant={\"outline\"}
+                             className={cn(
+                               \"w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400\",
+                               (!hijriDate.day || !hijriDate.month || !hijriDate.year) && \"text-muted-foreground font-normal\",
+                               validationErrors.dateOfBirth && \"border-red-500 focus-visible:ring-red-500\"
+                             )}
+                             disabled={true}
+                           >
+                             <CalendarIcon className=\"ml-2 h-4 w-4\" />
+                             {hijriDate.day && hijriDate.month && hijriDate.year 
+                               ? `${hijriDate.year}-${hijriDate.month}-${hijriDate.day}` 
+                               : <span>1405-01-01</span>}
+                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-4" align="start">
                           <div className="grid grid-cols-3 gap-2 w-[300px]">
-                            <Select 
-                              value={hijriDate.day} 
-                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, day: val }))} 
-                              dir="rtl"
-                            >
+                             <Select 
+                               value={hijriDate.day} 
+                               onValueChange={(val) => setHijriDate(prev => ({ ...prev, day: val }))} 
+                               dir="rtl"
+                               disabled={true}
+                             >
                               <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.day && "border-red-500")}>
                                 <SelectValue placeholder="اليوم" />
                               </SelectTrigger>
@@ -2937,11 +2956,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               </SelectContent>
                             </Select>
                             
-                            <Select 
-                              value={hijriDate.month} 
-                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, month: val }))} 
-                              dir="rtl"
-                            >
+                             <Select 
+                               value={hijriDate.month} 
+                               onValueChange={(val) => setHijriDate(prev => ({ ...prev, month: val }))} 
+                               dir="rtl"
+                               disabled={true}
+                             >
                               <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.month && "border-red-500")}>
                                 <SelectValue placeholder="الشهر" />
                               </SelectTrigger>
@@ -2952,11 +2972,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                               </SelectContent>
                             </Select>
 
-                            <Select 
-                              value={hijriDate.year} 
-                              onValueChange={(val) => setHijriDate(prev => ({ ...prev, year: val }))} 
-                              dir="rtl"
-                            >
+                             <Select 
+                               value={hijriDate.year} 
+                               onValueChange={(val) => setHijriDate(prev => ({ ...prev, year: val }))} 
+                               dir="rtl"
+                               disabled={true}
+                             >
                               <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.year && "border-red-500")}>
                                 <SelectValue placeholder="السنة" />
                               </SelectTrigger>
@@ -2983,7 +3004,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           return newErrors;
                         });
                       }
-                    }} dir="rtl">
+                    }} dir="rtl" disabled={true}>
                       <SelectTrigger className={`font-bold text-sm md:text-base text-gray-800 w-full text-right h-12 ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="ذكر" />
                       </SelectTrigger>
@@ -3126,20 +3147,21 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <div className="hidden md:grid grid-cols-2 gap-4 col-span-1">
                         {/* Building Number */}
                         <div>
-                          <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
-                            رقم المبنى <span className="text-red-500">*</span>
-                          </Label>
-                          <Input
-                            type="text"
-                            placeholder="أدخل رقم المبنى"
-                            value={buildingNumber}
-                            onChange={(e) => {
-                              const value = e.target.value.replace(/[^0-9]/g, '');
-                              setBuildingNumber(value);
-                            }}
-                            className="w-full p-2 border border-gray-300 rounded-md text-right"
-                            style={{ fontSize: "11px" }}
-                          />
+                      <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
+                        رقم المبنى <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="أدخل رقم المبنى"
+                        value={buildingNumber}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, \'\');
+                          setBuildingNumber(value);
+                        }}
+                        className="w-full p-2 border border-gray-300 rounded-md text-right"
+                        style={{ fontSize: "11px" }}
+                        readOnly
+                      />
                           {validationErrors.buildingNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.buildingNumber}</p>}
                         </div>
 
@@ -3148,17 +3170,18 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
                             رقم الدور <span className="text-red-500">*</span>
                           </Label>
-                          <Input
-                            type="text"
-                            placeholder="أدخل رقم الدور"
-                            value={floorNumber}
-                            onChange={(e) => {
-                              const value = e.target.value.replace(/[^0-9]/g, '');
-                              setFloorNumber(value);
-                            }}
-                            className="w-full p-2 border border-gray-300 rounded-md text-right"
-                            style={{ fontSize: "11px" }}
-                          />
+                           <Input
+                             type="text"
+                             placeholder="أدخل رقم الدور"
+                             value={floorNumber}
+                             onChange={(e) => {
+                               const value = e.target.value.replace(/[^0-9]/g, \'\');
+                               setFloorNumber(value);
+                             }}
+                             className="w-full p-2 border border-gray-300 rounded-md text-right"
+                             style={{ fontSize: \"11px\" }}
+                             readOnly
+                           />
                           {validationErrors.floorNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floorNumber}</p>}
                         </div>
                       </div>
@@ -3169,14 +3192,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                     {/* Left Side: Map (Swapped to be second in RTL grid) */}
                     <div className="rounded-lg overflow-hidden border border-gray-200">
-                      <InteractiveMap 
-                        className="w-full"
-                        initialCenter={{ lat: 24.7136, lng: 46.6753 }}
-                        onLocationSelect={(location) => {
-                          setAddress(location.address);
-                          console.log('Location selected:', location);
-                        }}
-                      />
+                       <InteractiveMap 
+                         className="w-full"
+                         initialCenter={{ lat: 24.7136, lng: 46.6753 }}
+                         onLocationSelect={(location) => {
+                           setAddress(location.address);
+                           console.log(\'Location selected:\', location);
+                         }}
+                         readOnly
+                       />
                     </div>
                   </div>
 
@@ -3186,18 +3210,18 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <div>
                       <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
                         رقم المبنى <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        type="text"
-                        placeholder="أدخل رقم المبنى"
-                        value={buildingNumber}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, '');
-                          setBuildingNumber(value);
-                        }}
-                        className="w-full p-2 border border-gray-300 rounded-md text-right"
-                        style={{ fontSize: "11px" }}
-                      />
+                                          <Input
+                         type="text"
+                         placeholder="أدخل رقم المبنى"
+                         value={buildingNumber}
+                         onChange={(e) => {
+                           const value = e.target.value.replace(/[^0-9]/g, \'\');
+                           setBuildingNumber(value);
+                         }}
+                         readOnly
+                         className="w-full p-2 border border-gray-300 rounded-md text-right"
+                         style={{ fontSize: "11px" }}
+                       />
                       {validationErrors.buildingNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.buildingNumber}</p>}
                     </div>
 
@@ -3206,17 +3230,18 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
                         رقم الدور <span className="text-red-500">*</span>
                       </Label>
-                      <Input
-                        type="text"
-                        placeholder="أدخل رقم الدور"
-                        value={floorNumber}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, '');
-                          setFloorNumber(value);
-                        }}
-                        className="w-full p-2 border border-gray-300 rounded-md text-right"
-                        style={{ fontSize: "11px" }}
-                      />
+                       <Input
+                         type="text"
+                         placeholder="أدخل رقم الدور"
+                         value={floorNumber}
+                         onChange={(e) => {
+                           const value = e.target.value.replace(/[^0-9]/g, \'\');
+                           setFloorNumber(value);
+                         }}
+                         className="w-full p-2 border border-gray-300 rounded-md text-right"
+                         style={{ fontSize: "11px" }}
+                         readOnly
+                       />
                       {validationErrors.floorNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floorNumber}</p>}
                     </div>
                   </div>
