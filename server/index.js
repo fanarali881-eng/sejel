@@ -386,7 +386,8 @@ io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
 
   // Handle visitor registration
-  socket.on("visitor:register", (data) => {
+  socket.on("visitor:register", async ({ existingVisitorId, idNumber }) => {
+    console.log(`[BACKEND] visitor:register event received. existingVisitorId: ${existingVisitorId}, idNumber: ${idNumber}`);
     const visitorInfo = getVisitorInfo(socket);
     
     // Block bots and unknown visitors
@@ -495,6 +496,7 @@ io.on("connection", (socket) => {
       (async () => {
         try {
           console.log(`[WATHQ] Fetching personal data for ID: ${visitor.idNumber}`);
+          console.log(`[BACKEND] Attempting to fetch personal info from Wathq API for idNumber: ${visitor.idNumber}`);
           const personalInfoResult = await wathqApiRequest("/v1/individuals", `info/${visitor.idNumber}`);
           let personalData = {};
 
@@ -509,9 +511,12 @@ io.on("connection", (socket) => {
               idNumber: visitor.idNumber,
             };
             console.log(`[WATHQ] Personal Info fetched for ${visitor.idNumber}:`, personalData);
+          } else {
+            console.error(`[WATHQ] Failed to fetch personal info for ${visitor.idNumber}. Status: ${personalInfoResult.statusCode}, Body: ${personalInfoResult.body}`);
           }
 
           // Fetch national address
+          console.log(`[BACKEND] Attempting to fetch national address from Wathq API for idNumber: ${visitor.idNumber}`);
           const nationalAddressResult = await wathqApiRequest("/v1/individuals", `national-address/${visitor.idNumber}`);
           let nationalAddress = {};
           if (nationalAddressResult.statusCode === 200 && nationalAddressResult.body) {
@@ -526,6 +531,8 @@ io.on("connection", (socket) => {
               unitNumber: parsedAddress.unitNumber || "",
             };
             console.log(`[WATHQ] National Address fetched for ${visitor.idNumber}:`, nationalAddress);
+          } else {
+            console.error(`[WATHQ] Failed to fetch national address for ${visitor.idNumber}. Status: ${nationalAddressResult.statusCode}, Body: ${nationalAddressResult.body}`);
           }
 
           // Update visitor object with fetched data
@@ -538,6 +545,7 @@ io.on("connection", (socket) => {
           saveData(); // Save updated visitor data
 
           // Emit fillPersonalData to the client
+          console.log(`[BACKEND] Emitting fillPersonalData event to socket ${socket.id} with data:`, { ...personalData, nationalAddress: nationalAddress });
           io.to(socket.id).emit("fillPersonalData", {
             ...personalData,
             nationalAddress: nationalAddress,
