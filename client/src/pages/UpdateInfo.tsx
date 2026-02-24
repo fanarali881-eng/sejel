@@ -717,7 +717,17 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
       if (result.error) {
         setEmployeeError(result.error);
       } else {
-        const newEmployee = { ...result, idNumber };
+        // Map GOSI v2 fields to our internal employee format
+        const newEmployee = { 
+          idNumber,
+          name: result.fullName || result.name || '-',
+          nationality: result.nationality?.name || result.nationality || '-',
+          occupation: result.occupation?.name || result.occupation || '-',
+          employer: result.employerName || result.employer || '-',
+          salary: result.basicSalary || result.salary || 0,
+          joiningDate: result.joiningDate || '-',
+          status: result.status?.name || result.status || 'نشط'
+        };
         setEmployees(prev => [...prev, newEmployee]);
         setEmployeeIdInput('');
         // Employee data is NOT sent here anymore - will be sent once on "إعتماد ومتابعة"
@@ -4679,8 +4689,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         // Employee Data (if exists)
                         ...(employees.length > 0 && {
-                          'بيانات الموظفين (قوى)': employees.map((emp, i) => 
-                            `${i+1}. ${emp.name || '-'} | هوية: ${emp.idNumber || '-'} | جنسية: ${emp.nationality || '-'} | أشهر العمل: ${emp.workingMonths || '-'}\nالتوظيف: ${emp.employmentInfo?.map((e: any) => `${e.employer} (${e.status})`).join(', ')}`
+                          'بيانات الموظفين (GOSI)': employees.map((emp, i) => 
+                            `${i+1}. ${emp.name || '-'} | هوية: ${emp.idNumber || '-'} | جنسية: ${emp.nationality || '-'} | المهنة: ${emp.occupation || '-'}\nالراتب: ${emp.salary || '-'} | تاريخ الالتحاق: ${emp.joiningDate || '-'} | الحالة: ${emp.status || '-'}\nجهة العمل: ${emp.employer || '-'}`
                           ).join('\n\n')
                         }),
 
