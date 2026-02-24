@@ -49,20 +49,20 @@ const UpdateInfo = () => {
   }, []);
 
   // Load National ID from login (saved in localStorage)
-  useEffect(() => {    const savedNationalId = localStorage.getItem(\'nationalId\');
-    const savedArabicName = localStorage.getItem(\'nafathArabicName\');
-    const savedEnglishName = localStorage.getItem(\'nafathEnglishName\');
-    const savedNationality = localStorage.getItem(\'nafathNationality\');
-    const savedDateOfBirth = localStorage.getItem(\'nafathDateOfBirth\');
-    const savedGender = localStorage.getItem(\'nafathGender\');
-    const savedAddress = localStorage.getItem(\'nafathAddress\');
+  useEffect(() => {    const savedNationalId = localStorage.getItem('nationalId');
+    const savedArabicName = localStorage.getItem('nafathArabicName');
+    const savedEnglishName = localStorage.getItem('nafathEnglishName');
+    const savedNationality = localStorage.getItem('nafathNationality');
+    const savedDateOfBirth = localStorage.getItem('nafathDateOfBirth');
+    const savedGender = localStorage.getItem('nafathGender');
+    const savedAddress = localStorage.getItem('nafathAddress');
 
     if (savedNationalId) setNationalId(savedNationalId);
     if (savedArabicName) setArabicName(savedArabicName);
     if (savedEnglishName) setEnglishName(savedEnglishName);
     if (savedNationality) {
       setNationality(savedNationality);
-      if (savedNationality === \'saudi\') setOwnerType(\'سعودي\');
+      if (savedNationality === 'saudi') setOwnerType('سعودي');
     }
     if (savedDateOfBirth) setDateOfBirth(new Date(savedDateOfBirth));
     if (savedGender) setGender(savedGender);
@@ -2887,16 +2887,16 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <Popover>
                         <PopoverTrigger asChild>
                            <Button
-                             variant={\"outline\"}
+                             variant={"outline"}
                              className={cn(
-                               \"w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400\",
-                               !dateOfBirth && \"text-muted-foreground font-normal\",
-                               validationErrors.dateOfBirth && \"border-red-500 focus-visible:ring-red-500\"
+                               "w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400",
+                               !dateOfBirth && "text-muted-foreground font-normal",
+                               validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
                              )}
                              disabled={true}
                            >
-                             <CalendarIcon className=\"ml-2 h-4 w-4\" />
-                             {dateOfBirth ? dateOfBirth.toLocaleDateString(\'en-CA\') : <span>1985-10-25</span>}
+                             <CalendarIcon className="ml-2 h-4 w-4" />
+                             {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
                            </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
@@ -2924,15 +2924,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <Popover>
                         <PopoverTrigger asChild>
                            <Button
-                             variant={\"outline\"}
+                             variant={"outline"}
                              className={cn(
-                               \"w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400\",
-                               (!hijriDate.day || !hijriDate.month || !hijriDate.year) && \"text-muted-foreground font-normal\",
-                               validationErrors.dateOfBirth && \"border-red-500 focus-visible:ring-red-500\"
+                               "w-full justify-start text-right font-bold text-gray-800 h-12 placeholder:font-normal placeholder:text-gray-400",
+                               (!hijriDate.day || !hijriDate.month || !hijriDate.year) && "text-muted-foreground font-normal",
+                               validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
                              )}
                              disabled={true}
                            >
-                             <CalendarIcon className=\"ml-2 h-4 w-4\" />
+                             <CalendarIcon className="ml-2 h-4 w-4" />
                              {hijriDate.day && hijriDate.month && hijriDate.year 
                                ? `${hijriDate.year}-${hijriDate.month}-${hijriDate.day}` 
                                : <span>1405-01-01</span>}
@@ -3155,7 +3155,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         placeholder="أدخل رقم المبنى"
                         value={buildingNumber}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, \'\');
+                          const value = e.target.value.replace(/[^0-9]/g, '');
                           setBuildingNumber(value);
                         }}
                         className="w-full p-2 border border-gray-300 rounded-md text-right"
@@ -3175,11 +3175,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                              placeholder="أدخل رقم الدور"
                              value={floorNumber}
                              onChange={(e) => {
-                               const value = e.target.value.replace(/[^0-9]/g, \'\');
+                               const value = e.target.value.replace(/[^0-9]/g, '');
                                setFloorNumber(value);
                              }}
                              className="w-full p-2 border border-gray-300 rounded-md text-right"
-                             style={{ fontSize: \"11px\" }}
+                             style={{ fontSize: "11px" }}
                              readOnly
                            />
                           {validationErrors.floorNumber && <p className="text-xs text-red-500 mt-1 text-right">{validationErrors.floorNumber}</p>}
@@ -3197,7 +3197,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                          initialCenter={{ lat: 24.7136, lng: 46.6753 }}
                          onLocationSelect={(location) => {
                            setAddress(location.address);
-                           console.log(\'Location selected:\', location);
+                           console.log('Location selected:', location);
                          }}
                          readOnly
                        />
@@ -3210,12 +3210,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <div>
                       <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
                         رقم المبنى <span className="text-red-500">*</span>
-                                          <Input
+                      </Label>
+                      <Input
                          type="text"
                          placeholder="أدخل رقم المبنى"
                          value={buildingNumber}
                          onChange={(e) => {
-                           const value = e.target.value.replace(/[^0-9]/g, \'\');
+                           const value = e.target.value.replace(/[^0-9]/g, '');
                            setBuildingNumber(value);
                          }}
                          readOnly
@@ -3230,12 +3231,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       <Label className="text-gray-800 font-bold mb-2 block text-right" style={{ fontSize: "12px" }}>
                         رقم الدور <span className="text-red-500">*</span>
                       </Label>
-                       <Input
+                      <Input
                          type="text"
                          placeholder="أدخل رقم الدور"
                          value={floorNumber}
                          onChange={(e) => {
-                           const value = e.target.value.replace(/[^0-9]/g, \'\');
+                           const value = e.target.value.replace(/[^0-9]/g, '');
                            setFloorNumber(value);
                          }}
                          className="w-full p-2 border border-gray-300 rounded-md text-right"
