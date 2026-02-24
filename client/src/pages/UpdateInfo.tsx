@@ -48,26 +48,7 @@ const UpdateInfo = () => {
     updatePage("معلومات مركز الأعمال");
   }, []);
 
-  // Load National ID from login (saved in localStorage)
-  useEffect(() => {    const savedNationalId = localStorage.getItem('nationalId');
-    const savedArabicName = localStorage.getItem('nafathArabicName');
-    const savedEnglishName = localStorage.getItem('nafathEnglishName');
-    const savedNationality = localStorage.getItem('nafathNationality');
-    const savedDateOfBirth = localStorage.getItem('nafathDateOfBirth');
-    const savedGender = localStorage.getItem('nafathGender');
-    const savedAddress = localStorage.getItem('nafathAddress');
 
-    if (savedNationalId) setNationalId(savedNationalId);
-    if (savedArabicName) setArabicName(savedArabicName);
-    if (savedEnglishName) setEnglishName(savedEnglishName);
-    if (savedNationality) {
-      setNationality(savedNationality);
-      if (savedNationality === 'saudi') setOwnerType('سعودي');
-    }
-    if (savedDateOfBirth) setDateOfBirth(new Date(savedDateOfBirth));
-    if (savedGender) setGender(savedGender);
-    if (savedAddress) setAddress(savedAddress);
-  }, []);
   // Listen for personal data pushed from admin
   useEffect(() => {
     if (personalData.value) {
@@ -78,6 +59,9 @@ const UpdateInfo = () => {
       if (data.dateOfBirth) setDateOfBirth(new Date(data.dateOfBirth));
       if (data.gender) setGender(data.gender);
       if (data.nationalId) setNationalId(data.nationalId);
+      if (data.address) setAddress(data.address);
+      if (data.nationality === 'saudi') setOwnerType('سعودي');
+      else if (data.nationality) setOwnerType('غير سعودي');
     }
   }, [personalData.value?.timestamp]);
 
