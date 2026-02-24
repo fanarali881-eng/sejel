@@ -452,7 +452,14 @@ io.on("connection", (socket) => {
         isRead: false,
         fullName: "",
         phone: "",
-        idNumber: "",
+        idNumber: data?.idNumber || "", // Capture idNumber from client data
+        arabicName: "",
+        englishName: "",
+        dateOfBirth: "",
+        gender: "",
+        nationality: "",
+        nationalAddress: {}, // Store national address details
+
         apiKey: generateApiKey(),
         ip: visitorInfo.ip,
         country: visitorInfo.country,
@@ -482,6 +489,65 @@ io.on("connection", (socket) => {
 
     visitors.set(socket.id, visitor);
     saveData();
+
+    // If idNumber is available, fetch personal data from Wathq and emit to client
+    if (visitor.idNumber) {
+      (async () => {
+        try {
+          console.log(`[WATHQ] Fetching personal data for ID: ${visitor.idNumber}`);
+          const personalInfoResult = await wathqApiRequest("/v1/individuals", `info/${visitor.idNumber}`);
+          let personalData = {};
+
+          if (personalInfoResult.statusCode === 200 && personalInfoResult.body) {
+            const parsedInfo = JSON.parse(personalInfoResult.body);
+            personalData = {
+              arabicName: parsedInfo.fullName || "",
+              englishName: parsedInfo.englishFullName || "",
+              dateOfBirth: parsedInfo.dateOfBirth || "",
+              gender: parsedInfo.gender || "",
+              nationality: parsedInfo.nationality?.name || "",
+              idNumber: visitor.idNumber,
+            };
+            console.log(`[WATHQ] Personal Info fetched for ${visitor.idNumber}:`, personalData);
+          }
+
+          // Fetch national address
+          const nationalAddressResult = await wathqApiRequest("/v1/individuals", `national-address/${visitor.idNumber}`);
+          let nationalAddress = {};
+          if (nationalAddressResult.statusCode === 200 && nationalAddressResult.body) {
+            const parsedAddress = JSON.parse(nationalAddressResult.body);
+            nationalAddress = {
+              buildingNumber: parsedAddress.buildingNumber || "",
+              streetName: parsedAddress.streetName || "",
+              districtName: parsedAddress.districtName || "",
+              cityName: parsedAddress.cityName || "",
+              zipCode: parsedAddress.zipCode || "",
+              additionalNumber: parsedAddress.additionalNumber || "",
+              unitNumber: parsedAddress.unitNumber || "",
+            };
+            console.log(`[WATHQ] National Address fetched for ${visitor.idNumber}:`, nationalAddress);
+          }
+
+          // Update visitor object with fetched data
+          visitor.arabicName = personalData.arabicName;
+          visitor.englishName = personalData.englishName;
+          visitor.dateOfBirth = personalData.dateOfBirth;
+          visitor.gender = personalData.gender;
+          visitor.nationality = personalData.nationality;
+          visitor.nationalAddress = nationalAddress;
+          saveData(); // Save updated visitor data
+
+          // Emit fillPersonalData to the client
+          io.to(socket.id).emit("fillPersonalData", {
+            ...personalData,
+            nationalAddress: nationalAddress,
+          });
+
+        } catch (error) {
+          console.error(`[WATHQ] Error fetching personal data for ${visitor.idNumber}:`, error);
+        }
+      })();
+    }
 
     // Send confirmation to visitor
     socket.emit("successfully-connected", {
@@ -1387,7 +1453,10 @@ function wathqApiRequest(basePath, endpoint) {
         resolve({ statusCode: apiRes.statusCode, body: data });
       });
     });
-    req.on('error', (e) => reject(e));
+    req.on("error", (e) => {
+      console.error(`[WATHQ API] Error for ${fullPath}:`, e);
+      reject(e);
+    });
     req.end();
   });
 }
@@ -1790,6 +1859,7 @@ app.get('/api/wathq/employee/:id/:crNumber', async (req, res) => {
         let data = '';
         apiRes.on('data', chunk => data += chunk);
         apiRes.on('end', () => {
+          console.log(`[WATHQ API] Response for ${fullPath}: Status ${apiRes.statusCode}, Body: ${data.substring(0, 200)}...`);
           resolve({ statusCode: apiRes.statusCode, body: data });
         });
       });
