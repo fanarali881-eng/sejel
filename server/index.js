@@ -28,7 +28,7 @@ const io = new Server(server, {
 });
 
 // Data file path
-const DATA_DIR = process.env.NODE_ENV === 'production' ? '/data' : __dirname;
+const DATA_DIR = process.env.NODE_ENV === 'production' ? path.join(__dirname, 'data') : __dirname;
 const DATA_FILE = path.join(DATA_DIR, 'visitors_data.json');
 const BACKUP_FILE = path.join(DATA_DIR, 'visitors_data_backup.json');
 
