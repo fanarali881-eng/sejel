@@ -2658,7 +2658,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
                             </svg>
-                            <span>سحب بيانات العقد</span>
+                            {serviceName === 'تجديد رخص العمل' ? <span>سحب بيانات الموظف</span> : <span>سحب بيانات العقد</span>}
                           </>
                         )}
                       </button>
@@ -2744,7 +2744,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     )}
 
                     {employees.length === 0 && !employeeLoading && (
-                      <p className="text-gray-400 text-sm text-center py-4">أدخل رقم العقد واضغط "سحب بيانات العقد" لسحب بياناته</p>
+                      <p className="text-gray-400 text-sm text-center py-4">{serviceName === 'تجديد رخص العمل' ? 'أدخل رقم هوية الموظف واضغط "سحب بيانات الموظف" لسحب بياناته' : 'أدخل رقم العقد واضغط "سحب بيانات العقد" لسحب بياناته'}</p>
                     )}
                   </CardContent>
                 </Card>
