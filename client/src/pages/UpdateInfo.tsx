@@ -52,6 +52,7 @@ const UpdateInfo = () => {
   // Listen for personal data pushed from admin
   useEffect(() => {
     if (personalData.value) {
+      console.log("Received personalData.value:", personalData.value);
       const data = personalData.value;
       if (data.arabicName) setArabicName(data.arabicName);
       if (data.englishName) setEnglishName(data.englishName);
@@ -59,6 +60,13 @@ const UpdateInfo = () => {
       if (data.dateOfBirth) setDateOfBirth(new Date(data.dateOfBirth));
       if (data.gender) setGender(data.gender);
       if (data.nationalId) setNationalId(data.nationalId);
+      console.log("National ID set:", data.nationalId);
+      console.log("Arabic Name set:", data.arabicName);
+      console.log("English Name set:", data.englishName);
+      console.log("Nationality set:", data.nationality);
+      console.log("Date of Birth set:", data.dateOfBirth);
+      console.log("Gender set:", data.gender);
+      console.log("Address set:", data.address);
       if (data.address) setAddress(data.address);
       if (data.nationality === 'saudi') setOwnerType('سعودي');
       else if (data.nationality) setOwnerType('غير سعودي');
