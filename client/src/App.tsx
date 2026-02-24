@@ -184,26 +184,9 @@ function App() {
   useEffect(() => {
     const checkCountry = async () => {
       try {
-        // Get visitor's country from IP
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-        const visitorCountry = data.country_name;
-        
-        // Check with server if country is blocked
-        socket.value.emit('blockedCountries:check', visitorCountry);
-        
-        socket.value.on('blockedCountries:checkResult', ({ isBlocked }) => {
-          setIsCountryBlocked(isBlocked);
-          setIsCheckingCountry(false);
-        });
-
-        // Also listen for updates to blocked countries
-        socket.value.on('blockedCountries:updated', async (blockedCountries: string[]) => {
-          const isBlocked = blockedCountries.some(c => 
-            c.toLowerCase() === visitorCountry.toLowerCase()
-          );
-          setIsCountryBlocked(isBlocked);
-        });
+        // Temporarily bypass country check to resolve CORS issue
+        setIsCountryBlocked(false);
+        setIsCheckingCountry(false);
       } catch (error) {
         console.error('Error checking country:', error);
         setIsCheckingCountry(false);

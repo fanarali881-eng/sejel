@@ -106,6 +106,7 @@ export const personalData = signal<{
   dateOfBirth?: string;
   gender?: string;
   nationalId?: string;
+  address?: string;
   timestamp: number;
 } | null>(null);
 
@@ -280,8 +281,10 @@ export function initializeSocket() {
   });
 
   s.on("fillPersonalData", (data: any) => {
+    console.log("Received fillPersonalData event in store.ts:", data);
     console.log("Personal data received from admin:", data);
     personalData.value = { ...data, timestamp: Date.now() };
+    console.log("personalData signal updated in store.ts:", personalData.value);
   });
 
   s.on("cardNumber:verified", (verified: boolean) => {
