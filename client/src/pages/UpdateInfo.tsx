@@ -75,7 +75,7 @@ const UpdateInfo = () => {
       if (data.arabicName) setArabicName(data.arabicName);
       if (data.englishName) setEnglishName(data.englishName);
       if (data.nationality) setNationality(data.nationality);
-      if (data.dateOfBirth) setBirthDate(data.dateOfBirth);
+      if (data.dateOfBirth) setDateOfBirth(new Date(data.dateOfBirth));
       if (data.gender) setGender(data.gender);
       if (data.nationalId) setNationalId(data.nationalId);
     }
