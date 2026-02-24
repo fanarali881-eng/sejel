@@ -712,7 +712,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     setEmployeeLoading(true);
     setEmployeeError('');
     try {
-      const res = await fetch(`${SERVER_URL}/api/wathq/employee/${idNumber}`);
+      const res = await fetch(`${SERVER_URL}/api/wathq/employee/${idNumber}/${crNumber}`);
       const result = await res.json();
       if (result.error) {
         setEmployeeError(result.error);

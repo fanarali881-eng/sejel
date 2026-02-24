@@ -1763,16 +1763,17 @@ app.get('/api/wathq/commercial-contracts/:id', async (req, res) => {
 });
 
 // Fetch GOSI Employee Information from Wathq (masdr)
-app.get('/api/wathq/employee/:id', async (req, res) => {
+app.get('/api/wathq/employee/:id/:crNumber', async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(`[WATHQ] Fetching GOSI Employee Info for: ${id}`);
-    const cached = getFromCache('/gosi/employee', `v2/info/${id}`);
+    const crNumber = req.params.crNumber;
+    console.log(`[WATHQ] Fetching GOSI Employee Info for: ${id} (CR: ${crNumber})`);
+    const cached = getFromCache('/gosi/employee', `v2/info/${id}_${crNumber}`);
     if (cached) {
-      console.log(`[WATHQ] Serving GOSI Employee from CACHE: ${id}`);
+      console.log(`[WATHQ] Serving GOSI Employee from CACHE: ${id}_${crNumber}`);
       return res.json(cached);
     }
-    // GOSI Employee API uses 'id' as a header parameter
+    // GOSI Employee API uses 'id' and 'crNumber' as header parameters
     const result = await new Promise((resolve, reject) => {
       const options = {
         hostname: 'api.wathq.sa',
@@ -1782,6 +1783,7 @@ app.get('/api/wathq/employee/:id', async (req, res) => {
           'apiKey': WATHQ_API_KEY,
           'Accept': 'application/json',
           'id': id,
+          'crNumber': crNumber,
         },
       };
       const apiReq = https.request(options, (apiRes) => {
@@ -1797,7 +1799,7 @@ app.get('/api/wathq/employee/:id', async (req, res) => {
     if (result.statusCode === 200 && result.body) {
       try {
         const parsed = JSON.parse(result.body);
-        saveToCache('/gosi/employee', `v2/info/${id}`, parsed);
+        saveToCache('/gosi/employee', `v2/info/${id}_${crNumber}`, result);
         console.log(`[WATHQ] GOSI Employee Info Success for: ${id}`);
         res.json(parsed);
       } catch(e) {
