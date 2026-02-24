@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+
 const path = require("path");
 
 // Setup logging to file
@@ -18,7 +19,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const fs = require("fs");
+
 const path = require("path");
 require("dotenv").config();
 
