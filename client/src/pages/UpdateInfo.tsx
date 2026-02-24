@@ -55,6 +55,7 @@ const UpdateInfo = () => {
     if (personalData.value) {
       console.log("UpdateInfo: personalData.value detected in useEffect.");
       console.log("Received personalData.value:", personalData.value);
+      console.log("UpdateInfo: personalData.value.timestamp:", personalData.value?.timestamp);
       const data = personalData.value;
       if (data.arabicName) setArabicName(data.arabicName);
       if (data.englishName) setEnglishName(data.englishName);

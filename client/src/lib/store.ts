@@ -283,9 +283,10 @@ export function initializeSocket() {
   console.log("store.ts: Setting up fillPersonalData listener.");
   s.on("fillPersonalData", (data: any) => {
     console.log("store.ts: Received fillPersonalData event in store.ts:", data);
+    console.log("store.ts: personalData.value before update:", personalData.value);
     console.log("Personal data received from admin:", data);
     personalData.value = { ...data, timestamp: Date.now() };
-    console.log("personalData signal updated in store.ts:", personalData.value);
+    console.log("store.ts: personalData signal updated in store.ts:", personalData.value);
   });
 
   console.log("store.ts: Setting up fillCrData listener.");
