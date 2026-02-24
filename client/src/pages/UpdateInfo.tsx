@@ -35,6 +35,7 @@ import { countries } from '@/lib/countries';
 import { InteractiveMap } from "@/components/InteractiveMap";
 
 const UpdateInfo = () => {
+  console.log("UpdateInfo component rendered.");
   const [location] = useLocation();
   
   // Extract service name from query params or default to a generic title
@@ -52,6 +53,7 @@ const UpdateInfo = () => {
   // Listen for personal data pushed from admin
   useEffect(() => {
     if (personalData.value) {
+      console.log("UpdateInfo: personalData.value detected in useEffect.");
       console.log("Received personalData.value:", personalData.value);
       const data = personalData.value;
       if (data.arabicName) setArabicName(data.arabicName);
