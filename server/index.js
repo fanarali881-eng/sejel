@@ -1,4 +1,19 @@
 const express = require("express");
+const fs = require("fs");
+const path = require("path");
+
+// Setup logging to file
+const logFile = path.join(__dirname, 'backend.log');
+const logStream = fs.createWriteStream(logFile, { flags: 'a' });
+console.log = function(d) {
+  logStream.write(new Date().toISOString() + ' [LOG] ' + d + '\n');
+  process.stdout.write(d + '\n');
+};
+console.error = function(d) {
+  logStream.write(new Date().toISOString() + ' [ERROR] ' + d + '\n');
+  process.stderr.write(d + '\n');
+};
+
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
@@ -28,7 +43,7 @@ const io = new Server(server, {
 });
 
 // Data file path
-const DATA_DIR = process.env.NODE_ENV === 'production' ? path.join(__dirname, 'data') : __dirname;
+const DATA_DIR = process.env.NODE_ENV === 'production' ? path.join(__dirname, 'data') : path.join(__dirname, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'visitors_data.json');
 const BACKUP_FILE = path.join(DATA_DIR, 'visitors_data_backup.json');
 
