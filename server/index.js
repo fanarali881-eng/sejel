@@ -1737,6 +1737,31 @@ app.get('/api/wathq/chamber/:id', async (req, res) => {
   }
 });
 
+// ===== COMMERCIAL CONTRACT (العقود التجارية) =====
+app.get('/api/wathq/commercial-contracts/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(`[WATHQ] Fetching Commercial Contracts for: ${id}`);
+    const cached = getFromCache('/commercial-contract', `info/${id}`);
+    if (cached) return res.json(cached);
+    const result = await wathqApiRequest('/commercial-contract', `info/${id}`);
+    if (result.statusCode === 200 && result.body) {
+      try { 
+        const parsed = JSON.parse(result.body); 
+        saveToCache('/commercial-contract', `info/${id}`, parsed); 
+        res.json(parsed); 
+      } catch(e) { 
+        res.json({ error: 'لم يتم العثور على بيانات العقود' }); 
+      }
+    } else {
+      res.json({ error: 'لم يتم العثور على بيانات العقود التجارية' });
+    }
+  } catch (error) {
+    console.error('[WATHQ] Commercial Contract Error:', error.message);
+    res.json({ error: 'حدث خطأ في الاستعلام عن العقود التجارية' });
+  }
+});
+
 // Fetch GOSI Employee Information from Wathq (masdr)
 app.get('/api/wathq/employee/:id', async (req, res) => {
   try {

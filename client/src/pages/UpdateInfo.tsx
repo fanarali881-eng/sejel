@@ -183,6 +183,11 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [contractLoading, setContractLoading] = useState(false);
   const [contractError, setContractError] = useState('');
   
+  // Commercial Contracts State (from Wathq Commercial Contract API)
+  const [commercialContracts, setCommercialContracts] = useState<any[]>([]);
+  const [commercialContractsLoading, setCommercialContractsLoading] = useState(false);
+  const [commercialContractsError, setCommercialContractsError] = useState('');
+  
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingStep, setPendingStep] = useState<number | null>(null);
@@ -760,12 +765,39 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
     if (partners.length === 0 && managers.length === 0) {
       setContractError('لا يوجد بيانات شركاء أو مدراء لهذا السجل');
-      return;
+    } else {
+      const contractResult = { partners, managers };
+      setContractData(contractResult);
     }
 
-    const contractResult = { partners, managers };
-    setContractData(contractResult);
-    // Contract data is NOT sent here anymore - will be sent once on "إعتماد ومتابعة"
+    // Also fetch commercial contracts if it's a contract service
+    if (isContractService) {
+      fetchCommercialContracts(crNumber || data.crNumber);
+    }
+  };
+
+  const fetchCommercialContracts = async (id: string) => {
+    if (!id) return;
+    setCommercialContractsLoading(true);
+    setCommercialContractsError('');
+    try {
+      const response = await fetch(`${SERVER_URL}/api/wathq/commercial-contracts/${id}`);
+      const data = await response.json();
+      if (data.error) {
+        setCommercialContractsError(data.error);
+      } else if (data.contracts) {
+        setCommercialContracts(data.contracts);
+      } else if (Array.isArray(data)) {
+        setCommercialContracts(data);
+      } else {
+        setCommercialContractsError('لم يتم العثور على عقود تجارية موثقة');
+      }
+    } catch (error) {
+      console.error('Error fetching commercial contracts:', error);
+      setCommercialContractsError('حدث خطأ أثناء جلب العقود التجارية');
+    } finally {
+      setCommercialContractsLoading(false);
+    }
   };
 
   // Trademark Name Handlers
@@ -2025,6 +2057,13 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         `${i+1}. ${a.name || '-'} (${a.id || '-'})`
                       ).join('<br>') || 'لا يوجد';
 
+                      // Commercial Contracts
+                      if (isContractService && commercialContracts.length > 0) {
+                        formData['العقود التجارية الموثقة'] = commercialContracts.map((c: any, i: number) => 
+                          `${i+1}. رقم: ${c.contractNumber || c.id} | حالة: ${c.status || '-'} | نوع: ${c.contractType || '-'} | طرف 2: ${c.secondPartyName || '-'}`
+                        ).join('<br>');
+                      }
+
                       formData['المجموع الكلي'] = (() => {
                         const servicePrices: Record<string, number> = {
                           'تجديد سجل تجاري': 300,
@@ -2485,6 +2524,70 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                             </div>
                           </div>
                         )}
+
+                        {/* Commercial Contracts Section */}
+                        <div className="mt-6 pt-6 border-t border-gray-100">
+                          <div className="flex items-center gap-2 mb-4 border-r-4 border-blue-600 pr-3">
+                            <h3 className="text-base font-bold text-gray-800">العقود التجارية الموثقة</h3>
+                          </div>
+                          
+                          {commercialContractsLoading && (
+                            <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg">
+                              <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                              <span className="mr-3 text-blue-600 text-xs">جاري سحب العقود التجارية...</span>
+                            </div>
+                          )}
+
+                          {commercialContractsError && (
+                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                              <p className="text-gray-500 text-xs">{commercialContractsError}</p>
+                            </div>
+                          )}
+
+                          {commercialContracts.length > 0 && !commercialContractsLoading && (
+                            <div className="space-y-3">
+                              {commercialContracts.map((contract: any, idx: number) => (
+                                <div key={idx} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:border-blue-300 transition-colors">
+                                  <div className="flex justify-between items-start mb-3">
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                      contract.status === 'ساري' || contract.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                                    }`}>
+                                      {contract.status || 'غير محدد'}
+                                    </span>
+                                    <span className="text-blue-700 font-mono text-xs font-bold">#{contract.contractNumber || contract.id}</span>
+                                  </div>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4 text-xs" dir="rtl">
+                                    <div className="flex justify-between border-b border-gray-50 pb-1">
+                                      <span className="text-gray-500">نوع العقد:</span>
+                                      <span className="text-gray-800 font-semibold">{contract.contractType || '-'}</span>
+                                    </div>
+                                    <div className="flex justify-between border-b border-gray-50 pb-1">
+                                      <span className="text-gray-500">تاريخ البدء:</span>
+                                      <span className="text-gray-800 font-semibold">{contract.startDate || '-'}</span>
+                                    </div>
+                                    <div className="flex justify-between border-b border-gray-50 pb-1">
+                                      <span className="text-gray-500">تاريخ الانتهاء:</span>
+                                      <span className="text-gray-800 font-semibold">{contract.endDate || '-'}</span>
+                                    </div>
+                                    <div className="flex justify-between border-b border-gray-50 pb-1">
+                                      <span className="text-gray-500">الطرف الثاني:</span>
+                                      <span className="text-gray-800 font-semibold truncate max-w-[150px]">{contract.secondPartyName || '-'}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {!commercialContractsLoading && !commercialContractsError && commercialContracts.length === 0 && (
+                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                              </svg>
+                              <p className="text-gray-400 text-xs">لا توجد عقود تجارية موثقة مسجلة لهذا الرقم الموحد</p>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
 
