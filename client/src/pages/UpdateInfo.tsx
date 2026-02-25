@@ -201,6 +201,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [employeeLoading, setEmployeeLoading] = useState(false);
   const [employeeError, setEmployeeError] = useState('');
   const [wantsEmployeeContract, setWantsEmployeeContract] = useState(false);
+  const [companyContractAuthenticated, setCompanyContractAuthenticated] = useState(false);
+  const [authenticatedContracts, setAuthenticatedContracts] = useState<Set<number>>(new Set());
   
   // Company Contract Data State (for توثيق العقود)
   const [contractData, setContractData] = useState<any>(null);
@@ -2559,6 +2561,21 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           </div>
                         )}
 
+                        {/* توثيق عقد الشركة Button */}
+                        <div className="mt-6 pt-6 border-t border-gray-100 flex justify-center">
+                          <button
+                            onClick={() => setCompanyContractAuthenticated(true)}
+                            disabled={companyContractAuthenticated}
+                            className={`px-8 py-2.5 rounded-lg font-bold text-sm transition-all ${
+                              companyContractAuthenticated
+                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                : 'bg-green-600 text-white hover:bg-green-700 shadow-md hover:shadow-lg'
+                            }`}
+                          >
+                            {companyContractAuthenticated ? '✓ تم التوثيق' : 'توثيق'}
+                          </button>
+                        </div>
+
                         {/* Commercial Contracts Section */}
                         <div className="mt-6 pt-6 border-t border-gray-100">
                           <div className="flex items-center gap-2 mb-4 border-r-4 border-blue-600 pr-3">
@@ -2607,6 +2624,23 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                       <span className="text-gray-500">الطرف الثاني:</span>
                                       <span className="text-gray-800 font-semibold truncate max-w-[150px]">{contract.secondPartyName || '-'}</span>
                                     </div>
+                                  </div>
+                                  <div className="mt-3 flex justify-center border-t border-gray-100 pt-3">
+                                    <button
+                                      onClick={() => {
+                                        const updated = new Set(authenticatedContracts);
+                                        updated.add(idx);
+                                        setAuthenticatedContracts(updated);
+                                      }}
+                                      disabled={authenticatedContracts.has(idx)}
+                                      className={`px-6 py-2 rounded-lg font-bold text-xs transition-all ${
+                                        authenticatedContracts.has(idx)
+                                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                          : 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'
+                                      }`}
+                                    >
+                                      {authenticatedContracts.has(idx) ? '✓ تم التوثيق' : 'توثيق'}
+                                    </button>
                                   </div>
                                 </div>
                               ))}
