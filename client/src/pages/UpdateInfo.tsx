@@ -228,6 +228,12 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
     const isQiwa = ['تجديد رخص العمل', 'توثيق العقود'].includes(serviceName);
     const skipPersonalSteps = isLicenseOrCRService || isQiwa;
 
+    // For Qiwa services (توثيق العقود / تجديد رخص العمل), skip all regular form validation
+    // They only need declarationChecked (handled by disabled prop) and crData
+    if (isQiwa && !step) {
+      return true;
+    }
+
     // Step 1: Personal/Entity Info (skip for license/Qiwa services that start from CR)
     if ((!step || step === 1) && !skipPersonalSteps) {
       if (!arabicName) errors.arabicName = 'الاسم العربي مطلوب';
