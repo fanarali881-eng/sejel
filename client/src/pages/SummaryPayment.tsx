@@ -179,14 +179,16 @@ export default function SummaryPayment() {
                     </div>
                     {isDynamic && (
                       <div className="flex justify-between items-center py-2 border-b">
-                        <span className="text-gray-600">عدد طلبات التوثيق</span>
+                        <span className="text-gray-600">{serviceName === 'تجديد رخص العمل' ? 'عدد طلبات تجديد الرخص' : 'عدد طلبات التوثيق'}</span>
                         <span className="font-medium">{authCount + empCount}</span>
                       </div>
                     )}
-                    <div className="flex justify-between items-center py-2 border-b">
-                      <span className="text-gray-600">رسوم الخدمة</span>
-                      <span className="font-medium">{servicePrice} ر.س</span>
-                    </div>
+                    {!isDynamic && (
+                      <div className="flex justify-between items-center py-2 border-b">
+                        <span className="text-gray-600">رسوم الخدمة</span>
+                        <span className="font-medium">{servicePrice} ر.س</span>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center py-2 border-b">
                       <span className="text-gray-600">ضريبة القيمة المضافة (15%)</span>
                       <span className="font-medium">{vatAmount} ر.س</span>
