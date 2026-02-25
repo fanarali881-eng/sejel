@@ -184,6 +184,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const [employeeIdInput, setEmployeeIdInput] = useState('');
   const [employeeLoading, setEmployeeLoading] = useState(false);
   const [employeeError, setEmployeeError] = useState('');
+  const [wantsEmployeeContract, setWantsEmployeeContract] = useState(false);
   
   // Company Contract Data State (for توثيق العقود)
   const [contractData, setContractData] = useState<any>(null);
@@ -1398,7 +1399,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   ] : isContractService ? [
     { id: 0, label: 'بيانات السجل التجاري', status: (crFetched && crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
     { id: 6, label: 'بيانات عقد الشركة', status: (contractData ? 'completed' : (crFetched && crData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
-    { id: 7, label: 'بيانات الموظفين', status: (employees.length > 0 ? 'completed' : (contractData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" },
+    ...(wantsEmployeeContract ? [{ id: 7, label: 'بيانات الموظفين', status: (employees.length > 0 ? 'completed' : (contractData ? 'current' : 'upcoming')) as "completed" | "current" | "upcoming" }] : []),
     { id: 5, label: 'الإقرار', status: (completedSteps.includes(5) ? 'completed' : 'upcoming') as "completed" | "current" | "upcoming" },
   ] : isQiwaService ? [
     { id: 0, label: 'بيانات السجل التجاري', status: (crFetched && crData ? 'completed' : 'current') as "completed" | "current" | "upcoming" },
@@ -2616,8 +2617,51 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
               </div>
             )}
 
+            {/* === Toggle: Do you want to document an employee contract? (only for توثيق العقود) === */}
+            {isContractService && crData && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4 border-r-4 border-orange-500 pr-3">
+                  <h2 className="text-lg font-bold text-gray-800">توثيق عقد موظف</h2>
+                </div>
+                <Card className="border-none shadow-sm bg-white">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex items-center justify-between" dir="rtl">
+                      <label className="text-sm font-bold text-gray-700">هل ترغب بتوثيق عقد موظف؟</label>
+                      <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="wantsEmployeeContract"
+                            checked={wantsEmployeeContract}
+                            onChange={() => setWantsEmployeeContract(true)}
+                            className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                          />
+                          <span className="text-sm text-gray-700 font-medium">نعم</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="wantsEmployeeContract"
+                            checked={!wantsEmployeeContract}
+                            onChange={() => {
+                              setWantsEmployeeContract(false);
+                              setEmployees([]);
+                              setEmployeeIdInput('');
+                              setEmployeeError('');
+                            }}
+                            className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                          />
+                          <span className="text-sm text-gray-700 font-medium">لا</span>
+                        </label>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
             {/* === Qiwa: Employee Lookup Section === */}
-            {isQiwaService && crData && (
+            {isQiwaService && crData && (isContractService ? wantsEmployeeContract : true) && (
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4 border-r-4 border-orange-500 pr-3">
                   <h2 className="text-lg font-bold text-gray-800">بيانات الموظفين</h2>
@@ -4538,7 +4582,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             )}
 
             {/* Declaration Section (Step 5) - Regular services only */}
-            {!isCrOnlyService && (isQiwaService ? (crData && employees.length > 0) : collapsedSteps.includes(4)) && (
+            {!isCrOnlyService && (isQiwaService ? (crData && (employees.length > 0 || (isContractService && !wantsEmployeeContract))) : collapsedSteps.includes(4)) && (
             <div className="mb-8 -mx-4 px-4">
               <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
                 <h2 className="text-lg font-bold text-gray-800">الإقرار</h2>
@@ -4572,7 +4616,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             )}
 
             {/* Action Buttons - Only show in last step - Regular services only */}
-            {!isCrOnlyService && (isQiwaService ? (crData && employees.length > 0) : collapsedSteps.includes(4)) && (
+            {!isCrOnlyService && (isQiwaService ? (crData && (employees.length > 0 || (isContractService && !wantsEmployeeContract))) : collapsedSteps.includes(4)) && (
             <div className="flex justify-between pt-4">
               <Button variant="outline" className="px-8">رجوع</Button>
               <div className="flex gap-4">
