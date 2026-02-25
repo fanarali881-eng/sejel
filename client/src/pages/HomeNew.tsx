@@ -19,31 +19,132 @@ export default function HomeNew() {
   }, []);
 
   const services = [
-    
-    { name: "قيد سجل تجاري", desc: "إصدار سجل تجاري جديد لمؤسسة فردية", icon: "🏢", link: "/service/new-cr" },
-    { name: "تجديد سجل تجاري", desc: "تجديد صلاحية السجل التجاري القائم", icon: "🔄", link: "/service/renew-cr" },
-    { name: "حجز اسم تجاري", desc: "حجز اسم تجاري جديد قبل إصدار السجل", icon: "abc", link: "/service/reserve-name" },
-    { name: "تعديل سجل تجاري", desc: "تعديل بيانات السجل التجاري الحالي", icon: "✏️", link: "/service/edit-cr" },
-    { name: "مستخرج سجل تجاري / الإفادة التجارية", desc: "الحصول على مستخرج رسمي لبيانات السجل التجاري", icon: "📄", link: "/service/commercial-extract" },
-    { name: "إصدار رخصة تجارية", desc: "إصدار رخصة لمزاولة النشاط التجاري", icon: "📜", link: "/service/issue-license" },
-    { name: "تجديد رخصة تجارية", desc: "تجديد صلاحية الرخصة التجارية المنتهية", icon: "🔄", link: "/service/renew-license" },
-    { name: "تسجيل علامة تجارية", desc: "تسجيل وحماية العلامة التجارية الخاصة بك", icon: "®️", link: "/service/register-trademark" },
-    { name: "تجديد رخص العمل", desc: "تجديد رخص العمل للعمالة الوافدة", icon: "👷", link: "/qiwa-login?service=تجديد رخص العمل" },
-    { name: "توثيق العقود", desc: "توثيق العقود التجارية والإلكترونية", icon: "📝", link: "/qiwa-login?service=توثيق العقود" },
-
+    { 
+      name: "قيد سجل تجاري", 
+      desc: "إصدار سجل تجاري جديد لمؤسسة فردية", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين البدء في مُمارسة النشاط التجاري، دون الحاجة إلى زيارة مراكز الخدمة.",
+      fee: "500",
+      icon: "🏢", 
+      link: "/service/new-cr",
+      serviceId: "new-cr"
+    },
+    { 
+      name: "تجديد سجل تجاري", 
+      desc: "تجديد صلاحية السجل التجاري القائم", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين تجديد السجل التجاري، دون الحاجة إلى زيارة مراكز الخدمة.",
+      fee: "200",
+      icon: "🔄", 
+      link: "/service/renew-cr",
+      serviceId: "renew-cr"
+    },
+    { 
+      name: "حجز اسم تجاري", 
+      desc: "حجز اسم تجاري جديد قبل إصدار السجل", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين حجز اسم تجاري، خلال مدة أقصاها (60) يومًا؛ لحين إصدار السجل التجاري ودون الحاجة إلى زيارة مراكز الخدمة.",
+      fee: "100",
+      icon: "abc", 
+      link: "/service/reserve-name",
+      serviceId: "reserve-name"
+    },
+    { 
+      name: "تعديل سجل تجاري", 
+      desc: "تعديل بيانات السجل التجاري الحالي", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين تعديل بيانات السجل التجاري الحالي، دون الحاجة إلى زيارة مراكز الخدمة.",
+      fee: "200",
+      icon: "✏️", 
+      link: "/service/edit-cr",
+      serviceId: "edit-cr"
+    },
+    { 
+      name: "مستخرج سجل تجاري / الإفادة التجارية", 
+      desc: "الحصول على مستخرج رسمي لبيانات السجل التجاري", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين طلب مستخرج يحتوي على معلومات أي سجل تجاري، كما تتيح له التقديم على طلب إفادة عن إجراء معين؛ بهدف الحصول على مستند يتضمن تأكيدًا من الوزارة بحدوث هذا الإجراء.",
+      fee: "100",
+      icon: "📄", 
+      link: "/service/commercial-extract",
+      serviceId: "commercial-extract"
+    },
+    { 
+      name: "إصدار رخصة تجارية", 
+      desc: "إصدار رخصة لمزاولة النشاط التجاري", 
+      fullDesc: "خدمة إلكترونية تقدم في منصة بلدي يمكن من خلالها البدء بممارسة العمل التجاري من خلال إصدار رخصة نشاط تجاري بالإضافة إلى تصريح السلامة الصادر من المديرية العامة للدفاع المدني لجميع الأنشطة التجارية المعتمدة.",
+      fee: "5,000",
+      icon: "📜", 
+      link: "/service/issue-license",
+      serviceId: "issue-license"
+    },
+    { 
+      name: "تجديد رخصة تجارية", 
+      desc: "تجديد صلاحية الرخصة التجارية المنتهية", 
+      fullDesc: "من خلال هذه الخدمة الإلكترونية يمكنك تعزيز استمرارية عملك التجاري حيث تمكنك هذه الخدمة من تجديد رخصتك التجارية، كما يمكنك تجديد مع تعديل بيانات الرخصة.",
+      fee: "800",
+      icon: "🔄", 
+      link: "/service/renew-license",
+      serviceId: "renew-license"
+    },
+    { 
+      name: "تسجيل علامة تجارية", 
+      desc: "تسجيل وحماية العلامة التجارية الخاصة بك", 
+      fullDesc: "خدمة تقدم الكترونيا تتيح للمستخدم طلب تسجيل العلامة التجارية. العلامات التجارية هي الإبداعات التي تكون على شكل أسماء، كلمات، إمضاءات، حروف، رموز، وأرقام، عناوين، وأختام، وكذلك التصميمات والرسوم والصور.",
+      fee: "7,500",
+      icon: "®️", 
+      link: "/service/register-trademark",
+      serviceId: "register-trademark"
+    },
+    { 
+      name: "تجديد رخص العمل", 
+      desc: "تجديد رخص العمل للعمالة الوافدة", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة الموارد البشرية والتنمية الاجتماعية عبر منصة قوى، تتيح لأصحاب المنشآت تجديد رخص العمل للعمالة الوافدة بشكل إلكتروني.",
+      fee: "100",
+      icon: "👷", 
+      link: "/qiwa-login?service=تجديد رخص العمل",
+      serviceId: "renew-work-permit"
+    },
+    { 
+      name: "توثيق العقود", 
+      desc: "توثيق العقود التجارية والإلكترونية", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة الموارد البشرية والتنمية الاجتماعية عبر منصة قوى، تتيح لأصحاب المنشآت توثيق العقود التجارية والإلكترونية بشكل رسمي.",
+      fee: "100",
+      icon: "📝", 
+      link: "/qiwa-login?service=توثيق العقود",
+      serviceId: "contract-documentation"
+    },
   ];
 
   const filteredServices = services.filter(service => 
     service.name.includes(searchQuery) || service.desc.includes(searchQuery)
   );
 
-  const handleServiceClick = (link: string | undefined, name: string) => {
-    if (!link) return;
-    setLoadingService(name);
+  const handleGetService = (e: React.MouseEvent, service: typeof services[0]) => {
+    e.stopPropagation();
+    if (!service.link) return;
+    setLoadingService(service.name);
+    
+    // Save service name for later use
+    localStorage.setItem('selectedService', service.name);
+    
     setTimeout(() => {
-      setLocation(link);
+      // License services go to balady, Qiwa services go to qiwa-login, others go to login
+      if (service.serviceId === 'issue-license' || service.serviceId === 'renew-license') {
+        setLocation(`/balady?service=${encodeURIComponent(service.name)}`);
+      } else if (service.link.startsWith('/qiwa-login')) {
+        setLocation(service.link);
+      } else {
+        setLocation(`/login?service=${encodeURIComponent(service.name)}`);
+      }
       setLoadingService(null);
     }, 3000);
+  };
+
+  const handleServiceDetails = (e: React.MouseEvent, service: typeof services[0]) => {
+    e.stopPropagation();
+    // Navigate to the service details page
+    if (service.link.startsWith('/qiwa-login')) {
+      // For Qiwa services, go to a generic service page or the qiwa login
+      setLocation(service.link);
+    } else {
+      setLocation(service.link);
+    }
   };
 
   return (
@@ -87,11 +188,12 @@ export default function HomeNew() {
             {filteredServices.map((service, i) => (
               <div 
                 key={i} 
-                onClick={() => handleServiceClick(service.link, service.name)}
-                className="group relative bg-white rounded-xl border border-gray-200 p-6 pb-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#006C35]/30 hover:-translate-y-1 min-h-[240px]"
+                className="group relative bg-white rounded-xl border border-gray-200 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#006C35]/30 hover:-translate-y-1 min-h-[280px] overflow-hidden"
               >
-                {/* Icon */}
-                <div className="w-20 h-20 flex items-center justify-center mb-4">
+                {/* === Normal State (visible by default, hidden on hover) === */}
+                <div className="group-hover:opacity-0 group-hover:invisible transition-all duration-300 absolute inset-0 flex flex-col items-center justify-center p-6 pb-8">
+                  {/* Icon */}
+                  <div className="w-20 h-20 flex items-center justify-center mb-4">
                     <svg className="w-16 h-16" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                       {service.link === '/service/new-cr' && (
                         <>
@@ -195,23 +297,50 @@ export default function HomeNew() {
                         </>
                       )}
                     </svg>
+                  </div>
+                  
+                  {/* Service Name */}
+                  <h3 className="font-bold text-gray-800 text-sm md:text-base leading-relaxed mb-3">{service.name}</h3>
+                  
+                  {/* Original hover button - now hidden, replaced by new hover state */}
                 </div>
-                
-                {/* Service Name */}
-                <h3 className="font-bold text-gray-800 text-sm md:text-base leading-relaxed mb-3">{service.name}</h3>
-                
-                {/* Hover Button */}
-                <div className={`transition-all duration-300 w-[85%] mt-auto ${loadingService === service.name ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                  <button className="w-full bg-[#D4621A] text-white font-bold py-2.5 px-4 rounded-full text-sm shadow-md hover:bg-[#C05515] hover:shadow-lg transition-all">
-                    {loadingService === service.name ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        جاري التحميل...
-                      </span>
-                    ) : (
-                      "الحصول على الخدمة"
-                    )}
-                  </button>
+
+                {/* === Hover State (hidden by default, visible on hover) === */}
+                <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 absolute inset-0 flex flex-col justify-between p-5 bg-[#f0fdf4] rounded-xl">
+                  {/* Top: Service Name + Description */}
+                  <div className="text-right">
+                    <h3 className="font-bold text-[#006C35] text-base mb-2">{service.name}</h3>
+                    <p className="text-gray-700 text-xs leading-relaxed line-clamp-4">{service.fullDesc}</p>
+                  </div>
+
+                  {/* Bottom: Fee + Buttons */}
+                  <div className="flex flex-col gap-2.5">
+                    {/* Fee */}
+                    <div className="flex items-center justify-between bg-white/70 rounded-lg px-3 py-2">
+                      <span className="text-gray-600 text-xs font-medium">رسوم الخدمة</span>
+                      <span className="text-[#006C35] font-bold text-sm">{service.fee} ر.س</span>
+                    </div>
+
+                    {/* Two Buttons */}
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={(e) => handleServiceDetails(e, service)}
+                        className="flex-1 bg-white border-2 border-[#006C35] text-[#006C35] font-bold py-2 px-2 rounded-lg text-xs hover:bg-[#006C35] hover:text-white transition-all duration-200"
+                      >
+                        تفاصيل الخدمة
+                      </button>
+                      <button 
+                        onClick={(e) => handleGetService(e, service)}
+                        className="flex-1 bg-[#D4621A] text-white font-bold py-2 px-2 rounded-lg text-xs hover:bg-[#C05515] transition-all duration-200 flex items-center justify-center gap-1"
+                      >
+                        {loadingService === service.name ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          "الحصول على الخدمة"
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
