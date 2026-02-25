@@ -2780,7 +2780,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <Input 
                       value={arabicName}
                       onChange={handleArabicNameChange}
-                      readOnly
                       placeholder="محمد عبدالله أحمد" 
                       className={`font-bold text-sm md:text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.arabicName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
@@ -2791,7 +2790,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     <Input 
                       value={englishName}
                       onChange={handleEnglishNameChange}
-                      readOnly
                       placeholder="Mohammed Abdullah Ahmed" 
                       className={`font-bold text-sm md:text-base text-gray-800 text-left h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.englishName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                       dir="ltr" 
@@ -2809,7 +2807,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           return newErrors;
                         });
                       }
-                    }} dir="rtl" disabled={true}>
+                    }} dir="rtl">
                       <SelectTrigger className={`font-bold text-[10px] text-gray-800 w-full text-right h-12 ${validationErrors.nationality ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="اختر الجنسية" />
                       </SelectTrigger>
@@ -2828,7 +2826,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                      <Input 
                        value={ownerType}
                        onChange={handleOwnerTypeChange}
-                       readOnly
                       placeholder="سعودي" 
                       className={`font-bold text-sm md:text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${validationErrors.ownerType ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
@@ -2839,7 +2836,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                      <Input 
                        value={nationalId}
                        onChange={handleNationalIdChange}
-                       readOnly
                       placeholder="1012345678" 
                       className={`font-bold text-sm md:text-base text-gray-800 h-12 w-full placeholder:font-normal placeholder:text-gray-400 ${nationalIdError || validationErrors.nationalId ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     />
@@ -2888,7 +2884,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                !dateOfBirth && "text-muted-foreground font-normal",
                                validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
                              )}
-                             disabled={true}
                            >
                              <CalendarIcon className="ml-2 h-4 w-4" />
                              {dateOfBirth ? dateOfBirth.toLocaleDateString('en-CA') : <span>1985-10-25</span>}
@@ -2925,7 +2920,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                (!hijriDate.day || !hijriDate.month || !hijriDate.year) && "text-muted-foreground font-normal",
                                validationErrors.dateOfBirth && "border-red-500 focus-visible:ring-red-500"
                              )}
-                             disabled={true}
                            >
                              <CalendarIcon className="ml-2 h-4 w-4" />
                              {hijriDate.day && hijriDate.month && hijriDate.year 
@@ -2939,7 +2933,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                value={hijriDate.day} 
                                onValueChange={(val) => setHijriDate(prev => ({ ...prev, day: val }))} 
                                dir="rtl"
-                               disabled={true}
                              >
                               <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.day && "border-red-500")}>
                                 <SelectValue placeholder="اليوم" />
@@ -2955,7 +2948,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                value={hijriDate.month} 
                                onValueChange={(val) => setHijriDate(prev => ({ ...prev, month: val }))} 
                                dir="rtl"
-                               disabled={true}
                              >
                               <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.month && "border-red-500")}>
                                 <SelectValue placeholder="الشهر" />
@@ -2971,7 +2963,6 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                value={hijriDate.year} 
                                onValueChange={(val) => setHijriDate(prev => ({ ...prev, year: val }))} 
                                dir="rtl"
-                               disabled={true}
                              >
                               <SelectTrigger className={cn(validationErrors.dateOfBirth && !hijriDate.year && "border-red-500")}>
                                 <SelectValue placeholder="السنة" />
@@ -2999,7 +2990,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           return newErrors;
                         });
                       }
-                    }} dir="rtl" disabled={true}>
+                    }} dir="rtl">
                       <SelectTrigger className={`font-bold text-sm md:text-base text-gray-800 w-full text-right h-12 ${validationErrors.gender ? 'border-red-500 focus:ring-red-500' : ''}`}>
                         <SelectValue placeholder="ذكر" />
                       </SelectTrigger>
