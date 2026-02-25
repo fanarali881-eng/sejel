@@ -2765,138 +2765,86 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         )}
                       </div>
                     ) : (
-                      /* === Original API-based Employee Lookup for other Qiwa services === */
-                      <>
-                        {/* Employee ID Input */}
-                        <div className="flex items-end gap-3 mb-6" dir="rtl">
-                          <div className="flex-1 max-w-xs">
-                            <Label className="text-gray-500 text-xs mb-1 block text-right">رقم هوية الموظف</Label>
-                            <Input 
-                              value={employeeIdInput}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                if (val === '' || /^\d+$/.test(val)) {
-                                  setEmployeeIdInput(val);
-                                  setEmployeeError('');
-                                }
-                              }}
-                              maxLength={10}
-                              placeholder="رقم الهوية الوطنية" 
-                              className="bg-gray-50 border-gray-200 h-12 text-right placeholder:text-gray-400"
-                              dir="ltr"
-                            />
-                          </div>
+                      /* === Manual Employee Entry for تجديد رخص العمل === */
+                      <div dir="rtl">
+                        {/* Add Employee Button */}
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-sm text-gray-500">الموظفين المضافين: {employees.length}</span>
                           <button
                             onClick={() => {
-                              if (employeeIdInput.length === 10) {
-                                if (employees.some(emp => emp.idNumber === employeeIdInput)) {
-                                  setEmployeeError('هذا الموظف مضاف مسبقاً');
-                                  return;
-                                }
-                                fetchEmployeeData(employeeIdInput);
-                              } else {
-                                setEmployeeError('يجب إدخال 10 أرقام');
-                              }
+                              setEmployees([...employees, { idNumber: '', name: '', _isManual: true, _isEditing: true }]);
                             }}
-                            disabled={employeeLoading}
-                            className="h-12 px-6 bg-[#0e4a79] text-white rounded-lg hover:bg-[#0c3d66] transition-colors disabled:opacity-50 flex items-center gap-2"
+                            className="h-10 w-10 bg-[#0e4a79] text-white rounded-full hover:bg-[#0c3d66] transition-colors flex items-center justify-center text-2xl font-bold shadow-md"
+                            title="إضافة موظف"
                           >
-                            {employeeLoading ? (
-                              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                            ) : (
-                              <>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                                </svg>
-                                <span>سحب بيانات الموظف</span>
-                              </>
-                            )}
+                            +
                           </button>
                         </div>
 
-                        {employeeError && (
-                          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-right">
-                            <p className="text-red-600 text-sm">{employeeError}</p>
-                          </div>
-                        )}
-
-                        {/* Employees List */}
+                        {/* Employee Entries */}
                         {employees.length > 0 && (
                           <div className="space-y-3">
-                            <div className="flex items-center justify-between mb-2" dir="rtl">
-                              <span className="text-sm text-gray-500">الموظفين المضافين: {employees.length}</span>
-                            </div>
                             {employees.map((emp, index) => (
-                              <div key={emp.idNumber || index} className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                              <div key={index} className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                                 <div className="flex items-center justify-between mb-3">
                                   <button
-                                    onClick={() => removeEmployee(emp.idNumber)}
-                                    className="text-red-500 hover:text-red-700 text-xs flex items-center gap-1"
+                                    onClick={() => {
+                                      const updated = employees.filter((_, i) => i !== index);
+                                      setEmployees(updated);
+                                    }}
+                                    className="h-8 w-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center text-xl font-bold shadow-md"
+                                    title="حذف موظف"
                                   >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                    </svg>
-                                    حذف
+                                    −
                                   </button>
                                   <h4 className="text-sm font-bold text-gray-800">موظف #{index + 1}</h4>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3" dir="rtl">
-                                  {emp.name && (
-                                    <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                      <span className="text-gray-500 text-xs">الاسم</span>
-                                      <span className="text-gray-800 text-sm font-semibold">{emp.name}</span>
-                                    </div>
-                                  )}
-                                  <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                    <span className="text-gray-500 text-xs">رقم الهوية</span>
-                                    <span className="text-gray-800 text-sm font-semibold" dir="ltr">{emp.idNumber}</span>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                  <div>
+                                    <Label className="text-gray-500 text-xs mb-1 block text-right">الرقم الوطني للموظف</Label>
+                                    <Input
+                                      value={emp.idNumber}
+                                      onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val === '' || /^\d+$/.test(val)) {
+                                          const updated = [...employees];
+                                          updated[index] = { ...updated[index], idNumber: val };
+                                          setEmployees(updated);
+                                        }
+                                      }}
+                                      maxLength={10}
+                                      placeholder="أدخل الرقم الوطني (10 أرقام)"
+                                      className="bg-white border-gray-200 h-12 text-right placeholder:text-gray-400"
+                                      dir="ltr"
+                                    />
                                   </div>
-                                  {emp.nationality && (
-                                    <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                      <span className="text-gray-500 text-xs">الجنسية</span>
-                                      <span className="text-gray-800 text-sm font-semibold">{emp.nationality}</span>
-                                    </div>
-                                  )}
-                                  {emp.occupation && (
-                                    <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                      <span className="text-gray-500 text-xs">المهنة</span>
-                                      <span className="text-gray-800 text-sm font-semibold">{emp.occupation}</span>
-                                    </div>
-                                  )}
-                                  {emp.employer && (
-                                    <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                      <span className="text-gray-500 text-xs">جهة العمل</span>
-                                      <span className="text-gray-800 text-sm font-semibold">{emp.employer}</span>
-                                    </div>
-                                  )}
-                                  {emp.salary && (
-                                    <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                      <span className="text-gray-500 text-xs">الراتب</span>
-                                      <span className="text-gray-800 text-sm font-semibold">{Number(emp.salary).toLocaleString()} ريال</span>
-                                    </div>
-                                  )}
-                                  {emp.joiningDate && (
-                                    <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                      <span className="text-gray-500 text-xs">تاريخ الالتحاق</span>
-                                      <span className="text-gray-800 text-sm font-semibold">{emp.joiningDate}</span>
-                                    </div>
-                                  )}
-                                  {emp.status && (
-                                    <div className="flex justify-between items-center bg-white rounded-md px-3 py-2">
-                                      <span className="text-gray-500 text-xs">الحالة</span>
-                                      <span className={`text-sm font-semibold ${emp.status === 'نشط' ? 'text-green-600' : 'text-red-600'}`}>{emp.status}</span>
-                                    </div>
-                                  )}
+                                  <div>
+                                    <Label className="text-gray-500 text-xs mb-1 block text-right">اسم الموظف باللغة العربية كامل</Label>
+                                    <Input
+                                      value={emp.name || ''}
+                                      onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val === '' || /^[\u0600-\u06FF\s]+$/.test(val)) {
+                                          const updated = [...employees];
+                                          updated[index] = { ...updated[index], name: val };
+                                          setEmployees(updated);
+                                        }
+                                      }}
+                                      placeholder="أدخل اسم الموظف الرباعي"
+                                      className="bg-white border-gray-200 h-12 text-right placeholder:text-gray-400"
+                                      dir="rtl"
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             ))}
                           </div>
                         )}
 
-                        {employees.length === 0 && !employeeLoading && (
-                          <p className="text-gray-400 text-sm text-center py-4">أدخل رقم هوية الموظف واضغط "سحب بيانات الموظف" لسحب بياناته</p>
+                        {employees.length === 0 && (
+                          <p className="text-gray-400 text-sm text-center py-4">اضغط على + لإضافة بيانات موظف</p>
                         )}
-                      </>
+                      </div>
                     )}
                   </CardContent>
                 </Card>
