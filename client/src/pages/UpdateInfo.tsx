@@ -2546,7 +2546,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         {/* Commercial Contracts Section */}
                         <div className="mt-6 pt-6 border-t border-gray-100">
                           <div className="flex items-center gap-2 mb-4 border-r-4 border-blue-600 pr-3">
-                            <h3 className="text-base font-bold text-gray-800">العقود التجارية الموثقة</h3>
+                            <h3 className="text-base font-bold text-gray-800">العقود التجارية</h3>
                           </div>
                           
                           {commercialContractsLoading && (
