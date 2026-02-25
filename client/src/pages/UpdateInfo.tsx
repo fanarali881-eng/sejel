@@ -2734,7 +2734,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                           }
                                         }}
                                         maxLength={10}
-                                        placeholder="أدخل الرقم الوطني (10 أرقام)"
+                                        placeholder="أدخل الرقم الوطني"
                                         className="bg-white border-gray-200 h-12 text-right placeholder:text-gray-400"
                                         dir="ltr"
                                       />
@@ -2832,7 +2832,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                         }
                                       }}
                                       maxLength={10}
-                                      placeholder="أدخل الرقم الوطني (10 أرقام)"
+                                      placeholder="أدخل الرقم الوطني"
                                       className="bg-white border-gray-200 h-12 text-right placeholder:text-gray-400"
                                       dir="ltr"
                                     />
