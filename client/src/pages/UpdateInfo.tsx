@@ -4699,7 +4699,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 <CardContent className="p-4 md:p-6">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 font-medium">رسوم {serviceName}</span>
+                      <span className="text-gray-700 font-medium">رسوم {isContractService ? 'توثيق العقد' : serviceName}</span>
                       <span className="text-lg font-bold text-green-700">100 ريال</span>
                     </div>
                   </div>
