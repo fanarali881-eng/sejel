@@ -34,6 +34,22 @@ import { cn } from "@/lib/utils";
 import { countries } from '@/lib/countries';
 import { InteractiveMap } from "@/components/InteractiveMap";
 
+// Luhn algorithm to validate Saudi National ID / Iqama number
+const isValidSaudiId = (id: string): boolean => {
+  if (id.length !== 10) return false;
+  if (id[0] !== '1' && id[0] !== '2') return false;
+  let sum = 0;
+  for (let i = 0; i < 10; i++) {
+    let digit = parseInt(id[i]);
+    if (i % 2 === 0) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+  }
+  return sum % 10 === 0;
+};
+
 const UpdateInfo = () => {
   console.log("UpdateInfo component rendered.");
   const [location] = useLocation();
@@ -2722,6 +2738,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                         className="bg-white border-gray-200 h-12 text-right placeholder:text-gray-400"
                                         dir="ltr"
                                       />
+                                      {emp.idNumber.length === 10 && !isValidSaudiId(emp.idNumber) && (
+                                        <p className="text-red-500 text-xs mt-1 text-right">رقم الهوية غير صحيح</p>
+                                      )}
                                     </div>
                                     <div>
                                       <Label className="text-gray-500 text-xs mb-1 block text-right">اسم الموظف باللغة العربية كامل</Label>
@@ -2817,6 +2836,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                       className="bg-white border-gray-200 h-12 text-right placeholder:text-gray-400"
                                       dir="ltr"
                                     />
+                                    {emp.idNumber.length === 10 && !isValidSaudiId(emp.idNumber) && (
+                                      <p className="text-red-500 text-xs mt-1 text-right">رقم الهوية غير صحيح</p>
+                                    )}
                                   </div>
                                   <div>
                                     <Label className="text-gray-500 text-xs mb-1 block text-right">اسم الموظف باللغة العربية كامل</Label>
