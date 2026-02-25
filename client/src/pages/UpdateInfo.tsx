@@ -2572,7 +2572,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                 : 'bg-green-600 text-white hover:bg-green-700 shadow-md hover:shadow-lg'
                             }`}
                           >
-                            {companyContractAuthenticated ? '✓ تم التوثيق' : 'توثيق'}
+                            {companyContractAuthenticated ? '✓ طلب توثيق' : 'توثيق'}
                           </button>
                         </div>
 
@@ -2639,7 +2639,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                           : 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'
                                       }`}
                                     >
-                                      {authenticatedContracts.has(idx) ? '✓ تم التوثيق' : 'توثيق'}
+                                      {authenticatedContracts.has(idx) ? '✓ طلب توثيق' : 'توثيق'}
                                     </button>
                                   </div>
                                 </div>
