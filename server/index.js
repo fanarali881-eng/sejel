@@ -5,6 +5,7 @@ const path = require("path");
 
 
 
+
 // Setup logging to file
 const logFile = path.join(__dirname, 'backend.log');
 const logStream = fs.createWriteStream(logFile, { flags: 'a' });
