@@ -178,20 +178,10 @@ export default function SummaryPayment() {
                       <span className="font-medium">{serviceName}</span>
                     </div>
                     {isDynamic && (
-                      <>
-                        <div className="flex justify-between items-center py-2 border-b">
-                          <span className="text-gray-600">عدد طلبات التوثيق</span>
-                          <span className="font-medium">{authCount}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2 border-b">
-                          <span className="text-gray-600">عدد الموظفين</span>
-                          <span className="font-medium">{empCount}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2 border-b">
-                          <span className="text-gray-600">سعر الوحدة</span>
-                          <span className="font-medium">100 ر.س</span>
-                        </div>
-                      </>
+                      <div className="flex justify-between items-center py-2 border-b">
+                        <span className="text-gray-600">عدد طلبات التوثيق</span>
+                        <span className="font-medium">{authCount + empCount}</span>
+                      </div>
                     )}
                     <div className="flex justify-between items-center py-2 border-b">
                       <span className="text-gray-600">رسوم الخدمة</span>
