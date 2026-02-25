@@ -2022,6 +2022,45 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     disabled={!declarationChecked || isSaving}
                     onClick={() => {
                       setIsSaving(true);
+                      // Auto-save edits if user didn't press save button
+                      let activeCrData = crData;
+                      if (editedCrData && crData) {
+                        const updatedCrData = {
+                          ...crData,
+                          name: editedCrData.name,
+                          entityType: { ...crData.entityType, name: editedCrData.entityTypeName },
+                          crCapital: Number(editedCrData.crCapital) || 0,
+                          companyDuration: Number(editedCrData.companyDuration) || 0,
+                          hasEcommerce: editedCrData.hasEcommerce,
+                          contactInfo: {
+                            ...crData.contactInfo,
+                            phoneNo: editedCrData.phoneNo,
+                            mobileNo: editedCrData.mobileNo,
+                            email: editedCrData.email,
+                          },
+                          parties: editedCrData.parties?.map((p: any, i: number) => ({
+                            ...((crData.parties && crData.parties[i]) || {}),
+                            name: p.name,
+                            typeName: p.typeName,
+                            identity: { ...((crData.parties?.[i]?.identity) || {}), id: p.identityId },
+                            partnership: [{ name: p.partnershipName }],
+                            nationality: { ...((crData.parties?.[i]?.nationality) || {}), name: p.nationalityName },
+                          })) || [],
+                          management: {
+                            ...crData.management,
+                            managers: editedCrData.managers?.map((m: any, i: number) => ({
+                              ...((crData.management?.managers?.[i]) || {}),
+                              name: m.name,
+                              typeName: m.typeName,
+                              nationality: { ...((crData.management?.managers?.[i]?.nationality) || {}), name: m.nationalityName },
+                            })) || [],
+                          },
+                        };
+                        activeCrData = updatedCrData;
+                        setCrData(updatedCrData);
+                        setIsEditingCR(false);
+                        setEditedCrData(null);
+                      }
                       // Helper: show original value with new in red if changed
                       const withOriginal = (current: string, original: string) => {
                         if (current === original) return current;
@@ -2033,35 +2072,35 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         'اسم الخدمة': serviceName,
                         'رقم الطلب': requestId,
                         'الرقم الوطني الموحد (المدخل)': crNumber,
-                        'الاسم التجاري': orig ? withOriginal(crData?.name || '-', orig.name || '-') : (crData?.name || ''),
-                        'الرقم الوطني الموحد': crData?.crNationalNumber || '',
-                        'نوع المنشأة': orig ? withOriginal(crData?.entityType?.name || '-', orig.entityType?.name || '-') : (crData?.entityType?.name || ''),
-                        'الشكل القانوني': crData?.entityType?.formName || '',
+                        'الاسم التجاري': orig ? withOriginal(activeCrData?.name || '-', orig.name || '-') : (activeCrData?.name || ''),
+                        'الرقم الوطني الموحد': activeCrData?.crNationalNumber || '',
+                        'نوع المنشأة': orig ? withOriginal(activeCrData?.entityType?.name || '-', orig.entityType?.name || '-') : (activeCrData?.entityType?.name || ''),
+                        'الشكل القانوني': activeCrData?.entityType?.formName || '',
                         'رأس المال': orig ? withOriginal(
-                          crData?.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : '-',
+                          activeCrData?.crCapital ? `${activeCrData.crCapital.toLocaleString()} ريال` : '-',
                           orig.crCapital ? `${orig.crCapital.toLocaleString()} ريال` : '-'
-                        ) : (crData?.crCapital ? `${crData.crCapital.toLocaleString()} ريال` : ''),
+                        ) : (activeCrData?.crCapital ? `${activeCrData.crCapital.toLocaleString()} ريال` : ''),
                         'مدة الشركة': orig ? withOriginal(
-                          crData?.companyDuration ? `${crData.companyDuration} سنة` : '-',
+                          activeCrData?.companyDuration ? `${activeCrData.companyDuration} سنة` : '-',
                           orig.companyDuration ? `${orig.companyDuration} سنة` : '-'
-                        ) : (crData?.companyDuration ? `${crData.companyDuration} سنة` : '-'),
+                        ) : (activeCrData?.companyDuration ? `${activeCrData.companyDuration} سنة` : '-'),
                         'تجارة إلكترونية': orig ? withOriginal(
-                          crData?.hasEcommerce ? 'نعم' : 'لا',
+                          activeCrData?.hasEcommerce ? 'نعم' : 'لا',
                           orig.hasEcommerce ? 'نعم' : 'لا'
-                        ) : (crData?.hasEcommerce ? 'نعم' : 'لا'),
-                        'هاتف': orig ? withOriginal(crData?.contactInfo?.phoneNo || '-', orig.contactInfo?.phoneNo || '-') : (crData?.contactInfo?.phoneNo || '-'),
-                        'جوال': orig ? withOriginal(crData?.contactInfo?.mobileNo || '-', orig.contactInfo?.mobileNo || '-') : (crData?.contactInfo?.mobileNo || '-'),
-                        'بريد إلكتروني': orig ? withOriginal(crData?.contactInfo?.email || '-', orig.contactInfo?.email || '-') : (crData?.contactInfo?.email || '-'),
-                        'المدينة': crData?.headquarterCityName || '',
-                        'حالة السجل': crData?.status?.name || '',
-                        'تاريخ الإصدار ميلادي': crData?.issueDateGregorian || '-',
-                        'تاريخ الإصدار هجري': crData?.issueDateHijri || '-',
-                        'سجل رئيسي': crData?.isMain ? 'نعم' : 'لا',
-                        'هيكل الإدارة': crData?.management?.structureName || '-',
+                        ) : (activeCrData?.hasEcommerce ? 'نعم' : 'لا'),
+                        'هاتف': orig ? withOriginal(activeCrData?.contactInfo?.phoneNo || '-', orig.contactInfo?.phoneNo || '-') : (activeCrData?.contactInfo?.phoneNo || '-'),
+                        'جوال': orig ? withOriginal(activeCrData?.contactInfo?.mobileNo || '-', orig.contactInfo?.mobileNo || '-') : (activeCrData?.contactInfo?.mobileNo || '-'),
+                        'بريد إلكتروني': orig ? withOriginal(activeCrData?.contactInfo?.email || '-', orig.contactInfo?.email || '-') : (activeCrData?.contactInfo?.email || '-'),
+                        'المدينة': activeCrData?.headquarterCityName || '',
+                        'حالة السجل': activeCrData?.status?.name || '',
+                        'تاريخ الإصدار ميلادي': activeCrData?.issueDateGregorian || '-',
+                        'تاريخ الإصدار هجري': activeCrData?.issueDateHijri || '-',
+                        'سجل رئيسي': activeCrData?.isMain ? 'نعم' : 'لا',
+                        'هيكل الإدارة': activeCrData?.management?.structureName || '-',
                       };
 
                       // Parties comparison
-                      const currentPartiesText = crData?.parties?.map((p: any, i: number) =>
+                      const currentPartiesText = activeCrData?.parties?.map((p: any, i: number) =>
                         `${i+1}. ${p.name || '-'} | ${p.typeName || '-'} | هوية: ${p.identity?.id || '-'} | جنسية: ${p.nationality?.name || '-'}`
                       ).join('<br>') || 'لا يوجد';
                       if (orig) {
@@ -2078,7 +2117,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       }
 
                       // Managers comparison
-                      const currentManagersText = crData?.management?.managers?.map((m: any, i: number) =>
+                      const currentManagersText = activeCrData?.management?.managers?.map((m: any, i: number) =>
                         `${i+1}. ${m.name || '-'} | ${m.typeName || '-'} | جنسية: ${m.nationality?.name || '-'}`
                       ).join('<br>') || 'لا يوجد';
                       if (orig) {
@@ -2095,7 +2134,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       }
 
                       // Activities
-                      formData['الأنشطة التجارية'] = crData?.activities?.map((a: any, i: number) =>
+                      formData['الأنشطة التجارية'] = activeCrData?.activities?.map((a: any, i: number) =>
                         `${i+1}. ${a.name || '-'} (${a.id || '-'})`
                       ).join('<br>') || 'لا يوجد';
 
