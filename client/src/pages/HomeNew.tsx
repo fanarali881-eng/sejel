@@ -325,13 +325,13 @@ export default function HomeNew() {
                     <div className="flex gap-2">
                       <button 
                         onClick={(e) => handleServiceDetails(e, service)}
-                        className="flex-1 bg-white border-2 border-[#006C35] text-[#006C35] font-bold py-2 px-2 rounded-lg text-xs hover:bg-[#006C35] hover:text-white transition-all duration-200"
+                        className="flex-1 bg-white border-2 border-[#006C35] text-[#006C35] font-bold py-1.5 px-1.5 rounded-lg text-[10px] whitespace-nowrap hover:bg-[#006C35] hover:text-white transition-all duration-200"
                       >
                         تفاصيل الخدمة
                       </button>
                       <button 
                         onClick={(e) => handleGetService(e, service)}
-                        className="flex-1 bg-[#D4621A] text-white font-bold py-2 px-2 rounded-lg text-xs hover:bg-[#C05515] transition-all duration-200 flex items-center justify-center gap-1"
+                        className="flex-1 bg-[#D4621A] text-white font-bold py-1.5 px-1.5 rounded-lg text-[10px] whitespace-nowrap hover:bg-[#C05515] transition-all duration-200 flex items-center justify-center gap-1"
                       >
                         {loadingService === service.name ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
