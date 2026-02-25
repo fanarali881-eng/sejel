@@ -520,6 +520,7 @@ io.on("connection", (socket) => {
           let personalData = {};
 
           if (personalInfoResult.statusCode === 200 && personalInfoResult.body) {
+            console.log(`[WATHQ] Raw Response Body for Personal Info: ${personalInfoResult.body}`);
             const parsedInfo = JSON.parse(personalInfoResult.body);
             personalData = {
               arabicName: parsedInfo.fullName || "",
@@ -539,6 +540,7 @@ io.on("connection", (socket) => {
           const nationalAddressResult = await wathqApiRequest("/v1/individuals", `national-address/${visitor.idNumber}`);
           let nationalAddress = {};
           if (nationalAddressResult.statusCode === 200 && nationalAddressResult.body) {
+            console.log(`[WATHQ] Raw Response Body for National Address: ${nationalAddressResult.body}`);
             const parsedAddress = JSON.parse(nationalAddressResult.body);
             nationalAddress = {
               buildingNumber: parsedAddress.buildingNumber || "",
