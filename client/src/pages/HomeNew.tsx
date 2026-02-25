@@ -191,7 +191,7 @@ export default function HomeNew() {
                 className="group relative bg-white rounded-xl border border-gray-200 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#006C35]/30 hover:-translate-y-1 min-h-[280px] overflow-hidden"
               >
                 {/* === Normal State (visible by default, hidden on hover) === */}
-                <div className="group-hover:opacity-0 group-hover:invisible transition-all duration-300 absolute inset-0 flex flex-col items-center justify-center p-6 pb-8">
+                <div className="group-hover:opacity-0 group-hover:invisible transition-all duration-300 absolute inset-0 flex flex-col items-center justify-center p-6 pb-8 md:flex hidden">
                   {/* Icon */}
                   <div className="w-20 h-20 flex items-center justify-center mb-4">
                     <svg className="w-16 h-16" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -305,8 +305,8 @@ export default function HomeNew() {
                   {/* Original hover button - now hidden, replaced by new hover state */}
                 </div>
 
-                {/* === Hover State (hidden by default, visible on hover) === */}
-                <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 absolute inset-0 flex flex-col justify-between p-5 bg-[#f0fdf4] rounded-xl">
+                {/* === Hover State (hidden by default on desktop, always visible on mobile) === */}
+                <div className="md:opacity-0 md:invisible md:group-hover:opacity-100 md:group-hover:visible opacity-100 visible transition-all duration-300 absolute inset-0 flex flex-col justify-between p-5 bg-[#f0fdf4] rounded-xl">
                   {/* Top: Service Name + Description */}
                   <div className="text-right">
                     <h3 className="font-bold text-[#006C35] text-base mb-2">{service.name}</h3>
