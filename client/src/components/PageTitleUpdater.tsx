@@ -29,7 +29,7 @@ export default function PageTitleUpdater() {
     }
 
     // Update browser title
-    document.title = `المنصة الوطنية | ${title}`;
+    document.title = title === 'الصفحة الرئيسية' ? 'المنصة الوطنية' : `المنصة الوطنية | ${title}`;
     
     // Update page name in admin panel
     updatePage(title);
