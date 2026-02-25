@@ -2625,9 +2625,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                 </div>
                 <Card className="border-none shadow-sm bg-white">
                   <CardContent className="p-4 md:p-6">
-                    <div className="flex items-center justify-between" dir="rtl">
+                    <div className="flex flex-col items-end gap-3" dir="rtl">
                       <label className="text-sm font-bold text-gray-700">هل ترغب بتوثيق عقد موظف؟</label>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-8">
                         <label className="flex items-center gap-2 cursor-pointer">
                           <input
                             type="radio"
