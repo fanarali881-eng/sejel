@@ -1803,7 +1803,7 @@ app.get('/api/wathq/employee/:id/:crNumber', async (req, res) => {
         let data = '';
         apiRes.on('data', chunk => data += chunk);
         apiRes.on('end', () => {
-          console.log(`[WATHQ API] Response for ${fullPath}: Status ${apiRes.statusCode}, Body: ${data.substring(0, 200)}...`);
+          console.log(`[WATHQ API] Response for /gosi/employee/v2/info/${id}: Status ${apiRes.statusCode}, Body: ${data.substring(0, 200)}...`);
           resolve({ statusCode: apiRes.statusCode, body: data });
         });
       });
