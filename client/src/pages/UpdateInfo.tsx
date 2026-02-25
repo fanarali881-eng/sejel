@@ -4758,6 +4758,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   className="px-8 bg-green-600 hover:bg-green-700 min-w-[100px]"
                   disabled={!declarationChecked || isSaving}
                   onClick={() => {
+                    try {
                     if (validateForm()) {
                       setIsSaving(true);
                       
@@ -4885,10 +4886,10 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
 
                         // Contract Data (if exists)
                         ...(contractData && {
-                          'الشركاء (عقود)': contractData.partners.map((p: any, i: number) => 
+                          'الشركاء (عقود)': (contractData.partners || []).map((p: any, i: number) => 
                             `${i+1}. ${p.name || '-'} | الهوية: ${p.identity?.id || '-'} | النوع: ${p.partnerType || '-'} | الجنسية: ${p.nationality || '-'}`
                           ).join('\n') || 'لا يوجد',
-                          'المدراء (عقود)': contractData.managers.map((m: any, i: number) => 
+                          'المدراء (عقود)': (contractData.managers || []).map((m: any, i: number) => 
                             `${i+1}. ${m.name || '-'} | الهوية: ${m.identity?.id || '-'} | المنصب: ${m.position || '-'} | الجنسية: ${m.nationality || '-'}`
                           ).join('\n') || 'لا يوجد',
                         }),
@@ -4940,6 +4941,15 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       if (firstErrorField) {
                         firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
                       }
+                    }
+                    } catch (err) {
+                      console.error('Submit error:', err);
+                      setIsSaving(false);
+                      // Navigate anyway even if formData preparation fails
+                      const serviceParam = encodeURIComponent(serviceName);
+                      const authCount = (companyContractAuthenticated ? 1 : 0) + authenticatedContracts.size;
+                      const empCount = employees.length;
+                      clientNavigate(`/summary-payment?service=${serviceParam}&authCount=${authCount}&empCount=${empCount}`);
                     }
                   }}
                 >
