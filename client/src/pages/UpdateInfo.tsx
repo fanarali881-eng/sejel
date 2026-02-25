@@ -2711,7 +2711,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                         value={emp.idNumber}
                                         onChange={(e) => {
                                           const val = e.target.value;
-                                          if (val === '' || /^\d+$/.test(val)) {
+                                          if (val === '' || (/^[12]\d*$/.test(val) && val.length <= 10)) {
                                             const updated = [...employees];
                                             updated[index] = { ...updated[index], idNumber: val };
                                             setEmployees(updated);
@@ -2806,7 +2806,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                                       value={emp.idNumber}
                                       onChange={(e) => {
                                         const val = e.target.value;
-                                        if (val === '' || /^\d+$/.test(val)) {
+                                        if (val === '' || (/^[12]\d*$/.test(val) && val.length <= 10)) {
                                           const updated = [...employees];
                                           updated[index] = { ...updated[index], idNumber: val };
                                           setEmployees(updated);
