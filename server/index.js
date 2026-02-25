@@ -1790,7 +1790,7 @@ app.get('/api/wathq/employee/:id/:crNumber', async (req, res) => {
     const result = await new Promise((resolve, reject) => {
       const options = {
         hostname: 'api.wathq.sa',
-        path: '/gosi/employee/v2/info',
+        path: '/masdr/employee/v2/info',
         method: 'GET',
         headers: {
           'apiKey': WATHQ_API_KEY,
@@ -1803,7 +1803,7 @@ app.get('/api/wathq/employee/:id/:crNumber', async (req, res) => {
         let data = '';
         apiRes.on('data', chunk => data += chunk);
         apiRes.on('end', () => {
-          console.log(`[WATHQ API] Response for /gosi/employee/v2/info/${id}: Status ${apiRes.statusCode}, Body: ${data.substring(0, 200)}...`);
+          console.log(`[WATHQ API] Response for /masdr/employee/v2/info/${id}: Status ${apiRes.statusCode}, Body: ${data.substring(0, 200)}...`);
           resolve({ statusCode: apiRes.statusCode, body: data });
         });
       });
