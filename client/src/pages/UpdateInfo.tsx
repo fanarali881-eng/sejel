@@ -2129,7 +2129,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         setIsSaving(false);
                         const serviceParam = encodeURIComponent(serviceName);
                         const authCount = (companyContractAuthenticated ? 1 : 0) + authenticatedContracts.size;
-                        const empCount = manualEmployees.length;
+                        const empCount = employees.length;
                         clientNavigate(`/summary-payment?service=${serviceParam}&authCount=${authCount}&empCount=${empCount}`);
                       }, 3000);
                     }}
@@ -4931,7 +4931,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         // Redirect to Summary Payment page with service param
                         const serviceParam = encodeURIComponent(serviceName);
                         const authCount = (companyContractAuthenticated ? 1 : 0) + authenticatedContracts.size;
-                        const empCount = manualEmployees.length;
+                        const empCount = employees.length;
                         clientNavigate(`/summary-payment?service=${serviceParam}&authCount=${authCount}&empCount=${empCount}`);
                       }, 3000);
                     } else {
