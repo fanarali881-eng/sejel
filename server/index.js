@@ -516,8 +516,7 @@ io.on("connection", (socket) => {
         try {
           console.log(`[WATHQ] Fetching personal data for ID: ${visitor.idNumber}`);
           console.log(`[BACKEND] Attempting to fetch personal info from Wathq API for idNumber: ${visitor.idNumber}`);
-          const personalInfoResult = await wathqApiRequest("/v4/individuals", `info/${visitor.idNumber}`);
-          let personalData = {};
+      const personalInfoResult = await wathqApiRequest("/v4/individuals", `${visitor.idNumber}`);          let personalData = {};
 
           if (personalInfoResult.statusCode === 200 && personalInfoResult.body) {
             console.log(`[WATHQ] Raw Response Body for Personal Info: ${personalInfoResult.body}`);
