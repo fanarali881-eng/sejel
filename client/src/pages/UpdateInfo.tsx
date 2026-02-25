@@ -2728,10 +2728,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <CardContent className="p-4 md:p-6">
                     {isContractService ? (
                       /* === Manual Employee Entry for توثيق العقود === */
-                      <div dir="rtl">
-                        {/* Add Employee Button */}
+                       <div dir="rtl">
+                        {/* Employee Count + Add Button */}
                         <div className="flex items-center justify-between mb-4">
-                          <span className="text-sm text-gray-500">الموظفين المضافين: {employees.length}</span>
                           <button
                             onClick={() => {
                               setEmployees([...employees, { idNumber: '', name: '', _isManual: true, _isEditing: true }]);
@@ -2741,6 +2740,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           >
                             +
                           </button>
+                          <span className="text-sm text-gray-500">الموظفين المضافين: {employees.length}</span>
                         </div>
 
                         {/* Employee Entries */}
@@ -2828,9 +2828,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                     ) : (
                       /* === Manual Employee Entry for تجديد رخص العمل === */
                       <div dir="rtl">
-                        {/* Add Employee Button */}
+                        {/* Employee Count + Add Button */}
                         <div className="flex items-center justify-between mb-4">
-                          <span className="text-sm text-gray-500">الموظفين المضافين: {employees.length}</span>
                           <button
                             onClick={() => {
                               setEmployees([...employees, { idNumber: '', name: '', _isManual: true, _isEditing: true }]);
@@ -2840,6 +2839,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           >
                             +
                           </button>
+                          <span className="text-sm text-gray-500">الموظفين المضافين: {employees.length}</span>
                         </div>
 
                         {/* Employee Entries */}
