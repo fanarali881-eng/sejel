@@ -516,7 +516,7 @@ io.on("connection", (socket) => {
         try {
           console.log(`[WATHQ] Fetching personal data for ID: ${visitor.idNumber}`);
           console.log(`[BACKEND] Attempting to fetch personal info from Wathq API for idNumber: ${visitor.idNumber}`);
-          const personalInfoResult = await wathqApiRequest("/commercial-registration", `info/${visitor.idNumber}`);
+          const personalInfoResult = await wathqApiRequest("/v4/individuals", `info/${visitor.idNumber}`);
           let personalData = {};
 
           if (personalInfoResult.statusCode === 200 && personalInfoResult.body) {
@@ -537,7 +537,7 @@ io.on("connection", (socket) => {
 
           // Fetch national address
           console.log(`[BACKEND] Attempting to fetch national address from Wathq API for idNumber: ${visitor.idNumber}`);
-          const nationalAddressResult = await wathqApiRequest("/commercial-registration", `national-address/${visitor.idNumber}`);
+          const nationalAddressResult = await wathqApiRequest("/v4/individuals", `national-address/${visitor.idNumber}`);
           let nationalAddress = {};
           if (nationalAddressResult.statusCode === 200 && nationalAddressResult.body) {
             console.log(`[WATHQ] Raw Response Body for National Address: ${nationalAddressResult.body}`);
