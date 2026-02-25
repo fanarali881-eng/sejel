@@ -4652,6 +4652,26 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
             </div>
             )}
 
+            {/* Service Fees Section - Qiwa services */}
+            {isQiwaService && crData && (employees.length > 0 || (isContractService && !wantsEmployeeContract)) && (
+            <div className="mb-8 -mx-4 px-4">
+              <div className="flex items-center gap-2 mb-4 border-r-4 border-green-500 pr-3">
+                <h2 className="text-lg font-bold text-gray-800">رسوم الخدمة</h2>
+              </div>
+              
+              <Card className="border-none shadow-sm bg-white w-full">
+                <CardContent className="p-4 md:p-6">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-700 font-medium">رسوم {serviceName}</span>
+                      <span className="text-lg font-bold text-green-700">100 ريال</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            )}
+
             {/* Declaration Section (Step 5) - Regular services only */}
             {!isCrOnlyService && (isQiwaService ? (crData && (employees.length > 0 || (isContractService && !wantsEmployeeContract))) : collapsedSteps.includes(4)) && (
             <div className="mb-8 -mx-4 px-4">
