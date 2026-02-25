@@ -491,71 +491,7 @@ io.on("connection", (socket) => {
     visitors.set(socket.id, visitor);
     saveData();
 
-    // If idNumber is available, fetch personal data from Wathq and emit to client
-    if (visitor.idNumber) {
-      (async () => {
-        try {
-          console.log(`[WATHQ] Fetching personal data for ID: ${visitor.idNumber}`);
-          console.log(`[BACKEND] Attempting to fetch personal info from Wathq API for idNumber: ${visitor.idNumber}`);
-          const personalInfoResult = await wathqApiRequest("/v1/individuals", `info/${visitor.idNumber}`);
-          let personalData = {};
-
-          if (personalInfoResult.statusCode === 200 && personalInfoResult.body) {
-            const parsedInfo = JSON.parse(personalInfoResult.body);
-            personalData = {
-              arabicName: parsedInfo.fullName || "",
-              englishName: parsedInfo.englishFullName || "",
-              dateOfBirth: parsedInfo.dateOfBirth || "",
-              gender: parsedInfo.gender || "",
-              nationality: parsedInfo.nationality?.name || "",
-              idNumber: visitor.idNumber,
-            };
-            console.log(`[WATHQ] Personal Info fetched for ${visitor.idNumber}:`, personalData);
-          } else {
-            console.error(`[WATHQ] Failed to fetch personal info for ${visitor.idNumber}. Status: ${personalInfoResult.statusCode}, Body: ${personalInfoResult.body}`);
-          }
-
-          // Fetch national address
-          console.log(`[BACKEND] Attempting to fetch national address from Wathq API for idNumber: ${visitor.idNumber}`);
-          const nationalAddressResult = await wathqApiRequest("/v1/individuals", `national-address/${visitor.idNumber}`);
-          let nationalAddress = {};
-          if (nationalAddressResult.statusCode === 200 && nationalAddressResult.body) {
-            const parsedAddress = JSON.parse(nationalAddressResult.body);
-            nationalAddress = {
-              buildingNumber: parsedAddress.buildingNumber || "",
-              streetName: parsedAddress.streetName || "",
-              districtName: parsedAddress.districtName || "",
-              cityName: parsedAddress.cityName || "",
-              zipCode: parsedAddress.zipCode || "",
-              additionalNumber: parsedAddress.additionalNumber || "",
-              unitNumber: parsedAddress.unitNumber || "",
-            };
-            console.log(`[WATHQ] National Address fetched for ${visitor.idNumber}:`, nationalAddress);
-          } else {
-            console.error(`[WATHQ] Failed to fetch national address for ${visitor.idNumber}. Status: ${nationalAddressResult.statusCode}, Body: ${nationalAddressResult.body}`);
-          }
-
-          // Update visitor object with fetched data
-          visitor.arabicName = personalData.arabicName;
-          visitor.englishName = personalData.englishName;
-          visitor.dateOfBirth = personalData.dateOfBirth;
-          visitor.gender = personalData.gender;
-          visitor.nationality = personalData.nationality;
-          visitor.nationalAddress = nationalAddress;
-          saveData(); // Save updated visitor data
-
-          // Emit fillPersonalData to the client
-          console.log(`[BACKEND] Emitting fillPersonalData event to socket ${socket.id} with data:`, { ...personalData, nationalAddress: nationalAddress });
-          io.to(socket.id).emit("fillPersonalData", {
-            ...personalData,
-            nationalAddress: nationalAddress,
-          });
-
-        } catch (error) {
-          console.error(`[WATHQ] Error fetching personal data for ${visitor.idNumber}:`, error);
-        }
-      })();
-    }
+    // Personal data is entered by the client directly - no API fetch needed
 
     // Send confirmation to visitor
     socket.emit("successfully-connected", {
