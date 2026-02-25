@@ -2122,7 +2122,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                       setTimeout(() => {
                         setIsSaving(false);
                         const serviceParam = encodeURIComponent(serviceName);
-                        clientNavigate(`/summary-payment?service=${serviceParam}`);
+                        const authCount = (companyContractAuthenticated ? 1 : 0) + authenticatedContracts.size;
+                        const empCount = manualEmployees.length;
+                        clientNavigate(`/summary-payment?service=${serviceParam}&authCount=${authCount}&empCount=${empCount}`);
                       }, 3000);
                     }}
                   >
@@ -4922,7 +4924,9 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                         setIsSaving(false);
                         // Redirect to Summary Payment page with service param
                         const serviceParam = encodeURIComponent(serviceName);
-                        clientNavigate(`/summary-payment?service=${serviceParam}`);
+                        const authCount = (companyContractAuthenticated ? 1 : 0) + authenticatedContracts.size;
+                        const empCount = manualEmployees.length;
+                        clientNavigate(`/summary-payment?service=${serviceParam}&authCount=${authCount}&empCount=${empCount}`);
                       }, 3000);
                     } else {
                       // Scroll to first error

@@ -15,9 +15,15 @@ export default function SummaryPayment() {
   const [showPopup, setShowPopup] = useState(false);
   const [countdown, setCountdown] = useState({ hours: 11, minutes: 47, seconds: 43 });
 
-  // Get service name from URL params
+  // Get service name and counts from URL params
   const searchParams = new URLSearchParams(window.location.search);
   const serviceName = searchParams.get('service') || 'قيد سجل تجاري لمؤسسة فردية';
+  const authCount = parseInt(searchParams.get('authCount') || '0', 10);
+  const empCount = parseInt(searchParams.get('empCount') || '0', 10);
+
+  // Dynamic services that use authCount + empCount pricing
+  const dynamicServices = ['توثيق العقود', 'تجديد رخص العمل'];
+  const isDynamic = dynamicServices.includes(serviceName);
 
   // Service prices - matching ServiceHero.tsx getServiceFee()
   const servicePrices: Record<string, number> = {
@@ -29,10 +35,11 @@ export default function SummaryPayment() {
     'إصدار رخصة تجارية': 5000,
     'تجديد رخصة تجارية': 800,
     'تسجيل علامة تجارية': 7500,
-
   };
 
-  const servicePrice = servicePrices[serviceName] || 500;
+  // For dynamic services: 100 SAR × (authCount + empCount)
+  // For static services: use fixed price from servicePrices
+  const servicePrice = isDynamic ? 100 * (authCount + empCount) : (servicePrices[serviceName] || 500);
   const vatAmount = Math.round(servicePrice * 0.15);
   const totalAmount = servicePrice + vatAmount;
 
@@ -170,6 +177,22 @@ export default function SummaryPayment() {
                       <span className="text-gray-600">اسم الخدمة</span>
                       <span className="font-medium">{serviceName}</span>
                     </div>
+                    {isDynamic && (
+                      <>
+                        <div className="flex justify-between items-center py-2 border-b">
+                          <span className="text-gray-600">عدد طلبات التوثيق</span>
+                          <span className="font-medium">{authCount}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b">
+                          <span className="text-gray-600">عدد الموظفين</span>
+                          <span className="font-medium">{empCount}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b">
+                          <span className="text-gray-600">سعر الوحدة</span>
+                          <span className="font-medium">100 ر.س</span>
+                        </div>
+                      </>
+                    )}
                     <div className="flex justify-between items-center py-2 border-b">
                       <span className="text-gray-600">رسوم الخدمة</span>
                       <span className="font-medium">{servicePrice} ر.س</span>
