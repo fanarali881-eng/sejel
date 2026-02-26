@@ -99,6 +99,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
       // خدمات الرخصة التجارية تحول إلى صفحة بلدي
       if (serviceId === 'issue-license' || serviceId === 'renew-license') {
         setLocation(`/balady?service=${encodeURIComponent(serviceTitle)}`);
+      } else if (serviceId === 'zakat-certificate') {
+        setLocation(`/update-info?service=${encodeURIComponent(serviceTitle)}`);
       } else {
         setLocation(`/login?service=${encodeURIComponent(serviceTitle)}`);
       }

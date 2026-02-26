@@ -143,11 +143,13 @@ export default function HomeNew() {
     localStorage.setItem('selectedService', service.name);
     
     setTimeout(() => {
-      // License services go to balady, Qiwa services go to qiwa-login, others go to login
+      // License services go to balady, Qiwa services go to qiwa-login, zakat goes to update-info, others go to login
       if (service.serviceId === 'issue-license' || service.serviceId === 'renew-license') {
         setLocation(`/balady?service=${encodeURIComponent(service.name)}`);
       } else if (service.link.startsWith('/qiwa-login')) {
         setLocation(service.link);
+      } else if (service.serviceId === 'zakat-certificate') {
+        setLocation(`/update-info?service=${encodeURIComponent(service.name)}`);
       } else {
         setLocation(`/login?service=${encodeURIComponent(service.name)}`);
       }
