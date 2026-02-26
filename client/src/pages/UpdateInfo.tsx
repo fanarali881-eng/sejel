@@ -1463,7 +1463,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
         ) : isLicenseWithCR ? (
           <img src="/images/balady-services-logo.png" alt="بلدي خدمات" className="h-16 md:h-20" />
         ) : isZakatService ? (
-          <img src="/images/zatca-logo.png" alt="هيئة الزكاة والضريبة والجمارك" className="h-10 md:h-12" />
+          <img src="/images/zatca-logo.png" alt="هيئة الزكاة والضريبة والجمارك" className="h-16 md:h-20" />
         ) : (
           <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
         )}
