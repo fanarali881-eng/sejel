@@ -6,7 +6,7 @@ export default function ServiceInfo() {
   const serviceId = match ? params?.id : null;
 
   const getServiceFee = () => {
-    if (serviceId === 'reserve-name' || serviceId === 'commercial-extract') {
+    if (serviceId === 'reserve-name' || serviceId === 'commercial-extract' || serviceId === 'delete-cr') {
       return '100';
     }
     if (serviceId === 'renew-cr' || serviceId === 'edit-cr') {

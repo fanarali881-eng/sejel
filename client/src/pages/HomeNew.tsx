@@ -66,6 +66,15 @@ export default function HomeNew() {
       serviceId: "commercial-extract"
     },
     { 
+      name: "شطب سجل تجاري", 
+      desc: "إلغاء السجل التجاري لمؤسسة فردية", 
+      fullDesc: "خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين إلغاء السجل التجاري لمؤسسة فردية عند الانتهاء من ممارسة النشاط التجارية، دون الحاجة إلى زيارة مراكز الخدمة.",
+      fee: "100",
+      icon: "🗑️", 
+      link: "/service/delete-cr",
+      serviceId: "delete-cr"
+    },
+    { 
       name: "إصدار رخصة تجارية", 
       desc: "إصدار رخصة لمزاولة النشاط التجاري", 
       fullDesc: "خدمة إلكترونية تقدم في منصة بلدي يمكن من خلالها البدء بممارسة العمل التجاري من خلال إصدار رخصة نشاط تجاري بالإضافة إلى تصريح السلامة الصادر من المديرية العامة للدفاع المدني لجميع الأنشطة التجارية المعتمدة.",
@@ -246,6 +255,16 @@ export default function HomeNew() {
                           <line x1="28" y1="48" x2="44" y2="48" stroke="#2A8B6E" strokeWidth="2" />
                           <rect x="46" y="50" width="16" height="12" rx="2" stroke="#E8772E" strokeWidth="2" fill="none" />
                           <line x1="49" y1="56" x2="59" y2="56" stroke="#E8772E" strokeWidth="1.5" />
+                        </>
+                      )}
+                      {service.link === '/service/delete-cr' && (
+                        <>
+                          <rect x="18" y="10" width="44" height="56" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="28" y1="24" x2="52" y2="24" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="32" x2="52" y2="32" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="40" x2="44" y2="40" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="46" y1="48" x2="62" y2="64" stroke="#E8772E" strokeWidth="2.5" strokeLinecap="round" />
+                          <line x1="62" y1="48" x2="46" y2="64" stroke="#E8772E" strokeWidth="2.5" strokeLinecap="round" />
                         </>
                       )}
                       {service.link === '/service/issue-license' && (

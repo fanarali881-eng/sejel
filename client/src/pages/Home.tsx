@@ -97,11 +97,27 @@ export default function Home() {
       );
     }
 
+    if (serviceId === 'delete-cr') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "أن يكون مقدم الطلب مالكًا للمؤسسة أو مفوضًا عنه تفويضًا إلكترونيًا.",
+            "تقديم تفويض من مجلس الجمعية لمقدم الطلب، في حال كانت جمعية تعاونية أو خيرية."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     if (serviceId === 'register-trademark') {
       return (
         <div className="py-4 space-y-4">
           {[
-            "الدخول على موقع الهيئة واختيار الخدمات والضغط على خدمة العلامات التجارية.",
+            "الدخول على موقع الهيئة واختيار الخدمات والضغط على خدمة العلامات التجارية.",,
             "الدخول إلى بوابة العلامات التجارية.",
             "الانتقال إلى منصة الخدمة من خلال النفاذ الوطني الموحد / البريد الإلكتروني.",
             "طلب تسجيل علامة جديدة (كمالك أو كصاحب شأن أو كمالك للمؤسسة أو كشركة).",
@@ -198,6 +214,22 @@ export default function Home() {
             "عقد الإيجار، أو صك الملكية، أو عقد الاستثمار للموقع من البلدية أو الجهات الحكومية الأخرى.",
             "عقد تنظيف (اختياري، يعتمد على العقد ونوع النشاط).",
             "رخصة تجارية سارية تنتهي خلال 3 أشهر أو رخصة منتهية لمدة أقصاها سنة واحدة."
+          ].map((doc, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'delete-cr') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "تقديم صك الوقف ووكالة شرعية من الواقف أو ناظر الوقف أو مجلس النظارة، في حال كانت مؤسسة وقفية.",
+            "تقديم صك حصر الورثة، وصك الولاية في حال وجود قُصّر، ووكالة شرعية من جميع الورثة تنص على شطب السجل التجاري، في حال كان المالك متوفى."
           ].map((doc, index) => (
             <div key={index} className="flex items-start gap-2 text-gray-800">
               <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />

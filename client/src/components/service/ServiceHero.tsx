@@ -11,7 +11,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
   const [, setLocation] = useLocation();
 
   const getServiceFee = () => {
-    if (serviceId === 'reserve-name' || serviceId === 'commercial-extract') {
+    if (serviceId === 'reserve-name' || serviceId === 'commercial-extract' || serviceId === 'delete-cr') {
       return '100';
     }
     if (serviceId === 'renew-cr' || serviceId === 'edit-cr') {
@@ -41,6 +41,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'تعديل سجل تجاري';
       case 'commercial-extract':
         return 'مستخرج سجل تجاري / الإفادة التجارية';
+      case 'delete-cr':
+        return 'شطب سجل تجاري';
       case 'issue-license':
         return 'إصدار رخصة تجارية';
       case 'register-trademark':
@@ -64,6 +66,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين تعديل بيانات السجل التجاري الحالي، دون الحاجة إلى زيارة مراكز الخدمة.';
       case 'commercial-extract':
         return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين طلب مستخرج يحتوي على معلومات أي سجل تجاري، كما تتيح له التقديم على طلب إفادة عن إجراء معين؛ بهدف الحصول على مستند يتضمن تأكيدًا من الوزارة بحدوث هذا الإجراء، لتقديمه إلى من يهمه الأمر، دون الحاجة إلى زيارة مراكز الخدمة.';
+      case 'delete-cr':
+        return 'خدمة إلكترونية تقدمها وزارة التجارة عبر منصة المركز السعودي للأعمال، تتيح للمستفيدين إلغاء السجل التجاري لمؤسسة فردية عند الانتهاء من ممارسة النشاط التجارية، دون الحاجة إلى زيارة مراكز الخدمة.';
       case 'issue-license':
         return 'خدمة إلكترونية تقدم في منصة بلدي يمكن من خلالها البدء بممارسة العمل التجاري من خلال إصدار رخصة نشاط تجاري بالإضافة إلى تصريح السلامة الصادر من المديرية العامة للدفاع المدني لجميع الأنشطة التجارية المعتمدة لدى وزارة البلديات والإسكان دون الحاجة لمراجعة الجهة.';
       case 'register-trademark':

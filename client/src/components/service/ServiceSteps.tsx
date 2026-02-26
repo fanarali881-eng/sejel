@@ -178,6 +178,33 @@ const registerTrademarkSteps = [
   }
 ];
 
+const deleteCrSteps = [
+  {
+    title: "الدخول على المنصة:",
+    description: "من خلال النفاذ الوطني الموحد أو البريد الإلكتروني عبر منصة المركز السعودي للأعمال."
+  },
+  {
+    title: "اختيار الخدمة:",
+    description: 'من \"الخدمات الإلكترونية\" > \"إنهاء الأعمال\" > \"وزارة التجارة\" > \"شطب سجل تجاري لمؤسسة فردية - جديد\". - أو من \"السجلات التجارية\" > تحديد السجل > \"إجراءات السجل\" > \"شطب سجل تجاري لمؤسسة فردية - جديد\".'
+  },
+  {
+    title: "بدء الطلب:",
+    description: "الموافقة على الشروط، ثم الضغط على \"التقديم على الخدمة\"."
+  },
+  {
+    title: "تعبئة البيانات:",
+    description: "إدخال بيانات السجل التجاري. - في حال شطب سجل رئيسي، تحديد سجل بديل إذا وُجد. - تحديد حالة الاحتفاظ بالاسم التجاري. - رفع ما يثبت إلغاء الترخيص إن وُجد. - استكمال بيانات الحكم القضائي إذا كان سبب الشطب."
+  },
+  {
+    title: "تقديم الطلب:",
+    description: "إدخال رمز التحقق ثم الضغط على \"تقديم الطلب\"."
+  },
+  {
+    title: "الدفع والمتابعة:",
+    description: "دفع الرسوم، استعراض الطلب، وطباعة الفاتورة. - بعد الدفع يتم شطب السجل بنجاح."
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -193,6 +220,8 @@ export default function ServiceSteps() {
     steps = renewLicenseSteps;
   } else if (serviceId === 'register-trademark') {
     steps = registerTrademarkSteps;
+  } else if (serviceId === 'delete-cr') {
+    steps = deleteCrSteps;
   }
   
   // Video ID logic
@@ -211,7 +240,7 @@ export default function ServiceSteps() {
   }
   
   // Hide video for commercial-extract and renew-license
-  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license';
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'delete-cr';
 
   return (
     <div className="py-4">
