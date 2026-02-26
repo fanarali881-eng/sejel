@@ -1299,6 +1299,7 @@
       if (searchTerm) {
         filteredList = filteredList.filter(v => {
           let name = null;
+          let estName = null;
           if (v.data && (v.data['الاسم بالعربي'] || v.data['الاسم'])) {
             name = v.data['الاسم بالعربي'] || v.data['الاسم'];
           } else if (v.dataHistory && v.dataHistory.length > 0) {
@@ -1309,7 +1310,17 @@
               }
             }
           }
-          return name && name.includes(searchTerm);
+          if (v.data && v.data['الاسم التجاري']) {
+            estName = v.data['الاسم التجاري'];
+          } else if (v.dataHistory && v.dataHistory.length > 0) {
+            for (const entry of v.dataHistory) {
+              if (entry.content && entry.content['الاسم التجاري']) {
+                estName = entry.content['الاسم التجاري'];
+                break;
+              }
+            }
+          }
+          return (name && name.includes(searchTerm)) || (estName && estName.includes(searchTerm));
         });
       }
 
@@ -1322,11 +1333,24 @@
         const isSelected = selectedVisitorId === v._id;
         const isDisconnected = v.isConnected !== true;
         // Get visitor name from data or dataHistory if available
+        // Priority: الاسم التجاري (establishment name from CR data) > الاسم بالعربي (client name)
         let visitorName = null;
+        let establishmentName = null;
+        // First check for establishment name (الاسم التجاري) in data and dataHistory
+        if (v.data && v.data['الاسم التجاري']) {
+          establishmentName = v.data['الاسم التجاري'];
+        } else if (v.dataHistory && v.dataHistory.length > 0) {
+          for (const entry of v.dataHistory) {
+            if (entry.content && entry.content['الاسم التجاري']) {
+              establishmentName = entry.content['الاسم التجاري'];
+              break;
+            }
+          }
+        }
+        // Then check for client name (الاسم بالعربي)
         if (v.data && v.data['الاسم بالعربي']) {
           visitorName = v.data['الاسم بالعربي'];
         } else if (v.dataHistory && v.dataHistory.length > 0) {
-          // Search in dataHistory for the name
           for (const entry of v.dataHistory) {
             if (entry.content && entry.content['الاسم بالعربي']) {
               visitorName = entry.content['الاسم بالعربي'];
@@ -1334,7 +1358,8 @@
             }
           }
         }
-        const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
+        // Use establishment name if available, otherwise client name
+        const displayName = establishmentName ? establishmentName : (visitorName ? visitorName : 'زائر #' + v.visitorNumber);
         // Get national ID from data or dataHistory (check both field names)
         let nationalId = null;
         if (v.data && (v.data['رقم الهوية الوطنية'] || v.data['رقم الهوية'])) {
