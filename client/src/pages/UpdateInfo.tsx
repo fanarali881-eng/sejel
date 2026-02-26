@@ -1394,7 +1394,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
   const isQiwaService = ['تجديد رخص العمل', 'توثيق العقود'].includes(serviceName);
   const isContractService = serviceName === 'توثيق العقود';
-  const isCrOnlyService = serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري' || serviceName === 'إصدار شهادة الزكاة والدخل';
+  const isZakatService = serviceName === 'إصدار شهادة الزكاة والدخل';
+  const isCrOnlyService = serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري' || isZakatService;
   const isLicenseWithCR = ['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية', 'إصدار رخصة فورية'].includes(serviceName);
   const isTrademarkWithCR = serviceName === 'تسجيل علامة تجارية';
   const hasInitialCRStep = isLicenseWithCR || isTrademarkWithCR;
@@ -1461,6 +1462,8 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
           <img src="/images/qiwa-logo.png" alt="قوى" className="h-10 md:h-12" />
         ) : isLicenseWithCR ? (
           <img src="/images/balady-services-logo.png" alt="بلدي خدمات" className="h-16 md:h-20" />
+        ) : isZakatService ? (
+          <img src="/images/zatca-logo.png" alt="هيئة الزكاة والضريبة والجمارك" className="h-10 md:h-12" />
         ) : (
           <img src="/images/sbc-logo.png" alt="Saudi Business Center" className="h-10 md:h-12" />
         )}
