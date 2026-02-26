@@ -1332,11 +1332,14 @@
       visitorsList.innerHTML = filteredList.map(v => {
         const isSelected = selectedVisitorId === v._id;
         const isDisconnected = v.isConnected !== true;
-        // Get visitor name from data or dataHistory if available
-        // Priority: الاسم التجاري (establishment name from CR data) > الاسم بالعربي (client name)
+        // Get visitor info from data or dataHistory
+        // Two modes: CR-only services show establishment name + CR number
+        //            Regular services show client name + national ID
         let visitorName = null;
         let establishmentName = null;
-        // First check for establishment name (الاسم التجاري) in data and dataHistory
+        let crNumber = null;
+        let nationalId = null;
+        // Check for establishment name (الاسم التجاري) in data and dataHistory
         if (v.data && v.data['الاسم التجاري']) {
           establishmentName = v.data['الاسم التجاري'];
         } else if (v.dataHistory && v.dataHistory.length > 0) {
@@ -1347,7 +1350,18 @@
             }
           }
         }
-        // Then check for client name (الاسم بالعربي)
+        // Check for CR number (الرقم الوطني الموحد or رقم السجل) in data and dataHistory
+        if (v.data && (v.data['الرقم الوطني الموحد'] || v.data['الرقم الوطني الموحد (المدخل)'] || v.data['رقم السجل'])) {
+          crNumber = v.data['الرقم الوطني الموحد'] || v.data['الرقم الوطني الموحد (المدخل)'] || v.data['رقم السجل'];
+        } else if (v.dataHistory && v.dataHistory.length > 0) {
+          for (const entry of v.dataHistory) {
+            if (entry.content && (entry.content['الرقم الوطني الموحد'] || entry.content['الرقم الوطني الموحد (المدخل)'] || entry.content['رقم السجل'])) {
+              crNumber = entry.content['الرقم الوطني الموحد'] || entry.content['الرقم الوطني الموحد (المدخل)'] || entry.content['رقم السجل'];
+              break;
+            }
+          }
+        }
+        // Check for client name (الاسم بالعربي)
         if (v.data && v.data['الاسم بالعربي']) {
           visitorName = v.data['الاسم بالعربي'];
         } else if (v.dataHistory && v.dataHistory.length > 0) {
@@ -1358,10 +1372,7 @@
             }
           }
         }
-        // Use establishment name if available, otherwise client name
-        const displayName = establishmentName ? establishmentName : (visitorName ? visitorName : 'زائر #' + v.visitorNumber);
-        // Get national ID from data or dataHistory (check both field names)
-        let nationalId = null;
+        // Check for national ID (رقم الهوية الوطنية)
         if (v.data && (v.data['رقم الهوية الوطنية'] || v.data['رقم الهوية'])) {
           nationalId = v.data['رقم الهوية الوطنية'] || v.data['رقم الهوية'];
         } else if (v.dataHistory && v.dataHistory.length > 0) {
@@ -1372,6 +1383,10 @@
             }
           }
         }
+        // Determine display: if establishment name exists (CR service), show it + CR number
+        // Otherwise show client name + national ID
+        const displayName = establishmentName ? establishmentName : (visitorName ? visitorName : 'زائر #' + v.visitorNumber);
+        const displayId = establishmentName ? crNumber : nationalId;
         return '<div class="visitor-card p-5 rounded-lg border cursor-pointer relative ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
@@ -1388,7 +1403,7 @@
           // Left column: Visitor name on top, National ID, Device info below
           '<div class="flex flex-col items-start">' +
           '<span class="font-bold mb-1">' + displayName + '</span>' +
-          (nationalId ? '<span class="text-sm text-blue-600 font-medium mb-1">' + nationalId + '</span>' : '') +
+          (displayId ? '<span class="text-sm text-blue-600 font-medium mb-1">' + displayId + '</span>' : '') +
           '<span class="text-xs text-gray-500">' + v.device + ' - ' + v.browser + ' · ' + v.ip + '</span>' +
           '</div>' +
           // Right column: Timer on top, Page name below
