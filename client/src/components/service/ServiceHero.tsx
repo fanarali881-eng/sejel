@@ -27,6 +27,9 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
     if (serviceId === 'register-trademark') {
       return '7500';
     }
+    if (serviceId === 'zakat-certificate') {
+      return '50';
+    }
 
     return '500';
   };
@@ -49,6 +52,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'تسجيل علامة تجارية';
       case 'renew-license':
         return 'تجديد رخصة تجارية';
+      case 'zakat-certificate':
+        return 'إصدار شهادة الزكاة والدخل';
 
       case 'new-cr':
       default:
@@ -74,6 +79,8 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
         return 'خدمة تقدم الكترونيا تتيح للمستخدم طلب تسجيل العلامة التجارية. العلامات التجارية هي الإبداعات التي تكون على شكل أسماء، كلمات ، إمضاءات، حروف، رموز، وأرقام، عناوين، وأختام، وكذلك التصميمات والرسوم والصور، والنقوش المميزة، أو طريقة تغليف عناصر تصويرية؛ أو أشكال، أو لون أو مجموعة ألوان أو مزيج من ذلك أو أية إشارة أو مجموعة إشارات إذا كانت تستخدم أو يراد استخدامها في تمييز سلع أو خدمات منشأة ما.';
       case 'renew-license':
         return 'من خلال هذه الخدمة الإلكترونية يمكنك تعزيز استمرارية عملك التجاري حيث تمكنك هذه الخدمة من تجديد رخصتك التجارية، كما يمكنك تجديد مع تعديل بيانات الرخصة.';
+      case 'zakat-certificate':
+        return 'خدمة إلكترونية تقدمها هيئة الزكاة والضريبة والجمارك، تتيح لك تقديم طلب الحصول على شهادة الزكاة أو الضريبة.';
 
       case 'new-cr':
       default:
@@ -114,7 +121,7 @@ export default function ServiceHero({ serviceId }: ServiceHeroProps) {
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="bg-[#e6f2ff] text-[#0075c9] text-xs font-bold px-3 py-1 rounded">
-                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : 'وزارة التجارة'}
+                {serviceId === 'issue-license' || serviceId === 'renew-license' ? 'الهيئة الملكية لمحافظة العلا' : serviceId === 'register-trademark' ? 'الهيئة السعودية للملكية الفكرية' : serviceId === 'zakat-certificate' ? 'هيئة الزكاة والضريبة والجمارك' : 'وزارة التجارة'}
               </span>
               <span className="bg-[#e6fffa] text-[#006c35] text-xs font-bold px-3 py-1 rounded">
                 الاكثر استخداما

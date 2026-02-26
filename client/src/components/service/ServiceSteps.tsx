@@ -205,6 +205,33 @@ const deleteCrSteps = [
   }
 ];
 
+const zakatCertificateSteps = [
+  {
+    title: "تسجيل الدخول:",
+    description: "تسجيل الدخول إلى البوابة الإلكترونية لهيئة الزكاة والضريبة والجمارك."
+  },
+  {
+    title: "الانتقال إلى تبويب الزكاة والضريبة والجمارك:",
+    description: "اختيار التبويب المناسب من القائمة الرئيسية."
+  },
+  {
+    title: "تحديد طلب للحصول على شهادة:",
+    description: "اختيار طلب الحصول على شهادة من الخدمات المتاحة."
+  },
+  {
+    title: "تحديد طلب جديد:",
+    description: "الضغط على \"طلب جديد\" لبدء إجراءات الحصول على الشهادة."
+  },
+  {
+    title: "تعبئة النموذج:",
+    description: "إدخال جميع البيانات المطلوبة في النموذج."
+  },
+  {
+    title: "استلام الشهادة:",
+    description: "سيصلك إشعار بالشهادة بعد إتمام الطلب."
+  }
+];
+
 export default function ServiceSteps() {
   const [match, params] = useRoute("/service/:id?");
   const serviceId = match ? params?.id : null;
@@ -222,6 +249,8 @@ export default function ServiceSteps() {
     steps = registerTrademarkSteps;
   } else if (serviceId === 'delete-cr') {
     steps = deleteCrSteps;
+  } else if (serviceId === 'zakat-certificate') {
+    steps = zakatCertificateSteps;
   }
   
   // Video ID logic
@@ -240,7 +269,7 @@ export default function ServiceSteps() {
   }
   
   // Hide video for commercial-extract and renew-license
-  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'delete-cr';
+  const showVideo = serviceId !== 'commercial-extract' && serviceId !== 'renew-license' && serviceId !== 'delete-cr' && serviceId !== 'zakat-certificate';
 
   return (
     <div className="py-4">

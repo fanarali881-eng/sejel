@@ -9,6 +9,9 @@ export default function ServiceInfo() {
     if (serviceId === 'reserve-name' || serviceId === 'commercial-extract' || serviceId === 'delete-cr') {
       return '100';
     }
+    if (serviceId === 'zakat-certificate') {
+      return '50';
+    }
     if (serviceId === 'renew-cr' || serviceId === 'edit-cr') {
       return '200';
     }

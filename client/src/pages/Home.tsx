@@ -113,11 +113,27 @@ export default function Home() {
       );
     }
 
+     if (serviceId === 'zakat-certificate') {
+      return (
+        <div className="py-4 space-y-4">
+          {[
+            "عدم وجود حالات تقديم إقرارات أو مدفوعات متأخرة.",
+            "لا توجد أي التزامات حالية."
+          ].map((req, index) => (
+            <div key={index} className="flex items-start gap-2 text-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{req}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     if (serviceId === 'register-trademark') {
       return (
         <div className="py-4 space-y-4">
           {[
-            "الدخول على موقع الهيئة واختيار الخدمات والضغط على خدمة العلامات التجارية.",,
+            "الدخول على موقع الهيئة واختيار الخدمات والضغط على خدمة العلامات التجارية.",
             "الدخول إلى بوابة العلامات التجارية.",
             "الانتقال إلى منصة الخدمة من خلال النفاذ الوطني الموحد / البريد الإلكتروني.",
             "طلب تسجيل علامة جديدة (كمالك أو كصاحب شأن أو كمالك للمؤسسة أو كشركة).",
@@ -236,6 +252,17 @@ export default function Home() {
               <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">{doc}</span>
             </div>
           ))}
+        </div>
+      );
+    }
+
+    if (serviceId === 'zakat-certificate') {
+      return (
+        <div className="py-4 space-y-4">
+          <div className="flex items-start gap-2 text-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-gray-800 mt-1 flex-shrink-0" strokeWidth={1.5} />
+            <span className="text-xs md:text-xs md:text-base font-medium leading-relaxed">لا يوجد مستندات مطلوبة.</span>
+          </div>
         </div>
       );
     }

@@ -1394,7 +1394,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
   const isRenewLicenseService = serviceName === 'تجديد رخصة تجارية' || serviceName === 'تجديد الرخصة التجارية';
   const isQiwaService = ['تجديد رخص العمل', 'توثيق العقود'].includes(serviceName);
   const isContractService = serviceName === 'توثيق العقود';
-  const isCrOnlyService = serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري';
+  const isCrOnlyService = serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري' || serviceName === 'إصدار شهادة الزكاة والدخل';
   const isLicenseWithCR = ['إصدار رخصة تجارية', 'تجديد رخصة تجارية', 'تجديد الرخصة التجارية', 'إصدار رخصة فورية'].includes(serviceName);
   const isTrademarkWithCR = serviceName === 'تسجيل علامة تجارية';
   const hasInitialCRStep = isLicenseWithCR || isTrademarkWithCR;
@@ -1974,7 +1974,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   <CardContent className="p-4 md:p-6">
                     <div className="flex items-center justify-between" dir="rtl">
                       <span className="text-gray-700 font-bold text-base">رسوم الخدمة</span>
-                      <span className="text-green-700 font-bold text-lg">{serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري' ? '100' : '200'} ريال</span>
+                      <span className="text-green-700 font-bold text-lg">{serviceName === 'إصدار شهادة الزكاة والدخل' ? '50' : serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري' ? '100' : '200'} ريال</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -2151,6 +2151,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                           'تعديل سجل تجاري': 200,
                           'مستخرج سجل تجاري / الإفادة التجارية': 100,
                           'شطب سجل تجاري': 100,
+                          'إصدار شهادة الزكاة والدخل': 50,
                         };
                         const servicePrice = servicePrices[serviceName] || 300;
                         const vatAmount = Math.round(servicePrice * 0.15);
@@ -4150,7 +4151,7 @@ const [capitalAmount, setCapitalAmount] = useState('1000');
                   )}
 
                   {/* CR Number Field - Conditionally Rendered (only for non-license CR services) */}
-                  {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري') && (
+                  {(serviceName === 'تجديد سجل تجاري' || serviceName === 'تعديل سجل تجاري' || serviceName === 'مستخرج سجل تجاري / الإفادة التجارية' || serviceName === 'شطب سجل تجاري' || serviceName === 'إصدار شهادة الزكاة والدخل') && (
                     <>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                       <div>

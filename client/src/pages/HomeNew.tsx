@@ -119,6 +119,15 @@ export default function HomeNew() {
       link: "/qiwa-login?service=توثيق العقود",
       serviceId: "contract-documentation"
     },
+    { 
+      name: "إصدار شهادة الزكاة والدخل", 
+      desc: "تقديم طلب الحصول على شهادة الزكاة أو الضريبة", 
+      fullDesc: "خدمة إلكترونية تقدمها هيئة الزكاة والضريبة والجمارك، تتيح لك تقديم طلب الحصول على شهادة الزكاة أو الضريبة.",
+      fee: "50",
+      icon: "📜", 
+      link: "/service/zakat-certificate",
+      serviceId: "zakat-certificate"
+    },
   ];
 
   const filteredServices = services.filter(service => 
@@ -315,6 +324,16 @@ export default function HomeNew() {
                           <line x1="24" y1="40" x2="36" y2="40" stroke="#2A8B6E" strokeWidth="2" />
                           <path d="M44 46 L50 52 L62 38" stroke="#E8772E" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                           <circle cx="53" cy="44" r="14" stroke="#E8772E" strokeWidth="2" fill="none" />
+                        </>
+                      )}
+                      {service.link === '/service/zakat-certificate' && (
+                        <>
+                          <rect x="18" y="10" width="44" height="56" rx="3" stroke="#2A8B6E" strokeWidth="2" fill="none" />
+                          <line x1="28" y1="24" x2="52" y2="24" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="32" x2="52" y2="32" stroke="#2A8B6E" strokeWidth="2" />
+                          <line x1="28" y1="40" x2="44" y2="40" stroke="#2A8B6E" strokeWidth="2" />
+                          <circle cx="40" cy="54" r="8" stroke="#E8772E" strokeWidth="2" fill="none" />
+                          <polyline points="36,54 39,57 44,51" stroke="#E8772E" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                         </>
                       )}
                     </svg>
